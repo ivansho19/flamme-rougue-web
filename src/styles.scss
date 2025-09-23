@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+@import './assets/styles/variables.scss';
+html, body { height: 100% }
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: $color-brown; // puedes alternar con $color-gray
+  color: $color-light;
+}
+
+.btn-custom {
+  width: 90%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, #e0c070, #c92a2a);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(201, 42, 42, 0.6);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

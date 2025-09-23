@@ -1,0 +1,83 @@
+.register-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+/* Mitades */
+.register-half {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Imagen ocupando toda la mitad */
+.register-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Contenido encima */
+.overlay {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 350px;
+  text-align: center;
+  color: white;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.btn-register {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4d6d;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-register:hover {
+  background: #e63950;
+}
+
+/* Animación hover */
+.register-half:hover .register-img {
+  transform: scale(1.05);
+  transition: transform 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+  }
+
+  .register-half {
+    height: 50vh;
+  }
+}
