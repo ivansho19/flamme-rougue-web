@@ -1,48 +1,22 @@
-@import '../../../assets/styles/variables.scss';
+@import '../../../../../assets/styles/variables.scss';
 
-.login-wrapper {
-  display: flex;
-  min-height: calc(100vh - 60px); /* altura total menos el footer */
-  width: 100%;
-  flex-wrap: wrap; /* 👈 permite que las columnas se acomoden en pantallas pequeñas */
-}
-
-/* 📌 Mitad izquierda */
-.login-left {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: $color-gray;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-/* 📌 Mitad derecha */
 .login-right {
-  flex: 1;
+  flex: 1; /* 50% */
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centrado en pantallas grandes */
+  justify-content: center;
   align-items: center;
   background: $color-gray;
   padding: 2rem;
   position: relative;
-  min-height: auto; /* 👈 dejamos que crezca si es necesario */
-  overflow-y: visible; /* 👈 quitamos scroll interno */
+  margin-top: -100px;
 }
 
 .logo-container {
-  margin-bottom: 2rem;
 
   img {
-    width: 220px; /* 👈 reduje tamaño para pantallas más chicas */
-    height: auto;
-    max-width: 100%;
+    width: 250px;
+    height: 250px;
   }
 }
 
@@ -52,10 +26,9 @@
   padding: 2rem;
   color: $color-light;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  width: 100%;
+  width: 500px;
   max-width: 400px;
   text-align: center;
-  margin-bottom: 2rem; /* 👈 separamos del footer */
 }
 
 h1.login-title,
@@ -136,38 +109,4 @@ h2.login-title {
 .extra-links .link:hover {
   color: #e0c070;
   text-decoration: underline;
-}
-
-.page-footer {
-  width: 100%;
-  background: $color-primary;
-  color: #b8b8b8;
-  font-family: 'Cinzel', serif;
-  font-size: 0.85rem;
-  text-align: center;
-  padding: 1rem;
-  position: relative; /* 👈 footer siempre debajo */
-}
-
-/* 📱 Responsive */
-@media (max-width: 768px) {
-  .login-wrapper {
-    flex-direction: column;
-    min-height: auto; /* 👈 quitamos restricción de altura */
-  }
-
-  .login-left {
-    display: none; /* ocultamos imagen en móvil */
-  }
-
-  .login-right {
-    flex: none;
-    width: 100%;
-    justify-content: flex-start; /* 👈 se alinea arriba en móviles */
-    padding: 1.5rem;
-  }
-
-  .logo-container img {
-    width: 150px; /* 👈 más pequeño en móviles */
-  }
 }

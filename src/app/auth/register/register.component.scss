@@ -1,3 +1,5 @@
+@import '../../../assets/styles/variables.scss';
+
 .register-container {
   display: flex;
   height: 100vh;
@@ -6,7 +8,7 @@
   overflow: hidden;
 }
 
-/* Mitades */
+/* Mitades de portada */
 .register-half {
   flex: 1;
   position: relative;
@@ -16,7 +18,6 @@
   overflow: hidden;
 }
 
-/* Imagen ocupando toda la mitad */
 .register-img {
   width: 100%;
   height: 100%;
@@ -27,7 +28,6 @@
   z-index: 0;
 }
 
-/* Contenido encima */
 .overlay {
   position: relative;
   z-index: 1;
@@ -39,16 +39,7 @@
   color: white;
 }
 
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
+/* Botones portada */
 .btn-register {
   padding: 12px 20px;
   border: none;
@@ -65,19 +56,106 @@ p {
   background: #e63950;
 }
 
+.btn-back {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: #c92a2a;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 /* Animación hover */
 .register-half:hover .register-img {
   transform: scale(1.05);
   transition: transform 0.5s ease;
 }
 
+/* --- FORMULARIO --- */
+.form-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: $color-gray;
+}
+
+.form-half {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.img-half {
+   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  }
+
+.form-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-box h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.form-box label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-box button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: #ff4d6d;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-box button:hover {
+  background: #e63950;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .register-container {
+  .register-container,
+  .form-container {
     flex-direction: column;
   }
 
-  .register-half {
+  .register-half,
+  .form-half {
     height: 50vh;
   }
 }

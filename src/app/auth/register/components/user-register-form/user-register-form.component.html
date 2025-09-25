@@ -1,0 +1,58 @@
+<div class="login-right">
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="assets/images/logo_1.png" alt="Logo" />
+  </div>
+
+  <!-- Caja del formulario -->
+  <div class="login-box">
+    <h1 class="login-title">Registro</h1>
+    <h2 class="login-title">Crea tu cuenta</h2>
+
+    <form [formGroup]="userForm">
+      <div class="form-group">
+        <input formControlName="name" required type="text" placeholder="Firstname" />
+        <div class="error" *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid">
+            <span *ngIf="userForm.get('name')?.errors?.['required']">El nombre es obligatorio</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="lastname" required type="text" placeholder="Lastname" />
+        <div class="error" *ngIf="userForm.get('lastname')?.touched && userForm.get('lastname')?.invalid">
+            <span *ngIf="userForm.get('lastname')?.errors?.['required']">El apellido es obligatorio</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="email" required type="email" placeholder="Email" />
+        <div class="error" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
+            <span *ngIf="userForm.get('email')?.errors?.['required']">El email es obligatorio</span>
+            <span *ngIf="userForm.get('email')?.errors?.['email']">Formato de email inválido</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="password" required type="password" placeholder="Password" />
+        <div class="error" *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
+            <span *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input formControlName="confirmPassword" required type="password" placeholder="Confirm Password" />
+        <div class="error" *ngIf="confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched" class="error-message">
+          Las contraseñas no coinciden
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <button class="btn-login" type="submit" (click)="onSubmitUser()" [disabled]="userForm.invalid">Registrarme</button>
+
+      <!-- Links extra -->
+      <div class="extra-links">
+        <a href="/auth/login" class="link">¿Ya tienes una cuenta? Inicia sesión</a>
+      </div>
+    </form>
+  </div>
+</div>

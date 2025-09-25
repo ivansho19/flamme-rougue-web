@@ -1,21 +1,58 @@
-<div class="register-container">
-  <!-- Mitad izquierda: Modelo -->
+<!-- Vista inicial (elegir tipo de registro) -->
+<div class="register-container" *ngIf="activeSection === 'choose'">
+  <!-- Mitad izquierda: Anunciante -->
   <div class="register-half">
-    <img src="assets/modelo.jpg" alt="Modelo" class="register-img" />
+    <img src="assets/images/modelo.jpg" alt="Anunciante" class="register-img" />
     <div class="overlay">
-      <h2>¿Eres Modelo?</h2>
+      <h2>¿Eres Anunciante?</h2>
       <p>Únete y comienza a mostrar tu talento al mundo.</p>
-      <button class="btn-custom">Registrarte como Modelo</button>
+      <button class="btn-custom" (click)="handleActivateSection('anunciante')">
+        Registrarte como Anunciante
+      </button>
     </div>
   </div>
 
   <!-- Mitad derecha: Usuario -->
   <div class="register-half">
-    <img src="assets/girl_register.jpg" alt="Usuario" class="register-img" />
+    <img src="assets/images/usuario.jpg" alt="Usuario" class="register-img" />
     <div class="overlay">
       <h2>¿Eres Usuario?</h2>
       <p>Descubre y conecta con los mejores talentos.</p>
-      <button class="btn-custom">Registrarte como Usuario</button>
+      <button class="btn-custom" (click)="handleActivateSection('usuario')">
+        Registrarte como Usuario
+      </button>
     </div>
   </div>
 </div>
+
+<!-- Vista Registro Usuario -->
+ <ng-container *ngIf="activeSection === 'usuario'">
+  <div class="form-container" *ngIf="activeSection === 'usuario'">
+  <!-- Mitad izquierda: Formulario -->
+  <div class="form-half">
+    <app-user-register-form></app-user-register-form>
+  </div>
+
+  <!-- Mitad derecha: Imagen -->
+  <div class="form-half">
+    <img src="assets/images/usuario.jpg" alt="Imagen usuario" class="img-half" />
+  </div>
+</div>
+ </ng-container>
+
+
+<!-- Vista Registro Anunciante -->
+ <ng-container *ngIf="activeSection === 'anunciante'">
+  <div class="form-container" *ngIf="activeSection === 'anunciante'">
+  <!-- Mitad izquierda: Formulario -->
+  <div class="form-half">
+    <h2>Registro de Anunciante</h2>
+   
+  </div>
+
+  <!-- Mitad derecha: Imagen -->
+  <div class="form-half img-half">
+    <img src="assets/images/anunciante-register.jpg" alt="Imagen anunciante" />
+  </div>
+</div>
+ </ng-container>
