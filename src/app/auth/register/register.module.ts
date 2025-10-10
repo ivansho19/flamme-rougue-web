@@ -5,16 +5,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register.component';
 import { RegisterRoutingModule } from './register-routing.component';
 import { UserRegisterFormComponent } from './components/user-register-form/user-register-form.component';
+import { AdvertisersRegisterFormComponent } from './components/advertisers-register-form/advertisers-register-form.component';
+import { ComponentsModule } from '../../shared/components/components.module';
 
 @NgModule({
-  declarations: [RegisterComponent, UserRegisterFormComponent],
-  exports: [RegisterComponent, UserRegisterFormComponent, RegisterRoutingModule],
+  declarations: [RegisterComponent, UserRegisterFormComponent, AdvertisersRegisterFormComponent],
+  exports: [RegisterComponent, UserRegisterFormComponent, RegisterRoutingModule, AdvertisersRegisterFormComponent],
   imports: [
     RegisterRoutingModule, 
     CommonModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule
 ],
 })
 export class RegisterModule {}

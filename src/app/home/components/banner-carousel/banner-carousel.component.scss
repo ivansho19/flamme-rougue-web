@@ -1,0 +1,148 @@
+@import '../../../../assets/styles/variables.scss';
+
+.embla {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 20px;
+
+  .embla__viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .embla__container {
+    display: flex;
+    user-select: none;
+    will-change: transform;
+    gap: 0; // No gap aquí, el espacio lo maneja el slide
+  }
+
+  .embla__slide {
+    flex: 0 0 80vw; // Cada slide ocupa el 80% del viewport
+    min-width: 350px; // Mínimo ancho para responsive
+    max-width: 700px; // Máximo ancho
+    margin: 0 16px; // Espacio entre slides
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s;
+  }
+
+  .embla__button {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    color: #222;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background: #ed5446;
+      color: #fff;
+    }
+  }
+  .embla__button--prev {
+    left: 8px;
+  }
+  .embla__button--next {
+    right: 8px;
+  }
+}
+
+.carousel-content {
+  display: flex;
+  background: #f3f1f1;
+  border-radius: 12px;
+  padding: 24px;
+  align-items: center;
+  min-height: 250px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  width: 100%;
+}
+
+.carousel-images {
+  display: flex;
+  gap: 10px;
+  img {
+    width: 180px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+}
+
+.carousel-text {
+  margin-left: 32px;
+  flex: 1 1 0;
+  h3 {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+    color: $color-dark;
+    font-size: larger;
+  }
+  p {
+    margin: 0 0 16px 0;
+    color: gray;
+  }
+  .carousel-phone {
+    margin: 0 0 16px 0;
+    font-size: 1.2em;
+    span{
+      color: black;
+    }
+  }
+  .carousel-btn {
+    padding: 12px 28px;
+    background: #ed5446;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background .2s;
+    &:hover {
+      background: #d23a2f;
+    }
+  }
+}
+
+// Responsive ajustado
+@media (max-width: 900px) {
+  .embla__slide {
+    flex: 0 0 95vw;
+    min-width: 250px;
+    max-width: 98vw;
+    margin: 0 8px;
+  }
+  .carousel-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+  .carousel-images {
+    margin-bottom: 12px;
+    img {
+      width: 120px;
+      height: 100px;
+    }
+  }
+  .carousel-text {
+    margin-left: 0;
+  }
+}

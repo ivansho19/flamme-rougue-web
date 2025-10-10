@@ -40,7 +40,7 @@
   margin-bottom: 2rem;
 
   img {
-    width: 220px; /* 👈 reduje tamaño para pantallas más chicas */
+    width: 250px; /* 👈 reduje tamaño para pantallas más chicas */
     height: auto;
     max-width: 100%;
   }
@@ -63,6 +63,7 @@ h2.login-title {
   margin: 0.5rem 0;
   font-family: 'Cinzel', serif;
   color: #e0c070;
+  font-weight: 600;
 }
 
 .form-group {
@@ -142,11 +143,35 @@ h2.login-title {
   width: 100%;
   background: $color-primary;
   color: #b8b8b8;
-  font-family: 'Cinzel', serif;
+  font-family: 'Cinzel', serif !important;
   font-size: 0.85rem;
   text-align: center;
   padding: 1rem;
   position: relative; /* 👈 footer siempre debajo */
+}
+
+.password-group {
+  position: relative;
+
+  input {
+    padding-right: 2.5rem; // Espacio para el icono
+  }
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #A60F2B;
+    font-size: 1.25rem;
+    z-index: 2;
+    padding: 0;
+  }
+  .toggle-password:focus {
+    outline: none;
+  }
 }
 
 /* 📱 Responsive */

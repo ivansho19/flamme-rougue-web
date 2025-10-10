@@ -1,0 +1,47 @@
+.logout-dialog-container {
+  text-align: center;
+  padding: 2rem;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.logout-dialog-logo {
+  width: 200px;
+  height: 200px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.logout-dialog-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0;
+}
+
+.logout-dialog-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #8C030E; // tono principal de tu paleta
+}
+
+.logout-dialog-message {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.logout-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button.btn-custom {
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.7rem;
+}

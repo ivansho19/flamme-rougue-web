@@ -1,0 +1,23 @@
+<div class="input-custom-group" [class.has-error]="controles.invalid && controles.touched">
+  <input
+    [type]="inputType"
+    [formControl]="controles"
+    [placeholder]="placeholder"
+    [name]="name"
+  />
+  <!-- Icono ojo solo si es password -->
+  <button
+    *ngIf="type === 'password'"
+    type="button"
+    class="toggle-password"
+    (click)="togglePassword()"
+    tabindex="-1"
+  >
+    <i class="bi" [ngClass]="showPassword ? 'bi-eye' : 'bi-eye-slash'"></i>
+  </button>
+</div>
+<div class="error" *ngIf="controles?.invalid && controles?.touched">
+  <span *ngIf="controles?.errors?.['required']">Este campo es obligatorio</span>
+  <span *ngIf="controles?.errors?.['email']">Formato de email inválido</span>
+  <span *ngIf="controles?.errors?.['minlength']">Mínimo {{ controles.errors?.['minlength']?.requiredLength }} caracteres</span>
+</div>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { last } from 'rxjs';
@@ -22,7 +22,7 @@ export class UserRegisterFormComponent {
     ) {
         this.userForm = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
-            lastname: ['', [Validators.required, Validators.minLength(2)]],
+            lastName: ['', [Validators.required, Validators.minLength(2)]],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', [Validators.required]]
@@ -53,22 +53,16 @@ export class UserRegisterFormComponent {
         return null;
     }
 
-    onSubmitAnunciante() {
-        if (this.anuncianteForm.valid) {
-            // Aquí iría la lógica de registro para anunciante
-            console.log('Anunciante form submitted:', this.anuncianteForm.value);
-        }
-    }
-
     onSubmitUser() {
-        debugger;
-        const { name, email, password } = this.userForm.value;
+        const { name, lastName, email, password } = this.userForm.value;
         if (this.userForm.valid) {
             // Aquí iría la lógica de registro
-            this.authService.registerUser(name, email, password).subscribe({
+            this.authService.registerUser(name, lastName, email, password).subscribe({
                 next: (response) => {
                     console.log('Registro exitoso:', response);
-                    // Redirigir o realizar acciones adicionales
+                    localStorage.setItem('token', response.token);
+                    localStorage.setItem('user', JSON.stringify(response.name));
+                    this.router.navigate(['/home']);
                 },
                 error: (error) => {
                     console.error('Error en el registro:', error);
@@ -77,20 +71,20 @@ export class UserRegisterFormComponent {
         }
     }
 
-    get name() {
-        return this.userForm.get('name');
+    get name(): FormControl {
+        return this.userForm.get('name') as FormControl;
     }
 
-    get email() {
-        return this.userForm.get('email');
+    get email(): FormControl {
+        return this.userForm.get('email') as FormControl;
     }
 
-    get password() {
-        return this.userForm.get('password');
+    get password(): FormControl {
+        return this.userForm.get('password') as FormControl;
     }
 
-    get confirmPassword() {
-        return this.userForm.get('confirmPassword');
+    get confirmPassword(): FormControl {
+        return this.userForm.get('confirmPassword') as FormControl;
     }
 
 

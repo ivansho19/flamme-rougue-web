@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { finalize, Observable, delay } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { LoaderService } from '../../shared/services/loader/loader.service';
+import { IAuthRequest, IAuthResponse } from '../register/models/IAuth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +12,31 @@ export class AuthService {
 
   private readonly apiGeeGenerateToken = environment.api_login;
   private readonly apiRegisterUser = environment.api_register;
+  private readonly apiRegisterClient = environment.api_register_client;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loaderS: LoaderService) { }
 
-    login(email: string, password: string): Observable<any> {
-        return this.http.post(this.apiGeeGenerateToken, { email, password });
+    login(email: string, password: string): Observable<IAuthResponse> {
+      this.loaderS.setLoaderState(true);
+        return this.http.post<IAuthResponse>(this.apiGeeGenerateToken, { email, password }).pipe(
+          delay(3000), // Delay artificial de 3 segundos
+          finalize(() => this.loaderS.setLoaderState(false))
+        );
     }
 
-    registerUser(name: string, email: string, password: string): Observable<any> {
-        return this.http.post(this.apiRegisterUser, { name, email, password });
+    registerUser(name: string, lastName: string, email: string, password: string): Observable<IAuthResponse> {
+      this.loaderS.setLoaderState(true);
+        return this.http.post<IAuthResponse>(this.apiRegisterUser, { name, lastName, email, password }).pipe(
+          delay(3000), // Delay artificial de 3 segundos
+          finalize(() => this.loaderS.setLoaderState(false))
+        );
+    }
+
+    registerClient(req: IAuthRequest): Observable<any> {
+      this.loaderS.setLoaderState(true);
+        return this.http.post(this.apiRegisterClient, req).pipe(
+          delay(3000), // Delay artificial de 3 segundos
+          finalize(() => this.loaderS.setLoaderState(false))
+        );
     }
 }

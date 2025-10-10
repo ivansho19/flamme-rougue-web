@@ -1,0 +1,80 @@
+.adult-dialog-container {
+  max-width: 420px;
+  background: #fff;
+  border-radius: 7px;
+  padding: 2.1rem 2rem 1.5rem 2rem;
+  text-align: center;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.adult-dialog-logo {
+  width: 180px;
+  display: block;
+  margin: 0 auto 1.1rem auto;
+}
+
+.adult-dialog-divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin-bottom: 1.3rem;
+}
+
+.adult-dialog-title {
+  font-size: 1.12rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #222;
+}
+
+.adult-dialog-message {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 0.6rem;
+  line-height: 1.45;
+
+  b {
+    font-weight: bold;
+  }
+  .adult-dialog-link {
+    color: #e74c3c;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  a.adult-dialog-link {
+    text-decoration: underline;
+  }
+  &.secondary {
+    color: #444;
+    margin-bottom: 1.35rem;
+    margin-top: 0.5rem;
+    font-size: 0.98rem;
+  }
+}
+
+.adult-dialog-accept {
+  width: 100%;
+  margin-bottom: 0.8rem;
+  background: #e74c3c !important;
+  color: #fff !important;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  border-radius: 5px;
+  box-shadow: none;
+  height: 46px;
+}
+
+.adult-dialog-settings {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px !important;
+  height: 46px;
+  border-width: 2px !important;
+  margin-top: 10px;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  background: rgba(20, 20, 20, 0.85) !important; // Más oscuro y opaco
+}

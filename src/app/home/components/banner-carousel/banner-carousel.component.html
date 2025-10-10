@@ -1,0 +1,32 @@
+<div class="embla">
+  <div class="embla__viewport" #embla>
+    <div class="embla__container">
+      <div class="embla__slide" *ngFor="let item of items">
+        <div class="carousel-content">
+          <div class="carousel-images">
+            <img *ngFor="let img of item.images" [src]="img" alt="Imagen" />
+          </div>
+          <div class="carousel-text">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <div class="carousel-phone">
+              <span><i class="bi bi-telephone"></i> {{ item.phone }}</span>
+            </div>
+            <a *ngIf="item.buttonUrl" [routerLink]="item.buttonUrl">
+              <button class="carousel-btn">{{ item.buttonText }}</button>
+            </a>
+            <button *ngIf="item.buttonText && !item.buttonUrl" class="carousel-btn">
+              {{ item.buttonText }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="embla__button embla__button--prev" (click)="scrollPrev()">
+    &#8249;
+  </button>
+  <button class="embla__button embla__button--next" (click)="scrollNext()">
+    &#8250;
+  </button>
+</div>

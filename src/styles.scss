@@ -16,7 +16,7 @@ body {
 }
 
 .btn-custom {
-  width: 90%;
+  width: 100%;
   padding: 0.8rem;
   margin-top: 1rem;
   background: linear-gradient(90deg, #e0c070, #c92a2a);
@@ -39,9 +39,47 @@ body {
   }
 }
 
+.btn-custom-cancel {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px !important;
+  height: 46px;
+  border-width: 2px !important;
+  margin-top: 10px;
+}
+
 .error {
   color: #ff4d4d;
   font-size: 14px;
   text-align: left;
   padding-left: 0.5rem;
 }
+
+h1.custom-title,
+h2.custom-title {
+  margin: 0.5rem 0;
+  font-family: 'Cinzel', serif;
+  color: #e0c070;
+  font-weight: 600;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+::ng-deep .adult-dialog-panel .mat-dialog-container {
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.7) !important;
+  animation: backdropFade 250ms ease-out;
+}
+
+@keyframes backdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+

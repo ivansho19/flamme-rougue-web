@@ -7,7 +7,7 @@
   <!-- Mitad derecha con login -->
   <div class="login-right">
     <div class="logo-container">
-      <img src="assets/images/logo_1.png" alt="Flamme Rouge Logo" />
+      <img src="assets/images/logo_HD.png" alt="Flamme Rouge Logo" />
     </div>
 
     <div class="login-box">
@@ -15,27 +15,11 @@
       <h2 class="login-title">Login</h2>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <!-- Email -->
-        <div class="form-group">
-          <input type="email" placeholder="Email" formControlName="email" />
-          <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-            <span *ngIf="loginForm.get('email')?.errors?.['required']">El email es obligatorio</span>
-            <span *ngIf="loginForm.get('email')?.errors?.['email']">Formato de email inválido</span>
-          </div>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group">
-          <input type="password" placeholder="Contraseña" formControlName="password" />
-          <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-            <span *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
-            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
-              La contraseña debe tener al menos 6 caracteres
-            </span>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-custom" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+        <app-input-custom [type]="'email'" [placeholder]="'Email'" [controles]="emailControl"
+          name="email"></app-input-custom>
+        <app-input-custom [type]="'password'" [placeholder]="'Contraseña'" [controles]="passwordControl"
+          name="password"></app-input-custom>
+         <button type="submit" class="btn-custom" [disabled]="loginForm.invalid">Iniciar Sesión</button>
 
         <div class="extra-links">
           <a routerLink="/auth/register" class="link">¿No tienes cuenta? Regístrate</a>
@@ -50,3 +34,4 @@
 <footer class="page-footer">
   <p>2025 © Flamme Rouge | Todos los derechos reservados</p>
 </footer>
+<app-loader *ngIf="loader"></app-loader>

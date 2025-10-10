@@ -46,13 +46,13 @@
   <div class="form-container" *ngIf="activeSection === 'anunciante'">
   <!-- Mitad izquierda: Formulario -->
   <div class="form-half">
-    <h2>Registro de Anunciante</h2>
-   
+    <app-advertisers-register-form></app-advertisers-register-form>
   </div>
 
   <!-- Mitad derecha: Imagen -->
-  <div class="form-half img-half">
-    <img src="assets/images/anunciante-register.jpg" alt="Imagen anunciante" />
+  <div class="form-half">
+    <img src="assets/images/modelo.jpg" alt="Imagen anunciante" class="img-half" />
   </div>
 </div>
  </ng-container>
+ <app-loader *ngIf="loader"></app-loader>

@@ -1,13 +1,13 @@
 <div class="login-right">
   <!-- Logo -->
   <div class="logo-container">
-    <img src="assets/images/logo_1.png" alt="Logo" />
+    <img src="assets/images/logo_HD.png" alt="Logo" />
   </div>
 
   <!-- Caja del formulario -->
   <div class="login-box">
-    <h1 class="login-title">Registro</h1>
-    <h2 class="login-title">Crea tu cuenta</h2>
+    <h1 class="custom-title">Registro</h1>
+    <h2 class="custom-title">Crea tu cuenta</h2>
 
     <form [formGroup]="userForm">
       <div class="form-group">
@@ -18,9 +18,9 @@
       </div>
 
       <div class="form-group">
-        <input formControlName="lastname" required type="text" placeholder="Lastname" />
-        <div class="error" *ngIf="userForm.get('lastname')?.touched && userForm.get('lastname')?.invalid">
-            <span *ngIf="userForm.get('lastname')?.errors?.['required']">El apellido es obligatorio</span>
+        <input formControlName="lastName" required type="text" placeholder="Lastname" />
+        <div class="error" *ngIf="userForm.get('lastName')?.touched && userForm.get('lastName')?.invalid">
+            <span *ngIf="userForm.get('lastName')?.errors?.['required']">El apellido es obligatorio</span>
         </div>
       </div>
 
@@ -33,14 +33,13 @@
       </div>
 
       <div class="form-group">
-        <input formControlName="password" required type="password" placeholder="Password" />
-        <div class="error" *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
-            <span *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
-        </div>
+        <app-input-custom [type]="'password'" [placeholder]="'Contraseña'" [controles]="password"
+          name="password"></app-input-custom>
       </div>
 
       <div class="form-group">
-        <input formControlName="confirmPassword" required type="password" placeholder="Confirm Password" />
+        <app-input-custom [type]="'password'" [placeholder]="'Confirmar Contraseña'" [controles]="confirmPassword"
+          name="confirmPassword"></app-input-custom>
         <div class="error" *ngIf="confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched" class="error-message">
           Las contraseñas no coinciden
         </div>

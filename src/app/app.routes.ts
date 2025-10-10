@@ -6,7 +6,7 @@ export const routes: Routes = [
     redirectTo: '/auth/login',
     pathMatch: 'full'
   },
-   {
+  {
     path: 'auth',
     children: [
       {
@@ -20,6 +20,11 @@ export const routes: Routes = [
           import('./auth/register/register.module').then((m) => m.RegisterModule),
       },
     ],
+  },
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('./home/pages/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: '**',

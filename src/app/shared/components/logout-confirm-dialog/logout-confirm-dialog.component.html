@@ -1,0 +1,29 @@
+<div class="logout-dialog-container">
+  <!-- Logo -->
+  <img src="assets/images/logo_HD.png" alt="Logo" class="logout-dialog-logo" width="200" height="200" />
+
+  <hr class="logout-dialog-divider" />
+
+  <!-- Título -->
+  <div class="logout-dialog-title">
+    ⚠️ ¿Deseas cerrar sesión?
+  </div>
+
+  <!-- Mensaje personalizado -->
+  <div class="logout-dialog-message">
+    Hola <b>{{ userName ? ( userName + ', ') : '' }}</b>
+    si cierras tu sesión, deberás volver a iniciar sesión para acceder nuevamente a 
+    <b>Flamme Rouge</b>.  
+    Asegúrate de haber guardado tu información antes de salir.
+  </div>
+
+  <!-- Botones -->
+  <div class="logout-dialog-actions">
+    <button mat-flat-button class="btn-custom" (click)="onConfirm()">
+      Cerrar Sesión
+    </button>
+    <button mat-stroked-button class="btn-custom-cancel" (click)="onCancel()">
+      Cancelar
+    </button>
+  </div>
+</div>

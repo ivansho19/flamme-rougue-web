@@ -1,0 +1,139 @@
+@import '../../../../../assets/styles/variables.scss';
+
+.login-right {
+  flex: 1; /* 50% */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $color-gray;
+  padding: 2rem;
+  position: relative;
+  margin-top: -100px;
+}
+
+.logo-container {
+  img {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.login-box {
+  background: $color-primary;
+  border-radius: 12px;
+  padding: 2rem;
+  color: $color-light;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  width: 500px;
+  max-width: 400px;
+  text-align: center;
+}
+
+h1.login-title,
+h2.login-title {
+  margin: 0.5rem 0;
+  font-family: 'Cinzel', serif;
+  color: #e0c070;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  input,
+  select {
+    width: 100%; // Cambia aquí de 90% a 100%
+    padding: 0.8rem;
+    border: 1px solid $color-brown;
+    border-radius: 8px;
+    background: $color-gray;
+    color: #000;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus,
+    &:hover {
+      border-color: #c92a2a;
+      outline: none;
+      box-shadow: 0px 0px 6px #c92a2a;
+    }
+  }
+}
+
+// Ajusta form-row para que use el mismo ancho que los inputs individuales
+.form-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 10px;
+
+  .form-group {
+    flex: 1 1 0;
+    margin-bottom: 0;
+  }
+}
+
+// Opcional: fuerza el ancho máximo del form para que todo quede igual
+.login-box form {
+  width: 90%; // O el mismo porcentaje que usabas para los inputs antes
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.error {
+  color: #ff4d4d;
+  font-size: 14px;
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+.btn-login {
+  width: 90%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, #e0c070, #c92a2a);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(201, 42, 42, 0.6);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.extra-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.extra-links .link {
+  color: #e0c070;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+  text-align: center;
+}
+
+.extra-links .link:hover {
+  color: #e0c070;
+  text-decoration: underline;
+}

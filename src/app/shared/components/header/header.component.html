@@ -1,0 +1,25 @@
+<header class="header">
+    <div class="logo">
+        <img src="assets/images/logo_mini.png" alt="Logo" width="32" height="32">Flamme Rouge
+    </div>
+    <div class="header-right">
+        <span class="username">Hola, {{ getUserName() }}</span>
+        <div class="header-icons">
+            <button class="icon-btn" title="Buscar"><i class="bi bi-search"></i></button>
+            <button class="icon-btn" title="Perfil"><i class="bi bi-person"></i></button>
+            <div class="dropdown-flag">
+                <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
+                    [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
+                    <img [src]="selectedFlagUrl" class="flag-img" alt="Idioma actual" />
+                </button>
+                <div class="dropdown-menu" [class.show]="dropdownOpen">
+                    <button class="dropdown-item" *ngFor="let flag of flagOptions" (click)="setFlag(flag)"
+                        [attr.aria-label]="flag.label">
+                        <img [src]="flag.url" class="flag-img" [alt]="flag.label" />
+                    </button>
+                </div>
+            </div>
+            <button class="icon-btn" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
+        </div>
+    </div>
+</header>
