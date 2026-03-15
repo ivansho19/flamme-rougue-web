@@ -1,0 +1,17 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ProfileEditComponent } from './create-profile.component';
+
+
+const routes: Routes = [
+  {
+    path: '',
+    component: ProfileEditComponent,
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ProfileEditRoutingModule {}

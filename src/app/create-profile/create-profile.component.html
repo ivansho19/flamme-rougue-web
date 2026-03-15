@@ -1,0 +1,137 @@
+<div class="profile-wrapper">
+
+  <!-- IMAGES -->
+  <div class="images-card fade-in">
+
+  <h2 class="section-title">Imágenes del perfil</h2>
+
+  <div class="images-layout">
+
+    <!-- FOTO PRINCIPAL -->
+    <div class="drop-zone main-zone"
+     (click)="openMainFileSelector()"
+     [class.dragging]="isDraggingMain"
+     (dragover)="onDragOverMain($event)"
+     (dragleave)="onDragLeaveMain()"
+     (drop)="onDropMain($event)">
+
+      <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
+        <img [src]="profile.profileImage" class="main-preview">
+      </ng-container>
+
+      <ng-template #mainPlaceholder>
+        <div class="drop-placeholder">
+          <p>Arrastra tu foto principal aquí</p>
+          <span>o haz click para subir</span>
+        </div>
+      </ng-template>
+
+      <input type="file"
+             hidden
+             accept="image/*"
+             #mainInput
+             (change)="onMainImageSelected($event)">
+
+    </div>
+
+
+    <!-- GALERÍA -->
+    <div class="drop-zone gallery-zone"
+     (click)="openGalleryFileSelector()"
+     [class.dragging]="isDraggingGallery"
+     (dragover)="onDragOverGallery($event)"
+     (dragleave)="onDragLeaveGallery()"
+     (drop)="onDropGallery($event)">
+
+      <div class="drop-header">
+        <p>Arrastra imágenes aquí</p>
+        <span>o haz click para subir múltiples</span>
+      </div>
+
+      <input type="file"
+             hidden
+             multiple
+             accept="image/*"
+             #galleryInput
+             (change)="onGallerySelected($event)">
+
+      <div class="gallery-grid">
+        <div class="gallery-item"
+             *ngFor="let img of profile.galleryImages; let i = index">
+
+          <img [src]="img">
+          <button class="remove-btn"
+                  (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- FORM -->
+  <form [formGroup]="profileForm"
+        (ngSubmit)="saveProfile()"
+        class="form-card slide-up">
+
+    <h2 class="section-title">Editar Perfil</h2>
+
+    <!-- BASIC -->
+    <div formGroupName="basicInfo" class="card">
+      <h3>Información básica</h3>
+
+      <input formControlName="publicName" placeholder="Nombre público">
+      <textarea formControlName="description" placeholder="Descripción"></textarea>
+      <input formControlName="city" placeholder="Ciudad">
+      <input formControlName="phone" placeholder="Teléfono">
+      <input formControlName="availability" placeholder="Disponibilidad">
+    </div>
+
+    <!-- PERSONAL -->
+    <div formGroupName="personalData" class="card">
+      <h3>Datos personales</h3>
+
+      <select formControlName="gender">
+        <option value="">Seleccionar género</option>
+        <option value="Vrouw">Mujer</option>
+        <option value="Man">Hombre</option>
+      </select>
+
+      <div class="grid-2">
+        <input type="number" formControlName="age" placeholder="Edad">
+        <input type="number" formControlName="height" placeholder="Altura (cm)">
+      </div>
+
+      <div class="grid-2">
+        <input formControlName="nationality" placeholder="Nacionalidad">
+        <input type="number" formControlName="weight" placeholder="Peso (kg)">
+      </div>
+
+      <div class="grid-2">
+        <input formControlName="hairColor" placeholder="Color cabello">
+        <input formControlName="eyeColor" placeholder="Color ojos">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Idiomas</h3>
+      <input formControlName="languages" placeholder="Ej: Español, Inglés">
+    </div>
+
+    <button type="submit" class="btn-primary">
+      Publicar perfil
+    </button>
+
+  </form>
+  <div class="preview-section" *ngIf="isProfileComplete">
+    <h2 class="section-title">Vista previa</h2>
+    <app-profile-preview [profile]="previewProfile"></app-profile-preview>
+  </div>
+  <app-planes
+    *ngIf="isProfileComplete"
+    [selectedPlanId]="selectedPlanId"
+    (planSelected)="planSelected($event)"
+  ></app-planes>
+</div>
