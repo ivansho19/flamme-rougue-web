@@ -1,0 +1,11 @@
+<div class="layout">
+    <!-- HEADER -->
+    <app-header [hidden]="loader"></app-header>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+     <!-- FOOTER -->
+    <footer [hidden]="loader" class="footer">
+        <p>© 2026 Flamme Rouge. Todos los derechos reservados.</p>
+    </footer>
+</div>
