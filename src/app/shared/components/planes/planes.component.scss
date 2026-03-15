@@ -1,0 +1,281 @@
+/* SECTION */
+
+.plans-section{
+  margin-top:4rem;
+  text-align:center;
+}
+
+/* TITULO */
+
+.center{
+  text-align:center;
+}
+
+.plans-subtitle{
+  color:#666;
+  margin-bottom:3rem;
+}
+
+/* GRID */
+
+.plans-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:2rem;
+}
+
+/* CARD */
+
+.plan-card{
+  background:white;
+  border-radius:20px;
+  padding:2rem;
+  position:relative;
+  transition:all .35s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  cursor:pointer;
+}
+
+/* HOVER */
+
+.plan-card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 20px 45px rgba(0,0,0,0.18);
+}
+
+/* HEADER */
+
+.plan-header h3{
+  margin-bottom:.5rem;
+}
+
+.price{
+  font-size:2rem;
+  font-weight:700;
+  color:#b71c1c;
+}
+
+.price span{
+  font-size:.9rem;
+  color:#777;
+}
+
+/* FEATURES */
+
+.plan-features{
+  list-style:none;
+  padding:0;
+  margin:2rem 0;
+  text-align:left;
+}
+
+.plan-features li{
+  padding:.6rem 0;
+  border-bottom:1px solid #eee;
+  font-size:14px;
+}
+
+/* BOTON */
+
+.plan-btn{
+  width:100%;
+  padding:.9rem;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(90deg,#d32f2f,#b71c1c);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.plan-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* PLAN RECOMENDADO */
+
+.popular{
+  border:2px solid #b71c1c;
+  transform:scale(1.05);
+}
+
+.popular:hover{
+  transform:scale(1.08);
+}
+
+/* BADGE */
+
+.badge{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#b71c1c;
+  color:white;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+}
+
+/* VIP */
+
+.vip{
+  background:linear-gradient(145deg,#1a1a1a,#2d2d2d);
+  color:white;
+}
+
+.vip .price{
+  color:#ffd700;
+}
+
+.vip .plan-features li{
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.vip-btn{
+  background:linear-gradient(90deg,#ffd700,#ffb300);
+  color:black;
+  font-weight:700;
+}
+
+/* CARD SELECCIONADA */
+
+.plan-card.selected{
+  border:3px solid #b71c1c;
+  transform:scale(1.05);
+  box-shadow:0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* INDICADOR */
+
+.plan-card.selected::after{
+  content:'✓ Seleccionado';
+  position:absolute;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+  color:#b71c1c;
+  font-weight:600;
+}
+
+/* CLICK EFFECT */
+
+.plan-card:active{
+  transform:scale(.98);
+}
+
+/* RESPONSIVE */
+
+@media (max-width:768px){
+
+  .plans-grid{
+    grid-template-columns:1fr;
+  }
+
+  .popular{
+    transform:none;
+  }
+
+}
+
+/* PLAN SELECCIONADO */
+
+.plan-card.selected{
+transform:scale(1.06);
+border:2px solid transparent;
+position:relative;
+z-index:2;
+}
+
+/* GLOW ANIMADO */
+
+.plan-card.selected::before{
+
+content:'';
+position:absolute;
+inset:-2px;
+border-radius:22px;
+
+background:linear-gradient(
+120deg,
+#ff003c,
+#ff8a00,
+#ffd500,
+#ff003c
+);
+
+background-size:300% 300%;
+
+animation:glowBorder 4s linear infinite;
+
+z-index:-1;
+
+}
+
+/* ANIMACION */
+
+@keyframes glowBorder{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+/* RESPLANDOR INTERNO */
+
+.plan-card.selected{
+
+box-shadow:
+0 0 25px rgba(255,0,60,0.4),
+0 0 60px rgba(255,0,60,0.2),
+0 20px 50px rgba(0,0,0,0.35);
+
+}
+
+/* BOTON ACTIVO */
+
+.active-btn{
+
+background:linear-gradient(
+90deg,
+#00c853,
+#2e7d32
+);
+
+font-weight:700;
+
+box-shadow:
+0 5px 15px rgba(0,200,83,0.4);
+
+}
+
+/* TRANSICION SUAVE */
+
+.plan-card{
+
+transition:
+transform .35s ease,
+box-shadow .35s ease;
+
+}
+
+/* EFECTO CLICK */
+
+.plan-card:active{
+
+transform:scale(.97);
+
+}

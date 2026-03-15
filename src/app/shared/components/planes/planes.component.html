@@ -1,0 +1,82 @@
+<div class="plans-section">
+
+    <h2 class="section-title center">Elige tu plan</h2>
+    <p class="plans-subtitle">
+        Publica tu perfil y comienza a recibir visitas
+    </p>
+
+    <div class="plans-grid">
+        <!-- PLAN BASICO -->
+        <div class="plan-card" (click)="selectPlan('basic')" [class.selected]="selectedPlan === 'basic'">
+
+            <div class="plan-header">
+                <h3>Plan Básico</h3>
+                <div class="price">39€ <span>/ mes</span></div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ Perfil activo</li>
+                <li>✔ Aparece en búsquedas normales</li>
+                <li>✔ Hasta 8 fotos</li>
+                <li>✔ Comentarios y estrellas</li>
+                <li>✖ Sin prioridad en listados</li>
+            </ul>
+
+            <button class="plan-btn" [class.active-btn]="selectedPlan === 'basic'">
+                {{ selectedPlan === 'basic' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            </button>
+
+        </div>
+
+
+        <!-- PLAN PRO -->
+        <div class="plan-card popular" (click)="selectPlan('pro')" [class.selected]="selectedPlan === 'pro'">
+
+            <div class="badge">RECOMENDADO</div>
+
+            <div class="plan-header">
+                <h3>Plan Pro</h3>
+                <div class="price">79€ <span>/ mes</span></div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ Todo lo del Básico</li>
+                <li>✔ Mejor posición en su ciudad</li>
+                <li>✔ Rotaciones destacadas</li>
+                <li>✔ Badge “Perfil Recomendado”</li>
+                <li>✔ Hasta 15 fotos</li>
+            </ul>
+
+            <button class="plan-btn" [class.active-btn]="selectedPlan === 'pro'">
+                {{ selectedPlan === 'pro' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            </button>
+
+        </div>
+
+
+        <!-- PLAN VIP -->
+        <div class="plan-card vip" (click)="selectPlan('vip')" [class.selected]="selectedPlan === 'vip'">
+
+            <div class="plan-header">
+                <h3>Plan VIP</h3>
+                <div class="price">149€ <span>/ mes</span></div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ Todo lo del Plan Pro</li>
+                <li>✔ Prioridad máxima en listados</li>
+                <li>✔ Aparición en Home destacada</li>
+                <li>✔ Badge VIP</li>
+                <li>✔ Hasta 30 fotos</li>
+                <li>✔ Soporte prioritario</li>
+            </ul>
+
+            <button class="plan-btn vip-btn" [class.active-btn]="selectedPlan === 'vip'">
+                {{ selectedPlan === 'vip' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
