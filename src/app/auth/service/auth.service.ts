@@ -13,6 +13,7 @@ export class AuthService {
   private readonly apiGeeGenerateToken = environment.api_login;
   private readonly apiRegisterUser = environment.api_register;
   private readonly apiRegisterClient = environment.api_register_client;
+  private readonly apiClientByEmail = environment.api_client_by_email;
 
   constructor(private http: HttpClient, private loaderS: LoaderService) { }
 
@@ -38,5 +39,13 @@ export class AuthService {
           delay(3000), // Delay artificial de 3 segundos
           finalize(() => this.loaderS.setLoaderState(false))
         );
+    }
+
+    getClientByEmail(email: string): Observable<any> {
+      this.loaderS.setLoaderState(true);
+      const encodedEmail = encodeURIComponent(email);
+      return this.http.get(`${this.apiClientByEmail}/${encodedEmail}`).pipe(
+        finalize(() => this.loaderS.setLoaderState(false))
+      );
     }
 }

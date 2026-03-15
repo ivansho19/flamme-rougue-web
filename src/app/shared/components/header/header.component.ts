@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Aquí llamas a tu servicio de logout
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+          localStorage.removeItem('userEmail');
         localStorage.removeItem('adult-consent');
         this.route.navigate(['/auth/login']);
         console.log('Sesión cerrada');

@@ -62,6 +62,7 @@ export class UserRegisterFormComponent {
                     console.log('Registro exitoso:', response);
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('user', JSON.stringify(response.name));
+                    localStorage.setItem('userEmail', email);
                     this.router.navigate(['/home']);
                 },
                 error: (error) => {

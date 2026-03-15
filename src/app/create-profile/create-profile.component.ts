@@ -6,6 +6,14 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { firstValueFrom, forkJoin, of } from 'rxjs';
 import { PlanOption } from '../shared/components/planes/planes.component';
 import { ProfilePreviewData } from '../shared/components/profile-preview/profile-preview.component';
+import { AuthService } from '../auth/service/auth.service';
+import { GetCountries } from '../shared/clases/getCountries';
+
+interface Country {
+    code: string;
+    name: string;
+    cities: string[];
+}
 
 @Component({
     selector: 'app-create-profile',
@@ -35,18 +43,34 @@ export class ProfileEditComponent implements OnInit {
     selectedPlanId: string | null = null;
     selectedPlan: PlanOption | null = null;
 
+    countries: Country[] = [];
+    cities: string[] = [];
+
     isDraggingMain = false;
     isDraggingGallery = false;
     @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
     @ViewChild('galleryInput') galleryInput!: ElementRef<HTMLInputElement>;
 
-    constructor(private cloudinaryService: CloudinaryService, private route: ActivatedRoute, private http: HttpClient, private fb: FormBuilder) { }
+    constructor(
+        private cloudinaryService: CloudinaryService,
+        private route: ActivatedRoute,
+        private http: HttpClient,
+        private fb: FormBuilder,
+        private authService: AuthService
+    ) { }
 
     ngOnInit() {
         this.initForm();
+        this.countries = GetCountries.getAllCountries();
         this.route.paramMap.subscribe(params => {
-            this.profileId = params.get('id')!;
-            this.getProfile();
+            this.profileId = params.get('id') || '';
+
+            if (this.profileId) {
+                this.getProfile();
+                return;
+            }
+
+            this.loadClientFromEmail();
         });
     }
 
@@ -108,11 +132,36 @@ export class ProfileEditComponent implements OnInit {
             });
     }
 
+    loadClientFromEmail() {
+        const emailFromQuery = this.route.snapshot.queryParamMap.get('email');
+        const emailFromStorage = localStorage.getItem('userEmail');
+        const email = emailFromQuery || emailFromStorage;
+
+        if (!email) {
+            return;
+        }
+
+        this.authService.getClientByEmail(email).subscribe({
+            next: (response) => {
+                const client = response?.client ?? response;
+                if (!client) {
+                    return;
+                }
+                this.applyClientToForm(client);
+            },
+            error: (error) => {
+                console.error('Error cargando cliente:', error);
+            }
+        });
+    }
+
     initForm() {
         this.profileForm = this.fb.group({
             basicInfo: this.fb.group({
                 publicName: ['', Validators.required],
+                email: ['', [Validators.email]],
                 description: [''],
+                country: [''],
                 city: [''],
                 phone: [''],
                 availability: ['']
@@ -131,6 +180,44 @@ export class ProfileEditComponent implements OnInit {
             languages: [''],
 
             isGold: [false]
+        });
+    }
+
+    onCountryChange(event: Event) {
+        const value = (event.target as HTMLSelectElement).value;
+        this.setCitiesForCountry(value);
+        this.profileForm.get('basicInfo.city')?.setValue('');
+    }
+
+    private setCitiesForCountry(value?: string | null): string {
+        if (!value) {
+            this.cities = [];
+            return '';
+        }
+
+        const found = this.countries.find(country =>
+            country.code === value || country.name === value
+        );
+
+        this.cities = found ? found.cities : [];
+        return found?.code ?? value;
+    }
+
+    private applyClientToForm(client: any) {
+        debugger;
+        const countryValue = this.setCitiesForCountry(client.country);
+
+        this.profileForm.patchValue({
+            basicInfo: {
+                publicName: client.name || '',
+                email: client.email || '',
+                country: countryValue || '',
+                city: client.city || '',
+                phone: client.phone || ''
+            },
+            personalData: {
+                gender: client.gender || ''
+            }
         });
     }
 

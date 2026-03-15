@@ -82,11 +82,28 @@
     <div formGroupName="basicInfo" class="card">
       <h3>Información básica</h3>
 
-      <input formControlName="publicName" placeholder="Nombre público">
+      <div class="grid-2">
+        <input formControlName="publicName" placeholder="Nombre público">
+        <input formControlName="email" type="email" placeholder="Email">
+      </div>
       <textarea formControlName="description" placeholder="Descripción"></textarea>
-      <input formControlName="city" placeholder="Ciudad">
-      <input formControlName="phone" placeholder="Teléfono">
-      <input formControlName="availability" placeholder="Disponibilidad">
+
+      <div class="grid-2">
+        <select formControlName="country" (change)="onCountryChange($event)">
+          <option value="" disabled selected>Country</option>
+          <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
+        </select>
+
+        <select formControlName="city" [disabled]="!cities.length">
+          <option value="" disabled selected>City</option>
+          <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+        </select>
+      </div>
+
+      <div class="grid-2">
+        <input formControlName="phone" placeholder="Teléfono">
+        <input formControlName="availability" placeholder="Disponibilidad">
+      </div>
     </div>
 
     <!-- PERSONAL -->
@@ -94,9 +111,11 @@
       <h3>Datos personales</h3>
 
       <select formControlName="gender">
-        <option value="">Seleccionar género</option>
-        <option value="Vrouw">Mujer</option>
-        <option value="Man">Hombre</option>
+        <option value="" disabled selected>Gender</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="transexual">Transexual</option>
+        <option value="prefer_not_say">Prefer not to say</option>
       </select>
 
       <div class="grid-2">
