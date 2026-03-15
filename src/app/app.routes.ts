@@ -1,4 +1,6 @@
+import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
+import { LayoutComponent } from './shared/components/layout/layout.component';
 
 export const routes: Routes = [
   {
@@ -22,9 +24,29 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'home',
-    loadChildren: () =>
-      import('./home/pages/home/home.module').then((m) => m.HomeModule),
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'home',
+        loadChildren: () =>
+          import('./home/pages/home/home.module').then((m) => m.HomeModule),
+      },
+      {
+        path: 'profile/:id',
+        loadChildren: () =>
+          import('./profiles/profiles.module').then((m) => m.ProfilesModule),
+      },
+      {
+        path: 'create-profile',
+        loadChildren: () =>
+          import('./create-profile/create-profile.module').then((m) => m.ProfileEditModule),
+      },
+      {
+        path: 'payments',
+        loadChildren: () =>
+          import('./payments/payment.module').then((m) => m.PaymentModule),
+      }]
   },
   {
     path: '**',
