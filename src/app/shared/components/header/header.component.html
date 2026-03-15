@@ -6,7 +6,7 @@
         <span class="username">Hola, {{ getUserName() }}</span>
         <div class="header-icons">
             <button class="icon-btn" title="Buscar"><i class="bi bi-search"></i></button>
-            <button class="icon-btn" title="Perfil"><i class="bi bi-person"></i></button>
+            <button (click)="navigateToProfile()" class="icon-btn" title="Perfil"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
                     [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">

@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit } from "@angular
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { LogoutConfirmDialogComponent } from "../logout-confirm-dialog/logout-confirm-dialog.component";
+import { LoaderService } from "../../services/loader/loader.service";
 
 @Component({
   selector: "app-header",
@@ -18,13 +19,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { url: 'https://flagcdn.com/gb.svg', label: 'Inglés' }
   ];
 
-  constructor(private route: Router, private eRef: ElementRef, private dialog: MatDialog) {}
+  constructor(private route: Router, private eRef: ElementRef, private dialog: MatDialog, private loaderService: LoaderService) { }
 
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    // Limpieza opcional si añades listeners manuales (no necesario con HostListener)
-  }
+  ngOnInit(): void { }
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
@@ -49,22 +46,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return user ? JSON.parse(user) : null;
   }
 
-    logout() {
+  navigateToProfile(){
+    this.route.navigate(['/profiles']);
+  }
 
-        const dialogRef = this.dialog.open(LogoutConfirmDialogComponent, {
-            width: '400px',
-            panelClass: 'custom-dialog'
-        });
+  logout() {
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                // Aquí llamas a tu servicio de logout
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                localStorage.removeItem('adult-consent');
-                this.route.navigate(['/auth/login']);
-                console.log('Sesión cerrada');
-            }
-        });
-    }
+    const dialogRef = this.dialog.open(LogoutConfirmDialogComponent, {
+      width: '400px',
+      panelClass: 'custom-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Aquí llamas a tu servicio de logout
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('adult-consent');
+        this.route.navigate(['/auth/login']);
+        console.log('Sesión cerrada');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Limpieza opcional si añades listeners manuales (no necesario con HostListener)
+  }
 }
