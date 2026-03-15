@@ -1,6 +1,4 @@
 <div class="home-container" *ngIf="!loader">
-  <!-- HEADER -->
-  <app-header></app-header>
   <!-- BANNER -->
   <section>
     <app-banner-carousel [items]="carouselItems"></app-banner-carousel>
@@ -11,14 +9,10 @@
   <div class="row">
     <div class="col-3" *ngFor="let card of anunciantes">
       <app-card [image]="card.img" [title]="card.nombre" [describe]="card.descripcion" [age]="card.age"
-        [buttonUrl]="'#'"></app-card>
+        [buttonUrl]="'/profile/' + card.id" (click)="goToProfile(card.id)"></app-card>
     </div>
   </div>
 </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2024 Flamme Rouge. Todos los derechos reservados.</p>
-  </footer>
 </div>
 <app-loader *ngIf="loader" [loaderFirstTime]="true"></app-loader>
