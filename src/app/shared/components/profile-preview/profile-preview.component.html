@@ -1,0 +1,67 @@
+<div class="profile-preview" *ngIf="profile as data">
+  <div class="profile-layout">
+    <div class="media-column">
+      <div class="media-frame">
+        <img
+          [src]="data.profileImage || fallbackImage"
+          alt="Imagen principal del perfil"
+        />
+      </div>
+
+      <div class="thumbs" *ngIf="galleryThumbs.length">
+        <img
+          *ngFor="let img of galleryThumbs; let i = index"
+          [src]="img"
+          [alt]="'Miniatura ' + (i + 1)"
+        />
+      </div>
+    </div>
+
+    <div class="info-column">
+      <header class="profile-header">
+        <div>
+          <h1>{{ data.name }}</h1>
+          <p class="subtitle" *ngIf="data.subtitleValue">
+            {{ data.subtitleLabel || 'Ciudad' }} <span>{{ data.subtitleValue }}</span>
+          </p>
+        </div>
+        <div class="contact-pill" *ngIf="data.phone">
+          <span class="phone">{{ data.phone }}</span>
+        </div>
+      </header>
+
+      <div class="badges" *ngIf="data.isGold || data.isVerified">
+        <span class="badge gold" *ngIf="data.isGold">★ GOLD</span>
+        <span class="badge verified" *ngIf="data.isVerified">✔ Verificado</span>
+      </div>
+
+      <p class="bio" *ngIf="data.bio">{{ data.bio }}</p>
+
+      <div class="card">
+        <h2 class="custom-card-title">Contacto</h2>
+        <div class="contact-grid">
+          <div><strong>Telefono:</strong> <span>{{ formatValue(data.phone) }}</span></div>
+          <div><strong>Disponibilidad:</strong> {{ formatValue(data.availability) }}</div>
+          <div class="contact-action"><strong>No puedes llamar?</strong></div>
+          <button type="button" class="btn-custom" *ngIf="showContactAction">
+            ENVIAR MENSAJE
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="custom-card-title">Perfil</h2>
+        <div class="profile-grid">
+          <div><strong>Genero:</strong> {{ formatValue(data.gender) }}</div>
+          <div><strong>Color cabello:</strong> {{ formatValue(data.hairColor) }}</div>
+          <div><strong>Edad:</strong> {{ formatValue(data.age, ' anos') }}</div>
+          <div><strong>Color ojos:</strong> {{ formatValue(data.eyeColor) }}</div>
+          <div><strong>Nacionalidad:</strong> {{ formatValue(data.nationality) }}</div>
+          <div><strong>Idiomas:</strong> {{ formatValue(data.languages) }}</div>
+          <div><strong>Altura:</strong> {{ formatValue(data.height, ' cm') }}</div>
+          <div><strong>Peso:</strong> {{ formatValue(data.weight, ' kg') }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
