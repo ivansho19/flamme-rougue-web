@@ -1,0 +1,38 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CloudinaryService {
+  private cloudName = 'dr4n5n4g9';
+  private uploadPreset = 'flammeRouge';
+
+  constructor(private http: HttpClient) {}
+
+  // uploadImage(file: File, userName: string, userId: string): Observable<any> {
+  //   const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
+
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   formData.append('upload_preset', this.uploadPreset);
+  //   formData.append('folder', `users/${userName}-${userId}/profile`);
+
+  //   return this.http.post(url, formData);
+  // }
+
+  uploadImage(file: File, userId: string) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', this.uploadPreset);
+  formData.append('folder', `users/${userId}`);
+
+  return this.http.post(
+    `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`,
+    formData
+  );
+}
+
+  
+}
