@@ -7,20 +7,29 @@ import { HeaderComponent } from './header/header.component';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 import { LogoutConfirmDialogComponent } from './logout-confirm-dialog/logout-confirm-dialog.component';
 import { InputCustomComponent } from './custom-input/custom-input.component';
+import { LayoutComponent } from './layout/layout.component';
+import { PlanesComponent } from './planes/planes.component';
+import { ProfilePreviewComponent } from './profile-preview/profile-preview.component';
 @NgModule({
   declarations: [
     LoaderComponent,
     HeaderComponent,
     WarningDialogComponent,
     LogoutConfirmDialogComponent,
-    InputCustomComponent
+    InputCustomComponent,
+    LayoutComponent,
+    PlanesComponent,
+    ProfilePreviewComponent
   ],
   exports: [
     LoaderComponent,
     HeaderComponent,
     WarningDialogComponent,
     InputCustomComponent,
-    LogoutConfirmDialogComponent
+    LogoutConfirmDialogComponent,
+    LayoutComponent,
+    PlanesComponent,
+    ProfilePreviewComponent
   ],
   imports: [
     CommonModule,
