@@ -3,9 +3,10 @@ import EmblaCarousel, { EmblaCarouselType, EmblaOptionsType } from 'embla-carous
 import { EmblaItem } from '../../components/banner-carousel/banner-carousel.component';
 import { Router } from '@angular/router';
 import { delay, Subscription } from 'rxjs';
-import { LoaderService } from '../../../shared/services/loader/loader.service';
-import { WarningDialogComponent } from '../../../shared/components/warning-dialog/warning-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoaderService } from '../../../../shared/services/loader/loader.service';
+import { ProfileService } from '../../../../shared/services/profile/profile.service';
+import { WarningDialogComponent } from '../../../../shared/components/warning-dialog/warning-dialog.component';
 
 @Component({
     selector: 'app-home',
@@ -15,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class HomeComponent implements OnInit, OnDestroy {
     @ViewChild('emblaRef') emblaRef!: ElementRef<HTMLDivElement>;
     loaderSubscription: Subscription = new Subscription;
-    public loader: any = true;
+    public loader = true;
     embla!: EmblaCarouselType;
     autoplayInterval: any;
     anunciantes: any[] = [];
@@ -68,7 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         // ...puedes agregar más con otros links de Unsplash o tu preferencia
     ];
 
-    constructor(private route: Router, private loaderService: LoaderService, private dialog: MatDialog) { }
+    constructor(
+        private route: Router,
+        private loaderService: LoaderService,
+        private dialog: MatDialog,
+        private profileService: ProfileService
+    ) { }
 
     ngAfterViewInit(): void {
         const options: EmblaOptionsType = { loop: true, align: 'center' };
@@ -84,6 +90,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this.autoplayInterval) {
             clearInterval(this.autoplayInterval);
         }
+        if (this.loaderSubscription) {
+            this.loaderSubscription.unsubscribe();
+        }
     }
 
     prevSlide(): void {
@@ -95,106 +104,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        // Mocks de anunciantes
-        this.anunciantes = [
-            {
-                
-                id: 1,
-                nombre: 'Ana López',
-                descripcion: 'Modelo profesional con experiencia en pasarela.',
-                age: 28,
-                img: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=400&h=400&fit=crop'
+        this.profileService.getAllProfiles().subscribe({
+            next: (response) => {
+                this.anunciantes = response?.profiles ?? response ?? [];
             },
-            {
-                id: 2,
-                nombre: 'María García',
-                descripcion: 'Modelo independiente para campañas digitales.',
-                age: 30,
-                img: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 3,
-                nombre: 'Lucía Fernández',
-                descripcion: 'Anunciante de moda y belleza.',
-                age: 25,
-                img: 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 4,
-                nombre: 'Gabriela Torres',
-                descripcion: 'Fotógrafa con experiencia internacional.',
-                age: 32,
-                img: 'https://images.pexels.com/photos/247322/pexels-photo-247322.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 5,
-                nombre: 'Paula Martínez',
-                descripcion: 'Modelo profesional de eventos.',
-                age: 27,
-                img: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 6,
-                nombre: 'Carla Suárez',
-                descripcion: 'Influencer y modelo digital.',
-                age: 29,
-                img: 'https://images.pexels.com/photos/2100063/pexels-photo-2100063.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 7,
-                nombre: 'Natalia Vega',
-                descripcion: 'Actriz y modelo de comerciales.',
-                age: 35,
-                img: 'https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 8,
-                nombre: 'Sofía Castro',
-                descripcion: 'Modelo y presentadora de TV.',
-                age: 33,
-                img: 'https://images.pexels.com/photos/1130624/pexels-photo-1130624.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 9,
-                nombre: 'Julia Morales',
-                descripcion: 'Modelo fitness y entrenadora personal.',
-                age: 26,
-                img: 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 10,
-                nombre: 'Camila Ríos',
-                descripcion: 'Modelo y actriz de teatro.',
-                age: 31,
-                img: 'https://images.pexels.com/photos/2100060/pexels-photo-2100060.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 11,
-                nombre: 'Valentina Cruz',
-                descripcion: 'Modelo internacional de pasarela.',
-                age: 29,
-                img: 'https://images.pexels.com/photos/247295/pexels-photo-247295.jpeg?auto=compress&w=400&h=400&fit=crop'
-            },
-            {
-                id: 12,
-                nombre: 'Elena Ramírez',
-                descripcion: 'Especialista en publicidad y modelo digital.',
-                age: 34,
-                img: 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&w=400&h=400&fit=crop'
+            error: (error) => {
+                console.error('Error cargando perfiles:', error);
+                this.anunciantes = [];
             }
-        ];
+        });
         this.showLoader();
         setTimeout(() => {
-            this.loader = false;
             this.showWarningDialog();
         }, 1000);
-
     }
 
     showLoader() {
         this.loaderSubscription = this.loaderService.getLoaderState().pipe(delay(0)).subscribe(
             (response: any) => {
-                this.loader = response
+                this.loader = !!response?.state;
             }
         )
     }
@@ -210,7 +138,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    goToProfile(id: number) {
+    goToProfile(id: string) {
         this.route.navigate(['/profile', id]);
     }
 

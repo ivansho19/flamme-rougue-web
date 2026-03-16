@@ -153,4 +153,5 @@
     [selectedPlanId]="selectedPlanId"
     (planSelected)="planSelected($event)"
   ></app-planes>
+  <app-loader *ngIf="loading"></app-loader>
 </div>

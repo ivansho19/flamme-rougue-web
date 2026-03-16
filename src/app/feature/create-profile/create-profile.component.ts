@@ -1,13 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CloudinaryService } from '../shared/services/cloudinary/cloudinary.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-import { PlanOption } from '../shared/components/planes/planes.component';
-import { ProfilePreviewData } from '../shared/components/profile-preview/profile-preview.component';
-import { AuthService } from '../auth/service/auth.service';
-import { GetCountries } from '../shared/clases/getCountries';
+
+import { IProfileCreateRequest } from './models/IProfileCreate.model';
+import { PlanOption } from '../../shared/components/planes/planes.component';
+import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
+import { AuthService } from '../../auth/service/auth.service';
+import { ProfileService } from '../../shared/services/profile/profile.service';
+import { GetCountries } from '../../shared/clases/getCountries';
+import { ProfilePreviewData } from '../../shared/components/profile-preview/profile-preview.component';
 
 interface Country {
     code: string;
@@ -36,6 +39,7 @@ export class ProfileEditComponent implements OnInit {
     loading = false;
     profileId: string = '';
     profileData: any;
+    clientData: any;
     userId: string = '123'; // Reemplaza con el ID real del usuario
 
     profileForm!: FormGroup;
@@ -56,7 +60,9 @@ export class ProfileEditComponent implements OnInit {
         private route: ActivatedRoute,
         private http: HttpClient,
         private fb: FormBuilder,
-        private authService: AuthService
+        private authService: AuthService,
+        private profileService: ProfileService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -129,6 +135,7 @@ export class ProfileEditComponent implements OnInit {
         this.http.get(`http://localhost:5000/api/users/${this.profileId}`)
             .subscribe(res => {
                 this.profileData = res;
+                this.userId = this.profileData._id;
             });
     }
 
@@ -204,7 +211,7 @@ export class ProfileEditComponent implements OnInit {
     }
 
     private applyClientToForm(client: any) {
-        debugger;
+        this.clientData = client;
         const countryValue = this.setCitiesForCountry(client.country);
 
         this.profileForm.patchValue({
@@ -361,83 +368,121 @@ export class ProfileEditComponent implements OnInit {
 
     async saveProfile() {
         debugger;
-//   if (this.profileForm.invalid) {
-//     this.profileForm.markAllAsTouched();
-//     return;
-//   }
+                if (this.profileForm.invalid) {
+                  this.profileForm.markAllAsTouched();
+                  return;
+                }
 
-  try {
+                try {
 
-    this.loading = true;
+                        this.loading = true;
 
-    /* =========================
-       1️⃣ SUBIR FOTO PRINCIPAL
-    ========================== */
+                        /* =========================
+                             1️⃣ SUBIR FOTO PRINCIPAL
+                        ========================== */
 
-    let mainImageUpload$: any = of(null);
+                        let mainImageUpload$: any = of(null);
 
-    if (this.mainImageFile) {
-      mainImageUpload$ = this.cloudinaryService
-        .uploadImage(this.mainImageFile, this.userId);
-    }
+                        if (this.mainImageFile) {
+                                mainImageUpload$ = this.cloudinaryService
+                                        .uploadImage(this.mainImageFile, this.userId);
+                        }
 
-    /* =========================
-       2️⃣ SUBIR GALERÍA EN PARALELO
-    ========================== */
+                        /* =========================
+                             2️⃣ SUBIR GALERÍA EN PARALELO
+                        ========================== */
 
-    let galleryUpload$: any = of([]);
+                        let galleryUpload$: any = of([]);
 
-    if (this.galleryFiles.length > 0) {
+                        if (this.galleryFiles.length > 0) {
 
-      const uploadsArray$ = this.galleryFiles.map(file =>
-        this.cloudinaryService.uploadImage(file, this.userId)
-      );
+                                const uploadsArray$ = this.galleryFiles.map(file =>
+                                        this.cloudinaryService.uploadImage(file, this.userId)
+                                );
 
-      galleryUpload$ = forkJoin(uploadsArray$);
-    }
+                                galleryUpload$ = forkJoin(uploadsArray$);
+                        }
 
-    /* =========================
-       3️⃣ EJECUTAR TODO EN PARALELO
-    ========================== */
+                        /* =========================
+                             3️⃣ EJECUTAR TODO EN PARALELO
+                        ========================== */
 
-    const [mainResult, galleryResults]: any = await firstValueFrom(
-      forkJoin([mainImageUpload$, galleryUpload$])
-    );
+                        const [mainResult, galleryResults]: any = await firstValueFrom(
+                                forkJoin([mainImageUpload$, galleryUpload$])
+                        );
 
-    /* =========================
-       4️⃣ EXTRAER URLS
-    ========================== */
+                        /* =========================
+                             4️⃣ EXTRAER URLS
+                        ========================== */
 
-    const mainImageUrl = mainResult?.secure_url || this.profile.profileImage;
+                        const mainImage = mainResult?.secure_url && mainResult?.public_id
+                            ? { url: mainResult.secure_url, public_id: mainResult.public_id }
+                            : undefined;
 
-    const galleryUrls = galleryResults.length
-      ? galleryResults.map((res: any) => res.secure_url)
-      : [];
+                        const galleryImages = galleryResults.length
+                            ? galleryResults
+                                .filter((res: any) => res?.secure_url && res?.public_id)
+                                .map((res: any) => ({ url: res.secure_url, public_id: res.public_id }))
+                            : [];
 
-    /* =========================
-       5️⃣ CONSTRUIR OBJETO FINAL
-    ========================== */
+                        /* =========================
+                             5️⃣ CONSTRUIR PAYLOAD
+                        ========================== */
 
-        const finalProfile = {
-            ...this.profileForm.value,
-            profileImage: mainImageUrl,
-            galleryImages: galleryUrls,
-            planId: this.selectedPlanId
-        };
+                        const basicInfo = this.profileForm.get('basicInfo')?.value || {};
+                        const personalData = this.profileForm.get('personalData')?.value || {};
+                        const objectId = this.clientData?._id || this.profileId || this.userId;
 
-    console.log('Perfil final:', finalProfile);
+                        const availabilityValue = basicInfo.availability || '';
+                        const availabilityList = typeof availabilityValue === 'string'
+                            ? availabilityValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+                            : [];
 
-    // 👉 Aquí haces tu POST o PUT real
+                        const languagesValue = this.profileForm.get('languages')?.value || '';
+                        const languagesList = typeof languagesValue === 'string'
+                            ? languagesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+                            : [];
 
-    this.loading = false;
+                        const profilePayload: IProfileCreateRequest = {
+                                objectId,
+                                displayName: basicInfo.publicName || '',
+                                bio: basicInfo.description || '',
+                                phone: basicInfo.phone || '',
+                                city: basicInfo.city || '',
+                            availability: availabilityList,
+                                gender: personalData.gender || '',
+                                age: personalData.age,
+                                nationality: personalData.nationality || '',
+                                height: personalData.height,
+                                weight: personalData.weight,
+                            hairColor: personalData.hairColor || '',
+                            eyeColor: personalData.eyeColor || '',
+                            languages: languagesList,
+                                isPremium: this.profileForm.get('isGold')?.value || false,
+                                planId: this.selectedPlanId,
+                            imagesMain: mainImage,
+                            imagesGallery: galleryImages
+                        };
 
-  } catch (error) {
+                        this.profileService.createProfile(profilePayload).subscribe({
+                                next: (response) => {
+                                        console.log('Perfil creado:', response);
+                                        this.loading = false;
+                                        this.router.navigate(['/home']);
+                                },
+                                error: (error) => {
+                                        console.error('Error creando perfil:', error);
+                                        this.loading = false;
+                                }
+                        });
 
-    console.error('Error subiendo imágenes:', error);
-    this.loading = false;
+                } catch (error) {
 
-  }
-}
+                        console.error('Error subiendo imágenes:', error);
+                        this.loading = false;
+
+                }
+        }
 
 
 }

@@ -28,17 +28,13 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.showLoader();
-        setTimeout(() => {
-            this.loader = false;
-        }, 1000);
-    
+    this.showLoader();    
   }
 
   showLoader() {
         this.loaderSubscription = this.loaderService.getLoaderState().pipe(delay(0)).subscribe(
             (response: any) => {
-                this.loader = response
+                this.loader = !!response?.state;
             }
         )
     }

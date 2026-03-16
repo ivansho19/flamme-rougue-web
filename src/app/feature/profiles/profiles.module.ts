@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfilesComponent } from './profiles.component';
 import { ProfilesRoutingModule } from './profiles-routing.component';
-import { ComponentsModule } from '../shared/components/components.module';
+import { ComponentsModule } from '../../shared/components/components.module';
 @NgModule({
   declarations: [ProfilesComponent],
   exports: [ ProfilesComponent, ProfilesRoutingModule],

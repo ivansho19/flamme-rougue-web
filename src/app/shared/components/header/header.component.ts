@@ -70,6 +70,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  navigateToHome(){
+    this.route.navigate(['/home']);
+  }
+
   ngOnDestroy(): void {
     // Limpieza opcional si añades listeners manuales (no necesario con HostListener)
   }

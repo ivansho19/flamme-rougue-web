@@ -8,11 +8,17 @@
 <div class="container text-center">
   <div class="row">
     <div class="col-3" *ngFor="let card of anunciantes">
-      <app-card [image]="card.img" [title]="card.nombre" [describe]="card.descripcion" [age]="card.age"
-        [buttonUrl]="'/profile/' + card.id" (click)="goToProfile(card.id)"></app-card>
+      <app-card
+        [image]="card.imagesMain?.url || ''"
+        [title]="card.displayName"
+        [describe]="card.bio"
+        [age]="card.age"
+        [buttonUrl]="'/profile/' + card._id"
+        (click)="goToProfile(card._id)">
+      </app-card>
     </div>
   </div>
 </div>
 
 </div>
-<app-loader *ngIf="loader" [loaderFirstTime]="true"></app-loader>
+<app-loader *ngIf="loader"></app-loader>

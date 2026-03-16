@@ -1,0 +1,57 @@
+
+<div class="profile-layout" *ngIf="profileData">
+    <!-- Columna izquierda: imágenes -->
+    <div class="media-column">
+      <div class="media-frame">
+        <img [src]="profileData.imagesMain?.url || fallbackImage" alt="Imagen principal del perfil"/>
+      </div>
+
+      <div class="thumbs" *ngIf="profileData.imagesGallery?.length">
+        <img *ngFor="let img of profileData.imagesGallery" [src]="img.url" alt="Miniatura"/>
+      </div>
+    </div>
+
+    <!-- Columna derecha: información -->
+    <div class="info-column">
+      <header class="profile-header">
+        <div>
+          <h1>{{ profileData.displayName }}</h1>
+          <p class="subtitle">Privé ontvangst <span>{{ profileData.city }}</span></p>
+        </div>
+        <div class="contact-pill" *ngIf="profileData.phone">
+          <span class="phone">{{ profileData.phone }}</span>
+        </div>
+      </header>
+
+      <div class="badges">
+        <span class="badge gold" *ngIf="profileData.isPremium">★ GOLD</span>
+        <span class="badge verified">✔ Geverifieerd</span>
+      </div>
+
+      <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>
+
+      <div class="card">
+        <h2 class="custom-card-title">Contact</h2>
+        <div class="contact-grid">
+          <div><strong>Telefoon:</strong> <span>{{ profileData.phone }}</span></div>
+          <div><strong>Disponibilidad:</strong> {{ availabilityText }}</div>
+          <div><strong>Wil je niet bellen?</strong></div>
+          <button class="btn-custom">STUUR EEN BERICHT</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="custom-card-title">Profiel</h2>
+        <div class="profile-grid">
+          <div><strong>Geslacht:</strong> {{ profileData.gender }}</div>
+          <div><strong>Haarkleur:</strong> {{ hairColorText }}</div>
+          <div><strong>Leeftijd:</strong> {{ profileData.age }} jaar</div>
+          <div><strong>Kleur ogen:</strong> {{ eyeColorText }}</div>
+          <div><strong>Nationaliteit:</strong> {{ profileData.nationality }}</div>
+          <div><strong>Talen:</strong> {{ languagesText }}</div>
+          <div><strong>Lengte:</strong> {{ profileData.height }}cm</div>
+          <div><strong>Gewicht:</strong> {{ profileData.weight }}kg</div>
+        </div>
+      </div>
+    </div>
+  </div>
