@@ -115,11 +115,100 @@ input, textarea, select {
   border: 1px solid #ddd;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.helper {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+}
+
+.field input,
+.field textarea,
+.field select {
+  margin-bottom: 0.35rem;
+}
+
+.input-error {
+  border-color: #e74c3c;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 0.92rem;
+  margin: 0 0 0.75rem;
+}
+
 /* GRID */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+.languages-section {
+  margin-top: 1rem;
+}
+
+.subsection-title {
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.languages-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.languages-chips.input-error {
+  border: 1px solid #e74c3c;
+  border-radius: 12px;
+  padding: 0.25rem;
+}
+
+.availability-field {
+  grid-column: span 2;
+}
+
+.availability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.availability-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.slot-add {
+  align-self: flex-start;
+  background: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.slot-remove {
+  background: #f5d1d1;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 
 /* BUTTON */

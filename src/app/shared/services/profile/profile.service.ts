@@ -34,4 +34,11 @@ export class ProfileService {
       finalize(() => this.loaderS.setLoaderState(false))
     );
   }
+
+  updateProfile(profileId: string, payload: IProfileCreateRequest): Observable<any> {
+    this.loaderS.setLoaderState(true);
+    return this.http.put(`${this.apiProfile}/updateProfile/${profileId}`, payload).pipe(
+      finalize(() => this.loaderS.setLoaderState(false))
+    );
+  }
 }

@@ -102,6 +102,22 @@ body {
   padding-bottom: 12px;
 }
 
+.edit-btn {
+  align-self: flex-start;
+  background: var(--button);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: var(--button-hover);
+}
+
 .profile-header h1 {
   font-size: 28px;
   color: #a20f1f;

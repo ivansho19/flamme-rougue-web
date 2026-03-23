@@ -38,9 +38,15 @@ export const routes: Routes = [
           import('./feature/profiles/profiles.module').then((m) => m.ProfilesModule),
       },
       {
+        canActivate:[],
         path: 'create-profile',
         loadChildren: () =>
           import('./feature/create-profile/create-profile.module').then((m) => m.ProfileEditModule),
+      },
+      {
+        path: 'my-profile',
+        loadChildren: () =>
+          import('./feature/update-profile/update-profile.module').then((m) => m.UpdateProfileModule),
       },
       {
         path: 'payments',

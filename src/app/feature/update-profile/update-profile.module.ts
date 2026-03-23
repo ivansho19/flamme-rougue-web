@@ -8,13 +8,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ComponentsModule } from '../../shared/components/components.module';
-import { ProfileEditRoutingModule } from './create-profile-routing.component';
-import { ProfileEditComponent } from './create-profile.component';
+import { UpdateProfileRoutingModule } from './update-profile-routing.component';
+import { UpdateProfileComponent } from './update-profile.component';
+
 @NgModule({
-  declarations: [ProfileEditComponent],
-  exports: [ ProfileEditComponent, ProfileEditRoutingModule],
+  declarations: [UpdateProfileComponent],
+  exports: [UpdateProfileComponent, UpdateProfileRoutingModule],
   imports: [
-    ProfileEditRoutingModule,
+    UpdateProfileRoutingModule,
     CommonModule,
     RouterModule,
     FormsModule,
@@ -24,7 +25,7 @@ import { ProfileEditComponent } from './create-profile.component';
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule
-],
+    MatNativeDateModule,
+  ],
 })
-export class ProfileEditModule {}
+export class UpdateProfileModule {}

@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { MatChipListboxChange } from '@angular/material/chips';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
 
 import { IProfileCreateRequest } from './models/IProfileCreate.model';
@@ -11,6 +12,7 @@ import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { GetCountries } from '../../shared/clases/getCountries';
 import { ProfilePreviewData } from '../../shared/components/profile-preview/profile-preview.component';
+import { GetUserName } from '../../shared/clases/getUserName';
 
 interface Country {
     code: string;
@@ -49,6 +51,28 @@ export class ProfileEditComponent implements OnInit {
 
     countries: Country[] = [];
     cities: string[] = [];
+    calculatedAge: number | null = null;
+
+    languageOptions = [
+        { value: 'inglés', label: 'Inglés' },
+        { value: 'belga', label: 'Belga' },
+        { value: 'francés', label: 'Francés' },
+        { value: 'español', label: 'Español' },
+        { value: 'italiano', label: 'Italiano' },
+        { value: 'ruso', label: 'Ruso' },
+        { value: 'chino', label: 'Chino' },
+        { value: 'japonés', label: 'Japonés' }
+    ];
+
+    weekDays = [
+        { value: 'Lunes', label: 'Lunes' },
+        { value: 'Martes', label: 'Martes' },
+        { value: 'Miércoles', label: 'Miércoles' },
+        { value: 'Jueves', label: 'Jueves' },
+        { value: 'Viernes', label: 'Viernes' },
+        { value: 'Sábado', label: 'Sábado' },
+        { value: 'Domingo', label: 'Domingo' }
+    ];
 
     isDraggingMain = false;
     isDraggingGallery = false;
@@ -166,28 +190,34 @@ export class ProfileEditComponent implements OnInit {
         this.profileForm = this.fb.group({
             basicInfo: this.fb.group({
                 publicName: ['', Validators.required],
-                email: ['', [Validators.email]],
-                description: [''],
-                country: [''],
-                city: [''],
-                phone: [''],
-                availability: ['']
+                email: ['', [Validators.required, Validators.email]],
+                description: ['', Validators.required],
+                country: ['', Validators.required],
+                city: ['', Validators.required],
+                phone: ['', Validators.required],
+                availabilitySlots: this.fb.array([], this.minArrayLengthValidator(1))
             }),
 
             personalData: this.fb.group({
-                gender: [''],
-                age: [null],
-                nationality: [''],
-                height: [null],
-                hairColor: [''],
-                eyeColor: [''],
-                weight: [null]
+                gender: ['', Validators.required],
+                birthDate: [null, [Validators.required, this.minAgeValidator(18)]],
+                age: [null, Validators.required],
+                nationality: ['', Validators.required],
+                height: [null, Validators.required],
+                hairColor: ['', Validators.required],
+                eyeColor: ['', Validators.required],
+                weight: [null, Validators.required],
+                languages: [[], Validators.required]
             }),
-
-            languages: [''],
 
             isGold: [false]
         });
+
+        this.profileForm
+            .get('personalData.birthDate')
+            ?.valueChanges.subscribe(value => this.updateAgeFromBirthDate(value));
+
+        this.addAvailabilitySlot();
     }
 
     onCountryChange(event: Event) {
@@ -212,6 +242,7 @@ export class ProfileEditComponent implements OnInit {
 
     private applyClientToForm(client: any) {
         this.clientData = client;
+        this.userId = client?._id || this.userId;
         const countryValue = this.setCitiesForCountry(client.country);
 
         this.profileForm.patchValue({
@@ -223,7 +254,8 @@ export class ProfileEditComponent implements OnInit {
                 phone: client.phone || ''
             },
             personalData: {
-                gender: client.gender || ''
+                gender: client.gender || '',
+                languages: Array.isArray(client.languages) ? client.languages : []
             }
         });
     }
@@ -297,20 +329,25 @@ export class ProfileEditComponent implements OnInit {
 
         const basicInfo = this.profileForm.get('basicInfo')?.value || {};
         const personalData = this.profileForm.get('personalData')?.value || {};
+        const availabilityText = this.formatAvailability(this.availabilitySlots.value || []);
+        const languageValues = personalData.languages ?? [];
+        const languagesText = Array.isArray(languageValues)
+            ? languageValues.join(', ')
+            : languageValues;
 
         return {
             name: basicInfo.publicName || 'Perfil',
             subtitleLabel: 'Ciudad',
             subtitleValue: basicInfo.city || '',
             phone: basicInfo.phone || '',
-            availability: basicInfo.availability || '',
+            availability: availabilityText,
             bio: basicInfo.description || '',
             gender: personalData.gender || '',
             hairColor: personalData.hairColor || '',
             age: personalData.age,
             eyeColor: personalData.eyeColor || '',
             nationality: personalData.nationality || '',
-            languages: this.profileForm.get('languages')?.value || '',
+            languages: languagesText || '',
             height: personalData.height,
             weight: personalData.weight,
             isGold: this.profileForm.get('isGold')?.value,
@@ -326,6 +363,118 @@ export class ProfileEditComponent implements OnInit {
         }
 
         return this.isControlComplete(this.profileForm);
+    }
+
+    get canPublish(): boolean {
+        return this.isProfileComplete && !!this.selectedPlanId;
+    }
+
+    isInvalid(controlPath: string): boolean {
+        const control = this.profileForm.get(controlPath);
+        return !!(control && control.invalid && (control.touched || control.dirty));
+    }
+
+    get availabilitySlots(): FormArray {
+        return this.profileForm.get('basicInfo.availabilitySlots') as FormArray;
+    }
+
+    addAvailabilitySlot() {
+        const group = this.fb.group({
+            day: ['', Validators.required],
+            start: ['', Validators.required],
+            end: ['', Validators.required]
+        });
+        this.availabilitySlots.push(group);
+    }
+
+    removeAvailabilitySlot(index: number) {
+        this.availabilitySlots.removeAt(index);
+    }
+
+    isAvailabilityInvalid(): boolean {
+        const control = this.profileForm.get('basicInfo.availabilitySlots');
+        return !!(control && control.invalid && (control.touched || control.dirty));
+    }
+
+    onLanguagesChange(event: any): void {
+        const values = event.value ?? [];
+        this.profileForm.get('personalData.languages')?.setValue(values);
+        this.profileForm.get('personalData.languages')?.markAsDirty();
+        this.profileForm.get('personalData.languages')?.markAsTouched();
+    }
+
+    private updateAgeFromBirthDate(value: unknown): void {
+        const age = this.calculateAge(value);
+        this.calculatedAge = age;
+        this.profileForm.get('personalData.age')?.setValue(age);
+        this.profileForm.get('personalData.age')?.markAsDirty();
+    }
+
+    private calculateAge(value: unknown): number | null {
+        if (!value) {
+            return null;
+        }
+
+        const date = value instanceof Date ? value : new Date(value as string);
+        if (Number.isNaN(date.getTime())) {
+            return null;
+        }
+
+        const today = new Date();
+        let age = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < date.getDate())) {
+            age -= 1;
+        }
+
+        return age;
+    }
+
+    private minAgeValidator(minAge: number) {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const age = this.calculateAge(control.value);
+            if (age === null) {
+                return null;
+            }
+
+            return age < minAge ? { minAge: { requiredAge: minAge, actualAge: age } } : null;
+        };
+    }
+
+    private minArrayLengthValidator(minLength: number) {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (control instanceof FormArray) {
+                return control.length >= minLength ? null : { minLength: true };
+            }
+            return null;
+        };
+    }
+
+    private formatAvailability(slots: Array<{ day: string; start: string; end: string }>): string {
+        return this.formatAvailabilityList(slots).join(', ');
+    }
+
+    private formatAvailabilityList(slots: Array<{ day: string; start: string; end: string }>): string[] {
+        return slots
+            .filter(slot => slot?.day && slot?.start && slot?.end)
+            .map(slot => `${slot.day} ${slot.start}-${slot.end}`);
+    }
+
+    private getUploadFolder(userId: string): string {
+        const rawName = this.clientData?.name || new GetUserName().getUserName() || 'user';
+        const safeName = this.slugifyName(rawName);
+        const idPart = userId || 'unknown';
+        return `users/${safeName}-${idPart}`;
+    }
+
+    private slugifyName(value: string): string {
+        return value
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '') || 'user';
     }
 
     private isControlComplete(control: AbstractControl, controlName?: string): boolean {
@@ -376,16 +525,18 @@ export class ProfileEditComponent implements OnInit {
                 try {
 
                         this.loading = true;
+                            const objectId = this.clientData?._id || this.profileId || this.userId;
+                            const uploadFolder = this.getUploadFolder(objectId);
 
-                        /* =========================
-                             1️⃣ SUBIR FOTO PRINCIPAL
-                        ========================== */
+                            /* =========================
+                                1️⃣ SUBIR FOTO PRINCIPAL
+                            ========================== */
 
                         let mainImageUpload$: any = of(null);
 
                         if (this.mainImageFile) {
-                                mainImageUpload$ = this.cloudinaryService
-                                        .uploadImage(this.mainImageFile, this.userId);
+                            mainImageUpload$ = this.cloudinaryService
+                                .uploadImage(this.mainImageFile, uploadFolder);
                         }
 
                         /* =========================
@@ -397,7 +548,7 @@ export class ProfileEditComponent implements OnInit {
                         if (this.galleryFiles.length > 0) {
 
                                 const uploadsArray$ = this.galleryFiles.map(file =>
-                                        this.cloudinaryService.uploadImage(file, this.userId)
+                                    this.cloudinaryService.uploadImage(file, uploadFolder)
                                 );
 
                                 galleryUpload$ = forkJoin(uploadsArray$);
@@ -431,17 +582,15 @@ export class ProfileEditComponent implements OnInit {
 
                         const basicInfo = this.profileForm.get('basicInfo')?.value || {};
                         const personalData = this.profileForm.get('personalData')?.value || {};
-                        const objectId = this.clientData?._id || this.profileId || this.userId;
 
-                        const availabilityValue = basicInfo.availability || '';
-                        const availabilityList = typeof availabilityValue === 'string'
-                            ? availabilityValue.split(',').map((item: string) => item.trim()).filter(Boolean)
-                            : [];
+                        const availabilityList = this.formatAvailabilityList(this.availabilitySlots.value || []);
 
-                        const languagesValue = this.profileForm.get('languages')?.value || '';
-                        const languagesList = typeof languagesValue === 'string'
-                            ? languagesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
-                            : [];
+                        const languagesValue = this.profileForm.get('personalData.languages')?.value ?? [];
+                        const languagesList = Array.isArray(languagesValue)
+                            ? languagesValue.map((item: string) => item.trim()).filter(Boolean)
+                            : typeof languagesValue === 'string'
+                                ? languagesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+                                : [];
 
                         const profilePayload: IProfileCreateRequest = {
                                 objectId,
@@ -449,24 +598,31 @@ export class ProfileEditComponent implements OnInit {
                                 bio: basicInfo.description || '',
                                 phone: basicInfo.phone || '',
                                 city: basicInfo.city || '',
-                            availability: availabilityList,
+                                availability: availabilityList,
                                 gender: personalData.gender || '',
                                 age: personalData.age,
                                 nationality: personalData.nationality || '',
                                 height: personalData.height,
                                 weight: personalData.weight,
-                            hairColor: personalData.hairColor || '',
-                            eyeColor: personalData.eyeColor || '',
-                            languages: languagesList,
+                                hairColor: personalData.hairColor || '',
+                                eyeColor: personalData.eyeColor || '',
+                                languages: languagesList,
                                 isPremium: this.profileForm.get('isGold')?.value || false,
                                 planId: this.selectedPlanId,
-                            imagesMain: mainImage,
-                            imagesGallery: galleryImages
+                                imagesMain: mainImage,
+                                imagesGallery: galleryImages
                         };
+
+                        console.log('Payload a enviar:', profilePayload);
 
                         this.profileService.createProfile(profilePayload).subscribe({
                                 next: (response) => {
                                         console.log('Perfil creado:', response);
+                                const createdProfile = response?.profile ?? response;
+                                const storedProfileId = createdProfile?._id || response?.profileId;
+                                if (storedProfileId) {
+                                    localStorage.setItem('profileId', storedProfileId);
+                                }
                                         this.loading = false;
                                         this.router.navigate(['/home']);
                                 },

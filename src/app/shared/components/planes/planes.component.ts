@@ -81,6 +81,10 @@ export class PlanesComponent {
 
     selectPlan(plan: string) {
         this.selectedPlan = plan;
+        const selected = this.plans.find(item => item.id === plan);
+        if (selected) {
+            this.planSelected.emit(selected);
+        }
     }
 
     trackById(_: number, plan: PlanOption): string {

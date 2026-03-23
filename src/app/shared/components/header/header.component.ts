@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToProfile(){
-    this.route.navigate(['/profiles']);
+    this.route.navigate(['/my-profile']);
   }
 
   logout() {
@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Aquí llamas a tu servicio de logout
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+          localStorage.removeItem('userId');
           localStorage.removeItem('userEmail');
         localStorage.removeItem('adult-consent');
         this.route.navigate(['/auth/login']);

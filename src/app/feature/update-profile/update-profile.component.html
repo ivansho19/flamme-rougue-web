@@ -73,10 +73,10 @@
 
   <!-- FORM -->
   <form [formGroup]="profileForm"
-        (ngSubmit)="saveProfile()"
+        (ngSubmit)="updateProfile()"
         class="form-card slide-up">
 
-    <h2 class="section-title">Editar Perfil</h2>
+    <h2 class="section-title">Mi perfil</h2>
 
     <!-- BASIC -->
     <div formGroupName="basicInfo" class="card">
@@ -102,9 +102,6 @@
             [class.input-error]="isInvalid('basicInfo.email')"
           >
           <div class="error" *ngIf="isInvalid('basicInfo.email')">
-            <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['required']">
-              Este campo es obligatorio
-            </span>
             <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['email']">
               Formato de email inválido
             </span>
@@ -225,9 +222,6 @@
             <mat-datepicker #birthPicker></mat-datepicker>
           </mat-form-field>
           <div class="error" *ngIf="isInvalid('personalData.birthDate')">
-            <span *ngIf="profileForm.get('personalData.birthDate')?.errors?.['required']">
-              Este campo es obligatorio
-            </span>
             <span *ngIf="profileForm.get('personalData.birthDate')?.errors?.['minAge']">
               Debes ser mayor de 18 anos
             </span>
@@ -328,23 +322,16 @@
       </div>
     </div>
 
+    <button type="submit" class="btn-primary" [disabled]="!canSave">
+      Guardar cambios
+    </button>
+
   </form>
-  <div class="preview-section" *ngIf="isProfileComplete">
+
+  <div class="preview-section" *ngIf="profileForm.valid">
     <h2 class="section-title">Vista previa</h2>
     <app-profile-preview [profile]="previewProfile"></app-profile-preview>
   </div>
-  <app-planes
-    *ngIf="isProfileComplete"
-    [selectedPlanId]="selectedPlanId"
-    (planSelected)="planSelected($event)"
-  ></app-planes>
-  <button
-    *ngIf="canPublish"
-    type="submit"
-    class="btn-primary"
-    (click)="saveProfile()"
-  >
-    Publicar perfil
-  </button>
+
   <app-loader *ngIf="loading"></app-loader>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { IProfileResponse } from './models/IProfile.model';
 
@@ -14,7 +14,11 @@ export class ProfilesComponent implements OnInit {
     profileData: IProfileResponse | null = null;
     fallbackImage = 'assets/images/model.webp';
 
-    constructor(private route: ActivatedRoute, private profileService: ProfileService) { }
+    constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private profileService: ProfileService
+    ) { }
 
     ngOnInit() {
       this.route.paramMap.subscribe(params => {
@@ -29,7 +33,12 @@ export class ProfilesComponent implements OnInit {
     getProfile() {
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
+          debugger;
           this.profileData = response?.profile ?? response ?? null;
+          const resolvedId = this.profileData?._id || this.profileId;
+          if (resolvedId) {
+            localStorage.setItem('profileId', resolvedId);
+          }
         },
         error: (error) => {
           console.error('Error cargando perfil:', error);
@@ -60,6 +69,13 @@ export class ProfilesComponent implements OnInit {
 
     get eyeColorText(): string {
       return this.profileData?.eyeColor || this.profileData?.eyecolor || '';
+    }
+
+    goToEditProfile() {
+      if (this.profileData?._id) {
+        localStorage.setItem('profileId', this.profileData._id);
+      }
+      this.router.navigate(['/my-profile']);
     }
 
 }
