@@ -5,7 +5,7 @@
     <div class="header-right">
         <span class="username">Hola, {{ getUserName() }}</span>
         <div class="header-icons">
-            <button class="icon-btn" title="Buscar"><i class="bi bi-search"></i></button>
+            <button class="icon-btn" title="Buscar" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
             <button (click)="navigateToProfile()" class="icon-btn" title="Perfil"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
@@ -23,3 +23,45 @@
         </div>
     </div>
 </header>
+
+<div class="search-backdrop" *ngIf="searchOpen" (click)="toggleSearch()"></div>
+<div class="search-panel" *ngIf="searchOpen">
+        <div class="search-input-wrapper">
+                <input
+                    #searchInput
+                    type="text"
+                    placeholder="Buscar perfiles"
+                    [value]="searchQuery"
+                    (input)="onSearchInput($any($event.target).value)"
+                />
+                <button class="search-clear" type="button" (click)="clearSearch()" *ngIf="searchQuery">
+                    ✕
+                </button>
+                <button class="search-btn" type="button" disabled>
+                    <i class="bi bi-search"></i>
+                </button>
+        </div>
+
+        <div class="search-results" *ngIf="searchQuery.length >= 3">
+                <div class="search-loading" *ngIf="searchLoading">Buscando...</div>
+                <div class="search-empty" *ngIf="!searchLoading && !searchResults.length">
+                        No hay Resultados
+                </div>
+                <button
+                    class="search-item"
+                    type="button"
+                    *ngFor="let result of searchResults"
+                    (click)="selectProfile(result.id)"
+                >
+                    <img class="search-item-avatar" [src]="result.imageUrl || 'assets/images/model.webp'" alt="Imagen de perfil" />
+                    <div class="search-item-text">
+                        <div class="search-item-title">{{ result.name }}</div>
+                        <div class="search-item-subtitle" *ngIf="result.city">{{ result.city }}</div>
+                    </div>
+                </button>
+        </div>
+
+        <div class="search-hint" *ngIf="searchQuery.length < 3">
+                Escribe al menos 3 caracteres para buscar
+        </div>
+</div>

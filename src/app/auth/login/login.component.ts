@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import { delay, Subscription } from 'rxjs';
 import { LoaderService } from '../../shared/services/loader/loader.service';
+import { ToastService } from '../../shared/services/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   loaderSubscription: Subscription | undefined;
   showPassword: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private loaderService: LoaderService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, 
+    private router: Router, private loaderService: LoaderService, 
+    private toastService: ToastService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
@@ -52,6 +55,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error en el inicio de sesión:', error);
+          if(error.status === 400){
+            this.toastService.showToast('Error', 'Correo electrónico o contraseña incorrecta', 'error', 5);
+            return;
+          } else {  
+            this.toastService.showToast('Error', 'Ocurrió un error inesperado, intente loguearse de nuevo', 'error', 5);
+          }
         }
       });
     } else {
@@ -62,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   showLoader() {
     this.loaderSubscription = this.loaderService.getLoaderState().pipe(delay(0)).subscribe(
       (response: any) => {
-        this.loader = response
+        this.loader = !!response?.state;
       }
     )
   }

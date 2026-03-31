@@ -22,5 +22,5 @@ export interface IProfileCreateRequest {
     url: string;
     public_id: string;
   }>;
-  planId?: string | null;
+  plan?: number | null;
 }

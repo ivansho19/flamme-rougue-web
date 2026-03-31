@@ -33,10 +33,6 @@ export class AdvertisersRegisterFormComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', [Validators.required]],
-            country: ['', [Validators.required]],
-            city: ['', [Validators.required]],
-            phone: ['', [Validators.required, Validators.minLength(7), Validators.pattern('^[0-9]+$')]],
-            gender: ['', [Validators.required, Validators.minLength(2)]],
         }, {
             validators: this.passwordMatchValidator
         });
@@ -66,18 +62,14 @@ export class AdvertisersRegisterFormComponent implements OnInit {
     }
 
     onSubmitUser() {
-        const { name, lastName, email, password, gender, city, country, phone } = this.anuncianteForm.value;
+        const { name, lastName, email, password } = this.anuncianteForm.value;
         if (this.anuncianteForm.valid) {
             // Aquí iría la lógica de registro
             const req: IAuthRequest = { 
                 name,
                 lastName,
                 email,
-                password,
-                country,
-                city,
-                gender,
-                phone
+                password
             }
             this.authService.registerClient(req).subscribe({
                 next: (response) => {

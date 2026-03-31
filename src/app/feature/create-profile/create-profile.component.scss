@@ -179,6 +179,20 @@ input, textarea, select {
   grid-column: span 2;
 }
 
+.phone-group {
+  grid-column: span 2;
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.75rem;
+}
+
+.phone-prefix {
+  text-align: center;
+}
+
 .availability-list {
   display: flex;
   flex-direction: column;

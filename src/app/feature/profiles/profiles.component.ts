@@ -31,9 +31,9 @@ export class ProfilesComponent implements OnInit {
     }
 
     getProfile() {
+      debugger;
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
-          debugger;
           this.profileData = response?.profile ?? response ?? null;
           const resolvedId = this.profileData?._id || this.profileId;
           if (resolvedId) {
@@ -76,6 +76,27 @@ export class ProfilesComponent implements OnInit {
         localStorage.setItem('profileId', this.profileData._id);
       }
       this.router.navigate(['/my-profile']);
+    }
+
+    openWhatsApp() {
+      const phone = this.profileData?.phone || '';
+      if (!phone) {
+        return;
+      }
+
+      const trimmedPhone = phone.trim();
+      let cleanPhone = trimmedPhone.replace(/[^0-9]/g, '');
+      if (trimmedPhone.startsWith('00')) {
+        cleanPhone = cleanPhone.replace(/^00/, '');
+      }
+      if (!cleanPhone) {
+        return;
+      }
+
+      const name = this.profileData?.displayName || 'perfil';
+      const text = encodeURIComponent(`Hola ${name}, vi tu perfil y quisiera mas informacion.`);
+      const url = `https://wa.me/${cleanPhone}?text=${text}`;
+      window.open(url, '_blank');
     }
 
 }

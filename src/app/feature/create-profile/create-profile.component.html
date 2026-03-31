@@ -154,12 +154,20 @@
       </div>
 
       <div class="grid-2">
-        <div class="field">
-          <input
-            formControlName="phone"
-            placeholder="Teléfono"
-            [class.input-error]="isInvalid('basicInfo.phone')"
-          >
+        <div class="field phone-group">
+          <div class="phone-row">
+            <input
+              class="phone-prefix"
+              formControlName="phonePrefix"
+              placeholder="+51"
+            >
+            <input
+              class="phone-number"
+              formControlName="phone"
+              placeholder="Teléfono"
+              [class.input-error]="isInvalid('basicInfo.phone')"
+            >
+          </div>
           <div class="error" *ngIf="isInvalid('basicInfo.phone')">
             Este campo es obligatorio
           </div>

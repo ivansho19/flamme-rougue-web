@@ -6,6 +6,7 @@
   background: #8C030E;
   color: #F2DAAC;
   padding: 1rem 2rem;
+  position: relative;
 }
 
 .logo {
@@ -205,5 +206,140 @@
   .flag-img {
     width: 20px;
     height: 15px;
+  }
+}
+
+.search-panel {
+  position: absolute;
+  right: 7rem;
+  top: 80px;
+  width: 85%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1.25rem 1.25rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  z-index: 120;
+}
+
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 110;
+  animation: fadeInBackdrop 0.2s ease;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f4f4f4;
+  border-radius: 999px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #e2e2e2;
+}
+
+.search-input-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.6rem 0.4rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-btn {
+  background: #8C030E;
+  border: none;
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.search-clear {
+  background: transparent;
+  border: none;
+  color: #7a7a7a;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.search-results {
+  margin-top: 1rem;
+  max-height: 360px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.search-item {
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.search-item:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.search-item-title {
+  font-weight: 700;
+  color: #2b2b2b;
+}
+
+.search-item-subtitle {
+  color: #7a7a7a;
+  font-size: 0.9rem;
+}
+
+.search-item-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #f2e2c8;
+}
+
+.search-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.search-loading,
+.search-empty,
+.search-hint {
+  color: #7a7a7a;
+  font-size: 0.95rem;
+  padding: 0.75rem 0.25rem 0;
+}
+
+@media (max-width: 650px) {
+  .search-panel {
+    right: 1rem;
+    top: 70px;
   }
 }

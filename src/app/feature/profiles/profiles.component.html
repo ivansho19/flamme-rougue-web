@@ -18,14 +18,12 @@
           <h1>{{ profileData.displayName }}</h1>
           <p class="subtitle">Privé ontvangst <span>{{ profileData.city }}</span></p>
         </div>
-        <div class="contact-pill" *ngIf="profileData.phone">
+        <button class="contact-pill phone-pill" type="button" *ngIf="profileData.phone != null">
           <span class="phone">{{ profileData.phone }}</span>
-        </div>
+        </button>
       </header>
 
-      <button class="edit-btn" type="button" (click)="goToEditProfile()">
-        Editar perfil
-      </button>
+      <div class="profile-divider"></div>
 
       <div class="badges">
         <span class="badge gold" *ngIf="profileData.isPremium">★ GOLD</span>
@@ -40,7 +38,7 @@
           <div><strong>Telefoon:</strong> <span>{{ profileData.phone }}</span></div>
           <div><strong>Disponibilidad:</strong> {{ availabilityText }}</div>
           <div><strong>Wil je niet bellen?</strong></div>
-          <button class="btn-custom">STUUR EEN BERICHT</button>
+          <button class="btn-custom" type="button" (click)="openWhatsApp()">STUUR EEN BERICHT</button>
         </div>
       </div>
 

@@ -3,10 +3,10 @@ export interface IAuthRequest {
   lastName: string;
   email: string;
   password: string;
-  country: string;
-  city: string;
-  gender: string;
-  phone: string;
+  country?: string;
+  city?: string;
+  gender?: string;
+  phone?: string;
 }
 
 export interface IAuthResponse {

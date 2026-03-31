@@ -4,12 +4,14 @@ import { MatChipListboxChange } from '@angular/material/chips';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
 
 import { IProfileCreateRequest } from '../create-profile/models/IProfileCreate.model';
+import { PlanOption } from '../../shared/components/planes/planes.component';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { GetCountries } from '../../shared/clases/getCountries';
 import { GetUserName } from '../../shared/clases/getUserName';
 import { ProfilePreviewData } from '../../shared/components/profile-preview/profile-preview.component';
+import { ToastService } from '../../shared/services/toast/toast.service';
 
 interface Country {
   code: string;
@@ -49,6 +51,10 @@ export class UpdateProfileComponent implements OnInit {
   profileForm!: FormGroup;
   calculatedAge: number | null = null;
   isPremium = false;
+  existingAvailability: string[] = [];
+  selectedPlanId: number | null = null;
+  selectedPlan: PlanOption | null = null;
+  showPlanSection = false;
 
   countries: Country[] = [];
   cities: string[] = [];
@@ -83,7 +89,8 @@ export class UpdateProfileComponent implements OnInit {
     private cloudinaryService: CloudinaryService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -209,7 +216,7 @@ export class UpdateProfileComponent implements OnInit {
         country: ['', Validators.required],
         city: ['', Validators.required],
         phone: ['', Validators.required],
-        availabilitySlots: this.fb.array([], this.minArrayLengthValidator(1))
+        availabilitySlots: this.fb.array([])
       }),
 
       personalData: this.fb.group({
@@ -247,7 +254,9 @@ export class UpdateProfileComponent implements OnInit {
         this.applyClientToForm(client);
         if (!this.userId) {
           this.userId = client._id;
-          this.getProfile(client._id);
+        }
+        if (!this.profileId && this.userId) {
+          this.profileId = this.userId;
         }
       },
       error: (error) => {
@@ -316,10 +325,16 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   private applyProfileToForm(profile: any) {
+    this.setSelectedPlan(profile);
     const availabilitySource = Array.isArray(profile.availability)
       ? profile.availability
       : profile.availability || profile.availabity || [];
     const availabilitySlots = this.parseAvailabilitySlots(availabilitySource);
+    this.existingAvailability = Array.isArray(availabilitySource)
+      ? availabilitySource
+      : typeof availabilitySource === 'string'
+        ? availabilitySource.split(',').map((item: string) => item.trim()).filter(Boolean)
+        : [];
 
     const languagesValue = Array.isArray(profile.languages)
       ? profile.languages
@@ -334,6 +349,7 @@ export class UpdateProfileComponent implements OnInit {
       },
       personalData: {
         gender: profile.gender || '',
+        birthDate: profile.birthDate || profile.birthday || null,
         age: profile.age ?? null,
         nationality: profile.nationality || '',
         height: profile.height ?? null,
@@ -366,8 +382,41 @@ export class UpdateProfileComponent implements OnInit {
     this.profile.galleryImages = (profile.imagesGallery || []).map((img: ProfileImage) => img.url);
   }
 
+  private setSelectedPlan(profile: any): void {
+    const rawPlan = profile?.plan ?? profile?.planId ?? profile?.plan?.id ?? null;
+    if (rawPlan === null || rawPlan === undefined) {
+      return;
+    }
+
+    const normalized = typeof rawPlan === 'string' ? Number(rawPlan) : Number(rawPlan);
+    this.selectedPlanId = Number.isNaN(normalized) ? null : normalized;
+  }
+
+  planSelected(plan: PlanOption) {
+    this.selectedPlanId = plan.id;
+    this.selectedPlan = plan;
+  }
+
+  updatePlan() {
+    if (!this.selectedPlanId) {
+      this.toastService.showToast('Selecciona un plan', 'Debes elegir un plan para actualizar', 'error', 4);
+      return;
+    }
+
+    this.updateProfile();
+  }
+
+  togglePlanSection() {
+    this.showPlanSection = true;
+  }
+
   get canSave(): boolean {
-    return !!this.profileForm && this.profileForm.valid && !this.loading;
+    return !!this.profileForm && this.profileForm.valid && !this.loading && this.hasAvailability;
+  }
+
+  get hasAvailability(): boolean {
+    return this.formatAvailabilityList(this.availabilitySlots.value || []).length > 0
+      || this.existingAvailability.length > 0;
   }
 
   get previewProfile(): ProfilePreviewData | null {
@@ -428,8 +477,11 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   isAvailabilityInvalid(): boolean {
+    if (this.hasAvailability) {
+      return false;
+    }
     const control = this.profileForm.get('basicInfo.availabilitySlots');
-    return !!(control && control.invalid && (control.touched || control.dirty));
+    return !!(control && (control.touched || control.dirty));
   }
 
   onLanguagesChange(event: any): void {
@@ -538,11 +590,13 @@ export class UpdateProfileComponent implements OnInit {
   async updateProfile() {
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
+      this.toastService.showToast('Formulario incompleto', 'Completa los campos obligatorios', 'error', 4);
       return;
     }
 
     const lookupId = this.profileId || this.userId;
     if (!lookupId) {
+      this.toastService.showToast('Perfil no identificado', 'Inicia sesion nuevamente', 'error', 4);
       return;
     }
 
@@ -584,7 +638,17 @@ export class UpdateProfileComponent implements OnInit {
       const personalData = this.profileForm.get('personalData')?.value || {};
       const objectId = this.clientData?._id || this.userId;
 
-      const availabilityList = this.formatAvailabilityList(this.availabilitySlots.value || []);
+      const availabilityList = this.formatAvailabilityList(this.availabilitySlots.value || [])
+        .filter(Boolean);
+      const finalAvailability = availabilityList.length > 0
+        ? availabilityList
+        : this.existingAvailability;
+
+      if (!finalAvailability.length) {
+        this.toastService.showToast('Falta disponibilidad', 'Agrega al menos un horario', 'error', 4);
+        this.loading = false;
+        return;
+      }
 
       const languagesValue = this.profileForm.get('personalData.languages')?.value ?? [];
       const languagesList = Array.isArray(languagesValue)
@@ -599,7 +663,7 @@ export class UpdateProfileComponent implements OnInit {
         bio: basicInfo.description || '',
         phone: basicInfo.phone || '',
         city: basicInfo.city || '',
-        availability: availabilityList,
+        availability: finalAvailability,
         gender: personalData.gender || '',
         age: personalData.age,
         nationality: personalData.nationality || '',
@@ -609,6 +673,7 @@ export class UpdateProfileComponent implements OnInit {
         eyeColor: personalData.eyeColor || '',
         languages: languagesList,
         isPremium: this.isPremium,
+        plan: this.selectedPlanId !== null ? Number(this.selectedPlanId) : null,
         imagesMain: mainImage,
         imagesGallery: galleryImages
       };
@@ -616,6 +681,7 @@ export class UpdateProfileComponent implements OnInit {
       this.profileService.updateProfile(lookupId, profilePayload).subscribe({
         next: () => {
           this.loading = false;
+          this.toastService.showToast('Perfil actualizado', 'Los cambios se guardaron', 'success', 5);
         },
         error: (error) => {
           console.error('Error actualizando perfil:', error);

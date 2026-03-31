@@ -91,15 +91,21 @@ body {
 .info-column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--border);
   padding-bottom: 12px;
+}
+
+.profile-divider {
+  height: 2px;
+  width: 100%;
+  background: #e7d9c4;
+  margin: 4px 0 6px;
 }
 
 .edit-btn {
@@ -134,11 +140,16 @@ body {
 }
 
 .contact-pill {
-  background: var(--primary);
+  background: #7f0a16 !important;
   color: #fff;
   padding: 8px 14px;
   border-radius: 999px;
   font-weight: 600;
+}
+
+.phone-pill {
+  border: none;
+  cursor: pointer;
 }
 
 .badges {
@@ -154,7 +165,7 @@ body {
 }
 
 .badge.gold {
-  background: var(--accent);
+  background: #caa14a;
   color: #1f1f1f;
 }
 
@@ -164,12 +175,12 @@ body {
 }
 
 .bio {
-  color: var(--text);
+  color: #1f1f1f;
   line-height: 1.5;
 }
 
 .card {
-  border: 1px solid var(--border);
+  border: 1px solid #e7d9c4;
   border-radius: 10px;
   padding: 16px;
   background: #F2DAAC;

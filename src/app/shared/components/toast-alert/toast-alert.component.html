@@ -1,0 +1,5 @@
+<div class="toast-alert" *ngIf="isVisible" [class.success]="type === 'success'" [class.error]="type === 'error'">
+  <button class="toast-close" type="button" (click)="close()">✕</button>
+  <div class="toast-title" *ngIf="title">{{ title }}</div>
+  <div class="toast-message">{{ message }}</div>
+</div>

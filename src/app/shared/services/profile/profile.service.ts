@@ -41,4 +41,12 @@ export class ProfileService {
       finalize(() => this.loaderS.setLoaderState(false))
     );
   }
+
+  searchProfiles(param: string): Observable<any> {
+    return this.http.get(`${this.apiProfile}/searchProfiles`, {
+      params: { query: param }
+    }).pipe(
+      finalize(() => this.loaderS.setLoaderState(false))
+    );
+  }
 }

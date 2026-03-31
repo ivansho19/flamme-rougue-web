@@ -10,6 +10,8 @@ import { InputCustomComponent } from './custom-input/custom-input.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PlanesComponent } from './planes/planes.component';
 import { ProfilePreviewComponent } from './profile-preview/profile-preview.component';
+import { ToastAlertComponent } from './toast-alert/toast-alert.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     LoaderComponent,
@@ -19,7 +21,8 @@ import { ProfilePreviewComponent } from './profile-preview/profile-preview.compo
     InputCustomComponent,
     LayoutComponent,
     PlanesComponent,
-    ProfilePreviewComponent
+    ProfilePreviewComponent,
+    ToastAlertComponent
   ],
   exports: [
     LoaderComponent,
@@ -29,13 +32,15 @@ import { ProfilePreviewComponent } from './profile-preview/profile-preview.compo
     LogoutConfirmDialogComponent,
     LayoutComponent,
     PlanesComponent,
-    ProfilePreviewComponent
+    ProfilePreviewComponent,
+    ToastAlertComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule
 ],
   providers: []
 })

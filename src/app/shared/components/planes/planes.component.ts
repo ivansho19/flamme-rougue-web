@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 export interface PlanOption {
-    id: string;
+    id: number;
     name: string;
     price: string;
     period?: string;
@@ -23,11 +23,11 @@ export class PlanesComponent {
     @Input() title: string = "Elige tu plan";
     @Input() subtitle: string = "Publica tu perfil y comienza a recibir visitas";
     @Input() note: string = "";
-    @Input() selectedPlanId: string | null = null;
+    @Input() selectedPlanId: number | null = null;
 
     @Input() plans: PlanOption[] = [
         {
-            id: "basic",
+            id: 1,
             name: "Plan Basico",
             price: "39€",
             period: "mes",
@@ -41,7 +41,7 @@ export class PlanesComponent {
             buttonText: "Seleccionar"
         },
         {
-            id: "pro",
+            id: 2,
             name: "Plan Pro",
             price: "79€",
             period: "mes",
@@ -57,7 +57,7 @@ export class PlanesComponent {
             buttonText: "Seleccionar"
         },
         {
-            id: "vip",
+            id: 3,
             name: "Plan VIP",
             price: "149€",
             period: "mes",
@@ -77,9 +77,9 @@ export class PlanesComponent {
 
     @Output() planSelected = new EventEmitter<PlanOption>();
 
-    selectedPlan: string = 'pro';
+    selectedPlan: number = 2;
 
-    selectPlan(plan: string) {
+    selectPlan(plan: number) {
         this.selectedPlan = plan;
         const selected = this.plans.find(item => item.id === plan);
         if (selected) {
@@ -87,7 +87,7 @@ export class PlanesComponent {
         }
     }
 
-    trackById(_: number, plan: PlanOption): string {
+    trackById(_: number, plan: PlanOption): number {
         return plan.id;
     }
 }

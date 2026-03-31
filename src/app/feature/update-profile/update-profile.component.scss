@@ -3,3 +3,23 @@
 .btn-primary {
   margin-top: 1.5rem;
 }
+
+.app-planes {
+  display: block;
+  margin-top: 2rem;
+}
+
+.plan-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 1.5rem;
+  flex-wrap: nowrap;
+}
+
+.plan-actions .btn-primary {
+  margin-top: 0;
+  width: auto;
+  flex: 0 0 auto;
+  min-width: 220px;
+}

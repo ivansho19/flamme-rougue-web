@@ -7,7 +7,7 @@
 
     <div class="plans-grid">
         <!-- PLAN BASICO -->
-        <div class="plan-card" (click)="selectPlan('basic')" [class.selected]="selectedPlan === 'basic'">
+        <div class="plan-card" (click)="selectPlan(1)" [class.selected]="selectedPlan === 1">
 
             <div class="plan-header">
                 <h3>Plan Básico</h3>
@@ -22,15 +22,15 @@
                 <li>✖ Sin prioridad en listados</li>
             </ul>
 
-            <button class="plan-btn" [class.active-btn]="selectedPlan === 'basic'">
-                {{ selectedPlan === 'basic' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            <button class="plan-btn" [class.active-btn]="selectedPlan ===  1">
+                {{ selectedPlan === 1 ? '✓ Plan seleccionado' : 'Seleccionar' }}
             </button>
 
         </div>
 
 
         <!-- PLAN PRO -->
-        <div class="plan-card popular" (click)="selectPlan('pro')" [class.selected]="selectedPlan === 'pro'">
+        <div class="plan-card popular" (click)="selectPlan(2)" [class.selected]="selectedPlan === 2">
 
             <div class="badge">RECOMENDADO</div>
 
@@ -47,15 +47,15 @@
                 <li>✔ Hasta 15 fotos</li>
             </ul>
 
-            <button class="plan-btn" [class.active-btn]="selectedPlan === 'pro'">
-                {{ selectedPlan === 'pro' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            <button class="plan-btn" [class.active-btn]="selectedPlan === 2">
+                {{ selectedPlan === 2 ? '✓ Plan seleccionado' : 'Seleccionar' }}
             </button>
 
         </div>
 
 
         <!-- PLAN VIP -->
-        <div class="plan-card vip" (click)="selectPlan('vip')" [class.selected]="selectedPlan === 'vip'">
+        <div class="plan-card vip" (click)="selectPlan(3)" [class.selected]="selectedPlan === 3">
 
             <div class="plan-header">
                 <h3>Plan VIP</h3>
@@ -71,8 +71,8 @@
                 <li>✔ Soporte prioritario</li>
             </ul>
 
-            <button class="plan-btn vip-btn" [class.active-btn]="selectedPlan === 'vip'">
-                {{ selectedPlan === 'vip' ? '✓ Plan seleccionado' : 'Seleccionar' }}
+            <button class="plan-btn vip-btn" [class.active-btn]="selectedPlan === 3">
+                {{ selectedPlan === 3 ? '✓ Plan seleccionado' : 'Seleccionar' }}
             </button>
 
         </div>

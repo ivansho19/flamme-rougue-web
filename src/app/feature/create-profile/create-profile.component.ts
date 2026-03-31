@@ -46,7 +46,7 @@ export class ProfileEditComponent implements OnInit {
 
     profileForm!: FormGroup;
 
-    selectedPlanId: string | null = null;
+    selectedPlanId: number | null = null;
     selectedPlan: PlanOption | null = null;
 
     countries: Country[] = [];
@@ -194,6 +194,7 @@ export class ProfileEditComponent implements OnInit {
                 description: ['', Validators.required],
                 country: ['', Validators.required],
                 city: ['', Validators.required],
+                phonePrefix: ['+'],
                 phone: ['', Validators.required],
                 availabilitySlots: this.fb.array([], this.minArrayLengthValidator(1))
             }),
@@ -251,6 +252,7 @@ export class ProfileEditComponent implements OnInit {
                 email: client.email || '',
                 country: countryValue || '',
                 city: client.city || '',
+                phonePrefix: '',
                 phone: client.phone || ''
             },
             personalData: {
@@ -339,7 +341,7 @@ export class ProfileEditComponent implements OnInit {
             name: basicInfo.publicName || 'Perfil',
             subtitleLabel: 'Ciudad',
             subtitleValue: basicInfo.city || '',
-            phone: basicInfo.phone || '',
+            phone: this.getPhoneWithPrefix(basicInfo),
             availability: availabilityText,
             bio: basicInfo.description || '',
             gender: personalData.gender || '',
@@ -461,6 +463,21 @@ export class ProfileEditComponent implements OnInit {
             .map(slot => `${slot.day} ${slot.start}-${slot.end}`);
     }
 
+    private getPhoneWithPrefix(basicInfo: { phonePrefix?: string; phone?: string }): string {
+        const prefix = (basicInfo.phonePrefix || '').trim();
+        const phone = (basicInfo.phone || '').trim();
+        if (!phone && !prefix) {
+            return '';
+        }
+        if (!prefix) {
+            return phone;
+        }
+        if (prefix.startsWith('+') || prefix.startsWith('00')) {
+            return `${prefix}${phone}`;
+        }
+        return `+${prefix}${phone}`;
+    }
+
     private getUploadFolder(userId: string): string {
         const rawName = this.clientData?.name || new GetUserName().getUserName() || 'user';
         const safeName = this.slugifyName(rawName);
@@ -516,7 +533,6 @@ export class ProfileEditComponent implements OnInit {
     }
 
     async saveProfile() {
-        debugger;
                 if (this.profileForm.invalid) {
                   this.profileForm.markAllAsTouched();
                   return;
@@ -596,7 +612,7 @@ export class ProfileEditComponent implements OnInit {
                                 objectId,
                                 displayName: basicInfo.publicName || '',
                                 bio: basicInfo.description || '',
-                                phone: basicInfo.phone || '',
+                            phone: this.getPhoneWithPrefix(basicInfo),
                                 city: basicInfo.city || '',
                                 availability: availabilityList,
                                 gender: personalData.gender || '',
@@ -608,7 +624,7 @@ export class ProfileEditComponent implements OnInit {
                                 eyeColor: personalData.eyeColor || '',
                                 languages: languagesList,
                                 isPremium: this.profileForm.get('isGold')?.value || false,
-                                planId: this.selectedPlanId,
+                                plan: this.selectedPlanId,
                                 imagesMain: mainImage,
                                 imagesGallery: galleryImages
                         };
