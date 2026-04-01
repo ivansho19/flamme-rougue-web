@@ -92,6 +92,68 @@
   margin-top: 2.5rem;
 }
 
+/* POSIBILIDADES */
+.possibilities-card {
+  background: #fff7e6;
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.possibilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.possibility-item {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 1px solid #f0e1c9;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+}
+
+.possibility-item h3 {
+  margin: 0 0 0.5rem;
+  color: #7f0000;
+  font-size: 1.05rem;
+}
+
+.possibility-item p {
+  margin: 0;
+  color: #555;
+  line-height: 1.4;
+}
+
+.possibilities-select {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.possibilities-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.possibility-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.possibility-option input {
+  margin: 0;
+}
+
 /* CARD */
 .card {
   background: #f5f5f5;
@@ -113,6 +175,28 @@ input, textarea, select {
   margin-bottom: 1rem;
   border-radius: 10px;
   border: 1px solid #ddd;
+}
+
+/* DATEPICKER */
+::ng-deep .profile-wrapper .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+::ng-deep .profile-wrapper .mat-mdc-text-field-wrapper {
+  background: #ffffff;
+  border-radius: 10px;
+  min-height: 42px;
+}
+
+::ng-deep .profile-wrapper .mat-mdc-form-field-infix {
+  min-height: 18px;
+  padding: 0.2rem 0;
+}
+
+::ng-deep .profile-wrapper .mat-mdc-input-element {
+  padding: 0 0.9rem;
+  height: 24px;
 }
 
 .field {
@@ -167,6 +251,24 @@ input, textarea, select {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+::ng-deep .profile-wrapper .languages-chips .mat-mdc-chip-option {
+  --mdc-chip-selected-container-color: #7f0000;
+  --mdc-chip-selected-text-color: #ffffff;
+  --mdc-chip-selected-graphic-color: #ffffff;
+}
+
+::ng-deep .profile-wrapper .languages-chips .mat-mdc-chip.mat-mdc-chip-selected {
+  background-color: #7f0000 !important;
+}
+
+::ng-deep .profile-wrapper .languages-chips .mat-mdc-chip.mat-mdc-chip-selected .mdc-evolution-chip__text-label {
+  color: #ffffff !important;
+}
+
+::ng-deep .profile-wrapper .languages-chips .mat-mdc-chip.mat-mdc-chip-selected .mdc-evolution-chip__graphic {
+  color: #ffffff !important;
 }
 
 .languages-chips.input-error {

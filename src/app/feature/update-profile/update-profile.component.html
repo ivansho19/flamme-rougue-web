@@ -94,7 +94,7 @@
                 <div class="field">
                     <select formControlName="country" (change)="onCountryChange($event)"
                         [class.input-error]="isInvalid('basicInfo.country')">
-                        <option value="" disabled selected>Country</option>
+                        <option value="" disabled>Country</option>
                         <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
                     </select>
                     <div class="error" *ngIf="isInvalid('basicInfo.country')">
@@ -105,7 +105,7 @@
                 <div class="field">
                     <select formControlName="city" [disabled]="!cities.length"
                         [class.input-error]="isInvalid('basicInfo.city')">
-                        <option value="" disabled selected>City</option>
+                        <option value="" disabled>City</option>
                         <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
                     </select>
                     <div class="error" *ngIf="isInvalid('basicInfo.city')">
@@ -241,6 +241,16 @@
                     Selecciona al menos un idioma
                 </div>
             </div>
+        </div>
+
+        <div class="card">
+            <h3>Posibilidades</h3>
+            <mat-chip-listbox formControlName="posibilities" multiple class="possibilities-chips"
+                (selectionChange)="onPosibilitiesChange($event)" aria-label="Selecciona posibilidades">
+                <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
+                    {{ option.label }}
+                </mat-chip-option>
+            </mat-chip-listbox>
         </div>
         <div class="plan-actions">
             <button type="submit" class="btn-primary" >

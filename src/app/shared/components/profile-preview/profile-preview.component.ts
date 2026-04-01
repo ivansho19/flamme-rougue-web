@@ -19,6 +19,7 @@ export interface ProfilePreviewData {
   isVerified?: boolean;
   profileImage?: string;
   galleryImages?: string[];
+  posibilities?: string[];
 }
 
 @Component({

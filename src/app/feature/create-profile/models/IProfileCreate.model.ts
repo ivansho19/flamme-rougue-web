@@ -3,6 +3,7 @@ export interface IProfileCreateRequest {
   displayName: string;
   bio: string;
   phone: string;
+  country?: string;
   city: string;
   availability: string[];
   gender: string;
@@ -23,4 +24,5 @@ export interface IProfileCreateRequest {
     public_id: string;
   }>;
   plan?: number | null;
+  posibilities?: string[];
 }

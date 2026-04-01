@@ -70,6 +70,15 @@ export class UpdateProfileComponent implements OnInit {
     { value: 'japonés', label: 'Japonés' }
   ];
 
+  posibilityOptions = [
+    { value: 'Acompanamientos', label: 'Acompanamientos' },
+    { value: 'Eventos', label: 'Eventos' },
+    { value: 'Cenas', label: 'Cenas' },
+    { value: 'Viajes', label: 'Viajes' },
+    { value: 'Video_llamada', label: 'Video llamada' },
+    { value: 'Sesiones_privadas', label: 'Sesiones privadas' }
+  ];
+
   weekDays = [
     { value: 'Lunes', label: 'Lunes' },
     { value: 'Martes', label: 'Martes' },
@@ -103,6 +112,12 @@ export class UpdateProfileComponent implements OnInit {
       this.profileId = storedProfileId;
       this.getProfile(storedProfileId);
       return;
+    }
+
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.userId = storedUserId;
+      this.getProfileByUser(storedUserId);
     }
   }
 
@@ -229,7 +244,8 @@ export class UpdateProfileComponent implements OnInit {
         eyeColor: ['', Validators.required],
         weight: [null, Validators.required],
         languages: [[], Validators.required]
-      })
+      }),
+      posibilities: [[]]
     });
 
     this.profileForm
@@ -255,9 +271,6 @@ export class UpdateProfileComponent implements OnInit {
         if (!this.userId) {
           this.userId = client._id;
         }
-        if (!this.profileId && this.userId) {
-          this.profileId = this.userId;
-        }
       },
       error: (error) => {
         console.error('Error cargando cliente:', error);
@@ -265,17 +278,37 @@ export class UpdateProfileComponent implements OnInit {
     });
   }
 
+  private getProfileByUser(userId: string) {
+    this.profileService.getProfileByUser(userId).subscribe({
+      next: (response) => {
+        const profile = response?.profile ?? response ?? null;
+        if (!profile?._id) {
+          this.toastService.showToast('Perfil no encontrado', 'Crea tu perfil primero', 'error', 4);
+          return;
+        }
+
+        this.profileId = profile._id;
+        localStorage.setItem('profileId', this.profileId);
+        this.applyProfileToForm(profile);
+      },
+      error: (error) => {
+        console.error('Error cargando perfil:', error);
+      }
+    });
+  }
+
   private applyClientToForm(client: any) {
     this.clientData = client;
     const countryValue = this.setCitiesForCountry(client.country);
+    const currentBasicInfo = this.profileForm.get('basicInfo')?.value || {};
 
     this.profileForm.patchValue({
       basicInfo: {
-        publicName: client.name || '',
-        email: client.email || '',
-        country: countryValue || '',
-        city: client.city || '',
-        phone: client.phone || ''
+        publicName: currentBasicInfo.publicName || client.name || '',
+        email: currentBasicInfo.email || client.email || '',
+        country: currentBasicInfo.country || countryValue || '',
+        city: currentBasicInfo.city || client.city || '',
+        phone: currentBasicInfo.phone || client.phone || ''
       }
     });
   }
@@ -339,11 +372,18 @@ export class UpdateProfileComponent implements OnInit {
     const languagesValue = Array.isArray(profile.languages)
       ? profile.languages
       : profile.language || [];
+    const posibilitiesValue = Array.isArray(profile.posibilities)
+      ? profile.posibilities
+      : (profile as any)?.possibilities || [];
+
+    const resolvedCountry = profile.country || '';
+    const countryValue = this.setCitiesForCountry(resolvedCountry || this.clientData?.country);
 
     this.profileForm.patchValue({
       basicInfo: {
         publicName: profile.displayName || '',
         description: profile.bio || '',
+        country: countryValue || '',
         city: profile.city || '',
         phone: profile.phone || ''
       },
@@ -357,7 +397,8 @@ export class UpdateProfileComponent implements OnInit {
         eyeColor: profile.eyeColor || profile.eyecolor || '',
         weight: profile.weight ?? null,
         languages: languagesValue
-      }
+      },
+      posibilities: posibilitiesValue
     });
 
     this.availabilitySlots.clear();
@@ -431,6 +472,12 @@ export class UpdateProfileComponent implements OnInit {
     const languagesText = Array.isArray(languageValues)
       ? languageValues.join(', ')
       : languageValues;
+    const posibilitiesValue = this.profileForm.get('posibilities')?.value ?? [];
+    const posibilitiesList = Array.isArray(posibilitiesValue)
+      ? posibilitiesValue
+      : typeof posibilitiesValue === 'string'
+        ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+        : [];
 
     return {
       name: basicInfo.publicName || 'Perfil',
@@ -450,7 +497,8 @@ export class UpdateProfileComponent implements OnInit {
       isGold: false,
       isVerified: true,
       profileImage: this.profile.profileImage,
-      galleryImages: this.profile.galleryImages
+      galleryImages: this.profile.galleryImages,
+      posibilities: posibilitiesList
     };
   }
 
@@ -489,6 +537,13 @@ export class UpdateProfileComponent implements OnInit {
     this.profileForm.get('personalData.languages')?.setValue(values);
     this.profileForm.get('personalData.languages')?.markAsDirty();
     this.profileForm.get('personalData.languages')?.markAsTouched();
+  }
+
+  onPosibilitiesChange(event: any): void {
+    const values = event.value ?? [];
+    this.profileForm.get('posibilities')?.setValue(values);
+    this.profileForm.get('posibilities')?.markAsDirty();
+    this.profileForm.get('posibilities')?.markAsTouched();
   }
 
   private updateAgeFromBirthDate(value: unknown): void {
@@ -657,11 +712,19 @@ export class UpdateProfileComponent implements OnInit {
           ? languagesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
           : [];
 
+      const posibilitiesValue = this.profileForm.get('posibilities')?.value ?? [];
+      const posibilitiesList = Array.isArray(posibilitiesValue)
+        ? posibilitiesValue.map((item: string) => item.trim()).filter(Boolean)
+        : typeof posibilitiesValue === 'string'
+          ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+          : [];
+
       const profilePayload: IProfileCreateRequest = {
         objectId,
         displayName: basicInfo.publicName || '',
         bio: basicInfo.description || '',
         phone: basicInfo.phone || '',
+        country: basicInfo.country || '',
         city: basicInfo.city || '',
         availability: finalAvailability,
         gender: personalData.gender || '',
@@ -672,6 +735,7 @@ export class UpdateProfileComponent implements OnInit {
         hairColor: personalData.hairColor || '',
         eyeColor: personalData.eyeColor || '',
         languages: languagesList,
+        posibilities: posibilitiesList,
         isPremium: this.isPremium,
         plan: this.selectedPlanId !== null ? Number(this.selectedPlanId) : null,
         imagesMain: mainImage,

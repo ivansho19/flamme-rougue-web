@@ -3,11 +3,20 @@
     <!-- Columna izquierda: imágenes -->
     <div class="media-column">
       <div class="media-frame">
-        <img [src]="profileData.imagesMain?.url || fallbackImage" alt="Imagen principal del perfil"/>
+        <img
+          [src]="profileData.imagesMain?.url || fallbackImage"
+          alt="Imagen principal del perfil"
+          (click)="openGallery(0)"
+        />
       </div>
 
       <div class="thumbs" *ngIf="profileData.imagesGallery?.length">
-        <img *ngFor="let img of profileData.imagesGallery" [src]="img.url" alt="Miniatura"/>
+        <img
+          *ngFor="let img of profileData.imagesGallery; let i = index"
+          [src]="img.url"
+          alt="Miniatura"
+          (click)="openGallery(i + 1)"
+        />
       </div>
     </div>
 
@@ -16,7 +25,7 @@
       <header class="profile-header">
         <div>
           <h1>{{ profileData.displayName }}</h1>
-          <p class="subtitle">Privé ontvangst <span>{{ profileData.city }}</span></p>
+          <p class="subtitle">{{ 'PROFILE.SUBTITLE' | translate }} <span>{{ profileData.city }}</span></p>
         </div>
         <button class="contact-pill phone-pill" type="button" *ngIf="profileData.phone != null">
           <span class="phone">{{ profileData.phone }}</span>
@@ -26,34 +35,59 @@
       <div class="profile-divider"></div>
 
       <div class="badges">
-        <span class="badge gold" *ngIf="profileData.isPremium">★ GOLD</span>
-        <span class="badge verified">✔ Geverifieerd</span>
+        <span class="badge gold" *ngIf="profileData.isPremium">★ {{ 'PROFILE.GOLD' | translate }}</span>
+        <span class="badge verified">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
       </div>
 
       <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>
 
       <div class="card">
-        <h2 class="custom-card-title">Contact</h2>
+        <h2 class="custom-card-title">{{ 'PROFILE.CONTACT' | translate }}</h2>
         <div class="contact-grid">
-          <div><strong>Telefoon:</strong> <span>{{ profileData.phone }}</span></div>
-          <div><strong>Disponibilidad:</strong> {{ availabilityText }}</div>
-          <div><strong>Wil je niet bellen?</strong></div>
-          <button class="btn-custom" type="button" (click)="openWhatsApp()">STUUR EEN BERICHT</button>
+          <div><strong>{{ 'PROFILE.PHONE' | translate }}:</strong> <span>{{ profileData.phone }}</span></div>
+          <div><strong>{{ 'PROFILE.AVAILABILITY' | translate }}:</strong> {{ availabilityText }}</div>
+          <div><strong>{{ 'PROFILE.NO_CALL' | translate }}</strong></div>
+          <button class="btn-custom" type="button" (click)="openWhatsApp()">{{ 'PROFILE.SEND_MESSAGE' | translate }}</button>
         </div>
       </div>
 
       <div class="card">
-        <h2 class="custom-card-title">Profiel</h2>
+        <h2 class="custom-card-title">{{ 'PROFILE.DETAILS' | translate }}</h2>
         <div class="profile-grid">
-          <div><strong>Geslacht:</strong> {{ profileData.gender }}</div>
-          <div><strong>Haarkleur:</strong> {{ hairColorText }}</div>
-          <div><strong>Leeftijd:</strong> {{ profileData.age }} jaar</div>
-          <div><strong>Kleur ogen:</strong> {{ eyeColorText }}</div>
-          <div><strong>Nationaliteit:</strong> {{ profileData.nationality }}</div>
-          <div><strong>Talen:</strong> {{ languagesText }}</div>
-          <div><strong>Lengte:</strong> {{ profileData.height }}cm</div>
-          <div><strong>Gewicht:</strong> {{ profileData.weight }}kg</div>
+          <div><strong>{{ 'PROFILE.GENDER' | translate }}:</strong> {{ profileData.gender }}</div>
+          <div><strong>{{ 'PROFILE.HAIR_COLOR' | translate }}:</strong> {{ hairColorText }}</div>
+          <div><strong>{{ 'PROFILE.AGE' | translate }}:</strong> {{ profileData.age }} {{ 'COMMON.YEARS' | translate }}</div>
+          <div><strong>{{ 'PROFILE.EYE_COLOR' | translate }}:</strong> {{ eyeColorText }}</div>
+          <div><strong>{{ 'PROFILE.NATIONALITY' | translate }}:</strong> {{ profileData.nationality }}</div>
+          <div><strong>{{ 'PROFILE.LANGUAGES' | translate }}:</strong> {{ languagesText }}</div>
+          <div><strong>{{ 'PROFILE.HEIGHT' | translate }}:</strong> {{ profileData.height }}{{ 'COMMON.CM' | translate }}</div>
+          <div><strong>{{ 'PROFILE.WEIGHT' | translate }}:</strong> {{ profileData.weight }}{{ 'COMMON.KG' | translate }}</div>
         </div>
+      </div>
+
+      <div class="card" *ngIf="posibilitiesList.length">
+        <h2 class="custom-card-title">{{ 'PROFILE.POSSIBILITIES' | translate }}</h2>
+        <ul class="possibilities-list">
+          <li *ngFor="let item of posibilitiesList">✔ {{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-modal" *ngIf="showGallery">
+    <div class="gallery-backdrop" (click)="closeGallery()"></div>
+    <div class="gallery-dialog" role="dialog" aria-modal="true">
+      <button type="button" class="gallery-close" (click)="closeGallery()">✕</button>
+      <div class="embla">
+        <div class="embla__viewport" #emblaViewport>
+          <div class="embla__container">
+            <div class="embla__slide" *ngFor="let img of galleryUrls">
+              <img [src]="img" alt="Imagen de galeria" />
+            </div>
+          </div>
+        </div>
+        <button type="button" class="embla__prev" (click)="scrollPrev()">‹</button>
+        <button type="button" class="embla__next" (click)="scrollNext()">›</button>
       </div>
     </div>
   </div>

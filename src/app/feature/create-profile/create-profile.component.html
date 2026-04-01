@@ -3,80 +3,74 @@
   <!-- IMAGES -->
   <div class="images-card fade-in">
 
-  <h2 class="section-title">Imágenes del perfil</h2>
+    <h2 class="section-title">Imágenes del perfil</h2>
 
-  <div class="images-layout">
+    <div class="images-layout">
 
-    <!-- FOTO PRINCIPAL -->
-    <div class="drop-zone main-zone"
-     (click)="openMainFileSelector()"
-     [class.dragging]="isDraggingMain"
-     (dragover)="onDragOverMain($event)"
-     (dragleave)="onDragLeaveMain()"
-     (drop)="onDropMain($event)">
+      <!-- FOTO PRINCIPAL -->
+      <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
+        (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
 
-      <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
-        <img [src]="profile.profileImage" class="main-preview">
-      </ng-container>
+        <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
+          <img [src]="profile.profileImage" class="main-preview">
+        </ng-container>
 
-      <ng-template #mainPlaceholder>
-        <div class="drop-placeholder">
-          <p>Arrastra tu foto principal aquí</p>
-          <span>o haz click para subir</span>
-        </div>
-      </ng-template>
+        <ng-template #mainPlaceholder>
+          <div class="drop-placeholder">
+            <p>Arrastra tu foto principal aquí</p>
+            <span>o haz click para subir</span>
+          </div>
+        </ng-template>
 
-      <input type="file"
-             hidden
-             accept="image/*"
-             #mainInput
-             (change)="onMainImageSelected($event)">
+        <input type="file" hidden accept="image/*" #mainInput (change)="onMainImageSelected($event)">
 
-    </div>
-
-
-    <!-- GALERÍA -->
-    <div class="drop-zone gallery-zone"
-     (click)="openGalleryFileSelector()"
-     [class.dragging]="isDraggingGallery"
-     (dragover)="onDragOverGallery($event)"
-     (dragleave)="onDragLeaveGallery()"
-     (drop)="onDropGallery($event)">
-
-      <div class="drop-header">
-        <p>Arrastra imágenes aquí</p>
-        <span>o haz click para subir múltiples</span>
       </div>
 
-      <input type="file"
-             hidden
-             multiple
-             accept="image/*"
-             #galleryInput
-             (change)="onGallerySelected($event)">
 
-      <div class="gallery-grid">
-        <div class="gallery-item"
-             *ngFor="let img of profile.galleryImages; let i = index">
+      <!-- GALERÍA -->
+      <div class="drop-zone gallery-zone" (click)="openGalleryFileSelector()" [class.dragging]="isDraggingGallery"
+        (dragover)="onDragOverGallery($event)" (dragleave)="onDragLeaveGallery()" (drop)="onDropGallery($event)">
 
-          <img [src]="img">
-          <button class="remove-btn"
-                  (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
+        <div class="drop-header">
+          <p>Arrastra imágenes aquí</p>
+          <span>o haz click para subir múltiples</span>
         </div>
+
+        <input type="file" hidden multiple accept="image/*" #galleryInput (change)="onGallerySelected($event)">
+
+        <div class="gallery-grid">
+          <div class="gallery-item" *ngFor="let img of profile.galleryImages; let i = index">
+
+            <img [src]="img">
+            <button class="remove-btn" (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
+          </div>
+        </div>
+
       </div>
 
     </div>
-
   </div>
-</div>
 
 
   <!-- FORM -->
-  <form [formGroup]="profileForm"
-        (ngSubmit)="saveProfile()"
-        class="form-card slide-up">
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form-card slide-up">
 
     <h2 class="section-title">Editar Perfil</h2>
+
+    <div class="card">
+      <h3>Posibilidades</h3>
+      <mat-chip-listbox
+        formControlName="posibilities"
+        multiple
+        class="possibilities-chips"
+        (selectionChange)="onPosibilitiesChange($event)"
+        aria-label="Selecciona posibilidades"
+      >
+        <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
 
     <!-- BASIC -->
     <div formGroupName="basicInfo" class="card">
@@ -84,23 +78,16 @@
 
       <div class="grid-2">
         <div class="field">
-          <input
-            formControlName="publicName"
-            placeholder="Nombre público"
-            [class.input-error]="isInvalid('basicInfo.publicName')"
-          >
+          <input formControlName="publicName" placeholder="Nombre público"
+            [class.input-error]="isInvalid('basicInfo.publicName')">
           <div class="error" *ngIf="isInvalid('basicInfo.publicName')">
             Este campo es obligatorio
           </div>
         </div>
 
         <div class="field">
-          <input
-            formControlName="email"
-            type="email"
-            placeholder="Email"
-            [class.input-error]="isInvalid('basicInfo.email')"
-          >
+          <input formControlName="email" type="email" placeholder="Email"
+            [class.input-error]="isInvalid('basicInfo.email')">
           <div class="error" *ngIf="isInvalid('basicInfo.email')">
             <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['required']">
               Este campo es obligatorio
@@ -113,11 +100,8 @@
       </div>
 
       <div class="field">
-        <textarea
-          formControlName="description"
-          placeholder="Descripción"
-          [class.input-error]="isInvalid('basicInfo.description')"
-        ></textarea>
+        <textarea formControlName="description" placeholder="Descripción"
+          [class.input-error]="isInvalid('basicInfo.description')"></textarea>
         <div class="error" *ngIf="isInvalid('basicInfo.description')">
           Este campo es obligatorio
         </div>
@@ -125,11 +109,8 @@
 
       <div class="grid-2">
         <div class="field">
-          <select
-            formControlName="country"
-            (change)="onCountryChange($event)"
-            [class.input-error]="isInvalid('basicInfo.country')"
-          >
+          <select formControlName="country" (change)="onCountryChange($event)"
+            [class.input-error]="isInvalid('basicInfo.country')">
             <option value="" disabled selected>Country</option>
             <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
           </select>
@@ -139,11 +120,7 @@
         </div>
 
         <div class="field">
-          <select
-            formControlName="city"
-            [disabled]="!cities.length"
-            [class.input-error]="isInvalid('basicInfo.city')"
-          >
+          <select formControlName="city" [disabled]="!cities.length" [class.input-error]="isInvalid('basicInfo.city')">
             <option value="" disabled selected>City</option>
             <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
           </select>
@@ -156,17 +133,9 @@
       <div class="grid-2">
         <div class="field phone-group">
           <div class="phone-row">
-            <input
-              class="phone-prefix"
-              formControlName="phonePrefix"
-              placeholder="+51"
-            >
-            <input
-              class="phone-number"
-              formControlName="phone"
-              placeholder="Teléfono"
-              [class.input-error]="isInvalid('basicInfo.phone')"
-            >
+            <input class="phone-prefix" formControlName="phonePrefix" placeholder="+51">
+            <input class="phone-number" formControlName="phone" placeholder="Teléfono"
+              [class.input-error]="isInvalid('basicInfo.phone')">
           </div>
           <div class="error" *ngIf="isInvalid('basicInfo.phone')">
             Este campo es obligatorio
@@ -176,11 +145,8 @@
         <div class="field availability-field">
           <label class="subsection-title">Disponibilidad</label>
           <div class="availability-list" formArrayName="availabilitySlots">
-            <div
-              class="availability-row"
-              *ngFor="let slot of availabilitySlots.controls; let i = index"
-              [formGroupName]="i"
-            >
+            <div class="availability-row" *ngFor="let slot of availabilitySlots.controls; let i = index"
+              [formGroupName]="i">
               <select formControlName="day">
                 <option value="" disabled selected>Día</option>
                 <option *ngFor="let day of weekDays" [value]="day.value">{{ day.label }}</option>
@@ -205,10 +171,7 @@
       <h3>Datos personales</h3>
 
       <div class="field">
-        <select
-          formControlName="gender"
-          [class.input-error]="isInvalid('personalData.gender')"
-        >
+        <select formControlName="gender" [class.input-error]="isInvalid('personalData.gender')">
           <option value="" disabled selected>Gender</option>
           <option value="female">Female</option>
           <option value="male">Male</option>
@@ -223,12 +186,7 @@
       <div class="grid-2">
         <div class="field">
           <mat-form-field appearance="outline" class="full-width">
-            <input
-              matInput
-              [matDatepicker]="birthPicker"
-              formControlName="birthDate"
-              placeholder="Fecha de nacimiento"
-            >
+            <input matInput [matDatepicker]="birthPicker" formControlName="birthDate" placeholder="Fecha de nacimiento">
             <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
             <mat-datepicker #birthPicker></mat-datepicker>
           </mat-form-field>
@@ -243,21 +201,12 @@
           <div class="helper" *ngIf="calculatedAge !== null">
             Edad calculada: {{ calculatedAge }}
           </div>
-          <input
-            type="number"
-            formControlName="age"
-            placeholder="Edad"
-            readonly
-          >
+          <input type="number" formControlName="age" placeholder="Edad" readonly>
         </div>
 
         <div class="field">
-          <input
-            type="number"
-            formControlName="height"
-            placeholder="Altura (cm)"
-            [class.input-error]="isInvalid('personalData.height')"
-          >
+          <input type="number" formControlName="height" placeholder="Altura (cm)"
+            [class.input-error]="isInvalid('personalData.height')">
           <div class="error" *ngIf="isInvalid('personalData.height')">
             Este campo es obligatorio
           </div>
@@ -266,23 +215,16 @@
 
       <div class="grid-2">
         <div class="field">
-          <input
-            formControlName="nationality"
-            placeholder="Nacionalidad"
-            [class.input-error]="isInvalid('personalData.nationality')"
-          >
+          <input formControlName="nationality" placeholder="Nacionalidad"
+            [class.input-error]="isInvalid('personalData.nationality')">
           <div class="error" *ngIf="isInvalid('personalData.nationality')">
             Este campo es obligatorio
           </div>
         </div>
 
         <div class="field">
-          <input
-            type="number"
-            formControlName="weight"
-            placeholder="Peso (kg)"
-            [class.input-error]="isInvalid('personalData.weight')"
-          >
+          <input type="number" formControlName="weight" placeholder="Peso (kg)"
+            [class.input-error]="isInvalid('personalData.weight')">
           <div class="error" *ngIf="isInvalid('personalData.weight')">
             Este campo es obligatorio
           </div>
@@ -291,22 +233,16 @@
 
       <div class="grid-2">
         <div class="field">
-          <input
-            formControlName="hairColor"
-            placeholder="Color cabello"
-            [class.input-error]="isInvalid('personalData.hairColor')"
-          >
+          <input formControlName="hairColor" placeholder="Color cabello"
+            [class.input-error]="isInvalid('personalData.hairColor')">
           <div class="error" *ngIf="isInvalid('personalData.hairColor')">
             Este campo es obligatorio
           </div>
         </div>
 
         <div class="field">
-          <input
-            formControlName="eyeColor"
-            placeholder="Color ojos"
-            [class.input-error]="isInvalid('personalData.eyeColor')"
-          >
+          <input formControlName="eyeColor" placeholder="Color ojos"
+            [class.input-error]="isInvalid('personalData.eyeColor')">
           <div class="error" *ngIf="isInvalid('personalData.eyeColor')">
             Este campo es obligatorio
           </div>
@@ -315,18 +251,10 @@
 
       <div class="languages-section">
         <h4 class="subsection-title">Idiomas</h4>
-        <mat-chip-listbox
-          formControlName="languages"
-          multiple
-          class="languages-chips"
-          (selectionChange)="onLanguagesChange($event)"
-          [class.input-error]="isInvalid('personalData.languages')"
-          aria-label="Selecciona idiomas"
-        >
-          <mat-chip-option
-            *ngFor="let language of languageOptions"
-            [value]="language.value"
-          >
+        <mat-chip-listbox formControlName="languages" multiple class="languages-chips"
+          (selectionChange)="onLanguagesChange($event)" [class.input-error]="isInvalid('personalData.languages')"
+          aria-label="Selecciona idiomas">
+          <mat-chip-option *ngFor="let language of languageOptions" [value]="language.value">
             {{ language.label }}
           </mat-chip-option>
         </mat-chip-listbox>
@@ -341,17 +269,9 @@
     <h2 class="section-title">Vista previa</h2>
     <app-profile-preview [profile]="previewProfile"></app-profile-preview>
   </div>
-  <app-planes
-    *ngIf="isProfileComplete"
-    [selectedPlanId]="selectedPlanId"
-    (planSelected)="planSelected($event)"
-  ></app-planes>
-  <button
-    *ngIf="canPublish"
-    type="submit"
-    class="btn-primary"
-    (click)="saveProfile()"
-  >
+  <app-planes *ngIf="isProfileComplete" [selectedPlanId]="selectedPlanId"
+    (planSelected)="planSelected($event)"></app-planes>
+  <button style="margin-top: 30px;" *ngIf="canPublish" type="submit" class="btn-primary" (click)="saveProfile()">
     Publicar perfil
   </button>
   <app-loader *ngIf="loading"></app-loader>

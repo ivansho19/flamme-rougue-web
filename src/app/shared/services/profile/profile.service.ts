@@ -35,6 +35,13 @@ export class ProfileService {
     );
   }
 
+  getProfileByUser(userId: string): Observable<any> {
+    this.loaderS.setLoaderState(true);
+    return this.http.get(`${this.apiProfile}/getProfileByUser/${userId}`).pipe(
+      finalize(() => this.loaderS.setLoaderState(false))
+    );
+  }
+
   updateProfile(profileId: string, payload: IProfileCreateRequest): Observable<any> {
     this.loaderS.setLoaderState(true);
     return this.http.put(`${this.apiProfile}/updateProfile/${profileId}`, payload).pipe(

@@ -22,7 +22,7 @@
         <div>
           <h1>{{ data.name }}</h1>
           <p class="subtitle" *ngIf="data.subtitleValue">
-            {{ data.subtitleLabel || 'Ciudad' }} <span>{{ data.subtitleValue }}</span>
+            {{ data.subtitleLabel || ('COMMON.CITY' | translate) }} <span>{{ data.subtitleValue }}</span>
           </p>
         </div>
         <div class="contact-pill" *ngIf="data.phone">
@@ -31,36 +31,43 @@
       </header>
 
       <div class="badges" *ngIf="data.isGold || data.isVerified">
-        <span class="badge gold" *ngIf="data.isGold">★ GOLD</span>
-        <span class="badge verified" *ngIf="data.isVerified">✔ Verificado</span>
+        <span class="badge gold" *ngIf="data.isGold">★ {{ 'PROFILE.GOLD' | translate }}</span>
+        <span class="badge verified" *ngIf="data.isVerified">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
       </div>
 
       <p class="bio" *ngIf="data.bio">{{ data.bio }}</p>
 
       <div class="card">
-        <h2 class="custom-card-title">Contacto</h2>
+        <h2 class="custom-card-title">{{ 'PROFILE.CONTACT' | translate }}</h2>
         <div class="contact-grid">
-          <div><strong>Telefono:</strong> <span>{{ formatValue(data.phone) }}</span></div>
-          <div><strong>Disponibilidad:</strong> {{ formatValue(data.availability) }}</div>
-          <div class="contact-action"><strong>No puedes llamar?</strong></div>
+          <div><strong>{{ 'PROFILE.PHONE' | translate }}:</strong> <span>{{ formatValue(data.phone) }}</span></div>
+          <div><strong>{{ 'PROFILE.AVAILABILITY' | translate }}:</strong> {{ formatValue(data.availability) }}</div>
+          <div class="contact-action"><strong>{{ 'PROFILE.NO_CALL' | translate }}</strong></div>
           <button type="button" class="btn-custom" *ngIf="showContactAction">
-            ENVIAR MENSAJE
+            {{ 'PROFILE.SEND_MESSAGE' | translate }}
           </button>
         </div>
       </div>
 
       <div class="card">
-        <h2 class="custom-card-title">Perfil</h2>
+        <h2 class="custom-card-title">{{ 'PROFILE.DETAILS' | translate }}</h2>
         <div class="profile-grid">
-          <div><strong>Genero:</strong> {{ formatValue(data.gender) }}</div>
-          <div><strong>Color cabello:</strong> {{ formatValue(data.hairColor) }}</div>
-          <div><strong>Edad:</strong> {{ formatValue(data.age, ' anos') }}</div>
-          <div><strong>Color ojos:</strong> {{ formatValue(data.eyeColor) }}</div>
-          <div><strong>Nacionalidad:</strong> {{ formatValue(data.nationality) }}</div>
-          <div><strong>Idiomas:</strong> {{ formatValue(data.languages) }}</div>
-          <div><strong>Altura:</strong> {{ formatValue(data.height, ' cm') }}</div>
-          <div><strong>Peso:</strong> {{ formatValue(data.weight, ' kg') }}</div>
+          <div><strong>{{ 'PROFILE.GENDER' | translate }}:</strong> {{ formatValue(data.gender) }}</div>
+          <div><strong>{{ 'PROFILE.HAIR_COLOR' | translate }}:</strong> {{ formatValue(data.hairColor) }}</div>
+          <div><strong>{{ 'PROFILE.AGE' | translate }}:</strong> {{ formatValue(data.age, ' ') }}{{ 'COMMON.YEARS' | translate }}</div>
+          <div><strong>{{ 'PROFILE.EYE_COLOR' | translate }}:</strong> {{ formatValue(data.eyeColor) }}</div>
+          <div><strong>{{ 'PROFILE.NATIONALITY' | translate }}:</strong> {{ formatValue(data.nationality) }}</div>
+          <div><strong>{{ 'PROFILE.LANGUAGES' | translate }}:</strong> {{ formatValue(data.languages) }}</div>
+          <div><strong>{{ 'PROFILE.HEIGHT' | translate }}:</strong> {{ formatValue(data.height, ' ') }}{{ 'COMMON.CM' | translate }}</div>
+          <div><strong>{{ 'PROFILE.WEIGHT' | translate }}:</strong> {{ formatValue(data.weight, ' ') }}{{ 'COMMON.KG' | translate }}</div>
         </div>
+      </div>
+
+      <div class="card" *ngIf="data.posibilities?.length">
+        <h2 class="custom-card-title">{{ 'PROFILE.POSSIBILITIES' | translate }}</h2>
+        <ul class="possibilities-list">
+          <li *ngFor="let item of data.posibilities">✔ {{ item }}</li>
+        </ul>
       </div>
     </div>
   </div>

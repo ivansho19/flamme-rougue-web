@@ -6,6 +6,7 @@ import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUnt
 import { LogoutConfirmDialogComponent } from "../logout-confirm-dialog/logout-confirm-dialog.component";
 import { LoaderService } from "../../services/loader/loader.service";
 import { ProfileService } from "../../services/profile/profile.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-header",
@@ -19,15 +20,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchQuery = '';
   searchResults: Array<{ id: string; name: string; city?: string; imageUrl?: string }> = [];
   searchLoading = false;
+  currentLang = 'es';
   private search$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   flagOptions = [
-    { url: 'https://flagcdn.com/fr.svg', label: 'Francés' },
-    { url: 'https://flagcdn.com/nl.svg', label: 'Holandés' },
-    { url: 'https://flagcdn.com/gb.svg', label: 'Inglés' }
+    { url: 'https://flagcdn.com/fr.svg', label: 'Francés', lang: 'fr' },
+    { url: 'https://flagcdn.com/nl.svg', label: 'Belga', lang: 'nl' },
+    { url: 'https://flagcdn.com/gb.svg', label: 'Inglés', lang: 'en' },
+    { url: 'https://flagcdn.com/es.svg', label: 'Español', lang: 'es' }
   ];
 
   constructor(
@@ -35,10 +38,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private eRef: ElementRef,
     private dialog: MatDialog,
     private loaderService: LoaderService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
+    const storedLang = localStorage.getItem('app-lang');
+    this.currentLang = storedLang || 'es';
+    this.translate.setDefaultLang('es');
+    this.translate.use(this.currentLang);
+    const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+    if (activeFlag) {
+      this.selectedFlagUrl = activeFlag.url;
+    }
+
     this.search$
       .pipe(
         debounceTime(300),
@@ -102,10 +115,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.route.navigate(['/profile', profileId]);
   }
 
-  setFlag(flag: { url: string; label: string }) {
+  setFlag(flag: { url: string; label: string; lang: string }) {
     this.selectedFlagUrl = flag.url;
     this.dropdownOpen = false;
-    // Aquí puedes agregar lógica para cambiar el idioma real de la app
+    this.currentLang = flag.lang;
+    localStorage.setItem('app-lang', flag.lang);
+    this.translate.use(flag.lang);
   }
 
   @HostListener('document:click', ['$event'])

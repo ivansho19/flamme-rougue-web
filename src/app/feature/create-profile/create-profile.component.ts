@@ -42,7 +42,7 @@ export class ProfileEditComponent implements OnInit {
     profileId: string = '';
     profileData: any;
     clientData: any;
-    userId: string = '123'; // Reemplaza con el ID real del usuario
+    userId: string | null = null; // Reemplaza con el ID real del usuario
 
     profileForm!: FormGroup;
 
@@ -62,6 +62,15 @@ export class ProfileEditComponent implements OnInit {
         { value: 'ruso', label: 'Ruso' },
         { value: 'chino', label: 'Chino' },
         { value: 'japonés', label: 'Japonés' }
+    ];
+
+    posibilityOptions = [
+        { value: 'Acompanamientos', label: 'Acompanamientos' },
+        { value: 'Eventos', label: 'Eventos' },
+        { value: 'Cenas', label: 'Cenas' },
+        { value: 'Viajes', label: 'Viajes' },
+        { value: 'Video_llamada', label: 'Video llamada' },
+        { value: 'Sesiones_privadas', label: 'Sesiones privadas' }
     ];
 
     weekDays = [
@@ -92,6 +101,12 @@ export class ProfileEditComponent implements OnInit {
     ngOnInit() {
         this.initForm();
         this.countries = GetCountries.getAllCountries();
+
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            this.userId = storedUserId;
+        }
+
         this.route.paramMap.subscribe(params => {
             this.profileId = params.get('id') || '';
 
@@ -100,6 +115,9 @@ export class ProfileEditComponent implements OnInit {
                 return;
             }
 
+            if (this.userId) {
+                this.getProfileByUser(this.userId);
+            }
             this.loadClientFromEmail();
         });
     }
@@ -156,11 +174,47 @@ export class ProfileEditComponent implements OnInit {
     }
 
     getProfile() {
-        this.http.get(`http://localhost:5000/api/users/${this.profileId}`)
-            .subscribe(res => {
-                this.profileData = res;
-                this.userId = this.profileData._id;
-            });
+        this.profileService.getProfileById(this.profileId).subscribe({
+            next: (response) => {
+                const profile = response?.profile ?? response ?? null;
+                if (!profile) {
+                    return;
+                }
+                this.profileData = profile;
+                this.profileId = profile._id || this.profileId;
+                if (profile.objectId) {
+                    this.userId = profile.objectId;
+                }
+                if (profile.country) {
+                    const countryValue = this.setCitiesForCountry(profile.country);
+                    this.profileForm.patchValue({
+                        basicInfo: {
+                            country: countryValue || ''
+                        }
+                    });
+                }
+            },
+            error: (error) => {
+                console.error('Error cargando perfil:', error);
+            }
+        });
+    }
+
+    private getProfileByUser(userId: string) {
+        this.profileService.getProfileByUser(userId).subscribe({
+            next: (response) => {
+                const profile = response?.profile ?? response ?? null;
+                if (!profile?._id) {
+                    return;
+                }
+                this.profileData = profile;
+                this.profileId = profile._id;
+                localStorage.setItem('profileId', this.profileId);
+            },
+            error: (error) => {
+                console.error('Error cargando perfil:', error);
+            }
+        });
     }
 
     loadClientFromEmail() {
@@ -211,6 +265,7 @@ export class ProfileEditComponent implements OnInit {
                 languages: [[], Validators.required]
             }),
 
+            posibilities: [[]],
             isGold: [false]
         });
 
@@ -258,7 +313,8 @@ export class ProfileEditComponent implements OnInit {
             personalData: {
                 gender: client.gender || '',
                 languages: Array.isArray(client.languages) ? client.languages : []
-            }
+            },
+            posibilities: Array.isArray(client.posibilities) ? client.posibilities : []
         });
     }
 
@@ -336,6 +392,12 @@ export class ProfileEditComponent implements OnInit {
         const languagesText = Array.isArray(languageValues)
             ? languageValues.join(', ')
             : languageValues;
+        const posibilitiesValue = this.profileForm.get('posibilities')?.value ?? [];
+        const posibilitiesList = Array.isArray(posibilitiesValue)
+            ? posibilitiesValue
+            : typeof posibilitiesValue === 'string'
+                ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+                : [];
 
         return {
             name: basicInfo.publicName || 'Perfil',
@@ -355,7 +417,8 @@ export class ProfileEditComponent implements OnInit {
             isGold: this.profileForm.get('isGold')?.value,
             isVerified: true,
             profileImage: this.profile.profileImage,
-            galleryImages: this.profile.galleryImages
+            galleryImages: this.profile.galleryImages,
+            posibilities: posibilitiesList
         };
     }
 
@@ -403,6 +466,13 @@ export class ProfileEditComponent implements OnInit {
         this.profileForm.get('personalData.languages')?.setValue(values);
         this.profileForm.get('personalData.languages')?.markAsDirty();
         this.profileForm.get('personalData.languages')?.markAsTouched();
+    }
+
+    onPosibilitiesChange(event: any): void {
+        const values = event.value ?? [];
+        this.profileForm.get('posibilities')?.setValue(values);
+        this.profileForm.get('posibilities')?.markAsDirty();
+        this.profileForm.get('posibilities')?.markAsTouched();
     }
 
     private updateAgeFromBirthDate(value: unknown): void {
@@ -541,7 +611,7 @@ export class ProfileEditComponent implements OnInit {
                 try {
 
                         this.loading = true;
-                            const objectId = this.clientData?._id || this.profileId || this.userId;
+                            const objectId = this.clientData?._id || this.userId;
                             const uploadFolder = this.getUploadFolder(objectId);
 
                             /* =========================
@@ -608,11 +678,19 @@ export class ProfileEditComponent implements OnInit {
                                 ? languagesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
                                 : [];
 
+                        const posibilitiesValue = this.profileForm.get('posibilities')?.value ?? [];
+                        const posibilitiesList = Array.isArray(posibilitiesValue)
+                            ? posibilitiesValue.map((item: string) => item.trim()).filter(Boolean)
+                            : typeof posibilitiesValue === 'string'
+                                ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
+                                : [];
+
                         const profilePayload: IProfileCreateRequest = {
                                 objectId,
                                 displayName: basicInfo.publicName || '',
                                 bio: basicInfo.description || '',
                             phone: this.getPhoneWithPrefix(basicInfo),
+                                country: basicInfo.country || '',
                                 city: basicInfo.city || '',
                                 availability: availabilityList,
                                 gender: personalData.gender || '',
@@ -623,6 +701,7 @@ export class ProfileEditComponent implements OnInit {
                                 hairColor: personalData.hairColor || '',
                                 eyeColor: personalData.eyeColor || '',
                                 languages: languagesList,
+                                posibilities: posibilitiesList,
                                 isPremium: this.profileForm.get('isGold')?.value || false,
                                 plan: this.selectedPlanId,
                                 imagesMain: mainImage,

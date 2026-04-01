@@ -26,4 +26,5 @@ export interface IProfileResponse {
   isPremium?: boolean;
   imagesGallery?: IProfileImage[];
   imagesMain?: IProfileImage;
+  posibilities?: string[];
 }

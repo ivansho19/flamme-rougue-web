@@ -12,6 +12,8 @@ import { PlanesComponent } from './planes/planes.component';
 import { ProfilePreviewComponent } from './profile-preview/profile-preview.component';
 import { ToastAlertComponent } from './toast-alert/toast-alert.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
+
 @NgModule({
   declarations: [
     LoaderComponent,
@@ -40,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
 ],
   providers: []
 })

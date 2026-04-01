@@ -3,14 +3,14 @@
         <img src="assets/images/logo_mini.png" alt="Logo" width="32" height="32">Flamme Rouge
     </div>
     <div class="header-right">
-        <span class="username">Hola, {{ getUserName() }}</span>
+        <span class="username">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
         <div class="header-icons">
-            <button class="icon-btn" title="Buscar" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
-            <button (click)="navigateToProfile()" class="icon-btn" title="Perfil"><i class="bi bi-person"></i></button>
+            <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
+            <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
                     [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
-                    <img [src]="selectedFlagUrl" class="flag-img" alt="Idioma actual" />
+                    <img [src]="selectedFlagUrl" class="flag-img" [alt]="'HEADER.CURRENT_LANG' | translate" />
                 </button>
                 <div class="dropdown-menu" [class.show]="dropdownOpen">
                     <button class="dropdown-item" *ngFor="let flag of flagOptions" (click)="setFlag(flag)"
@@ -30,7 +30,7 @@
                 <input
                     #searchInput
                     type="text"
-                    placeholder="Buscar perfiles"
+                    [placeholder]="'HEADER.SEARCH_PLACEHOLDER' | translate"
                     [value]="searchQuery"
                     (input)="onSearchInput($any($event.target).value)"
                 />
@@ -43,9 +43,9 @@
         </div>
 
         <div class="search-results" *ngIf="searchQuery.length >= 3">
-                <div class="search-loading" *ngIf="searchLoading">Buscando...</div>
+                <div class="search-loading" *ngIf="searchLoading">{{ 'HEADER.SEARCHING' | translate }}</div>
                 <div class="search-empty" *ngIf="!searchLoading && !searchResults.length">
-                        No hay Resultados
+                    {{ 'HEADER.NO_RESULTS' | translate }}
                 </div>
                 <button
                     class="search-item"
@@ -62,6 +62,6 @@
         </div>
 
         <div class="search-hint" *ngIf="searchQuery.length < 3">
-                Escribe al menos 3 caracteres para buscar
+                {{ 'HEADER.SEARCH_HINT' | translate }}
         </div>
 </div>
