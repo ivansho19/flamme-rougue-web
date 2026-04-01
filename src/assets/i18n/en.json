@@ -1,0 +1,39 @@
+{
+  "HEADER": {
+    "GREETING": "Hello",
+    "SEARCH": "Search",
+    "PROFILE": "Profile",
+    "CURRENT_LANG": "Current language",
+    "SEARCH_PLACEHOLDER": "Search profiles",
+    "SEARCHING": "Searching...",
+    "NO_RESULTS": "No results",
+    "SEARCH_HINT": "Type at least 3 characters to search"
+  },
+  "PROFILE": {
+    "SUBTITLE": "Private reception",
+    "GOLD": "GOLD",
+    "VERIFIED": "Verified",
+    "CONTACT": "Contact",
+    "PHONE": "Phone",
+    "AVAILABILITY": "Availability",
+    "NO_CALL": "Do you want to send a message?",
+    "SEND_MESSAGE": "Send message",
+    "DETAILS": "Profile",
+    "GENDER": "Gender",
+    "HAIR_COLOR": "Hair color",
+    "AGE": "Age",
+    "EYE_COLOR": "Eye color",
+    "NATIONALITY": "Nationality",
+    "LANGUAGES": "Languages",
+    "HEIGHT": "Height",
+    "WEIGHT": "Weight"
+    ,
+    "POSSIBILITIES": "Possibilities"
+  },
+  "COMMON": {
+    "YEARS": "years",
+    "CM": "cm",
+    "KG": "kg",
+    "CITY": "City"
+  }
+}

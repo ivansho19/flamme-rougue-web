@@ -1,0 +1,39 @@
+{
+  "HEADER": {
+    "GREETING": "Hallo",
+    "SEARCH": "Zoeken",
+    "PROFILE": "Profiel",
+    "CURRENT_LANG": "Huidige taal",
+    "SEARCH_PLACEHOLDER": "Zoek profielen",
+    "SEARCHING": "Bezig met zoeken...",
+    "NO_RESULTS": "Geen resultaten",
+    "SEARCH_HINT": "Typ minstens 3 tekens om te zoeken"
+  },
+  "PROFILE": {
+    "SUBTITLE": "Prive ontvangst",
+    "GOLD": "GOLD",
+    "VERIFIED": "Geverifieerd",
+    "CONTACT": "Contact",
+    "PHONE": "Telefoon",
+    "AVAILABILITY": "Beschikbaarheid",
+    "NO_CALL": "Wil je een bericht sturen?",
+    "SEND_MESSAGE": "Stuur een bericht",
+    "DETAILS": "Profiel",
+    "GENDER": "Geslacht",
+    "HAIR_COLOR": "Haarkleur",
+    "AGE": "Leeftijd",
+    "EYE_COLOR": "Kleur ogen",
+    "NATIONALITY": "Nationaliteit",
+    "LANGUAGES": "Talen",
+    "HEIGHT": "Lengte",
+    "WEIGHT": "Gewicht"
+    ,
+    "POSSIBILITIES": "Mogelijkheden"
+  },
+  "COMMON": {
+    "YEARS": "jaar",
+    "CM": "cm",
+    "KG": "kg",
+    "CITY": "Stad"
+  }
+}

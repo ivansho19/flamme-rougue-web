@@ -1,0 +1,39 @@
+{
+  "HEADER": {
+    "GREETING": "Bonjour",
+    "SEARCH": "Recherche",
+    "PROFILE": "Profil",
+    "CURRENT_LANG": "Langue actuelle",
+    "SEARCH_PLACEHOLDER": "Rechercher des profils",
+    "SEARCHING": "Recherche...",
+    "NO_RESULTS": "Aucun resultat",
+    "SEARCH_HINT": "Tapez au moins 3 caracteres pour rechercher"
+  },
+  "PROFILE": {
+    "SUBTITLE": "Reception privee",
+    "GOLD": "GOLD",
+    "VERIFIED": "Verifie",
+    "CONTACT": "Contact",
+    "PHONE": "Telephone",
+    "AVAILABILITY": "Disponibilite",
+    "NO_CALL": "Voulez-vous envoyer un message?",
+    "SEND_MESSAGE": "Envoyer un message",
+    "DETAILS": "Profil",
+    "GENDER": "Genre",
+    "HAIR_COLOR": "Couleur des cheveux",
+    "AGE": "Age",
+    "EYE_COLOR": "Couleur des yeux",
+    "NATIONALITY": "Nationalite",
+    "LANGUAGES": "Langues",
+    "HEIGHT": "Taille",
+    "WEIGHT": "Poids"
+    ,
+    "POSSIBILITIES": "Possibilites"
+  },
+  "COMMON": {
+    "YEARS": "ans",
+    "CM": "cm",
+    "KG": "kg",
+    "CITY": "Ville"
+  }
+}
