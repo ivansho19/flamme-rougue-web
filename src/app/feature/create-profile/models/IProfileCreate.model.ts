@@ -7,6 +7,8 @@ export interface IProfileCreateRequest {
   city: string;
   availability: string[];
   gender: string;
+  sexualOrientation?: string;
+  birthDate?: string | Date | null;
   age: number | null;
   nationality: string;
   height: number | null;

@@ -16,6 +16,10 @@
     <div class="verified-row">
       <span class="verified-icon" aria-hidden="true">&#10003;</span>
       <span class="verified-text">Verificado</span>
+      <span class="city-badge" *ngIf="city">
+        <span class="city-icon material-icons" aria-hidden="true">place</span>
+        <span class="city-text">{{ city }}</span>
+      </span>
     </div>
   </div>
 </div>

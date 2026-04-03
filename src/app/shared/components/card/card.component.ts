@@ -10,6 +10,7 @@ export class CardComponent {
     @Input() age: number = 0;
     @Input() title: string = '';
     @Input() describe: string = '';
+    @Input() city: string = '';
     @Input() plan: number | null = null;
     @Input() buttonText: string = 'Go somewhere';
     @Input() buttonUrl: string = '#';

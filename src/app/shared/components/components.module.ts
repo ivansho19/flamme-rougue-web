@@ -35,7 +35,8 @@ import { TranslateModule } from '@ngx-translate/core';
     LayoutComponent,
     PlanesComponent,
     ProfilePreviewComponent,
-    ToastAlertComponent
+    ToastAlertComponent,
+    TranslateModule
   ],
   imports: [
     CommonModule,

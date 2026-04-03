@@ -60,17 +60,27 @@ export class ProfileEditComponent implements OnInit {
         { value: 'español', label: 'Español' },
         { value: 'italiano', label: 'Italiano' },
         { value: 'ruso', label: 'Ruso' },
+        { value: 'árabe', label: 'Árabe' },
+        { value: 'ucraniano', label: 'Ucraniano' },
         { value: 'chino', label: 'Chino' },
         { value: 'japonés', label: 'Japonés' }
     ];
 
     posibilityOptions = [
-        { value: 'Acompanamientos', label: 'Acompanamientos' },
-        { value: 'Eventos', label: 'Eventos' },
-        { value: 'Cenas', label: 'Cenas' },
-        { value: 'Viajes', label: 'Viajes' },
-        { value: 'Video_llamada', label: 'Video llamada' },
-        { value: 'Sesiones_privadas', label: 'Sesiones privadas' }
+        { value: 'Masaje_relajante', label: 'Masaje relajante' },
+        { value: 'Masaje_sensual', label: 'Masaje sensual' },
+        { value: 'Masaje_tantrico', label: 'Masaje tántrico' },
+        { value: 'Trato_presencial', label: 'Trato presencial' },
+        { value: 'Experiencia_afectiva', label: 'Experiencia afectiva' },
+        { value: 'Ducha_disponible', label: 'Ducha disponible' },
+        { value: 'Cena_acompanamiento', label: 'Cena / acompañamiento' },
+        { value: 'Acompanamiento_tipo_cita', label: 'Acompañamiento tipo cita' },
+        { value: 'Visitas_clubs_saunas', label: 'Visitas a clubs y saunas' },
+        { value: 'Striptease', label: 'Striptease' },
+        { value: 'Acompanamiento_nocturno', label: 'Acompañamiento nocturno' },
+        { value: 'Experiencias_personalizadas', label: 'Experiencias únicas y personalizadas' },
+        { value: 'Parejas', label: 'Parejas' },
+        { value: 'Viajes_acompanamiento_social', label: 'Viajes / acompañamiento social' }
     ];
 
     weekDays = [
@@ -245,7 +255,7 @@ export class ProfileEditComponent implements OnInit {
             basicInfo: this.fb.group({
                 publicName: ['', Validators.required],
                 email: ['', [Validators.required, Validators.email]],
-                description: ['', Validators.required],
+                description: ['', [Validators.required, Validators.maxLength(2500)]],
                 country: ['', Validators.required],
                 city: ['', Validators.required],
                 phonePrefix: ['+'],
@@ -255,6 +265,7 @@ export class ProfileEditComponent implements OnInit {
 
             personalData: this.fb.group({
                 gender: ['', Validators.required],
+                sexualOrientation: ['', Validators.required],
                 birthDate: [null, [Validators.required, this.minAgeValidator(18)]],
                 age: [null, Validators.required],
                 nationality: ['', Validators.required],
@@ -312,6 +323,7 @@ export class ProfileEditComponent implements OnInit {
             },
             personalData: {
                 gender: client.gender || '',
+                sexualOrientation: client.sexualOrientation || '',
                 languages: Array.isArray(client.languages) ? client.languages : []
             },
             posibilities: Array.isArray(client.posibilities) ? client.posibilities : []
@@ -694,6 +706,8 @@ export class ProfileEditComponent implements OnInit {
                                 city: basicInfo.city || '',
                                 availability: availabilityList,
                                 gender: personalData.gender || '',
+                                sexualOrientation: personalData.sexualOrientation || '',
+                                birthDate: personalData.birthDate || null,
                                 age: personalData.age,
                                 nationality: personalData.nationality || '',
                                 height: personalData.height,

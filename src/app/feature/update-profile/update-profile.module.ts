@@ -7,6 +7,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../shared/components/components.module';
 import { UpdateProfileRoutingModule } from './update-profile-routing.component';
 import { UpdateProfileComponent } from './update-profile.component';
@@ -26,6 +27,7 @@ import { UpdateProfileComponent } from './update-profile.component';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
+    TranslateModule,
   ],
 })
 export class UpdateProfileModule {}
