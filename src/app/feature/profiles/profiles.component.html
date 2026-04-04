@@ -41,6 +41,18 @@
 
       <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>
 
+      <div class="likes-bar">
+        <button type="button" class="like-toggle" [class.active]="userReaction === 'like'" (click)="toggleReaction('like')">
+          <i class="bi bi-hand-thumbs-up like-icon" aria-hidden="true"></i>
+          <span>{{ likeCount }}</span>
+        </button>
+        <span class="likes-separator">-</span>
+        <button type="button" class="like-toggle" [class.active]="userReaction === 'dislike'" (click)="toggleReaction('dislike')">
+          <i class="bi bi-hand-thumbs-down like-icon" aria-hidden="true"></i>
+          <span>{{ dislikeCount }}</span>
+        </button>
+      </div>
+
       <div class="card">
         <h2 class="custom-card-title">{{ 'PROFILE.CONTACT' | translate }}</h2>
         <div class="contact-grid">
@@ -70,6 +82,48 @@
         <ul class="possibilities-list">
           <li *ngFor="let item of posibilitiesList">✔ {{ item }}</li>
         </ul>
+      </div>
+
+      <div class="card comments-card">
+        <div class="comments-header">
+          <h2 class="custom-card-title">Comentarios</h2>
+          <span class="comments-count">2</span>
+        </div>
+
+        <div class="comment-input">
+          <div class="comment-avatar">U</div>
+          <div class="comment-box">
+            <textarea rows="3" placeholder="Agrega un comentario..."></textarea>
+            <div class="comment-actions">
+              <button type="button" class="comment-btn ghost">Cancelar</button>
+              <button type="button" class="comment-btn">Comentar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-list">
+          <div class="comment-item">
+            <div class="comment-avatar">M</div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-author">Maria G.</span>
+                <span class="comment-time">hace 2 horas</span>
+              </div>
+              <p class="comment-text">Muy buena atencion, todo claro y puntual. Recomendado.</p>
+            </div>
+          </div>
+
+          <div class="comment-item">
+            <div class="comment-avatar">J</div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-author">Juan C.</span>
+                <span class="comment-time">ayer</span>
+              </div>
+              <p class="comment-text">Excelente experiencia, seguro vuelvo a contactar.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

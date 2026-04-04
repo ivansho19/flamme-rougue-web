@@ -15,6 +15,9 @@ export class ProfilesComponent implements OnInit {
     profileData: IProfileResponse | null = null;
     fallbackImage = 'assets/images/model.webp';
     showGallery = false;
+    likeCount = 10;
+    dislikeCount = 0;
+    userReaction: 'like' | 'dislike' | null = null;
     private embla: EmblaCarouselType | null = null;
     @ViewChild('emblaViewport') emblaViewport?: ElementRef<HTMLDivElement>;
 
@@ -166,6 +169,32 @@ export class ProfilesComponent implements OnInit {
       const text = encodeURIComponent(`Hola ${name}, vi tu perfil en FlammeRouge y quisiera mas informacion.`);
       const url = `https://wa.me/${cleanPhone}?text=${text}`;
       window.open(url, '_blank');
+    }
+
+    toggleReaction(type: 'like' | 'dislike') {
+      if (this.userReaction === type) {
+        this.userReaction = null;
+        if (type === 'like') {
+          this.likeCount = Math.max(0, this.likeCount - 1);
+        } else {
+          this.dislikeCount = Math.max(0, this.dislikeCount - 1);
+        }
+        return;
+      }
+
+      if (this.userReaction === 'like') {
+        this.likeCount = Math.max(0, this.likeCount - 1);
+      }
+      if (this.userReaction === 'dislike') {
+        this.dislikeCount = Math.max(0, this.dislikeCount - 1);
+      }
+
+      this.userReaction = type;
+      if (type === 'like') {
+        this.likeCount += 1;
+      } else {
+        this.dislikeCount += 1;
+      }
     }
 
 }

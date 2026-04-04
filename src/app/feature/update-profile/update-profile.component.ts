@@ -1,9 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-
 import { IProfileCreateRequest } from '../create-profile/models/IProfileCreate.model';
-import { PlanOption } from '../../shared/components/planes/planes.component';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
@@ -11,18 +9,12 @@ import { GetCountries } from '../../shared/clases/getCountries';
 import { GetUserName } from '../../shared/clases/getUserName';
 import { ProfilePreviewData } from '../../shared/components/profile-preview/profile-preview.component';
 import { ToastService } from '../../shared/services/toast/toast.service';
-
-interface Country {
-  code: string;
-  name: string;
-  cities: string[];
-}
-
-interface ProfileImage {
-  url: string;
-  public_id: string;
-}
-
+import { PlanOption } from '../../shared/model/planes.model';
+import { Country } from '../../shared/model/country.model';
+import { ProfileImage } from '../../shared/model/profile.model';
+import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
+import { GetWeekDays } from '../../shared/clases/getWeekDays';
+import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -35,18 +27,14 @@ export class UpdateProfileComponent implements OnInit {
   };
 
   uploadProgress = 0;
-
   mainImageFile!: File | null;
   galleryFiles: File[] = [];
-
   existingMainImage: ProfileImage | null = null;
   existingGalleryImages: ProfileImage[] = [];
-
   loading = false;
   profileId: string = '';
   userId: string = '';
   clientData: any;
-
   profileForm!: FormGroup;
   calculatedAge: number | null = null;
   isPremium = false;
@@ -54,50 +42,11 @@ export class UpdateProfileComponent implements OnInit {
   selectedPlanId: number | null = null;
   selectedPlan: PlanOption | null = null;
   showPlanSection = false;
-
   countries: Country[] = [];
   cities: string[] = [];
-
-  languageOptions = [
-    { value: 'inglés', label: 'Inglés' },
-    { value: 'belga', label: 'Belga' },
-    { value: 'francés', label: 'Francés' },
-    { value: 'español', label: 'Español' },
-    { value: 'italiano', label: 'Italiano' },
-    { value: 'ruso', label: 'Ruso' },
-    { value: 'árabe', label: 'Árabe' },
-    { value: 'ucraniano', label: 'Ucraniano' },
-    { value: 'chino', label: 'Chino' },
-    { value: 'japonés', label: 'Japonés' }
-  ];
-
-  posibilityOptions = [
-    { value: 'Masaje_relajante', label: 'Masaje relajante' },
-    { value: 'Masaje_sensual', label: 'Masaje sensual' },
-    { value: 'Masaje_tantrico', label: 'Masaje tántrico' },
-    { value: 'Trato_presencial', label: 'Trato presencial' },
-    { value: 'Experiencia_afectiva', label: 'Experiencia afectiva' },
-    { value: 'Ducha_disponible', label: 'Ducha disponible' },
-    { value: 'Cena_acompanamiento', label: 'Cena / acompañamiento' },
-    { value: 'Acompanamiento_tipo_cita', label: 'Acompañamiento tipo cita' },
-    { value: 'Visitas_clubs_saunas', label: 'Visitas a clubs y saunas' },
-    { value: 'Striptease', label: 'Striptease' },
-    { value: 'Acompanamiento_nocturno', label: 'Acompañamiento nocturno' },
-    { value: 'Experiencias_personalizadas', label: 'Experiencias únicas y personalizadas' },
-    { value: 'Parejas', label: 'Parejas' },
-    { value: 'Viajes_acompanamiento_social', label: 'Viajes / acompañamiento social' }
-  ];
-
-  weekDays = [
-    { value: 'Lunes', label: 'Lunes' },
-    { value: 'Martes', label: 'Martes' },
-    { value: 'Miércoles', label: 'Miércoles' },
-    { value: 'Jueves', label: 'Jueves' },
-    { value: 'Viernes', label: 'Viernes' },
-    { value: 'Sábado', label: 'Sábado' },
-    { value: 'Domingo', label: 'Domingo' }
-  ];
-
+  languageOptions: any[] = [];
+  posibilityOptions: any[] = [];
+  weekDays: any[] = [];
   isDraggingMain = false;
   isDraggingGallery = false;
   @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
@@ -114,6 +63,9 @@ export class UpdateProfileComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.countries = GetCountries.getAllCountries();
+    this.languageOptions = GetLenguages.getLenguajesOptions();
+    this.posibilityOptions = GetPosibilities.GetPosibilityOptions();
+    this.weekDays = GetWeekDays.GetWeekDaysOptions();
     this.loadClientFromEmail();
 
     const storedProfileId = localStorage.getItem('profileId');

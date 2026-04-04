@@ -2,23 +2,19 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { MatChipListboxChange } from '@angular/material/chips';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-
 import { IProfileCreateRequest } from './models/IProfileCreate.model';
-import { PlanOption } from '../../shared/components/planes/planes.component';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { GetCountries } from '../../shared/clases/getCountries';
 import { ProfilePreviewData } from '../../shared/components/profile-preview/profile-preview.component';
 import { GetUserName } from '../../shared/clases/getUserName';
-
-interface Country {
-    code: string;
-    name: string;
-    cities: string[];
-}
+import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
+import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
+import { GetWeekDays } from '../../shared/clases/getWeekDays';
+import { Country } from '../../shared/model/country.model';
+import { PlanOption } from '../../shared/model/planes.model';
 
 @Component({
     selector: 'app-create-profile',
@@ -37,6 +33,14 @@ export class ProfileEditComponent implements OnInit {
     mainImageFile!: File | null;
     galleryFiles: File[] = [];
 
+    documentFrontFile: File | null = null;
+    documentBackFile: File | null = null;
+    passportFile: File | null = null;
+
+    documentFrontPreview: string | null = null;
+    documentBackPreview: string | null = null;
+    passportPreview: string | null = null;
+
     imageUrl: string | null = null;
     loading = false;
     profileId: string = '';
@@ -52,46 +56,11 @@ export class ProfileEditComponent implements OnInit {
     countries: Country[] = [];
     cities: string[] = [];
     calculatedAge: number | null = null;
+    languageOptions: any[] = [];
 
-    languageOptions = [
-        { value: 'inglés', label: 'Inglés' },
-        { value: 'belga', label: 'Belga' },
-        { value: 'francés', label: 'Francés' },
-        { value: 'español', label: 'Español' },
-        { value: 'italiano', label: 'Italiano' },
-        { value: 'ruso', label: 'Ruso' },
-        { value: 'árabe', label: 'Árabe' },
-        { value: 'ucraniano', label: 'Ucraniano' },
-        { value: 'chino', label: 'Chino' },
-        { value: 'japonés', label: 'Japonés' }
-    ];
+    posibilityOptions : any[] = [];
 
-    posibilityOptions = [
-        { value: 'Masaje_relajante', label: 'Masaje relajante' },
-        { value: 'Masaje_sensual', label: 'Masaje sensual' },
-        { value: 'Masaje_tantrico', label: 'Masaje tántrico' },
-        { value: 'Trato_presencial', label: 'Trato presencial' },
-        { value: 'Experiencia_afectiva', label: 'Experiencia afectiva' },
-        { value: 'Ducha_disponible', label: 'Ducha disponible' },
-        { value: 'Cena_acompanamiento', label: 'Cena / acompañamiento' },
-        { value: 'Acompanamiento_tipo_cita', label: 'Acompañamiento tipo cita' },
-        { value: 'Visitas_clubs_saunas', label: 'Visitas a clubs y saunas' },
-        { value: 'Striptease', label: 'Striptease' },
-        { value: 'Acompanamiento_nocturno', label: 'Acompañamiento nocturno' },
-        { value: 'Experiencias_personalizadas', label: 'Experiencias únicas y personalizadas' },
-        { value: 'Parejas', label: 'Parejas' },
-        { value: 'Viajes_acompanamiento_social', label: 'Viajes / acompañamiento social' }
-    ];
-
-    weekDays = [
-        { value: 'Lunes', label: 'Lunes' },
-        { value: 'Martes', label: 'Martes' },
-        { value: 'Miércoles', label: 'Miércoles' },
-        { value: 'Jueves', label: 'Jueves' },
-        { value: 'Viernes', label: 'Viernes' },
-        { value: 'Sábado', label: 'Sábado' },
-        { value: 'Domingo', label: 'Domingo' }
-    ];
+    weekDays : any[] = []
 
     isDraggingMain = false;
     isDraggingGallery = false;
@@ -111,6 +80,9 @@ export class ProfileEditComponent implements OnInit {
     ngOnInit() {
         this.initForm();
         this.countries = GetCountries.getAllCountries();
+        this.languageOptions = GetLenguages.getLenguajesOptions();
+        this.posibilityOptions = GetPosibilities.GetPosibilityOptions();
+        this.weekDays = GetWeekDays.GetWeekDaysOptions();
 
         const storedUserId = localStorage.getItem('userId');
         if (storedUserId) {
@@ -276,6 +248,18 @@ export class ProfileEditComponent implements OnInit {
                 languages: [[], Validators.required]
             }),
 
+            realData: this.fb.group({
+                realName: ['', Validators.required],
+                realBirthDate: [null, Validators.required],
+                realAge: [null, Validators.required],
+                realNationality: ['', Validators.required],
+                contactPhone: ['', Validators.required],
+                documentType: ['', Validators.required],
+                documentFront: [null],
+                documentBack: [null],
+                documentSingle: [null]
+            }),
+
             posibilities: [[]],
             isGold: [false]
         });
@@ -283,6 +267,14 @@ export class ProfileEditComponent implements OnInit {
         this.profileForm
             .get('personalData.birthDate')
             ?.valueChanges.subscribe(value => this.updateAgeFromBirthDate(value));
+
+        this.profileForm
+            .get('realData.realBirthDate')
+            ?.valueChanges.subscribe(value => this.updateRealAgeFromBirthDate(value));
+
+        this.profileForm
+            .get('realData.documentType')
+            ?.valueChanges.subscribe(value => this.updateDocumentValidators(value));
 
         this.addAvailabilitySlot();
     }
@@ -328,6 +320,12 @@ export class ProfileEditComponent implements OnInit {
             },
             posibilities: Array.isArray(client.posibilities) ? client.posibilities : []
         });
+    }
+
+    get canShowRealDataSection(): boolean {
+        const basicInfoValid = this.profileForm.get('basicInfo')?.valid ?? false;
+        const personalDataValid = this.profileForm.get('personalData')?.valid ?? false;
+        return basicInfoValid && personalDataValid;
     }
 
     /* ============ DRAG GENERICO ============ */
@@ -492,6 +490,85 @@ export class ProfileEditComponent implements OnInit {
         this.calculatedAge = age;
         this.profileForm.get('personalData.age')?.setValue(age);
         this.profileForm.get('personalData.age')?.markAsDirty();
+    }
+
+    private updateRealAgeFromBirthDate(value: unknown): void {
+        const age = this.calculateAge(value);
+        this.profileForm.get('realData.realAge')?.setValue(age);
+        this.profileForm.get('realData.realAge')?.markAsDirty();
+    }
+
+    openDocumentSelector(input: HTMLInputElement) {
+        input.click();
+    }
+
+    onDocumentSelected(type: 'front' | 'back' | 'passport', event: Event) {
+        const input = event.target as HTMLInputElement;
+        const file = input?.files?.[0];
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (type === 'front') {
+                this.documentFrontFile = file;
+                this.documentFrontPreview = reader.result as string;
+                this.profileForm.get('realData.documentFront')?.setValue(file);
+            }
+            if (type === 'back') {
+                this.documentBackFile = file;
+                this.documentBackPreview = reader.result as string;
+                this.profileForm.get('realData.documentBack')?.setValue(file);
+            }
+            if (type === 'passport') {
+                this.passportFile = file;
+                this.passportPreview = reader.result as string;
+                this.profileForm.get('realData.documentSingle')?.setValue(file);
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    onDocumentTypeChange(event: Event) {
+        const value = (event.target as HTMLSelectElement).value;
+        this.updateDocumentValidators(value);
+        this.clearDocumentUploads();
+    }
+
+    private clearDocumentUploads() {
+        this.documentFrontFile = null;
+        this.documentBackFile = null;
+        this.passportFile = null;
+        this.documentFrontPreview = null;
+        this.documentBackPreview = null;
+        this.passportPreview = null;
+        this.profileForm.get('realData.documentFront')?.setValue(null);
+        this.profileForm.get('realData.documentBack')?.setValue(null);
+        this.profileForm.get('realData.documentSingle')?.setValue(null);
+    }
+
+    private updateDocumentValidators(type: string) {
+        const front = this.profileForm.get('realData.documentFront');
+        const back = this.profileForm.get('realData.documentBack');
+        const single = this.profileForm.get('realData.documentSingle');
+
+        front?.clearValidators();
+        back?.clearValidators();
+        single?.clearValidators();
+
+        if (type === 'dni') {
+            front?.setValidators([Validators.required]);
+            back?.setValidators([Validators.required]);
+        }
+
+        if (type === 'passport') {
+            single?.setValidators([Validators.required]);
+        }
+
+        front?.updateValueAndValidity();
+        back?.updateValueAndValidity();
+        single?.updateValueAndValidity();
     }
 
     private calculateAge(value: unknown): number | null {
@@ -748,6 +825,4 @@ export class ProfileEditComponent implements OnInit {
 
                 }
         }
-
-
 }

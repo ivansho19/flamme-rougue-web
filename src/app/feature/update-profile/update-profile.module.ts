@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../shared/components/components.module';
 import { UpdateProfileRoutingModule } from './update-profile-routing.component';
 import { UpdateProfileComponent } from './update-profile.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [UpdateProfileComponent],
@@ -28,6 +29,7 @@ import { UpdateProfileComponent } from './update-profile.component';
     MatInputModule,
     MatNativeDateModule,
     TranslateModule,
+    MatExpansionModule
   ],
 })
 export class UpdateProfileModule {}

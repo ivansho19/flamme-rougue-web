@@ -1,19 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-
-export interface PlanOption {
-    id: number;
-    name: string;
-    price: string;
-    period?: string;
-    description?: string;
-    features?: string[];
-    badge?: string;
-    highlight?: boolean;
-    buttonText?: string;
-    cardClass?: string;
-    buttonClass?: string;
-}
-
+import { PlanOption } from "../../model/planes.model";
 @Component({
     selector: "app-planes",
     templateUrl: "./planes.component.html",

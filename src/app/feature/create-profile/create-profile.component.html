@@ -1,65 +1,61 @@
 <div class="profile-wrapper">
 
-  <!-- IMAGES -->
-  <div class="images-card fade-in">
-
-    <h2 class="section-title">{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</h2>
-
-    <div class="images-layout">
-
-      <!-- FOTO PRINCIPAL -->
-      <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
-        (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
-
-        <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
-          <img [src]="profile.profileImage" class="main-preview">
-        </ng-container>
-
-        <ng-template #mainPlaceholder>
-          <div class="drop-placeholder">
-            <p>{{ 'PROFILE_FORM.MAIN_DROP_TITLE' | translate }}</p>
-            <span>{{ 'PROFILE_FORM.MAIN_DROP_HINT' | translate }}</span>
-          </div>
-        </ng-template>
-
-        <input type="file" hidden accept="image/*" #mainInput (change)="onMainImageSelected($event)">
-
-      </div>
-
-
-      <!-- GALERÍA -->
-      <div class="drop-zone gallery-zone" (click)="openGalleryFileSelector()" [class.dragging]="isDraggingGallery"
-        (dragover)="onDragOverGallery($event)" (dragleave)="onDragLeaveGallery()" (drop)="onDropGallery($event)">
-
-        <div class="drop-header">
-          <p>{{ 'PROFILE_FORM.GALLERY_DROP_TITLE' | translate }}</p>
-          <span>{{ 'PROFILE_FORM.GALLERY_DROP_HINT' | translate }}</span>
-        </div>
-
-        <input type="file" hidden multiple accept="image/*" #galleryInput (change)="onGallerySelected($event)">
-
-        <div class="gallery-grid">
-          <div class="gallery-item" *ngFor="let img of profile.galleryImages; let i = index">
-
-            <img [src]="img">
-            <button class="remove-btn" (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-
   <!-- FORM -->
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form-card slide-up">
-
     <h2 class="section-title">{{ 'PROFILE_FORM.CREATE_TITLE' | translate }}</h2>
 
-    <!-- BASIC -->
-    <div formGroupName="basicInfo" class="card">
-      <h4 class="subsection-title">{{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}</h4>
+    <mat-accordion class="profile-accordion">
+      <mat-expansion-panel [expanded]="true" class="accordion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="images-card fade-in">
+          <div class="images-layout">
+            <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
+              (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
+
+              <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
+                <img [src]="profile.profileImage" class="main-preview">
+              </ng-container>
+
+              <ng-template #mainPlaceholder>
+                <div class="drop-placeholder">
+                  <p>{{ 'PROFILE_FORM.MAIN_DROP_TITLE' | translate }}</p>
+                  <span>{{ 'PROFILE_FORM.MAIN_DROP_HINT' | translate }}</span>
+                </div>
+              </ng-template>
+
+              <input type="file" hidden accept="image/*" #mainInput (change)="onMainImageSelected($event)">
+            </div>
+
+            <div class="drop-zone gallery-zone" (click)="openGalleryFileSelector()" [class.dragging]="isDraggingGallery"
+              (dragover)="onDragOverGallery($event)" (dragleave)="onDragLeaveGallery()" (drop)="onDropGallery($event)">
+
+              <div class="drop-header">
+                <p>{{ 'PROFILE_FORM.GALLERY_DROP_TITLE' | translate }}</p>
+                <span>{{ 'PROFILE_FORM.GALLERY_DROP_HINT' | translate }}</span>
+              </div>
+
+              <input type="file" hidden multiple accept="image/*" #galleryInput (change)="onGallerySelected($event)">
+
+              <div class="gallery-grid">
+                <div class="gallery-item" *ngFor="let img of profile.galleryImages; let i = index">
+                  <img [src]="img">
+                  <button class="remove-btn" (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="accordion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div formGroupName="basicInfo" class="card">
 
       <div class="grid-2">
         <div class="field">
@@ -155,10 +151,14 @@
         </div>
       </div>
     </div>
+      </mat-expansion-panel>
 
-    <!-- PERSONAL -->
-    <div formGroupName="personalData" class="card">
-      <h4 class="subsection-title">{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</h4>
+      <mat-expansion-panel class="accordion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div formGroupName="personalData" class="card">
 
       <div class="field">
         <select formControlName="gender" [class.input-error]="isInvalid('personalData.gender')">
@@ -270,22 +270,141 @@
         </div>
       </div>
     </div>
+    </mat-expansion-panel>
 
-    <div class="card">
-      <h4 class="subsection-title">{{ 'PROFILE_FORM.SERVICES_TITLE' | translate }}</h4>
-      <mat-chip-listbox
-        formControlName="posibilities"
-        multiple
-        class="possibilities-chips"
-        (selectionChange)="onPosibilitiesChange($event)"
-        [attr.aria-label]="'PROFILE_FORM.SERVICES_ARIA' | translate"
-      >
-        <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
-          {{ option.label }}
-        </mat-chip-option>
-      </mat-chip-listbox>
-    </div>
+      <mat-expansion-panel class="accordion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ 'PROFILE_FORM.SERVICES_TITLE' | translate }}</mat-panel-title>
+        </mat-expansion-panel-header>
 
+        <div class="card">
+          <mat-chip-listbox
+            formControlName="posibilities"
+            multiple
+            class="possibilities-chips"
+            (selectionChange)="onPosibilitiesChange($event)"
+            [attr.aria-label]="'PROFILE_FORM.SERVICES_ARIA' | translate"
+          >
+            <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="accordion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ 'PROFILE_FORM.REAL_DATA_TITLE' | translate }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div formGroupName="realData" class="card">
+          <div class="grid-2">
+            <div class="field">
+              <input formControlName="realName" placeholder="{{ 'PROFILE_FORM.REAL_NAME_PLACEHOLDER' | translate }}"
+                [class.input-error]="isInvalid('realData.realName')">
+              <div class="error" *ngIf="isInvalid('realData.realName')">
+                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+              </div>
+            </div>
+
+            <div class="field">
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput [matDatepicker]="realBirthPicker" formControlName="realBirthDate"
+                  placeholder="{{ 'PROFILE_FORM.REAL_BIRTHDATE_PLACEHOLDER' | translate }}">
+                <mat-datepicker-toggle matSuffix [for]="realBirthPicker"></mat-datepicker-toggle>
+                <mat-datepicker #realBirthPicker></mat-datepicker>
+              </mat-form-field>
+              <div class="error" *ngIf="isInvalid('realData.realBirthDate')">
+                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+              </div>
+              <input type="number" formControlName="realAge"
+                placeholder="{{ 'PROFILE_FORM.REAL_AGE_PLACEHOLDER' | translate }}" readonly>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <input formControlName="realNationality"
+                placeholder="{{ 'PROFILE_FORM.REAL_NATIONALITY_PLACEHOLDER' | translate }}"
+                [class.input-error]="isInvalid('realData.realNationality')">
+              <div class="error" *ngIf="isInvalid('realData.realNationality')">
+                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+              </div>
+            </div>
+
+            <div class="field">
+              <input formControlName="contactPhone"
+                placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}"
+                [class.input-error]="isInvalid('realData.contactPhone')">
+              <div class="error" *ngIf="isInvalid('realData.contactPhone')">
+                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <select formControlName="documentType" (change)="onDocumentTypeChange($event)"
+              [class.input-error]="isInvalid('realData.documentType')">
+              <option value="" disabled selected>{{ 'PROFILE_FORM.DOCUMENT_TYPE_LABEL' | translate }}</option>
+              <option value="dni">{{ 'PROFILE_FORM.DOCUMENT_TYPE_DNI' | translate }}</option>
+              <option value="passport">{{ 'PROFILE_FORM.DOCUMENT_TYPE_PASSPORT' | translate }}</option>
+            </select>
+            <div class="error" *ngIf="isInvalid('realData.documentType')">
+              {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+            </div>
+          </div>
+
+          <div class="document-grid" *ngIf="profileForm.get('realData.documentType')?.value === 'dni'">
+            <div class="document-upload" [class.has-file]="documentFrontPreview" [class.is-empty]="!documentFrontPreview"
+              (click)="openDocumentSelector(docFrontInput)">
+              <input type="file" hidden accept="image/*" #docFrontInput
+                (change)="onDocumentSelected('front', $event)">
+              <ng-container *ngIf="documentFrontPreview; else frontPlaceholder">
+                <img [src]="documentFrontPreview" class="document-preview" alt="DNI frontal">
+              </ng-container>
+              <ng-template #frontPlaceholder>
+                <div class="document-placeholder">
+                  <p>{{ 'PROFILE_FORM.DOCUMENT_FRONT_LABEL' | translate }}</p>
+                  <span>{{ 'PROFILE_FORM.DOCUMENT_UPLOAD_HINT' | translate }}</span>
+                </div>
+              </ng-template>
+            </div>
+
+            <div class="document-upload" [class.has-file]="documentBackPreview" [class.is-empty]="!documentBackPreview"
+              (click)="openDocumentSelector(docBackInput)">
+              <input type="file" hidden accept="image/*" #docBackInput
+                (change)="onDocumentSelected('back', $event)">
+              <ng-container *ngIf="documentBackPreview; else backPlaceholder">
+                <img [src]="documentBackPreview" class="document-preview" alt="DNI posterior">
+              </ng-container>
+              <ng-template #backPlaceholder>
+                <div class="document-placeholder">
+                  <p>{{ 'PROFILE_FORM.DOCUMENT_BACK_LABEL' | translate }}</p>
+                  <span>{{ 'PROFILE_FORM.DOCUMENT_UPLOAD_HINT' | translate }}</span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="document-grid" *ngIf="profileForm.get('realData.documentType')?.value === 'passport'">
+            <div class="document-upload" [class.has-file]="passportPreview" [class.is-empty]="!passportPreview"
+              (click)="openDocumentSelector(passportInput)">
+              <input type="file" hidden accept="image/*" #passportInput
+                (change)="onDocumentSelected('passport', $event)">
+              <ng-container *ngIf="passportPreview; else passportPlaceholder">
+                <img [src]="passportPreview" class="document-preview" alt="Pasaporte">
+              </ng-container>
+              <ng-template #passportPlaceholder>
+                <div class="document-placeholder">
+                  <p>{{ 'PROFILE_FORM.DOCUMENT_SINGLE_LABEL' | translate }}</p>
+                  <span>{{ 'PROFILE_FORM.DOCUMENT_UPLOAD_HINT' | translate }}</span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   </form>
   <div class="preview-section" *ngIf="isProfileComplete">
     <h2 class="section-title">{{ 'PROFILE_FORM.PREVIEW_TITLE' | translate }}</h2>

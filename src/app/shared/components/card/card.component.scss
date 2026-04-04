@@ -4,10 +4,12 @@
   width: 18rem;
   height: 430px;
   border-radius: 12px;
-  background: #F7E6C9;
+  border: 3px solid transparent;
+  background:
+    linear-gradient(#F7E6C9, #F7E6C9) padding-box,
+    linear-gradient(135deg, #f2d9a0 0%, #caa14a 35%, #a20f1f 70%, #7f0a16 100%) border-box;
   box-shadow: 0 4px 12px rgba(178, 126, 131, 0.07);
   overflow: hidden;
-  border: 1.5px solid $color-light;
   display: flex;
   flex-direction: column;
   align-items: center;

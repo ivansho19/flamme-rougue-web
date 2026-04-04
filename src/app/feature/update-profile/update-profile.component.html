@@ -1,260 +1,264 @@
 <div class="profile-wrapper">
-
-    <!-- IMAGES -->
-    <div class="images-card fade-in">
-
-        <h2 class="section-title">{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</h2>
-
-        <div class="images-layout">
-
-            <!-- FOTO PRINCIPAL -->
-            <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
-                (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
-
-                <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
-                    <img [src]="profile.profileImage" class="main-preview">
-                </ng-container>
-
-                <ng-template #mainPlaceholder>
-                    <div class="drop-placeholder">
-                        <p>{{ 'PROFILE_FORM.MAIN_DROP_TITLE' | translate }}</p>
-                        <span>{{ 'PROFILE_FORM.MAIN_DROP_HINT' | translate }}</span>
-                    </div>
-                </ng-template>
-
-                <input type="file" hidden accept="image/*" #mainInput (change)="onMainImageSelected($event)">
-
-            </div>
-
-
-            <!-- GALERÍA -->
-            <div class="drop-zone gallery-zone" (click)="openGalleryFileSelector()" [class.dragging]="isDraggingGallery"
-                (dragover)="onDragOverGallery($event)" (dragleave)="onDragLeaveGallery()"
-                (drop)="onDropGallery($event)">
-
-                <div class="drop-header">
-                    <p>{{ 'PROFILE_FORM.GALLERY_DROP_TITLE' | translate }}</p>
-                    <span>{{ 'PROFILE_FORM.GALLERY_DROP_HINT' | translate }}</span>
-                </div>
-
-                <input type="file" hidden multiple accept="image/*" #galleryInput (change)="onGallerySelected($event)">
-
-                <div class="gallery-grid">
-                    <div class="gallery-item" *ngFor="let img of profile.galleryImages; let i = index">
-
-                        <img [src]="img">
-                        <button class="remove-btn" (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-
     <!-- FORM -->
     <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="form-card slide-up">
-
         <h2 class="section-title">{{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}</h2>
 
-        <!-- BASIC -->
-        <div formGroupName="basicInfo" class="card">
-            <h3>{{ 'PROFILE_FORM.BASIC_INFO_TITLE' | translate }}</h3>
+        <mat-accordion class="profile-accordion">
+            <mat-expansion-panel [expanded]="true" class="accordion-panel">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</mat-panel-title>
+                </mat-expansion-panel-header>
 
-            <div class="grid-2">
-                <div class="field">
-                    <input formControlName="publicName" placeholder="{{ 'PROFILE_FORM.PUBLIC_NAME_PLACEHOLDER_UPDATE' | translate }}"
-                        [class.input-error]="isInvalid('basicInfo.publicName')">
-                    <div class="error" *ngIf="isInvalid('basicInfo.publicName')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
+                <div class="images-card fade-in">
+                    <div class="images-layout">
+                        <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
+                            (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
 
-                <div class="field">
-                    <input formControlName="email" type="email" placeholder="{{ 'PROFILE_FORM.EMAIL_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('basicInfo.email')">
-                    <div class="error" *ngIf="isInvalid('basicInfo.email')">
-                        <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['email']">
-                            {{ 'PROFILE_FORM.INVALID_EMAIL_ERROR' | translate }}
-                        </span>
-                    </div>
-                </div>
-            </div>
+                            <ng-container *ngIf="profile.profileImage; else mainPlaceholder">
+                                <img [src]="profile.profileImage" class="main-preview">
+                            </ng-container>
 
-            <div class="field">
-                <textarea formControlName="description" placeholder="{{ 'PROFILE_FORM.DESCRIPTION_PLACEHOLDER' | translate }}"
-                    [class.input-error]="isInvalid('basicInfo.description')"></textarea>
-                <div class="error" *ngIf="isInvalid('basicInfo.description')">
-                    {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                </div>
-            </div>
+                            <ng-template #mainPlaceholder>
+                                <div class="drop-placeholder">
+                                    <p>{{ 'PROFILE_FORM.MAIN_DROP_TITLE' | translate }}</p>
+                                    <span>{{ 'PROFILE_FORM.MAIN_DROP_HINT' | translate }}</span>
+                                </div>
+                            </ng-template>
 
-            <div class="grid-2">
-                <div class="field">
-                    <select formControlName="country" (change)="onCountryChange($event)"
-                        [class.input-error]="isInvalid('basicInfo.country')">
-                        <option value="" disabled>{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</option>
-                        <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
-                    </select>
-                    <div class="error" *ngIf="isInvalid('basicInfo.country')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
+                            <input type="file" hidden accept="image/*" #mainInput (change)="onMainImageSelected($event)">
+                        </div>
 
-                <div class="field">
-                    <select formControlName="city" [disabled]="!cities.length"
-                        [class.input-error]="isInvalid('basicInfo.city')">
-                        <option value="" disabled>{{ 'PROFILE_FORM.CITY_PLACEHOLDER' | translate }}</option>
-                        <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
-                    </select>
-                    <div class="error" *ngIf="isInvalid('basicInfo.city')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
-            </div>
+                        <div class="drop-zone gallery-zone" (click)="openGalleryFileSelector()" [class.dragging]="isDraggingGallery"
+                            (dragover)="onDragOverGallery($event)" (dragleave)="onDragLeaveGallery()" (drop)="onDropGallery($event)">
 
-            <div class="grid-2">
-                <div class="field">
-                    <input formControlName="phone" placeholder="{{ 'PROFILE_FORM.PHONE_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('basicInfo.phone')">
-                    <div class="error" *ngIf="isInvalid('basicInfo.phone')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
+                            <div class="drop-header">
+                                <p>{{ 'PROFILE_FORM.GALLERY_DROP_TITLE' | translate }}</p>
+                                <span>{{ 'PROFILE_FORM.GALLERY_DROP_HINT' | translate }}</span>
+                            </div>
 
-                <div class="field availability-field">
-                    <label class="subsection-title">{{ 'PROFILE_FORM.AVAILABILITY_TITLE' | translate }}</label>
-                    <div class="availability-list" formArrayName="availabilitySlots">
-                        <div class="availability-row" *ngFor="let slot of availabilitySlots.controls; let i = index"
-                            [formGroupName]="i">
-                            <select formControlName="day">
-                                <option value="" disabled selected>{{ 'PROFILE_FORM.DAY_PLACEHOLDER' | translate }}</option>
-                                <option *ngFor="let day of weekDays" [value]="day.value">{{ day.label }}</option>
-                            </select>
-                            <input type="time" formControlName="start">
-                            <input type="time" formControlName="end">
-                            <button type="button" class="slot-remove" (click)="removeAvailabilitySlot(i)">✕</button>
+                            <input type="file" hidden multiple accept="image/*" #galleryInput (change)="onGallerySelected($event)">
+
+                            <div class="gallery-grid">
+                                <div class="gallery-item" *ngFor="let img of profile.galleryImages; let i = index">
+                                    <img [src]="img">
+                                    <button class="remove-btn" (click)="removeGalleryImage(i); $event.stopPropagation()">✕</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <button type="button" class="slot-add" (click)="addAvailabilitySlot()">
-                        {{ 'PROFILE_FORM.ADD_SCHEDULE' | translate }}
-                    </button>
-                    <div class="error" *ngIf="isAvailabilityInvalid()">
-                        {{ 'PROFILE_FORM.ADD_SCHEDULE_ERROR' | translate }}
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="accordion-panel">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div formGroupName="basicInfo" class="card">
+                    <div class="grid-2">
+                        <div class="field">
+                            <input formControlName="publicName" placeholder="{{ 'PROFILE_FORM.PUBLIC_NAME_PLACEHOLDER_UPDATE' | translate }}"
+                                [class.input-error]="isInvalid('basicInfo.publicName')">
+                            <div class="error" *ngIf="isInvalid('basicInfo.publicName')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <input formControlName="email" type="email" placeholder="{{ 'PROFILE_FORM.EMAIL_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('basicInfo.email')">
+                            <div class="error" *ngIf="isInvalid('basicInfo.email')">
+                                <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['email']">
+                                    {{ 'PROFILE_FORM.INVALID_EMAIL_ERROR' | translate }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <textarea formControlName="description" placeholder="{{ 'PROFILE_FORM.DESCRIPTION_PLACEHOLDER' | translate }}"
+                            [class.input-error]="isInvalid('basicInfo.description')"></textarea>
+                        <div class="error" *ngIf="isInvalid('basicInfo.description')">
+                            {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="field">
+                            <select formControlName="country" (change)="onCountryChange($event)"
+                                [class.input-error]="isInvalid('basicInfo.country')">
+                                <option value="" disabled>{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</option>
+                                <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
+                            </select>
+                            <div class="error" *ngIf="isInvalid('basicInfo.country')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <select formControlName="city" [disabled]="!cities.length"
+                                [class.input-error]="isInvalid('basicInfo.city')">
+                                <option value="" disabled>{{ 'PROFILE_FORM.CITY_PLACEHOLDER' | translate }}</option>
+                                <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+                            </select>
+                            <div class="error" *ngIf="isInvalid('basicInfo.city')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="field">
+                            <input formControlName="phone" placeholder="{{ 'PROFILE_FORM.PHONE_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('basicInfo.phone')">
+                            <div class="error" *ngIf="isInvalid('basicInfo.phone')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="field availability-field">
+                            <label class="subsection-title">{{ 'PROFILE_FORM.AVAILABILITY_TITLE' | translate }}</label>
+                            <div class="availability-list" formArrayName="availabilitySlots">
+                                <div class="availability-row" *ngFor="let slot of availabilitySlots.controls; let i = index"
+                                    [formGroupName]="i">
+                                    <select formControlName="day">
+                                        <option value="" disabled selected>{{ 'PROFILE_FORM.DAY_PLACEHOLDER' | translate }}</option>
+                                        <option *ngFor="let day of weekDays" [value]="day.value">{{ day.label }}</option>
+                                    </select>
+                                    <input type="time" formControlName="start">
+                                    <input type="time" formControlName="end">
+                                    <button type="button" class="slot-remove" (click)="removeAvailabilitySlot(i)">✕</button>
+                                </div>
+                            </div>
+                            <button type="button" class="slot-add" (click)="addAvailabilitySlot()">
+                                {{ 'PROFILE_FORM.ADD_SCHEDULE' | translate }}
+                            </button>
+                            <div class="error" *ngIf="isAvailabilityInvalid()">
+                                {{ 'PROFILE_FORM.ADD_SCHEDULE_ERROR' | translate }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </mat-expansion-panel>
 
-        <!-- PERSONAL -->
-        <div formGroupName="personalData" class="card">
-            <h3>{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</h3>
+            <mat-expansion-panel class="accordion-panel">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</mat-panel-title>
+                </mat-expansion-panel-header>
 
-            <div class="field">
-                <select formControlName="gender" [class.input-error]="isInvalid('personalData.gender')">
-                    <option value="" disabled selected>{{ 'PROFILE_FORM.GENDER_PLACEHOLDER' | translate }}</option>
-                    <option value="female">{{ 'PROFILE_FORM.GENDER_FEMALE' | translate }}</option>
-                    <option value="male">{{ 'PROFILE_FORM.GENDER_MALE' | translate }}</option>
-                    <option value="transexual">{{ 'PROFILE_FORM.GENDER_TRANSEXUAL' | translate }}</option>
-                    <option value="prefer_not_say">{{ 'PROFILE_FORM.GENDER_PREFER_NOT_SAY' | translate }}</option>
-                </select>
-                <div class="error" *ngIf="isInvalid('personalData.gender')">
-                    {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="field">
-                    <mat-form-field appearance="outline" class="full-width">
-                        <input matInput [matDatepicker]="birthPicker" formControlName="birthDate"
-                            placeholder="{{ 'PROFILE_FORM.BIRTHDATE_PLACEHOLDER' | translate }}">
-                        <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #birthPicker></mat-datepicker>
-                    </mat-form-field>
-                    <div class="error" *ngIf="isInvalid('personalData.birthDate')">
-                        <span *ngIf="profileForm.get('personalData.birthDate')?.errors?.['minAge']">
-                            {{ 'PROFILE_FORM.MIN_AGE_ERROR' | translate }}
-                        </span>
+                <div formGroupName="personalData" class="card">
+                    <div class="field">
+                        <select formControlName="gender" [class.input-error]="isInvalid('personalData.gender')">
+                            <option value="" disabled selected>{{ 'PROFILE_FORM.GENDER_PLACEHOLDER' | translate }}</option>
+                            <option value="female">{{ 'PROFILE_FORM.GENDER_FEMALE' | translate }}</option>
+                            <option value="male">{{ 'PROFILE_FORM.GENDER_MALE' | translate }}</option>
+                            <option value="transexual">{{ 'PROFILE_FORM.GENDER_TRANSEXUAL' | translate }}</option>
+                            <option value="prefer_not_say">{{ 'PROFILE_FORM.GENDER_PREFER_NOT_SAY' | translate }}</option>
+                        </select>
+                        <div class="error" *ngIf="isInvalid('personalData.gender')">
+                            {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                        </div>
                     </div>
-                    <div class="helper" *ngIf="calculatedAge !== null">
-                        {{ 'PROFILE_FORM.CALCULATED_AGE' | translate }}: {{ calculatedAge }}
+
+                    <div class="grid-2">
+                        <div class="field">
+                            <mat-form-field appearance="outline" class="full-width">
+                                <input matInput [matDatepicker]="birthPicker" formControlName="birthDate"
+                                    placeholder="{{ 'PROFILE_FORM.BIRTHDATE_PLACEHOLDER' | translate }}">
+                                <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #birthPicker></mat-datepicker>
+                            </mat-form-field>
+                            <div class="error" *ngIf="isInvalid('personalData.birthDate')">
+                                <span *ngIf="profileForm.get('personalData.birthDate')?.errors?.['minAge']">
+                                    {{ 'PROFILE_FORM.MIN_AGE_ERROR' | translate }}
+                                </span>
+                            </div>
+                            <div class="helper" *ngIf="calculatedAge !== null">
+                                {{ 'PROFILE_FORM.CALCULATED_AGE' | translate }}: {{ calculatedAge }}
+                            </div>
+                            <input type="number" formControlName="age" placeholder="{{ 'PROFILE_FORM.AGE_PLACEHOLDER' | translate }}" readonly>
+                        </div>
+
+                        <div class="field">
+                            <input type="number" formControlName="height" placeholder="{{ 'PROFILE_FORM.HEIGHT_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('personalData.height')">
+                            <div class="error" *ngIf="isInvalid('personalData.height')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
                     </div>
-                    <input type="number" formControlName="age" placeholder="{{ 'PROFILE_FORM.AGE_PLACEHOLDER' | translate }}" readonly>
-                </div>
 
-                <div class="field">
-                    <input type="number" formControlName="height" placeholder="{{ 'PROFILE_FORM.HEIGHT_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('personalData.height')">
-                    <div class="error" *ngIf="isInvalid('personalData.height')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                    <div class="grid-2">
+                        <div class="field">
+                            <input formControlName="nationality" placeholder="{{ 'PROFILE_FORM.NATIONALITY_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('personalData.nationality')">
+                            <div class="error" *ngIf="isInvalid('personalData.nationality')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <input type="number" formControlName="weight" placeholder="{{ 'PROFILE_FORM.WEIGHT_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('personalData.weight')">
+                            <div class="error" *ngIf="isInvalid('personalData.weight')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="field">
+                            <input formControlName="hairColor" placeholder="{{ 'PROFILE_FORM.HAIR_COLOR_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('personalData.hairColor')">
+                            <div class="error" *ngIf="isInvalid('personalData.hairColor')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <input formControlName="eyeColor" placeholder="{{ 'PROFILE_FORM.EYE_COLOR_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('personalData.eyeColor')">
+                            <div class="error" *ngIf="isInvalid('personalData.eyeColor')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="languages-section">
+                        <h4 class="subsection-title">{{ 'PROFILE_FORM.LANGUAGES_TITLE' | translate }}</h4>
+                        <mat-chip-listbox formControlName="languages" multiple class="languages-chips"
+                            (selectionChange)="onLanguagesChange($event)"
+                            [class.input-error]="isInvalid('personalData.languages')"
+                            [attr.aria-label]="'PROFILE_FORM.LANGUAGES_ARIA' | translate">
+                            <mat-chip-option *ngFor="let language of languageOptions" [value]="language.value">
+                                {{ language.label }}
+                            </mat-chip-option>
+                        </mat-chip-listbox>
+                        <div class="error" *ngIf="isInvalid('personalData.languages')">
+                            {{ 'PROFILE_FORM.LANGUAGES_ERROR' | translate }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </mat-expansion-panel>
 
-            <div class="grid-2">
-                <div class="field">
-                    <input formControlName="nationality" placeholder="{{ 'PROFILE_FORM.NATIONALITY_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('personalData.nationality')">
-                    <div class="error" *ngIf="isInvalid('personalData.nationality')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
+            <mat-expansion-panel class="accordion-panel">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>{{ 'PROFILE_FORM.POSSIBILITIES_TITLE' | translate }}</mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="card">
+                    <mat-chip-listbox formControlName="posibilities" multiple class="possibilities-chips"
+                        (selectionChange)="onPosibilitiesChange($event)" [attr.aria-label]="'PROFILE_FORM.POSSIBILITIES_ARIA' | translate">
+                        <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
+                            {{ option.label }}
+                        </mat-chip-option>
+                    </mat-chip-listbox>
                 </div>
+            </mat-expansion-panel>
+        </mat-accordion>
 
-                <div class="field">
-                    <input type="number" formControlName="weight" placeholder="{{ 'PROFILE_FORM.WEIGHT_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('personalData.weight')">
-                    <div class="error" *ngIf="isInvalid('personalData.weight')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="field">
-                    <input formControlName="hairColor" placeholder="{{ 'PROFILE_FORM.HAIR_COLOR_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('personalData.hairColor')">
-                    <div class="error" *ngIf="isInvalid('personalData.hairColor')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
-
-                <div class="field">
-                    <input formControlName="eyeColor" placeholder="{{ 'PROFILE_FORM.EYE_COLOR_PLACEHOLDER' | translate }}"
-                        [class.input-error]="isInvalid('personalData.eyeColor')">
-                    <div class="error" *ngIf="isInvalid('personalData.eyeColor')">
-                        {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="languages-section">
-                <h4 class="subsection-title">{{ 'PROFILE_FORM.LANGUAGES_TITLE' | translate }}</h4>
-                <mat-chip-listbox formControlName="languages" multiple class="languages-chips"
-                    (selectionChange)="onLanguagesChange($event)"
-                    [class.input-error]="isInvalid('personalData.languages')"
-                    [attr.aria-label]="'PROFILE_FORM.LANGUAGES_ARIA' | translate">
-                    <mat-chip-option *ngFor="let language of languageOptions" [value]="language.value">
-                        {{ language.label }}
-                    </mat-chip-option>
-                </mat-chip-listbox>
-                <div class="error" *ngIf="isInvalid('personalData.languages')">
-                    {{ 'PROFILE_FORM.LANGUAGES_ERROR' | translate }}
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>{{ 'PROFILE_FORM.POSSIBILITIES_TITLE' | translate }}</h3>
-            <mat-chip-listbox formControlName="posibilities" multiple class="possibilities-chips"
-                (selectionChange)="onPosibilitiesChange($event)" [attr.aria-label]="'PROFILE_FORM.POSSIBILITIES_ARIA' | translate">
-                <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
-                    {{ option.label }}
-                </mat-chip-option>
-            </mat-chip-listbox>
-        </div>
         <div class="plan-actions">
-            <button type="submit" class="btn-primary" >
+            <button type="submit" class="btn-primary">
                 {{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}
             </button>
             <button type="button" class="btn-primary" [hidden]="showPlanSection" (click)="togglePlanSection()">
