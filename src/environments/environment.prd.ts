@@ -2,7 +2,7 @@ const urlBase = 'https://flamme-rouge-backend-production.up.railway.app/api';
 
 
 export const environment = {
-  production: false,
+  production: true,
   api_login: `${urlBase}/auth/login`,
   api_register: `${urlBase}/auth/register`,
   api_register_client: `${urlBase}/auth/registerClient`,
