@@ -1,4 +1,5 @@
-const urlBase = 'http://localhost:5000/api';
+// const urlBase = 'http://localhost:5000/api';
+const urlBase = 'https://flamme-rouge-backend-production.up.railway.app/api';
 
 
 export const environment = {
