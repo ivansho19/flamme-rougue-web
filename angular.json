@@ -38,11 +38,11 @@
             "scripts": []
           },
           "configurations": {
-            "main": {
+            "production": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.prd.ts"
                 }
               ],
               "outputHashing": "all"
@@ -60,7 +60,7 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "main"
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -72,7 +72,7 @@
               "buildTarget": "flamme-rouge-web:build:development"
             }
           },
-          "defaultConfiguration": "main"
+          "defaultConfiguration": "production"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
