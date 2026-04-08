@@ -72,7 +72,7 @@
               "buildTarget": "flamme-rouge-web:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "main"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
