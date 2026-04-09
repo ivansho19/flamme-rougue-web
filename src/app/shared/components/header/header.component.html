@@ -3,7 +3,7 @@
         <img src="assets/images/logo_mini.png" alt="Logo" width="32" height="32">Flamme Rouge
     </div>
     <div class="header-right">
-        <span class="username">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
+        <span class="username" *ngIf="getUserName()">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
         <div class="header-icons">
             <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
             <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>

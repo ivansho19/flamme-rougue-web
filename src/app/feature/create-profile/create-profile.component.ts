@@ -127,10 +127,10 @@ export class ProfileEditComponent implements OnInit {
         if (!file) return;
 
         this.mainImageFile = file;
-
         const reader = new FileReader();
         reader.onload = () => {
             this.profile.profileImage = reader.result as string;
+            this.checkFormStatus();
         };
         reader.readAsDataURL(file);
     }
@@ -437,7 +437,34 @@ export class ProfileEditComponent implements OnInit {
             return false;
         }
 
-        return this.isControlComplete(this.profileForm);
+        // Check required fields individually to exclude optional FormArrays
+        const hasImage = !!this.profile.profileImage;
+        
+        // BasicInfo validations (excluding optional availabilitySlots)
+        const publicName = this.profileForm.get('basicInfo.publicName')?.valid ?? false;
+        const email = this.profileForm.get('basicInfo.email')?.valid ?? false;
+        const description = this.profileForm.get('basicInfo.description')?.valid ?? false;
+        const country = this.profileForm.get('basicInfo.country')?.valid ?? false;
+        const city = this.profileForm.get('basicInfo.city')?.valid ?? false;
+        const phone = this.profileForm.get('basicInfo.phone')?.valid ?? false;
+        
+        const basicInfoComplete = publicName && email && description && country && city && phone;
+        
+        // PersonalData validations
+        const gender = this.profileForm.get('personalData.gender')?.valid ?? false;
+        const sexualOrientation = this.profileForm.get('personalData.sexualOrientation')?.valid ?? false;
+        const birthDate = this.profileForm.get('personalData.birthDate')?.valid ?? false;
+        const nationality = this.profileForm.get('personalData.nationality')?.valid ?? false;
+        const height = this.profileForm.get('personalData.height')?.valid ?? false;
+        const hairColor = this.profileForm.get('personalData.hairColor')?.valid ?? false;
+        const eyeColor = this.profileForm.get('personalData.eyeColor')?.valid ?? false;
+        const weight = this.profileForm.get('personalData.weight')?.valid ?? false;
+        const languages = this.profileForm.get('personalData.languages')?.valid ?? false;
+        
+        const personalDataComplete = gender && sexualOrientation && birthDate && nationality && 
+                                    height && hairColor && eyeColor && weight && languages;
+        
+        return basicInfoComplete && personalDataComplete && hasImage;
     }
 
     get canPublish(): boolean {
@@ -689,6 +716,59 @@ export class ProfileEditComponent implements OnInit {
         }
 
         return true;
+    }
+
+    checkFormStatus(): void {
+        console.log('=== 🔍 FORM DETAILED STATUS ===\n');
+        
+        // Overall form status
+        console.log('📋 OVERALL');
+        console.log('Form Status:', this.profileForm?.status);
+        console.log('Form Valid:', this.profileForm?.valid);
+        console.log('Has Main Image:', !!this.profile.profileImage);
+        console.log('isProfileComplete:', this.isProfileComplete);
+        
+        console.log('\n--- 📝 BASICINFO FIELDS ---');
+        const basicInfoGroup = this.profileForm?.get('basicInfo') as FormGroup;
+        if (basicInfoGroup) {
+            Object.keys(basicInfoGroup.controls).forEach(key => {
+                const ctrl = basicInfoGroup.get(key);
+                const hasError = !ctrl?.valid;
+                console.log(`${hasError ? '❌' : '✅'} ${key}: valid=${ctrl?.valid}, errors=${JSON.stringify(ctrl?.errors)}, value="${ctrl?.value}"`);
+            });
+        }
+        
+        console.log('\n--- 💬 PERSONALDATA FIELDS ---');
+        const personalDataGroup = this.profileForm?.get('personalData') as FormGroup;
+        if (personalDataGroup) {
+            Object.keys(personalDataGroup.controls).forEach(key => {
+                const ctrl = personalDataGroup.get(key);
+                const hasError = !ctrl?.valid;
+                console.log(`${hasError ? '❌' : '✅'} ${key}: valid=${ctrl?.valid}, errors=${JSON.stringify(ctrl?.errors)}, value="${ctrl?.value}"`);
+            });
+        }
+        
+        console.log('\n--- 🎯 VALIDATION CHECK ---');
+        console.log('publicName:', this.profileForm?.get('basicInfo.publicName')?.valid ?? false);
+        console.log('email:', this.profileForm?.get('basicInfo.email')?.valid ?? false);
+        console.log('description:', this.profileForm?.get('basicInfo.description')?.valid ?? false);
+        console.log('country:', this.profileForm?.get('basicInfo.country')?.valid ?? false);
+        console.log('city:', this.profileForm?.get('basicInfo.city')?.valid ?? false);
+        console.log('phone:', this.profileForm?.get('basicInfo.phone')?.valid ?? false);
+        console.log('gender:', this.profileForm?.get('personalData.gender')?.valid ?? false);
+        console.log('sexualOrientation:', this.profileForm?.get('personalData.sexualOrientation')?.valid ?? false);
+        console.log('birthDate VALID:', this.profileForm?.get('personalData.birthDate')?.valid ?? false);
+        console.log('birthDate ERRORS:', this.profileForm?.get('personalData.birthDate')?.errors);
+        console.log('birthDate VALUE:', this.profileForm?.get('personalData.birthDate')?.value);
+        console.log('nationality:', this.profileForm?.get('personalData.nationality')?.valid ?? false);
+        console.log('height:', this.profileForm?.get('personalData.height')?.valid ?? false);
+        console.log('hairColor:', this.profileForm?.get('personalData.hairColor')?.valid ?? false);
+        console.log('eyeColor:', this.profileForm?.get('personalData.eyeColor')?.valid ?? false);
+        console.log('weight:', this.profileForm?.get('personalData.weight')?.valid ?? false);
+        console.log('languages VALID:', this.profileForm?.get('personalData.languages')?.valid ?? false);
+        console.log('languages VALUE:', this.profileForm?.get('personalData.languages')?.value);
+        
+        console.log('\n================================');
     }
 
     async saveProfile() {

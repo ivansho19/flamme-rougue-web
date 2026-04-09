@@ -138,7 +138,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToProfile(){
-    this.route.navigate(['/my-profile']);
+    const user = localStorage.getItem('user');
+    if(user){
+      this.route.navigate(['/my-profile']);
+    } else {
+      this.route.navigate(['/auth/login']);
+    }
   }
 
   logout() {
