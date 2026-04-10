@@ -13,10 +13,42 @@
 
   &__icon {
     width: 100%;
+    max-width: 400px;
     border-radius: 8px;
     padding: 24px;
+    
     img {
       width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+}
+
+/* ============ 📱 RESPONSIVE ============ */
+@media (max-width: 767px) {
+  .loader {
+    &__icon {
+      width: 85%;
+      padding: 20px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .loader {
+    &__icon {
+      width: 90%;
+      padding: 15px;
+    }
+  }
+}
+
+@media (max-width: 425px) {
+  .loader {
+    &__icon {
+      width: 95%;
+      padding: 10px;
     }
   }
 }

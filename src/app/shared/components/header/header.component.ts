@@ -15,6 +15,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   dropdownOpen = false;
+  mobileMenuOpen = false;
   selectedFlagUrl = 'https://flagcdn.com/gb.svg';
   searchOpen = false;
   searchQuery = '';
@@ -91,9 +92,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleSearch() {
     this.searchOpen = !this.searchOpen;
+    this.mobileMenuOpen = false;
     if (this.searchOpen) {
       setTimeout(() => this.searchInput?.nativeElement?.focus(), 0);
     }
+  }
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+    this.searchOpen = false;
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
   }
 
   onSearchInput(value: any) {
@@ -129,6 +140,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.dropdownOpen = false;
       this.searchOpen = false;
+      this.mobileMenuOpen = false;
     }
   }
 

@@ -17,12 +17,20 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+
+  .logo-text {
+    display: inline;
+  }
 }
 
 .header-right {
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  &.desktop-menu {
+    display: flex;
+  }
 }
 
 .username {
@@ -178,6 +186,159 @@
   }
 }
 
+/* ============ 📱 MOBILE MENU ============ */
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 200;
+
+  span {
+    width: 25px;
+    height: 3px;
+    background: #F2DAAC;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  &.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  &.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  &.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 100%;
+  height: calc(100vh - 60px);
+  background: #8C030E;
+  z-index: 150;
+  overflow-y: auto;
+  border-top: 2px solid #BF9663;
+  animation: slideInMenu 0.3s ease;
+
+  &.show {
+    display: block;
+  }
+}
+
+@keyframes slideInMenu {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem;
+}
+
+.mobile-username {
+  padding: 1rem;
+  font-weight: bold;
+  color: #F2DAAC;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(242, 218, 172, 0.2);
+  display: block;
+}
+
+.mobile-item {
+  background: none;
+  border: none;
+  padding: 1rem;
+  color: #F2DAAC;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: background 0.2s;
+
+  i {
+    font-size: 1.2rem;
+  }
+
+  &:hover {
+    background: rgba(242, 218, 172, 0.1);
+  }
+
+  &.logout {
+    color: #ff6b6b;
+
+    &:hover {
+      background: rgba(255, 107, 107, 0.1);
+    }
+  }
+}
+
+.mobile-divider {
+  height: 1px;
+  background: rgba(242, 218, 172, 0.2);
+  margin: 0.5rem 0;
+}
+
+.mobile-languages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.mobile-lang-item {
+  background: rgba(242, 218, 172, 0.1);
+  border: 2px solid rgba(242, 218, 172, 0.2);
+  padding: 0.75rem;
+  border-radius: 8px;
+  color: #F2DAAC;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+
+  .flag-img-mobile {
+    width: 24px;
+    height: 16px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  &.active {
+    background: #BF9663;
+    color: #8C030E;
+    border-color: #BF9663;
+  }
+
+  &:hover {
+    background: #BF9663;
+    color: #8C030E;
+  }
+}
+
 /* Logout button en header (si quieres que también sea círculo) */
 .btn-profile,
 .btn-logout {
@@ -195,17 +356,67 @@
   }
 }
 
-/* Responsive: iconos más pequeños en móviles */
+/* ============ 📱 RESPONSIVE ============ */
 @media (max-width: 650px) {
+  .header {
+    padding: 1rem 1rem;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  /* Ocultar menú desktop */
+  .desktop-menu {
+    display: none !important;
+  }
+
+  /* Mostrar botón hamburguesa */
+  .mobile-toggle {
+    display: flex;
+  }
+
+  /* Estilos de responsive para búsqueda */
+  .search-panel {
+    right: 1rem;
+    top: 70px;
+    width: calc(100% - 2rem);
+  }
+
   .header-icons .icon-btn,
   .dropdown-flag .icon-btn {
     width: 36px;
     height: 36px;
     font-size: 1.2rem;
   }
+
   .flag-img {
     width: 20px;
     height: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.75rem 0.75rem;
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  .mobile-menu {
+    top: 50px;
+    height: calc(100vh - 50px);
+  }
+
+  .mobile-languages {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-panel {
+    width: calc(100% - 1rem);
+    right: 0.5rem;
   }
 }
 
