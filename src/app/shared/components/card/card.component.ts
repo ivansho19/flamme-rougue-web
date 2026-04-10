@@ -11,28 +11,28 @@ export class CardComponent {
     @Input() title: string = '';
     @Input() describe: string = '';
     @Input() city: string = '';
-    @Input() plan: number | null = null;
+    @Input() plan: string[] | null = null;
     @Input() buttonText: string = 'Go somewhere';
     @Input() buttonUrl: string = '#';
 
     get planBadgeLabel(): string | null {
-        if (this.plan === 2) {
+        if (this.plan && this.plan[0] === '2') {
             return 'Pro';
         }
-        if (this.plan === 3) {
+        if (this.plan && this.plan[0] === '3') {
             return 'Premium';
         }
-        if (this.plan === 0 || this.plan === 1) {
+        if (this.plan && (this.plan[0] === '0' || this.plan[0] === '1')) {
             return 'Basico';
         }
         return null;
     }
 
     get planBadgeClass(): string {
-        if (this.plan === 2) {
+        if (this.plan && this.plan[0] === '2') {
             return 'plan-pro';
         }
-        if (this.plan === 3) {
+        if (this.plan && this.plan[0] === '3') {
             return 'plan-premium';
         }
         return 'plan-basic';
