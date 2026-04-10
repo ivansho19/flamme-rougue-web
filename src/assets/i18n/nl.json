@@ -7,7 +7,8 @@
     "SEARCH_PLACEHOLDER": "Zoek profielen",
     "SEARCHING": "Bezig met zoeken...",
     "NO_RESULTS": "Geen resultaten",
-    "SEARCH_HINT": "Typ minstens 3 tekens om te zoeken"
+    "SEARCH_HINT": "Typ minstens 3 tekens om te zoeken",
+    "LOGOUT": "Afmelden"
   },
   "PROFILE": {
     "SUBTITLE": "Prive ontvangst",
@@ -20,6 +21,7 @@
     "SEND_MESSAGE": "Stuur een bericht",
     "DETAILS": "Profiel",
     "GENDER": "Geslacht",
+    "SEXUAL_ORIENTATION": "Seksuele geaardheid",
     "HAIR_COLOR": "Haarkleur",
     "AGE": "Leeftijd",
     "EYE_COLOR": "Kleur ogen",
@@ -47,6 +49,7 @@
     "DESCRIPTION_MAX_ERROR": "Beschrijving mag niet langer zijn dan 2500 tekens",
     "COUNTRY_PLACEHOLDER": "Land",
     "CITY_PLACEHOLDER": "Stad",
+    "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telefoon",
     "AVAILABILITY_TITLE": "Beschikbaarheid",
     "DAY_PLACEHOLDER": "Dag",

@@ -7,7 +7,8 @@
     "SEARCH_PLACEHOLDER": "Buscar perfiles",
     "SEARCHING": "Buscando...",
     "NO_RESULTS": "No hay resultados",
-    "SEARCH_HINT": "Escribe al menos 3 caracteres para buscar"
+    "SEARCH_HINT": "Escribe al menos 3 caracteres para buscar",
+    "LOGOUT": "Cerrar sesión"
   },
   "PROFILE": {
     "SUBTITLE": "Recepcion privada",
@@ -20,6 +21,7 @@
     "SEND_MESSAGE": "Enviar mensaje",
     "DETAILS": "Perfil",
     "GENDER": "Genero",
+    "SEXUAL_ORIENTATION": "Orientación sexual",
     "HAIR_COLOR": "Color cabello",
     "AGE": "Edad",
     "EYE_COLOR": "Color ojos",
@@ -47,12 +49,13 @@
     "DESCRIPTION_MAX_ERROR": "La descripción no puede superar los 2500 caracteres",
     "COUNTRY_PLACEHOLDER": "País",
     "CITY_PLACEHOLDER": "Ciudad",
+    "ZONE_PLACEHOLDER": "Zona",
     "PHONE_PLACEHOLDER": "Teléfono",
     "AVAILABILITY_TITLE": "Disponibilidad",
     "DAY_PLACEHOLDER": "Día",
     "ADD_SCHEDULE": "+ Agregar horario",
     "ADD_SCHEDULE_ERROR": "Agrega al menos un horario",
-    "PERSONAL_DATA_TITLE": "Datos personales del anuncio",
+    "PERSONAL_DATA_TITLE": "Datos personales del anunciante",
     "GENDER_PLACEHOLDER": "Género",
     "GENDER_FEMALE": "Femenino",
     "GENDER_MALE": "Masculino",

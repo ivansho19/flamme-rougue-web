@@ -7,7 +7,8 @@
     "SEARCH_PLACEHOLDER": "Rechercher des profils",
     "SEARCHING": "Recherche...",
     "NO_RESULTS": "Aucun resultat",
-    "SEARCH_HINT": "Tapez au moins 3 caracteres pour rechercher"
+    "SEARCH_HINT": "Tapez au moins 3 caracteres pour rechercher",
+    "LOGOUT": "Déconnexion"
   },
   "PROFILE": {
     "SUBTITLE": "Reception privee",
@@ -20,6 +21,7 @@
     "SEND_MESSAGE": "Envoyer un message",
     "DETAILS": "Profil",
     "GENDER": "Genre",
+    "SEXUAL_ORIENTATION": "Orientation sexuelle",
     "HAIR_COLOR": "Couleur des cheveux",
     "AGE": "Age",
     "EYE_COLOR": "Couleur des yeux",
@@ -47,6 +49,7 @@
     "DESCRIPTION_MAX_ERROR": "La description ne peut pas depasser 2500 caracteres",
     "COUNTRY_PLACEHOLDER": "Pays",
     "CITY_PLACEHOLDER": "Ville",
+    "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telephone",
     "AVAILABILITY_TITLE": "Disponibilite",
     "DAY_PLACEHOLDER": "Jour",

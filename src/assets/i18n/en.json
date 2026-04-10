@@ -7,7 +7,8 @@
     "SEARCH_PLACEHOLDER": "Search profiles",
     "SEARCHING": "Searching...",
     "NO_RESULTS": "No results",
-    "SEARCH_HINT": "Type at least 3 characters to search"
+    "SEARCH_HINT": "Type at least 3 characters to search",
+    "LOGOUT": "Logout"
   },
   "PROFILE": {
     "SUBTITLE": "Private reception",
@@ -20,6 +21,7 @@
     "SEND_MESSAGE": "Send message",
     "DETAILS": "Profile",
     "GENDER": "Gender",
+    "SEXUAL_ORIENTATION": "Sexual orientation",
     "HAIR_COLOR": "Hair color",
     "AGE": "Age",
     "EYE_COLOR": "Eye color",
@@ -47,6 +49,7 @@
     "DESCRIPTION_MAX_ERROR": "Description cannot exceed 2500 characters",
     "COUNTRY_PLACEHOLDER": "Country",
     "CITY_PLACEHOLDER": "City",
+    "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Phone",
     "AVAILABILITY_TITLE": "Availability",
     "DAY_PLACEHOLDER": "Day",
