@@ -66,6 +66,20 @@ export class ProfilesComponent implements OnInit {
       return urls;
     }
 
+    get planBadgeLabel(): string | null {
+        if (this.profileData && this.profileData.plan?.[0] === '2') {
+            return 'Pro';
+        }
+        if (this.profileData && this.profileData.plan?.[0] === '3') {
+            return 'Premium';
+        }
+        if (this.profileData && (this.profileData.plan?.[0] === '0' || this.profileData.plan?.[0] === '1')) {
+            return 'Basico';
+        }
+        return null;
+    }
+
+
     openGallery(startIndex: number = 0) {
       if (!this.galleryUrls.length) {
         return;

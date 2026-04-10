@@ -13,6 +13,8 @@ export interface IProfileResponse {
   availability?: string[];
   availabity?: string[] | string;
   gender?: string;
+  orientation?: string;
+  plan?: any[] | null;
   age?: number;
   nationality?: string;
   height?: number;

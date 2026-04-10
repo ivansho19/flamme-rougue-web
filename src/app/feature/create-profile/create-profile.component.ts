@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-import { IProfileCreateRequest } from './models/IProfileCreate.model';
+import { IProfileCreateRequest, IKYCCreateRequest } from './models/IProfileCreate.model';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
@@ -15,6 +15,7 @@ import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { Country } from '../../shared/model/country.model';
 import { PlanOption } from '../../shared/model/planes.model';
+import { ToastService } from '../../shared/services/toast/toast.service';
 
 @Component({
     selector: 'app-create-profile',
@@ -74,7 +75,8 @@ export class ProfileEditComponent implements OnInit {
         private fb: FormBuilder,
         private authService: AuthService,
         private profileService: ProfileService,
-        private router: Router
+        private router: Router,
+        private toastService: ToastService
     ) { }
 
     ngOnInit() {
@@ -230,6 +232,7 @@ export class ProfileEditComponent implements OnInit {
                 description: ['', [Validators.required, Validators.maxLength(2500)]],
                 country: ['', Validators.required],
                 city: ['', Validators.required],
+                zone: [''],
                 phonePrefix: ['+'],
                 phone: ['', Validators.required],
                 availabilitySlots: this.fb.array([], this.minArrayLengthValidator(1))
@@ -237,7 +240,7 @@ export class ProfileEditComponent implements OnInit {
 
             personalData: this.fb.group({
                 gender: ['', Validators.required],
-                sexualOrientation: ['', Validators.required],
+                orientation: ['', Validators.required],
                 birthDate: [null, [Validators.required, this.minAgeValidator(18)]],
                 age: [null, Validators.required],
                 nationality: ['', Validators.required],
@@ -252,6 +255,7 @@ export class ProfileEditComponent implements OnInit {
                 realName: ['', Validators.required],
                 realBirthDate: [null, Validators.required],
                 realAge: [null, Validators.required],
+                email: ['', [Validators.required, Validators.email]],
                 realNationality: ['', Validators.required],
                 contactPhone: ['', Validators.required],
                 documentType: ['', Validators.required],
@@ -315,7 +319,7 @@ export class ProfileEditComponent implements OnInit {
             },
             personalData: {
                 gender: client.gender || '',
-                sexualOrientation: client.sexualOrientation || '',
+                orientation: client.orientation || '',
                 languages: Array.isArray(client.languages) ? client.languages : []
             },
             posibilities: Array.isArray(client.posibilities) ? client.posibilities : []
@@ -417,6 +421,7 @@ export class ProfileEditComponent implements OnInit {
             availability: availabilityText,
             bio: basicInfo.description || '',
             gender: personalData.gender || '',
+            orientation: personalData.orientation || '',
             hairColor: personalData.hairColor || '',
             age: personalData.age,
             eyeColor: personalData.eyeColor || '',
@@ -452,7 +457,7 @@ export class ProfileEditComponent implements OnInit {
         
         // PersonalData validations
         const gender = this.profileForm.get('personalData.gender')?.valid ?? false;
-        const sexualOrientation = this.profileForm.get('personalData.sexualOrientation')?.valid ?? false;
+        const orientation = this.profileForm.get('personalData.orientation')?.valid ?? false;
         const birthDate = this.profileForm.get('personalData.birthDate')?.valid ?? false;
         const nationality = this.profileForm.get('personalData.nationality')?.valid ?? false;
         const height = this.profileForm.get('personalData.height')?.valid ?? false;
@@ -461,7 +466,7 @@ export class ProfileEditComponent implements OnInit {
         const weight = this.profileForm.get('personalData.weight')?.valid ?? false;
         const languages = this.profileForm.get('personalData.languages')?.valid ?? false;
         
-        const personalDataComplete = gender && sexualOrientation && birthDate && nationality && 
+        const personalDataComplete = gender && orientation && birthDate && nationality && 
                                     height && hairColor && eyeColor && weight && languages;
         
         return basicInfoComplete && personalDataComplete && hasImage;
@@ -756,7 +761,7 @@ export class ProfileEditComponent implements OnInit {
         console.log('city:', this.profileForm?.get('basicInfo.city')?.valid ?? false);
         console.log('phone:', this.profileForm?.get('basicInfo.phone')?.valid ?? false);
         console.log('gender:', this.profileForm?.get('personalData.gender')?.valid ?? false);
-        console.log('sexualOrientation:', this.profileForm?.get('personalData.sexualOrientation')?.valid ?? false);
+        console.log('orientation:', this.profileForm?.get('personalData.orientation')?.valid ?? false);
         console.log('birthDate VALID:', this.profileForm?.get('personalData.birthDate')?.valid ?? false);
         console.log('birthDate ERRORS:', this.profileForm?.get('personalData.birthDate')?.errors);
         console.log('birthDate VALUE:', this.profileForm?.get('personalData.birthDate')?.value);
@@ -772,6 +777,12 @@ export class ProfileEditComponent implements OnInit {
     }
 
     async saveProfile() {
+                // Validar que haya un plan seleccionado
+                if (!this.selectedPlanId) {
+                    this.toastService.showToast('error', 'Falta seleccionar un plan para poder publicar tu perfil');
+                    return;
+                }
+
                 if (this.profileForm.invalid) {
                   this.profileForm.markAllAsTouched();
                   return;
@@ -861,9 +872,10 @@ export class ProfileEditComponent implements OnInit {
                             phone: this.getPhoneWithPrefix(basicInfo),
                                 country: basicInfo.country || '',
                                 city: basicInfo.city || '',
+                                zone: basicInfo.zone || '',
                                 availability: availabilityList,
                                 gender: personalData.gender || '',
-                                sexualOrientation: personalData.sexualOrientation || '',
+                                orientation: personalData.orientation || '',
                                 birthDate: personalData.birthDate || null,
                                 age: personalData.age,
                                 nationality: personalData.nationality || '',
@@ -873,8 +885,7 @@ export class ProfileEditComponent implements OnInit {
                                 eyeColor: personalData.eyeColor || '',
                                 languages: languagesList,
                                 posibilities: posibilitiesList,
-                                isPremium: this.profileForm.get('isGold')?.value || false,
-                                plan: this.selectedPlanId,
+                                plan: this.selectedPlanId ? [this.selectedPlanId.toString()] : [],
                                 imagesMain: mainImage,
                                 imagesGallery: galleryImages
                         };
@@ -889,8 +900,17 @@ export class ProfileEditComponent implements OnInit {
                                 if (storedProfileId) {
                                     localStorage.setItem('profileId', storedProfileId);
                                 }
-                                        this.loading = false;
-                                        this.router.navigate(['/home']);
+                                
+                                // 6️⃣ GUARDAR DATOS REALES (KYC) SI TIENEN DOCUMENTO
+                                this.saveKYCData(objectId).then(() => {
+                                    this.loading = false;
+                                    this.router.navigate(['/home']);
+                                }).catch((kycError) => {
+                                    console.warn('KYC guardado parcialmente con error:', kycError);
+                                    // Aún así navega al home aunque KYC falle
+                                    this.loading = false;
+                                    this.router.navigate(['/home']);
+                                });
                                 },
                                 error: (error) => {
                                         console.error('Error creando perfil:', error);
@@ -905,4 +925,58 @@ export class ProfileEditComponent implements OnInit {
 
                 }
         }
+
+    private async saveKYCData(userId: string): Promise<void> {
+        const realData = this.profileForm.get('realData')?.value || {};
+        const realName = realData.realName || '';
+        
+        // Si no hay documento seleccionado, no hacer nada
+        const documentFile = this.documentFrontFile || this.documentBackFile || this.passportFile;
+        if (!documentFile) {
+            console.log('No hay documento KYC para guardar');
+            return;
+        }
+
+        try {
+            // 1️⃣ CREAR CARPETA KYC CON FORMATO JERÁRQUICO: kyc/[nombre-real-usuario]+[id]
+            const slugifiedName = this.slugifyName(realName);
+            const kycFolder = `kyc/${slugifiedName}+${userId}`;
+
+            // 2️⃣ SUBIR IMAGEN A CLOUDINARY
+            console.log('Subiendo documento KYC a carpeta:', kycFolder);
+            const documentUpload: any = await firstValueFrom(
+                this.cloudinaryService.uploadImage(documentFile, kycFolder)
+            );
+
+            if (!documentUpload?.secure_url || !documentUpload?.public_id) {
+                throw new Error('Error al subir documento KYC a Cloudinary');
+            }
+
+            // 3️⃣ PREPARAR PAYLOAD PARA API KYC
+            const kycPayload: IKYCCreateRequest = {
+                userId: userId,
+                fullName: realName,
+                age: realData.realAge || null,
+                nationality: realData.realNationality || '',
+                phone: realData.contactPhone || '',
+                email: realData.email || '',
+                documentImage: {
+                    url: documentUpload.secure_url,
+                    public_id: documentUpload.public_id
+                }
+            };
+
+            console.log('Payload KYC:', kycPayload);
+
+            // 4️⃣ LLAMAR A LA API /api/profiles/createKYC
+            const kycResponse = await firstValueFrom(
+                this.profileService.createKYC(kycPayload)
+            );
+
+        } catch (error) {
+            console.error('Error al guardar KYC:', error);
+            this.toastService.showToast('warning', 'Perfil creado, pero hubo un error al guardar los datos reales');
+            throw error;
+        }
+    }
 }

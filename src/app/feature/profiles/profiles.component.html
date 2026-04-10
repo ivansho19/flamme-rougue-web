@@ -35,7 +35,7 @@
       <div class="profile-divider"></div>
 
       <div class="badges">
-        <span class="badge gold" *ngIf="profileData.isPremium">★ {{ 'PROFILE.GOLD' | translate }}</span>
+        <span class="badge gold" *ngIf="planBadgeLabel">★ {{ 'PROFILE.GOLD' | translate }}</span>
         <span class="badge verified">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
       </div>
 
@@ -67,6 +67,7 @@
         <h2 class="custom-card-title">{{ 'PROFILE.DETAILS' | translate }}</h2>
         <div class="profile-grid">
           <div><strong>{{ 'PROFILE.GENDER' | translate }}:</strong> {{ profileData.gender }}</div>
+          <div><strong>{{ 'PROFILE.SEXUAL_ORIENTATION' | translate }}:</strong> {{ profileData.orientation }}</div>
           <div><strong>{{ 'PROFILE.HAIR_COLOR' | translate }}:</strong> {{ hairColorText }}</div>
           <div><strong>{{ 'PROFILE.AGE' | translate }}:</strong> {{ profileData.age }} {{ 'COMMON.YEARS' | translate }}</div>
           <div><strong>{{ 'PROFILE.EYE_COLOR' | translate }}:</strong> {{ eyeColorText }}</div>

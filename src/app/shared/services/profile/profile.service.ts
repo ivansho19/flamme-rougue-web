@@ -56,4 +56,11 @@ export class ProfileService {
       finalize(() => this.loaderS.setLoaderState(false))
     );
   }
+
+  createKYC(payload: any): Observable<any> {
+    this.loaderS.setLoaderState(true);
+    return this.http.post(`${this.apiProfile}/createKYC`, payload).pipe(
+      finalize(() => this.loaderS.setLoaderState(false))
+    );
+  }
 }

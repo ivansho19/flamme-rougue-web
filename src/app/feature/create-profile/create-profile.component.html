@@ -114,6 +114,14 @@
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </div>
         </div>
+
+        <div class="field" *ngIf="cities.length > 0">
+          <input formControlName="zone" type="text" placeholder="{{ 'PROFILE_FORM.ZONE_PLACEHOLDER' | translate }}"
+            [class.input-error]="isInvalid('basicInfo.zone')">
+          <div class="error" *ngIf="isInvalid('basicInfo.zone')">
+            {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+          </div>
+        </div>
       </div>
 
       <div class="grid-2">
@@ -173,8 +181,8 @@
       </div>
 
       <div class="field">
-        <select formControlName="sexualOrientation"
-          [class.input-error]="isInvalid('personalData.sexualOrientation')">
+        <select formControlName="orientation"
+          [class.input-error]="isInvalid('personalData.orientation')">
           <option value="" disabled selected>{{ 'PROFILE_FORM.SEXUAL_ORIENTATION_PLACEHOLDER' | translate }}</option>
           <option value="heterosexual">{{ 'PROFILE_FORM.SEXUAL_ORIENTATION_HETERO' | translate }}</option>
           <option value="homosexual">{{ 'PROFILE_FORM.SEXUAL_ORIENTATION_HOMO' | translate }}</option>
@@ -183,7 +191,7 @@
           <option value="asexual">{{ 'PROFILE_FORM.SEXUAL_ORIENTATION_ASEXUAL' | translate }}</option>
           <option value="other">{{ 'PROFILE_FORM.SEXUAL_ORIENTATION_OTHER' | translate }}</option>
         </select>
-        <div class="error" *ngIf="isInvalid('personalData.sexualOrientation')">
+        <div class="error" *ngIf="isInvalid('personalData.orientation')">
           {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
         </div>
       </div>
@@ -339,6 +347,19 @@
               </div>
             </div>
           </div>
+
+          <div class="field">
+          <input formControlName="email" type="email" placeholder="{{ 'PROFILE_FORM.EMAIL_PLACEHOLDER' | translate }}"
+            [class.input-error]="isInvalid('basicInfo.email')">
+          <div class="error" *ngIf="isInvalid('basicInfo.email')">
+            <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['required']">
+              {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+            </span>
+            <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['email']">
+              {{ 'PROFILE_FORM.INVALID_EMAIL_ERROR' | translate }}
+            </span>
+          </div>
+        </div>
 
           <div class="field">
             <select formControlName="documentType" (change)="onDocumentTypeChange($event)"

@@ -8,6 +8,7 @@ export interface ProfilePreviewData {
   availability?: string;
   bio?: string;
   gender?: string;
+  orientation?: string;
   hairColor?: string;
   age?: number | string | null;
   eyeColor?: string;

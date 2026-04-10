@@ -698,10 +698,11 @@ export class UpdateProfileComponent implements OnInit {
         eyeColor: personalData.eyeColor || '',
         languages: languagesList,
         posibilities: posibilitiesList,
-        isPremium: this.isPremium,
-        plan: this.selectedPlanId !== null ? Number(this.selectedPlanId) : null,
+        plan: this.selectedPlanId ? [this.selectedPlanId.toString()] : [],
         imagesMain: mainImage,
-        imagesGallery: galleryImages
+        imagesGallery: galleryImages,
+        orientation: personalData.orientation || '',
+
       };
 
       this.profileService.updateProfile(lookupId, profilePayload).subscribe({
