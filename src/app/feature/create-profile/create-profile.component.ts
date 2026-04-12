@@ -53,6 +53,9 @@ export class ProfileEditComponent implements OnInit {
 
     selectedPlanId: number | null = null;
     selectedPlan: PlanOption | null = null;
+    
+    showPlanModal = false;
+    previousIsProfileComplete = false;
 
     countries: Country[] = [];
     cities: string[] = [];
@@ -280,6 +283,11 @@ export class ProfileEditComponent implements OnInit {
             .get('realData.documentType')
             ?.valueChanges.subscribe(value => this.updateDocumentValidators(value));
 
+        // Watch for form changes to auto-show modal when profile becomes complete
+        this.profileForm.statusChanges.subscribe(() => {
+            this.checkAndShowPlanModal();
+        });
+
         this.addAvailabilitySlot();
     }
 
@@ -392,6 +400,40 @@ export class ProfileEditComponent implements OnInit {
         this.selectedPlanId = plan.id;
         this.selectedPlan = plan;
         console.log('Plan seleccionado:', plan);
+    }
+
+    handlePlanSelectionFromModal(plan: PlanOption): void {
+        this.selectedPlanId = plan.id;
+        this.selectedPlan = plan;
+        this.showPlanModal = false;
+        console.log('Plan seleccionado desde modal:', plan);
+        // Auto-save profile after plan confirmation
+        this.saveProfile();
+    }
+
+    closePlanModal(): void {
+        // Permite cerrar el modal sin hacer nada (cuando hace clic en "Decidir después")
+        this.showPlanModal = false;
+    }
+
+    publishProfile(): void {
+        // Si no hay plan seleccionado, abre el modal para seleccionar uno
+        if (!this.selectedPlanId) {
+            this.showPlanModal = true;
+            return;
+        }
+        // Si ya hay plan, procede a guardar el perfil
+        this.saveProfile();
+    }
+
+    checkAndShowPlanModal(): void {
+        // Auto-show modal when profile becomes complete for the first time
+        if (this.isProfileComplete && !this.previousIsProfileComplete) {
+            this.showPlanModal = true;
+            this.previousIsProfileComplete = true;
+        } else if (!this.isProfileComplete && this.previousIsProfileComplete) {
+            this.previousIsProfileComplete = false;
+        }
     }
 
     get previewProfile(): ProfilePreviewData | null {

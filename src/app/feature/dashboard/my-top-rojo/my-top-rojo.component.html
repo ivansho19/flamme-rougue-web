@@ -1,0 +1,192 @@
+<div class="dashboard-container">
+  <div class="section-header">
+    <h2>
+      <span class="badge-icon">🔴</span>
+      {{ 'TOP_ROJO.MY_TOPS' | translate }}
+    </h2>
+    <button class="btn-publish" (click)="openTopRojoModal()">
+      <i class="bi bi-plus-circle"></i>
+      {{ 'TOP_ROJO.PUBLISH_NEW' | translate }}
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+    <button class="tab" 
+      [class.active]="activeTab === 'active'"
+      (click)="activeTab = 'active'">
+      <i class="bi bi-play-circle"></i>
+      {{ 'TOP_ROJO.ACTIVE' | translate }}
+      <span class="tab-badge" *ngIf="dashboard?.active?.length">
+        {{ dashboard?.active?.length }}
+      </span>
+    </button>
+    <button class="tab" 
+      [class.active]="activeTab === 'expired'"
+      (click)="activeTab = 'expired'">
+      <i class="bi bi-clock-history"></i>
+      {{ 'TOP_ROJO.EXPIRED' | translate }}
+      <span class="tab-badge" *ngIf="dashboard?.expired?.length">
+        {{ dashboard?.expired?.length }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Estado vacío -->
+  <div class="empty-state" *ngIf="!loading && !dashboard?.active?.length && activeTab === 'active'">
+    <div class="empty-icon">🔴</div>
+    <h3>{{ 'TOP_ROJO.NO_ACTIVE' | translate }}</h3>
+    <p>{{ 'TOP_ROJO.NO_ACTIVE_DESC' | translate }}</p>
+    <button class="btn btn-primary" (click)="openTopRojoModal()">
+      {{ 'TOP_ROJO.PUBLISH_NOW' | translate }}
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <app-loader></app-loader>
+  </div>
+
+  <!-- TOP ROJO Activos -->
+  <div *ngIf="!loading && activeTab === 'active'" class="tops-grid">
+    <div class="top-card" *ngFor="let top of dashboard?.active || []">
+      <div class="top-card-header">
+        <div class="top-badge">🔴 TOP</div>
+        <span class="top-plan">{{ getPlanName(top.planType) }}</span>
+      </div>
+
+      <div class="top-card-image">
+        <img [src]="top.profileImage" [alt]="top.displayName" />
+      </div>
+
+      <div class="top-card-content">
+        <h3>{{ top.displayName }}</h3>
+        <p class="city">{{ top.city }}, {{ top.country }}</p>
+
+        <!-- Timer -->
+        <div class="timer-box">
+          <div class="timer">
+            <i class="bi bi-hourglass-split"></i>
+            <span *ngIf="top.daysRemaining > 0">
+              {{ top.daysRemaining }}d {{ top.hoursRemaining }}h
+            </span>
+            <span *ngIf="top.daysRemaining === 0">
+              {{ top.hoursRemaining }}h {{ 'TOP_ROJO.REMAINING' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+          <div class="stat-item">
+            <i class="bi bi-eye"></i>
+            <span class="stat-value">{{ top.views }}</span>
+            <span class="stat-label">{{ 'TOP_ROJO.VIEWS' | translate }}</span>
+          </div>
+          <div class="stat-item">
+            <i class="bi bi-hand-index"></i>
+            <span class="stat-value">{{ top.clicks }}</span>
+            <span class="stat-label">{{ 'TOP_ROJO.CLICKS' | translate }}</span>
+          </div>
+          <div class="stat-item">
+            <i class="bi bi-chat-dots"></i>
+            <span class="stat-value">{{ top.inquiries }}</span>
+            <span class="stat-label">{{ 'TOP_ROJO.INQUIRIES' | translate }}</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgressPercentage(top)"></div>
+          </div>
+          <span class="progress-text">{{ getProgressPercentage(top) }}% {{ 'TOP_ROJO.COMPLETE' | translate }}</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="top-card-actions">
+        <button class="btn btn-small btn-secondary" (click)="renewTopRojo(top._id)">
+          <i class="bi bi-arrow-clockwise"></i>
+          {{ 'TOP_ROJO.RENEW' | translate }}
+        </button>
+        <button class="btn btn-small btn-danger" (click)="cancelTopRojo(top._id)">
+          <i class="bi bi-trash"></i>
+          {{ 'TOP_ROJO.CANCEL' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP ROJO Expirados -->
+  <div *ngIf="!loading && activeTab === 'expired'" class="tops-grid">
+    <div class="top-card expired" *ngFor="let top of dashboard?.expired || []">
+      <div class="expired-badge">{{ 'TOP_ROJO.EXPIRED' | translate }}</div>
+      
+      <div class="top-card-image">
+        <img [src]="top.profileImage" [alt]="top.displayName" />
+      </div>
+
+      <div class="top-card-content">
+        <h3>{{ top.displayName }}</h3>
+        <p class="city">{{ top.city }}, {{ top.country }}</p>
+        
+        <div class="expiration-info">
+          <span>{{ 'TOP_ROJO.EXPIRED_ON' | translate }}: {{ top.endDate | date:'short' }}</span>
+        </div>
+
+        <div class="final-stats">
+          <div class="stat-item">
+            <span class="stat-label">{{ 'TOP_ROJO.TOTAL_VIEWS' | translate }}</span>
+            <span class="stat-value">{{ top.views }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">{{ 'TOP_ROJO.TOTAL_CLICKS' | translate }}</span>
+            <span class="stat-value">{{ top.clicks }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-card-actions">
+        <button class="btn btn-small btn-primary" (click)="renewTopRojo(top._id)">
+          <i class="bi bi-plus"></i>
+          {{ 'TOP_ROJO.RENEW_AGAIN' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Statistics -->
+  <div class="summary-section" *ngIf="dashboard">
+    <h3>{{ 'TOP_ROJO.STATISTICS' | translate }}</h3>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_SPENT' | translate }}</span>
+        <span class="summary-value">€{{ dashboard.statistics.totalSpent }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_VIEWS' | translate }}</span>
+        <span class="summary-value">{{ dashboard.statistics.totalViews }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_CLICKS' | translate }}</span>
+        <span class="summary-value">{{ dashboard.statistics.totalClicks }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">{{ 'TOP_ROJO.CONV_RATE' | translate }}</span>
+        <span class="summary-value">{{ dashboard.statistics.conversionRate }}%</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal TOP ROJO -->
+<app-top-rojo-modal
+  [isOpen]="showTopRojoModal"
+  [profileId]="profileId"
+  [city]="city"
+  [country]="country"
+  (close)="showTopRojoModal = false"
+  (purchaseSuccess)="onPurchaseSuccess()">
+</app-top-rojo-modal>

@@ -52,6 +52,11 @@ export const routes: Routes = [
         path: 'payments',
         loadChildren: () =>
           import('./feature/payments/payment.module').then((m) => m.PaymentModule),
+      },
+      {
+        path: 'dashboard/my-top-rojo',
+        loadChildren: () =>
+          import('./feature/dashboard/my-top-rojo/my-top-rojo.module').then((m) => m.MyTopRojoModule),
       }]
   },
   {

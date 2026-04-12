@@ -1,0 +1,111 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <!-- Header -->
+    <div class="modal-header">
+      <h2>
+        <span class="badge-rojo">🔴</span>
+        {{ 'TOP_ROJO.TITLE' | translate }}
+      </h2>
+      <button class="close-btn" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <!-- Descripción -->
+      <div class="description">
+        <p class="description-text">
+          {{ 'TOP_ROJO.DESCRIPTION' | translate }}
+        </p>
+        <div class="benefits">
+          <div class="benefit-item">
+            <i class="bi bi-star-fill"></i>
+            <span>{{ 'TOP_ROJO.BENEFIT_1' | translate }}</span>
+          </div>
+          <div class="benefit-item">
+            <i class="bi bi-graph-up"></i>
+            <span>{{ 'TOP_ROJO.BENEFIT_2' | translate }}</span>
+          </div>
+          <div class="benefit-item">
+            <i class="bi bi-eye"></i>
+            <span>{{ 'TOP_ROJO.BENEFIT_3' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Planes -->
+      <div class="plans-container">
+        <div class="plan-card" 
+          *ngFor="let plan of plans | keyvalue"
+          [class.selected]="selectedPlan === plan.key"
+          (click)="selectPlan(plan.key)">
+          
+          <div class="plan-header">
+            <h3>{{ plan.value.name }}</h3>
+            <span class="duration">{{ plan.value.duration }}h</span>
+          </div>
+
+          <p class="plan-description">
+            {{ plan.value.description }}
+          </p>
+
+          <div class="plan-price">
+            <span class="price">€{{ plan.value.price }}</span>
+          </div>
+
+          <div class="plan-check" *ngIf="selectedPlan === plan.key">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de la ciudad -->
+      <div class="city-info" *ngIf="cityData">
+        <h4>{{ 'TOP_ROJO.CITY_INFO' | translate }}</h4>
+        <div class="city-details">
+          <div class="detail-row">
+            <span>{{ 'TOP_ROJO.CURRENT_CITY' | translate }}:</span>
+            <strong>{{ cityData.city }}, {{ cityData.country }}</strong>
+          </div>
+          <div class="detail-row">
+            <span>{{ 'TOP_ROJO.TOP_SLOTS' | translate }}:</span>
+            <strong>{{ cityData.slotsAvailable }}/5 {{ 'TOP_ROJO.AVAILABLE' | translate }}</strong>
+          </div>
+          <div class="detail-row" *ngIf="cityData.slotsAvailable === 0">
+            <span class="warning">⚠️ {{ 'TOP_ROJO.NO_SLOTS' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen -->
+      <div class="summary" *ngIf="selectedPlan && plans[selectedPlan]">
+        <h4>{{ 'TOP_ROJO.SUMMARY' | translate }}</h4>
+        <div class="summary-row">
+          <span>{{ plans[selectedPlan].name }}</span>
+          <span class="price">€{{ plans[selectedPlan].price }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>{{ 'TOP_ROJO.TOTAL' | translate }}</span>
+          <span class="total-price">€{{ plans[selectedPlan].price }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button class="btn btn-primary" 
+        (click)="proceedToPayment()"
+        [disabled]="!selectedPlan">
+        {{ 'TOP_ROJO.PURCHASE_NOW' | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Overlay oscuro -->
+<div class="modal-backdrop" *ngIf="isOpen" [class.show]="isOpen"></div>

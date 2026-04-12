@@ -8,7 +8,8 @@
     "SEARCHING": "Searching...",
     "NO_RESULTS": "No results",
     "SEARCH_HINT": "Type at least 3 characters to search",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "PUBLISH_TOP": "Publish TOP"
   },
   "PROFILE": {
     "SUBTITLE": "Private reception",
@@ -109,6 +110,42 @@
     "YEARS": "years",
     "CM": "cm",
     "KG": "kg",
-    "CITY": "City"
+    "CITY": "City",
+    "CANCEL": "Cancel"
+  },
+  "TOP_ROJO": {
+    "TITLE": "🔴 TOP RED - Maximum Visibility",
+    "DESCRIPTION": "Appears in the Top 5 of your city and on the home page. Only 5 profiles can be TOP simultaneously in each city.",
+    "BENEFIT_1": "Appears in the Top 5 of your city",
+    "BENEFIT_2": "Visibility on the home page",
+    "BENEFIT_3": "Exclusive red badge and featured",
+    "MY_TOPS": "My TOP RED",
+    "PUBLISH_NEW": "New TOP RED",
+    "PUBLISH_NOW": "Publish TOP RED",
+    "ACTIVE": "Active",
+    "EXPIRED": "Expired",
+    "NO_ACTIVE": "You have no active TOP RED",
+    "NO_ACTIVE_DESC": "Buy a TOP RED to increase your visibility and reach more customers.",
+    "CITY_INFO": "City information",
+    "CURRENT_CITY": "Current city",
+    "TOP_SLOTS": "TOP slots",
+    "AVAILABLE": "available",
+    "NO_SLOTS": "No slots available in this city. Try again later.",
+    "SUMMARY": "Order summary",
+    "TOTAL": "Total",
+    "PURCHASE_NOW": "Buy now",
+    "VIEWS": "Views",
+    "CLICKS": "Clicks",
+    "INQUIRIES": "Inquiries",
+    "REMAINING": "remaining",
+    "RENEW": "Renew",
+    "RENEW_AGAIN": "Renew again",
+    "STATISTICS": "General statistics",
+    "TOTAL_SPENT": "Total spent",
+    "TOTAL_VIEWS": "Total views",
+    "TOTAL_CLICKS": "Total clicks",
+    "CONV_RATE": "Conversion rate",
+    "COMPLETE": "completed",
+    "EXPIRED_ON": "Expired on"
   }
 }

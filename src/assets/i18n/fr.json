@@ -8,7 +8,8 @@
     "SEARCHING": "Recherche...",
     "NO_RESULTS": "Aucun resultat",
     "SEARCH_HINT": "Tapez au moins 3 caracteres pour rechercher",
-    "LOGOUT": "Déconnexion"
+    "LOGOUT": "Déconnexion",
+    "PUBLISH_TOP": "Publier TOP"
   },
   "PROFILE": {
     "SUBTITLE": "Reception privee",
@@ -109,6 +110,42 @@
     "YEARS": "ans",
     "CM": "cm",
     "KG": "kg",
-    "CITY": "Ville"
+    "CITY": "Ville",
+    "CANCEL": "Annuler"
+  },
+  "TOP_ROJO": {
+    "TITLE": "🔴 TOP ROUGE - Visibilité maximale",
+    "DESCRIPTION": "Apparaît dans le Top 5 de ta ville et sur la page d'accueil. Seulement 5 profils peuvent être TOP simultanément dans chaque ville.",
+    "BENEFIT_1": "Apparaît dans le Top 5 de ta ville",
+    "BENEFIT_2": "Visibilité sur la page d'accueil",
+    "BENEFIT_3": "Badge rouge exclusif et en vedette",
+    "MY_TOPS": "Mes TOP ROUGE",
+    "PUBLISH_NEW": "Nouveau TOP ROUGE",
+    "PUBLISH_NOW": "Publier TOP ROUGE",
+    "ACTIVE": "Actifs",
+    "EXPIRED": "Expirés",
+    "NO_ACTIVE": "Tu n'as pas de TOP ROUGE actifs",
+    "NO_ACTIVE_DESC": "Achète un TOP ROUGE pour augmenter ta visibilité et atteindre plus de clients.",
+    "CITY_INFO": "Information de la ville",
+    "CURRENT_CITY": "Ville actuelle",
+    "TOP_SLOTS": "Emplacements TOP",
+    "AVAILABLE": "disponibles",
+    "NO_SLOTS": "Il n'y a pas d'emplacements disponibles dans cette ville. Réessaye plus tard.",
+    "SUMMARY": "Résumé de la commande",
+    "TOTAL": "Total",
+    "PURCHASE_NOW": "Acheter maintenant",
+    "VIEWS": "Vues",
+    "CLICKS": "Clics",
+    "INQUIRIES": "Demandes",
+    "REMAINING": "restant",
+    "RENEW": "Renouveler",
+    "RENEW_AGAIN": "Renouveler à nouveau",
+    "STATISTICS": "Statistiques générales",
+    "TOTAL_SPENT": "Total dépensé",
+    "TOTAL_VIEWS": "Vues totales",
+    "TOTAL_CLICKS": "Clics totaux",
+    "CONV_RATE": "Taux de conversion",
+    "COMPLETE": "complété",
+    "EXPIRED_ON": "Expiré le"
   }
 }

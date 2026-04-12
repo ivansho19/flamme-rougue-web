@@ -8,7 +8,8 @@
     "SEARCHING": "Buscando...",
     "NO_RESULTS": "No hay resultados",
     "SEARCH_HINT": "Escribe al menos 3 caracteres para buscar",
-    "LOGOUT": "Cerrar sesión"
+    "LOGOUT": "Cerrar sesión",
+    "PUBLISH_TOP": "Publicar TOP"
   },
   "PROFILE": {
     "SUBTITLE": "Recepcion privada",
@@ -108,6 +109,43 @@
     "YEARS": "anos",
     "CM": "cm",
     "KG": "kg",
-    "CITY": "Ciudad"
+    "CITY": "Ciudad",
+    "CANCEL": "Cancelar"
+  },
+  "TOP_ROJO": {
+    "TITLE": "🔴 TOP ROJO - Máxima Visibilidad",
+    "DESCRIPTION": "Aparece en el Top 5 de tu ciudad y en la home. Solo 5 perfiles pueden ser TOP simultáneamente en cada ciudad.",
+    "BENEFIT_1": "Aparece en el Top 5 de tu ciudad",
+    "BENEFIT_2": "Visibilidad en la página principal (home)",
+    "BENEFIT_3": "Badge rojo exclusivo y destacado",
+    "MY_TOPS": "Mis TOP ROJO",
+    "PUBLISH_NEW": "Nuevo TOP ROJO",
+    "PUBLISH_NOW": "Publicar TOP ROJO",
+    "ACTIVE": "Activos",
+    "EXPIRED": "Expirados",
+    "NO_ACTIVE": "No tienes TOP ROJO activos",
+    "NO_ACTIVE_DESC": "Compra un TOP ROJO para aumentar tu visibilidad y llegar a más clientes.",
+    "CITY_INFO": "Información de la ciudad",
+    "CURRENT_CITY": "Ciudad actual",
+    "TOP_SLOTS": "Plazas TOP",
+    "AVAILABLE": "disponibles",
+    "NO_SLOTS": "No hay plazas disponibles en esta ciudad. Intenta en otra hora.",
+    "SUMMARY": "Resumen del pedido",
+    "TOTAL": "Total",
+    "PURCHASE_NOW": "Comprar ahora",
+    "VIEWS": "Visualizaciones",
+    "CLICKS": "Clicks",
+    "INQUIRIES": "Consultas",
+    "REMAINING": "restante",
+    "RENEW": "Renovar",
+    "CANCEL": "Cancelar",
+    "RENEW_AGAIN": "Renovar nuevamente",
+    "STATISTICS": "Estadísticas generales",
+    "TOTAL_SPENT": "Total gastado",
+    "TOTAL_VIEWS": "Visualizaciones totales",
+    "TOTAL_CLICKS": "Clicks totales",
+    "CONV_RATE": "Tasa de conversión",
+    "COMPLETE": "completado",
+    "EXPIRED_ON": "Expiró el"
   }
 }

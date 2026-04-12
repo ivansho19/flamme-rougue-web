@@ -22,6 +22,9 @@
                     </button>
                 </div>
             </div>
+            <button class="publish-top-btn" (click)="openTopRojoModal()" [title]="'HEADER.PUBLISH_TOP' | translate">
+                <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
+            </button>
             <button class="icon-btn" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
         </div>
     </div>
@@ -42,6 +45,9 @@
             </button>
             <button class="mobile-item" type="button" (click)="navigateToProfile(); closeMobileMenu()">
                 <i class="bi bi-person"></i> {{ 'HEADER.PROFILE' | translate }}
+            </button>
+            <button class="mobile-item publish-top" type="button" (click)="openTopRojoModal(); closeMobileMenu()">
+                <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
             </button>
             <div class="mobile-divider"></div>
             <div class="mobile-languages">

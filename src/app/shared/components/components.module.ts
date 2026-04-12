@@ -12,7 +12,10 @@ import { PlanesComponent } from './planes/planes.component';
 import { ProfilePreviewComponent } from './profile-preview/profile-preview.component';
 import { ToastAlertComponent } from './toast-alert/toast-alert.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopRojoModalComponent } from './top-rojo-modal/top-rojo-modal.component';
+import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selection-modal.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { TranslateModule } from '@ngx-translate/core';
     LayoutComponent,
     PlanesComponent,
     ProfilePreviewComponent,
-    ToastAlertComponent
+    ToastAlertComponent,
+    TopRojoModalComponent,
+    PlanSelectionModalComponent
   ],
   exports: [
     LoaderComponent,
@@ -36,7 +41,9 @@ import { TranslateModule } from '@ngx-translate/core';
     PlanesComponent,
     ProfilePreviewComponent,
     ToastAlertComponent,
-    TranslateModule
+    TranslateModule,
+    TopRojoModalComponent,
+    PlanSelectionModalComponent
   ],
   imports: [
     CommonModule,
@@ -44,6 +51,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     MatSnackBarModule,
+    MatDialogModule,
     TranslateModule
 ],
   providers: []

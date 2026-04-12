@@ -429,10 +429,23 @@
     <h2 class="section-title">{{ 'PROFILE_FORM.PREVIEW_TITLE' | translate }}</h2>
     <app-profile-preview [profile]="previewProfile"></app-profile-preview>
   </div>
-  <app-planes *ngIf="isProfileComplete" [selectedPlanId]="selectedPlanId"
-    (planSelected)="planSelected($event)"></app-planes>
-  <button style="margin-top: 30px;" *ngIf="canPublish" type="submit" class="btn-primary" (click)="saveProfile()">
-    {{ 'PROFILE_FORM.PUBLISH_PROFILE' | translate }}
+
+  <!-- Plan Selection Modal - Auto-triggers when profile is complete -->
+  <app-plan-selection-modal
+    [isOpen]="showPlanModal"
+    [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
+    (close)="closePlanModal()"
+    (planSelected)="handlePlanSelectionFromModal($event)">
+  </app-plan-selection-modal>
+
+  <!-- Publish Button - Triggers plan selection if not chosen yet -->
+  <button 
+    style="margin-top: 30px;" 
+    *ngIf="isProfileComplete" 
+    type="button" 
+    class="btn-primary" 
+    (click)="publishProfile()">
+    {{ selectedPlanId ? ('PROFILE_FORM.PUBLISH_PROFILE' | translate) : 'Elige tu plan y publica tu perfil' }}
   </button>
   <app-loader *ngIf="loading"></app-loader>
 </div>

@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { Subject, of } from "rxjs";
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -7,6 +6,7 @@ import { LogoutConfirmDialogComponent } from "../logout-confirm-dialog/logout-co
 import { LoaderService } from "../../services/loader/loader.service";
 import { ProfileService } from "../../services/profile/profile.service";
 import { TranslateService } from "@ngx-translate/core";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-header",
@@ -182,6 +182,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateToHome(){
     this.route.navigate(['/home']);
+  }
+
+  openTopRojoModal() {
+    // Navigate to dashboard y luego abrir el modal
+    this.route.navigate(['/dashboard/my-top-rojo']);
   }
 
   ngOnDestroy(): void {

@@ -186,6 +186,37 @@
   }
 }
 
+/* Publish TOP button */
+.publish-top-btn {
+  background: linear-gradient(135deg, #BF9663, #D4AF37);
+  border: 2px solid #F2DAAC;
+  border-radius: 24px;
+  padding: 0.5rem 1rem;
+  color: #8C030E;
+  font-weight: bold;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  &:hover, &:focus {
+    background: linear-gradient(135deg, #D4AF37, #FFED4E);
+    box-shadow: 0 4px 12px rgba(191, 150, 99, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
 /* ============ 📱 MOBILE MENU ============ */
 .mobile-toggle {
   display: none;
@@ -291,6 +322,19 @@
       background: rgba(255, 107, 107, 0.1);
     }
   }
+
+  &.publish-top {
+    background: linear-gradient(135deg, #BF9663, #D4AF37);
+    color: #8C030E;
+    font-weight: bold;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+
+    &:hover {
+      background: linear-gradient(135deg, #D4AF37, #FFED4E);
+      box-shadow: 0 2px 8px rgba(191, 150, 99, 0.3);
+    }
+  }
 }
 
 .mobile-divider {
@@ -369,6 +413,11 @@
   /* Ocultar menú desktop */
   .desktop-menu {
     display: none !important;
+  }
+
+  /* Ocultar botón Publicar TOP en mobile */
+  .publish-top-btn {
+    display: none;
   }
 
   /* Mostrar botón hamburguesa */

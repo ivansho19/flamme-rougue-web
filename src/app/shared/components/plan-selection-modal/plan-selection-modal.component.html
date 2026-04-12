@@ -1,0 +1,133 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="progress-badge">100%</div>
+        <h2>¡Perfil completado!</h2>
+        <p class="header-subtitle">{{ profileName }}, estás listo para anunciarte con nosotros</p>
+      </div>
+      <button class="close-btn" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <!-- Motivational Message -->
+      <div class="motivation-banner">
+        <i class="bi bi-star-fill"></i>
+        <p>Elige tu plan ideal y comienza a recibir solicitudes hoy mismo</p>
+      </div>
+
+      <!-- Plans Grid -->
+      <div class="plans-modal-grid">
+        
+        <!-- PLAN BASICO -->
+        <div class="plan-card" 
+          [class.selected]="selectedPlanId === 1"
+          (click)="selectPlan(1)">
+
+          <div class="plan-header">
+            <h3>Plan Básico</h3>
+            <div class="price">39€ <span>/ mes</span></div>
+          </div>
+
+          <ul class="plan-features">
+            <li>✔ Perfil activo</li>
+            <li>✔ Aparece en búsquedas</li>
+            <li>✔ Hasta 8 fotos</li>
+            <li>✔ Comentarios y rating</li>
+            <li class="disabled">✖ Sin prioridad</li>
+          </ul>
+
+          <div class="plan-check" *ngIf="selectedPlanId === 1">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+
+        <!-- PLAN PRO (RECOMENDADO) -->
+        <div class="plan-card popular" 
+          [class.selected]="selectedPlanId === 2"
+          (click)="selectPlan(2)">
+
+          <div class="badge-recommended">RECOMENDADO</div>
+
+          <div class="plan-header">
+            <h3>Plan Pro</h3>
+            <div class="price">79€ <span>/ mes</span></div>
+          </div>
+
+          <ul class="plan-features">
+            <li>✔ Todo lo del Básico</li>
+            <li>✔ Mejor posición en ciudad</li>
+            <li>✔ Rotaciones destacadas</li>
+            <li>✔ Badge Recomendado</li>
+            <li>✔ Hasta 15 fotos</li>
+          </ul>
+
+          <div class="plan-check" *ngIf="selectedPlanId === 2">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+
+        <!-- PLAN VIP -->
+        <div class="plan-card vip" 
+          [class.selected]="selectedPlanId === 3"
+          (click)="selectPlan(3)">
+
+          <div class="plan-header">
+            <h3>Plan VIP</h3>
+            <div class="price">149€ <span>/ mes</span></div>
+          </div>
+
+          <ul class="plan-features">
+            <li>✔ Todo lo del Pro</li>
+            <li>✔ Prioridad máxima</li>
+            <li>✔ Destacado en Home</li>
+            <li>✔ Badge VIP</li>
+            <li>✔ Hasta 30 fotos</li>
+            <li>✔ Soporte prioritario</li>
+          </ul>
+
+          <div class="plan-check" *ngIf="selectedPlanId === 3">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Info supplementaria -->
+      <div class="plan-info">
+        <div class="info-item">
+          <i class="bi bi-credit-card"></i>
+          <span>Pago seguro via Stripe</span>
+        </div>
+        <div class="info-item">
+          <i class="bi bi-arrow-repeat"></i>
+          <span>Puedes cambiar de plan cuando quieras</span>
+        </div>
+        <div class="info-item">
+          <i class="bi bi-shield-check"></i>
+          <span>7 días de garantía de dinero devuelto</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()">
+        Decidir después
+      </button>
+      <button class="btn btn-primary" 
+        (click)="confirmPlan()"
+        [disabled]="!selectedPlanId">
+        Confirmar Plan y Publicar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" [class.show]="isOpen"></div>
