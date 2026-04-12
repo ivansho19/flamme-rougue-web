@@ -1,0 +1,57 @@
+<!-- Background overlay -->
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+
+<!-- Modal container -->
+<div class="modal-container" *ngIf="isOpen">
+  <div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-content">
+        <h2>Elige tu plan TOP ROJO</h2>
+        <p class="subtitle">{{ profileName }}</p>
+      </div>
+      <button class="close-btn" (click)="closeModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Plans container -->
+    <div class="plans-container">
+      <div 
+        class="plan-card"
+        *ngFor="let plan of plans"
+        [class.selected]="selectedPlanId === plan.id"
+        (click)="selectPlan(plan.id)">
+        
+        <!-- Plan header -->
+        <div class="plan-header">
+          <h3>{{ plan.name }}</h3>
+          <span class="duration">{{ getDurationText(plan.duration) }}</span>
+        </div>
+
+        <!-- Plan description -->
+        <p class="plan-description">{{ plan.description }}</p>
+
+        <!-- Price -->
+        <div class="plan-price">
+          <span class="price">€{{ plan.price }}</span>
+        </div>
+
+        <!-- Check icon for selected plan -->
+        <div class="plan-check" *ngIf="selectedPlanId === plan.id">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer actions -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeModal()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button class="btn btn-primary" (click)="confirmSelection()">
+        {{ 'TOP_ROJO.CONFIRM_PLAN' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
