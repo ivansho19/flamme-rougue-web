@@ -40,6 +40,13 @@ export interface ITopRojoCreateRequest {
   planType: TopRojoPlantType; // 'top_24h' | 'top_3d' | 'top_7d'
   city: string;               // Ciudad donde será visible
   country: string;            // País
+  title?: string;             // Título del TOP ROJO
+  description?: string;       // Descripción del servicio
+  contactPhone?: string;      // Número de contacto adicional
+  images?: Array<{            // Fotos del TOP ROJO
+    url: string;
+    public_id: string;
+  }>;
 }
 
 /**
