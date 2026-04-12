@@ -121,6 +121,18 @@
     "MY_TOPS": "Mis TOP ROJO",
     "PUBLISH_NEW": "Nuevo TOP ROJO",
     "PUBLISH_NOW": "Publicar TOP ROJO",
+    "CREATE_NEW": "Crear nuevo TOP ROJO",
+    "LOCATION": "Ubicación",
+    "LOCATION_HINT": "Selecciona donde será visible tu TOP ROJO",
+    "SELECT_PHOTOS": "Selecciona 2 fotos",
+    "PHOTOS_HINT": "Carga 2 fotos de alta calidad que muestren tu servicio",
+    "UPLOAD_PHOTO": "Subir foto",
+    "TITLE": "Título del TOP ROJO",
+    "DESCRIPTION": "Descripción del servicio",
+    "CONTACT_PHONE": "Número de contacto",
+    "INVALID_PHONE": "Por favor ingresa un número de teléfono válido",
+    "CONTINUE_TO_PLAN": "Continuar a planes",
+    "MIN_CHARS": "Mínimo {{min}} caracteres requeridos",
     "ACTIVE": "Activos",
     "EXPIRED": "Expirados",
     "NO_ACTIVE": "No tienes TOP ROJO activos",
@@ -146,6 +158,7 @@
     "TOTAL_CLICKS": "Clicks totales",
     "CONV_RATE": "Tasa de conversión",
     "COMPLETE": "completado",
-    "EXPIRED_ON": "Expiró el"
+    "EXPIRED_ON": "Expiró el",
+    "CONFIRM_PLAN": "Confirmar plan"
   }
 }

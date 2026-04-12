@@ -247,10 +247,10 @@ export class ProfileEditComponent implements OnInit {
                 birthDate: [null, [Validators.required, this.minAgeValidator(18)]],
                 age: [null, Validators.required],
                 nationality: ['', Validators.required],
-                height: [null, Validators.required],
+                height: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
                 hairColor: ['', Validators.required],
                 eyeColor: ['', Validators.required],
-                weight: [null, Validators.required],
+                weight: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
                 languages: [[], Validators.required]
             }),
 
@@ -502,14 +502,26 @@ export class ProfileEditComponent implements OnInit {
         const orientation = this.profileForm.get('personalData.orientation')?.valid ?? false;
         const birthDate = this.profileForm.get('personalData.birthDate')?.valid ?? false;
         const nationality = this.profileForm.get('personalData.nationality')?.valid ?? false;
-        const height = this.profileForm.get('personalData.height')?.valid ?? false;
+        
+        // Height and Weight - Check if value exists and is a valid number greater than 0
+        const heightControl = this.profileForm.get('personalData.height');
+        const heightValue = heightControl?.value ?? '';
+        const heightValid = heightValue !== '' && !isNaN(Number(heightValue)) && Number(heightValue) > 0;
+        
+        const weightControl = this.profileForm.get('personalData.weight');
+        const weightValue = weightControl?.value ?? '';
+        const weightValid = weightValue !== '' && !isNaN(Number(weightValue)) && Number(weightValue) > 0;
+        
         const hairColor = this.profileForm.get('personalData.hairColor')?.valid ?? false;
         const eyeColor = this.profileForm.get('personalData.eyeColor')?.valid ?? false;
-        const weight = this.profileForm.get('personalData.weight')?.valid ?? false;
-        const languages = this.profileForm.get('personalData.languages')?.valid ?? false;
+        
+        // Languages - check if at least one language is selected (value is array and not empty)
+        const languagesControl = this.profileForm.get('personalData.languages');
+        const languagesValue = languagesControl?.value ?? [];
+        const hasLanguages = Array.isArray(languagesValue) && languagesValue.length > 0;
         
         const personalDataComplete = gender && orientation && birthDate && nationality && 
-                                    height && hairColor && eyeColor && weight && languages;
+                                    heightValid && hairColor && eyeColor && weightValid && hasLanguages;
         
         return basicInfoComplete && personalDataComplete && hasImage;
     }

@@ -1,14 +1,25 @@
 <div class="dashboard-container">
   <div class="section-header">
     <h2>
-      <span class="badge-icon">🔴</span>
+      <span class="badge-icon"><img src="assets/images/logo_mini.png" alt="Logo" width="52" height="52"></span>
       {{ 'TOP_ROJO.MY_TOPS' | translate }}
     </h2>
-    <button class="btn-publish" (click)="openTopRojoModal()">
+    <button class="btn-publish" (click)="openCreateForm()">
       <i class="bi bi-plus-circle"></i>
       {{ 'TOP_ROJO.PUBLISH_NEW' | translate }}
     </button>
   </div>
+
+  <!-- Create TOP ROJO Form -->
+  <app-create-top-rojo-form
+    [isOpen]="showCreateForm"
+    [profileName]="displayName"
+    [profileId]="profileId"
+    [defaultCountry]="country"
+    [defaultCity]="city"
+    (close)="closeCreateForm()"
+    (planSelected)="onPlanSelectedForTopRojo($event)">
+  </app-create-top-rojo-form>
 
   <!-- Tabs -->
   <div class="tabs-container">
@@ -37,7 +48,7 @@
     <div class="empty-icon">🔴</div>
     <h3>{{ 'TOP_ROJO.NO_ACTIVE' | translate }}</h3>
     <p>{{ 'TOP_ROJO.NO_ACTIVE_DESC' | translate }}</p>
-    <button class="btn btn-primary" (click)="openTopRojoModal()">
+    <button class="btn btn-primary" (click)="openCreateForm()">
       {{ 'TOP_ROJO.PUBLISH_NOW' | translate }}
     </button>
   </div>
@@ -157,36 +168,27 @@
   </div>
 
   <!-- Summary Statistics -->
-  <div class="summary-section" *ngIf="dashboard">
+  <div class="summary-section" *ngIf="dashboard && dashboard.statistics">
     <h3>{{ 'TOP_ROJO.STATISTICS' | translate }}</h3>
     <div class="summary-grid">
       <div class="summary-card">
         <span class="summary-label">{{ 'TOP_ROJO.TOTAL_SPENT' | translate }}</span>
-        <span class="summary-value">€{{ dashboard.statistics.totalSpent }}</span>
+        <span class="summary-value">€{{ dashboard.statistics.totalSpent || 0 }}</span>
       </div>
       <div class="summary-card">
         <span class="summary-label">{{ 'TOP_ROJO.TOTAL_VIEWS' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.totalViews }}</span>
+        <span class="summary-value">{{ dashboard.statistics.totalViews || 0 }}</span>
       </div>
       <div class="summary-card">
         <span class="summary-label">{{ 'TOP_ROJO.TOTAL_CLICKS' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.totalClicks }}</span>
+        <span class="summary-value">{{ dashboard.statistics.totalClicks || 0 }}</span>
       </div>
       <div class="summary-card">
         <span class="summary-label">{{ 'TOP_ROJO.CONV_RATE' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.conversionRate }}%</span>
+        <span class="summary-value">{{ dashboard.statistics.conversionRate || 0 }}%</span>
       </div>
     </div>
   </div>
 
 </div>
 
-<!-- Modal TOP ROJO -->
-<app-top-rojo-modal
-  [isOpen]="showTopRojoModal"
-  [profileId]="profileId"
-  [city]="city"
-  [country]="country"
-  (close)="showTopRojoModal = false"
-  (purchaseSuccess)="onPurchaseSuccess()">
-</app-top-rojo-modal>

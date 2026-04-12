@@ -6,9 +6,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsModule } from '../../../shared/components/components.module';
 import { MyTopRojoRoutingModule } from './my-top-rojo-routing.component';
 import { MyTopRojoComponent } from './my-top-rojo.component';
+import { CreateTopRojoFormComponent } from './create-top-rojo-form/create-top-rojo-form.component';
+import { PlanSelectionModalTopRojoComponent } from './plan-selection-modal-top-rojo/plan-selection-modal-top-rojo.component';
 
 @NgModule({
-  declarations: [MyTopRojoComponent],
+  declarations: [
+    MyTopRojoComponent,
+    CreateTopRojoFormComponent,
+    PlanSelectionModalTopRojoComponent
+  ],
   exports: [MyTopRojoComponent, MyTopRojoRoutingModule],
   imports: [
     MyTopRojoRoutingModule,
