@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { IAuthRequest } from '../../models/IAuth.model';
 import { GetCountries } from '../../../../shared/clases/getCountries';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Country {
     code: string;
@@ -21,11 +22,20 @@ export class AdvertisersRegisterFormComponent implements OnInit {
     countries: Country[] = [];
     cities: string[] = [];
     anuncianteForm: FormGroup;
+    currentLang = 'es';
+    selectedFlagUrl = 'https://flagcdn.com/es.svg';
+    flagOptions = [
+        { url: 'https://flagcdn.com/es.svg', label: 'Espanol', lang: 'es' },
+        { url: 'https://flagcdn.com/gb.svg', label: 'English', lang: 'en' },
+        { url: 'https://flagcdn.com/fr.svg', label: 'Francais', lang: 'fr' },
+        { url: 'https://flagcdn.com/nl.svg', label: 'Nederlands', lang: 'nl' }
+    ];
 
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private translate: TranslateService
     ) {
         this.anuncianteForm = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
@@ -38,6 +48,14 @@ export class AdvertisersRegisterFormComponent implements OnInit {
         });
     }
     ngOnInit(): void {
+        const storedLang = localStorage.getItem('app-lang');
+        this.currentLang = storedLang || 'es';
+        this.translate.setDefaultLang('es');
+        this.translate.use(this.currentLang);
+        const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+        if (activeFlag) {
+            this.selectedFlagUrl = activeFlag.url;
+        }
         this.countries = GetCountries.getAllCountries();
     }
 
@@ -84,6 +102,13 @@ export class AdvertisersRegisterFormComponent implements OnInit {
                 }
             });
         }
+    }
+
+    setFlag(flag: { url: string; label: string; lang: string }) {
+        this.selectedFlagUrl = flag.url;
+        this.currentLang = flag.lang;
+        localStorage.setItem('app-lang', flag.lang);
+        this.translate.use(flag.lang);
     }
 
     get name() {

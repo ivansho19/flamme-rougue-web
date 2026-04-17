@@ -17,7 +17,7 @@
   </button>
 </div>
 <div class="error" *ngIf="controles?.invalid && controles?.touched">
-  <span *ngIf="controles?.errors?.['required']">Este campo es obligatorio</span>
-  <span *ngIf="controles?.errors?.['email']">Formato de email inválido</span>
-  <span *ngIf="controles?.errors?.['minlength']">Mínimo {{ controles.errors?.['minlength']?.requiredLength }} caracteres</span>
+  <span *ngIf="controles?.errors?.['required']">{{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}</span>
+  <span *ngIf="controles?.errors?.['email']">{{ 'PROFILE_FORM.INVALID_EMAIL_ERROR' | translate }}</span>
+  <span *ngIf="controles?.errors?.['minlength']">{{ 'PROFILE_FORM.MIN_LENGTH_ERROR' | translate:{min: controles.errors?.['minlength']?.requiredLength} }}</span>
 </div>

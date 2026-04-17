@@ -112,6 +112,50 @@
     "CITY": "Ciudad",
     "CANCEL": "Cancelar"
   },
+  "LOGIN": {
+    "TITLE": "Flamme Rouge",
+    "SUBTITLE": "Login",
+    "EMAIL_PLACEHOLDER": "Email",
+    "PASSWORD_PLACEHOLDER": "Contraseña",
+    "SUBMIT": "Iniciar sesión",
+    "NO_ACCOUNT": "¿No tienes cuenta?",
+    "REGISTER": "Regístrate",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "FOOTER": "2025 © Flamme Rouge | Todos los derechos reservados"
+  },
+  "LOGOUT_DIALOG": {
+    "TITLE": "¿Deseas cerrar sesión?",
+    "GREETING": "Hola",
+    "MESSAGE": "si cierras tu sesión, deberás volver a iniciar sesión para acceder nuevamente a Flamme Rouge. Asegúrate de haber guardado tu información antes de salir.",
+    "CONFIRM": "Cerrar Sesión",
+    "CANCEL": "Cancelar"
+  },
+  "REGISTER": {
+    "ADVERTISER_TITLE": "¿Eres Anunciante?",
+    "ADVERTISER_DESC": "Únete y comienza a mostrar tu talento al mundo.",
+    "ADVERTISER_CTA": "Registrarte como Anunciante",
+    "USER_TITLE": "¿Eres Usuario?",
+    "USER_DESC": "Descubre y conecta con los mejores talentos.",
+    "USER_CTA": "Registrarte como Usuario"
+  },
+  "REGISTER_FORM": {
+    "USER_TITLE": "Registro",
+    "USER_SUBTITLE": "Crea tu cuenta",
+    "ADVERTISER_TITLE": "Registro de Anunciante",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "EMAIL": "Email",
+    "PASSWORD": "Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar Contraseña",
+    "REQUIRED_FIRST_NAME": "El nombre es obligatorio",
+    "REQUIRED_LAST_NAME": "El apellido es obligatorio",
+    "REQUIRED_EMAIL": "El email es obligatorio",
+    "INVALID_EMAIL": "Formato de email inválido",
+    "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+    "SUBMIT": "Registrarme",
+    "ALREADY_ACCOUNT": "¿Ya tienes una cuenta?",
+    "LOGIN_LINK": "Inicia sesión"
+  },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROJO - Máxima Visibilidad",
     "DESCRIPTION": "Aparece en el Top 5 de tu ciudad y en la home. Solo 5 perfiles pueden ser TOP simultáneamente en cada ciudad.",
@@ -127,8 +171,6 @@
     "SELECT_PHOTOS": "Selecciona 2 fotos",
     "PHOTOS_HINT": "Carga 2 fotos de alta calidad que muestren tu servicio",
     "UPLOAD_PHOTO": "Subir foto",
-    "TITLE": "Título del TOP ROJO",
-    "DESCRIPTION": "Descripción del servicio",
     "CONTACT_PHONE": "Número de contacto",
     "INVALID_PHONE": "Por favor ingresa un número de teléfono válido",
     "CONTINUE_TO_PLAN": "Continuar a planes",

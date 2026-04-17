@@ -1,13 +1,26 @@
 <!-- Vista inicial (elegir tipo de registro) -->
 <div class="register-container" *ngIf="activeSection === 'choose'">
+  <div class="login-topbar">
+    <div class="lang-switch" aria-label="Language selector">
+      <button
+        class="lang-btn"
+        type="button"
+        *ngFor="let flag of flagOptions"
+        (click)="setFlag(flag)"
+        [class.active]="flag.lang === currentLang"
+        [attr.aria-label]="flag.label">
+        <img [src]="flag.url" [alt]="flag.label" />
+      </button>
+    </div>
+  </div>
   <!-- Mitad izquierda: Anunciante -->
   <div class="register-half">
     <img src="assets/images/modelo.jpg" alt="Anunciante" class="register-img" />
     <div class="overlay">
-      <h2>¿Eres Anunciante?</h2>
-      <p>Únete y comienza a mostrar tu talento al mundo.</p>
+      <h2>{{ 'REGISTER.ADVERTISER_TITLE' | translate }}</h2>
+      <p>{{ 'REGISTER.ADVERTISER_DESC' | translate }}</p>
       <button class="btn-custom" (click)="handleActivateSection('anunciante')">
-        Registrarte como Anunciante
+        {{ 'REGISTER.ADVERTISER_CTA' | translate }}
       </button>
     </div>
   </div>
@@ -16,10 +29,10 @@
   <div class="register-half">
     <img src="assets/images/usuario.jpg" alt="Usuario" class="register-img" />
     <div class="overlay">
-      <h2>¿Eres Usuario?</h2>
-      <p>Descubre y conecta con los mejores talentos.</p>
+      <h2>{{ 'REGISTER.USER_TITLE' | translate }}</h2>
+      <p>{{ 'REGISTER.USER_DESC' | translate }}</p>
       <button class="btn-custom" (click)="handleActivateSection('usuario')">
-        Registrarte como Usuario
+        {{ 'REGISTER.USER_CTA' | translate }}
       </button>
     </div>
   </div>

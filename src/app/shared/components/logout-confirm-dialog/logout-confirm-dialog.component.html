@@ -6,24 +6,23 @@
 
   <!-- Título -->
   <div class="logout-dialog-title">
-    ⚠️ ¿Deseas cerrar sesión?
+    ⚠️ {{ 'LOGOUT_DIALOG.TITLE' | translate }}
   </div>
 
   <!-- Mensaje personalizado -->
   <div class="logout-dialog-message">
-    Hola <b>{{ userName ? ( userName + ', ') : '' }}</b>
-    si cierras tu sesión, deberás volver a iniciar sesión para acceder nuevamente a 
-    <b>Flamme Rouge</b>.  
-    Asegúrate de haber guardado tu información antes de salir.
+    <span>{{ 'LOGOUT_DIALOG.GREETING' | translate }}</span>
+    <b>{{ userName ? ( userName + ', ') : '' }}</b>
+    <span>{{ 'LOGOUT_DIALOG.MESSAGE' | translate }}</span>
   </div>
 
   <!-- Botones -->
   <div class="logout-dialog-actions">
     <button mat-flat-button class="btn-custom" (click)="onConfirm()">
-      Cerrar Sesión
+      {{ 'LOGOUT_DIALOG.CONFIRM' | translate }}
     </button>
     <button mat-stroked-button class="btn-custom-cancel" (click)="onCancel()">
-      Cancelar
+      {{ 'LOGOUT_DIALOG.CANCEL' | translate }}
     </button>
   </div>
 </div>

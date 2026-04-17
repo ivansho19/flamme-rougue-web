@@ -5,6 +5,7 @@ import { AuthService } from '../service/auth.service';
 import { delay, Subscription } from 'rxjs';
 import { LoaderService } from '../../shared/services/loader/loader.service';
 import { ToastService } from '../../shared/services/toast/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +17,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   loader: boolean = false;
   loaderSubscription: Subscription | undefined;
   showPassword: boolean = false;
+  currentLang = 'es';
+  selectedFlagUrl = 'https://flagcdn.com/es.svg';
+  flagOptions = [
+    { url: 'https://flagcdn.com/es.svg', label: 'Espanol', lang: 'es' },
+    { url: 'https://flagcdn.com/gb.svg', label: 'English', lang: 'en' },
+    { url: 'https://flagcdn.com/fr.svg', label: 'Francais', lang: 'fr' },
+    { url: 'https://flagcdn.com/nl.svg', label: 'Nederlands', lang: 'nl' }
+  ];
 
   constructor(private fb: FormBuilder, private authService: AuthService, 
     private router: Router, private loaderService: LoaderService, 
-    private toastService: ToastService) {
+    private toastService: ToastService, private translate: TranslateService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
@@ -30,6 +39,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const storedLang = localStorage.getItem('app-lang');
+    this.currentLang = storedLang || 'es';
+    this.translate.setDefaultLang('es');
+    this.translate.use(this.currentLang);
+    const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+    if (activeFlag) {
+      this.selectedFlagUrl = activeFlag.url;
+    }
     this.showLoader();
   }
 
@@ -79,6 +96,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  setFlag(flag: { url: string; label: string; lang: string }) {
+    this.selectedFlagUrl = flag.url;
+    this.currentLang = flag.lang;
+    localStorage.setItem('app-lang', flag.lang);
+    this.translate.use(flag.lang);
   }
 
   ngOnDestroy(): void {

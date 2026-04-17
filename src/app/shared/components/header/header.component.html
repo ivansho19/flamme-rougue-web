@@ -22,10 +22,10 @@
                     </button>
                 </div>
             </div>
-            <button class="publish-top-btn" (click)="openTopRojoModal()" [title]="'HEADER.PUBLISH_TOP' | translate">
+            <button class="publish-top-btn" *ngIf="getUserName()" (click)="openTopRojoModal()" [title]="'HEADER.PUBLISH_TOP' | translate">
                 <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
             </button>
-            <button class="icon-btn" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
+            <button class="icon-btn" *ngIf="getUserName()" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
             <button class="mobile-item" type="button" (click)="navigateToProfile(); closeMobileMenu()">
                 <i class="bi bi-person"></i> {{ 'HEADER.PROFILE' | translate }}
             </button>
-            <button class="mobile-item publish-top" type="button" (click)="openTopRojoModal(); closeMobileMenu()">
+            <button class="mobile-item publish-top" type="button" *ngIf="getUserName()" (click)="openTopRojoModal(); closeMobileMenu()">
                 <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
             </button>
             <div class="mobile-divider"></div>
@@ -59,7 +59,7 @@
                 </button>
             </div>
             <div class="mobile-divider"></div>
-            <button class="mobile-item logout" type="button" (click)="logout(); closeMobileMenu()">
+            <button class="mobile-item logout" type="button" *ngIf="getUserName()" (click)="logout(); closeMobileMenu()">
                 <i class="bi bi-box-arrow-right"></i> {{ 'HEADER.LOGOUT' | translate }}
             </button>
         </div>

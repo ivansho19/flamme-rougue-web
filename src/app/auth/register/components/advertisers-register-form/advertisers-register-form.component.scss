@@ -12,6 +12,27 @@
   margin-top: -100px;
 }
 
+.login-topbar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 3;
+}
+
+.lang-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.lang-btn {
+  width: 34px;
+  height: 26px;
+}
+
 .logo-container {
   img {
     width: 250px;
@@ -136,4 +157,13 @@ h2.login-title {
 .extra-links .link:hover {
   color: #e0c070;
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-topbar {
+    top: 12px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
 }

@@ -5,7 +5,7 @@ import { LayoutComponent } from './shared/components/layout/layout.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/auth/login',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
@@ -61,6 +61,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/auth/login'
+    redirectTo: '/home'
   }
 ];

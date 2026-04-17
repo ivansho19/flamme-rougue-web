@@ -113,6 +113,50 @@
     "CITY": "City",
     "CANCEL": "Cancel"
   },
+  "LOGIN": {
+    "TITLE": "Flamme Rouge",
+    "SUBTITLE": "Login",
+    "EMAIL_PLACEHOLDER": "Email",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "SUBMIT": "Sign in",
+    "NO_ACCOUNT": "No account?",
+    "REGISTER": "Register",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "FOOTER": "2025 © Flamme Rouge | All rights reserved"
+  },
+  "LOGOUT_DIALOG": {
+    "TITLE": "Do you want to log out?",
+    "GREETING": "Hi",
+    "MESSAGE": "if you log out, you will need to sign in again to access Flamme Rouge. Make sure you have saved your information before leaving.",
+    "CONFIRM": "Log out",
+    "CANCEL": "Cancel"
+  },
+  "REGISTER": {
+    "ADVERTISER_TITLE": "Are you an Advertiser?",
+    "ADVERTISER_DESC": "Join and start showing your talent to the world.",
+    "ADVERTISER_CTA": "Register as Advertiser",
+    "USER_TITLE": "Are you a User?",
+    "USER_DESC": "Discover and connect with the best talents.",
+    "USER_CTA": "Register as User"
+  },
+  "REGISTER_FORM": {
+    "USER_TITLE": "Register",
+    "USER_SUBTITLE": "Create your account",
+    "ADVERTISER_TITLE": "Advertiser Registration",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "REQUIRED_FIRST_NAME": "First name is required",
+    "REQUIRED_LAST_NAME": "Last name is required",
+    "REQUIRED_EMAIL": "Email is required",
+    "INVALID_EMAIL": "Invalid email format",
+    "PASSWORD_MISMATCH": "Passwords do not match",
+    "SUBMIT": "Create account",
+    "ALREADY_ACCOUNT": "Already have an account?",
+    "LOGIN_LINK": "Sign in"
+  },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP RED - Maximum Visibility",
     "DESCRIPTION": "Appears in the Top 5 of your city and on the home page. Only 5 profiles can be TOP simultaneously in each city.",

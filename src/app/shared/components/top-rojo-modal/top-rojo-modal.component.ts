@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
 import { TopRojoService } from '../../services/top-rojo/top-rojo.service';
-import { TOP_ROJO_PLANS, TopRojoPlantType, ITopRojoListResponse } from '../../models/top-rojo.model';
+import { TOP_ROJO_PLANS, TopRojoPlantType, ITopRojoListResponse, ITopRojoCreateRequest } from '../../models/top-rojo.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -70,11 +70,12 @@ export class TopRojoModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const request = {
+    const request:ITopRojoCreateRequest = {
       profileId: this.profileId,
       planType: this.selectedPlan,
       city: this.city,
-      country: this.country
+      country: this.country,
+      displayName: '' 
     };
 
     this.topRojoService

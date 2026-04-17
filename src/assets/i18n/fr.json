@@ -113,6 +113,50 @@
     "CITY": "Ville",
     "CANCEL": "Annuler"
   },
+  "LOGIN": {
+    "TITLE": "Flamme Rouge",
+    "SUBTITLE": "Connexion",
+    "EMAIL_PLACEHOLDER": "Email",
+    "PASSWORD_PLACEHOLDER": "Mot de passe",
+    "SUBMIT": "Se connecter",
+    "NO_ACCOUNT": "Pas de compte?",
+    "REGISTER": "S inscrire",
+    "FORGOT_PASSWORD": "Mot de passe oublie?",
+    "FOOTER": "2025 © Flamme Rouge | Tous droits reserves"
+  },
+  "LOGOUT_DIALOG": {
+    "TITLE": "Voulez-vous vous deconnecter?",
+    "GREETING": "Bonjour",
+    "MESSAGE": "si vous vous deconnectez, vous devrez vous reconnecter pour acceder a Flamme Rouge. Assurez-vous d avoir sauvegarde vos informations avant de partir.",
+    "CONFIRM": "Se deconnecter",
+    "CANCEL": "Annuler"
+  },
+  "REGISTER": {
+    "ADVERTISER_TITLE": "Etes-vous Annonceur?",
+    "ADVERTISER_DESC": "Rejoignez et commencez a montrer votre talent au monde.",
+    "ADVERTISER_CTA": "S inscrire comme Annonceur",
+    "USER_TITLE": "Etes-vous Utilisateur?",
+    "USER_DESC": "Decouvrez et connectez-vous aux meilleurs talents.",
+    "USER_CTA": "S inscrire comme Utilisateur"
+  },
+  "REGISTER_FORM": {
+    "USER_TITLE": "Inscription",
+    "USER_SUBTITLE": "Creez votre compte",
+    "ADVERTISER_TITLE": "Inscription Annonceur",
+    "FIRST_NAME": "Prenom",
+    "LAST_NAME": "Nom",
+    "EMAIL": "Email",
+    "PASSWORD": "Mot de passe",
+    "CONFIRM_PASSWORD": "Confirmer le mot de passe",
+    "REQUIRED_FIRST_NAME": "Le prenom est obligatoire",
+    "REQUIRED_LAST_NAME": "Le nom est obligatoire",
+    "REQUIRED_EMAIL": "L email est obligatoire",
+    "INVALID_EMAIL": "Format d email invalide",
+    "PASSWORD_MISMATCH": "Les mots de passe ne correspondent pas",
+    "SUBMIT": "S inscrire",
+    "ALREADY_ACCOUNT": "Vous avez deja un compte?",
+    "LOGIN_LINK": "Se connecter"
+  },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROUGE - Visibilité maximale",
     "DESCRIPTION": "Apparaît dans le Top 5 de ta ville et sur la page d'accueil. Seulement 5 profils peuvent être TOP simultanément dans chaque ville.",

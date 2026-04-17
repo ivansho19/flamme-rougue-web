@@ -37,6 +37,7 @@ export const TOP_ROJO_PLANS = {
  */
 export interface ITopRojoCreateRequest {
   profileId: string;          // FK: Profile._id
+  displayName: string;        // Nombre a mostrar del usuario
   planType: TopRojoPlantType; // 'top_24h' | 'top_3d' | 'top_7d'
   city: string;               // Ciudad donde será visible
   country: string;            // País
@@ -121,4 +122,32 @@ export interface ITopRojoRotation {
   rotationActive: boolean;
   rotationIntervalMinutes: number; // 10 o 15 minutos
   nextRotationTime: Date;
+}
+
+/**
+ * TOP ROJO - respuesta para banner carousel (all)
+ */
+export interface ITopRojoAllItem {
+  id: string;
+  profileId: string;
+  title: string;
+  description: string;
+  contactPhone: string;
+  images: Array<{
+    url: string;
+    public_id: string;
+  }>;
+  planType: TopRojoPlantType;
+  city: string;
+  country: string;
+  position: number;
+  viewCount: number;
+  clickCount: number;
+  endDate: string;
+}
+
+export interface ITopRojoAllResponse {
+  success: boolean;
+  total: number;
+  tops: ITopRojoAllItem[];
 }

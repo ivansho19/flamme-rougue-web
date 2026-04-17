@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { last } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user-register-form',
@@ -10,15 +11,24 @@ import { last } from 'rxjs';
     templateUrl: './user-register-form.component.html',
     styleUrls: ['./user-register-form.component.scss']
 })
-export class UserRegisterFormComponent {
+export class UserRegisterFormComponent implements OnInit {
 
     userForm: FormGroup;
     anuncianteForm: FormGroup
+    currentLang = 'es';
+    selectedFlagUrl = 'https://flagcdn.com/es.svg';
+    flagOptions = [
+        { url: 'https://flagcdn.com/es.svg', label: 'Espanol', lang: 'es' },
+        { url: 'https://flagcdn.com/gb.svg', label: 'English', lang: 'en' },
+        { url: 'https://flagcdn.com/fr.svg', label: 'Francais', lang: 'fr' },
+        { url: 'https://flagcdn.com/nl.svg', label: 'Nederlands', lang: 'nl' }
+    ];
 
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private translate: TranslateService
     ) {
         this.userForm = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
@@ -38,6 +48,17 @@ export class UserRegisterFormComponent {
         }, {
             validators: this.passwordMatchValidator
         });
+    }
+
+    ngOnInit(): void {
+        const storedLang = localStorage.getItem('app-lang');
+        this.currentLang = storedLang || 'es';
+        this.translate.setDefaultLang('es');
+        this.translate.use(this.currentLang);
+        const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+        if (activeFlag) {
+            this.selectedFlagUrl = activeFlag.url;
+        }
     }
 
     passwordMatchValidator(form: FormGroup) {
@@ -70,6 +91,13 @@ export class UserRegisterFormComponent {
                 }
             });
         }
+    }
+
+    setFlag(flag: { url: string; label: string; lang: string }) {
+        this.selectedFlagUrl = flag.url;
+        this.currentLang = flag.lang;
+        localStorage.setItem('app-lang', flag.lang);
+        this.translate.use(flag.lang);
     }
 
     get name(): FormControl {

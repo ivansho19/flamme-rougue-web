@@ -127,7 +127,7 @@
           [class.is-invalid]="topRojoForm.get('title')?.invalid && (topRojoForm.get('title')?.touched || topRojoForm.get('title')?.dirty)"
           placeholder="Ej: Experiencia VIP en el centro">
         <small class="error-text" *ngIf="topRojoForm.get('title')?.hasError('required')">
-          {{ 'FORM.FIELD_REQUIRED' | translate }}
+          {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
         </small>
         <small class="error-text" *ngIf="topRojoForm.get('title')?.hasError('minlength')">
           {{ 'TOP_ROJO.MIN_CHARS' | translate: { min: 5 } }}
@@ -145,7 +145,7 @@
           placeholder="Describe tu servicio en detalle..."
           rows="4"></textarea>
         <small class="error-text" *ngIf="topRojoForm.get('description')?.hasError('required')">
-          {{ 'FORM.FIELD_REQUIRED' | translate }}
+          {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
         </small>
         <small class="error-text" *ngIf="topRojoForm.get('description')?.hasError('minlength')">
           {{ 'TOP_ROJO.MIN_CHARS' | translate: { min: 10 } }}
@@ -163,7 +163,7 @@
           [class.is-invalid]="topRojoForm.get('phone')?.invalid && (topRojoForm.get('phone')?.touched || topRojoForm.get('phone')?.dirty)"
           placeholder="+39 123 456 7890">
         <small class="error-text" *ngIf="topRojoForm.get('phone')?.hasError('required')">
-          {{ 'FORM.FIELD_REQUIRED' | translate }}
+          {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
         </small>
         <small class="error-text" *ngIf="topRojoForm.get('phone')?.hasError('pattern')">
           {{ 'TOP_ROJO.INVALID_PHONE' | translate }}

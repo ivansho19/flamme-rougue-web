@@ -6,51 +6,55 @@
 
   <!-- Caja del formulario -->
   <div class="login-box">
-    <h1 class="custom-title">Registro</h1>
-    <h2 class="custom-title">Crea tu cuenta</h2>
+    <h1 class="custom-title">{{ 'REGISTER_FORM.USER_TITLE' | translate }}</h1>
+    <h2 class="custom-title">{{ 'REGISTER_FORM.USER_SUBTITLE' | translate }}</h2>
 
     <form [formGroup]="userForm">
       <div class="form-group">
-        <input formControlName="name" required type="text" placeholder="Firstname" />
+        <input formControlName="name" required type="text" [placeholder]="'REGISTER_FORM.FIRST_NAME' | translate" />
         <div class="error" *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid">
-            <span *ngIf="userForm.get('name')?.errors?.['required']">El nombre es obligatorio</span>
+            <span *ngIf="userForm.get('name')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_FIRST_NAME' | translate }}</span>
         </div>
       </div>
 
       <div class="form-group">
-        <input formControlName="lastName" required type="text" placeholder="Lastname" />
+        <input formControlName="lastName" required type="text" [placeholder]="'REGISTER_FORM.LAST_NAME' | translate" />
         <div class="error" *ngIf="userForm.get('lastName')?.touched && userForm.get('lastName')?.invalid">
-            <span *ngIf="userForm.get('lastName')?.errors?.['required']">El apellido es obligatorio</span>
+            <span *ngIf="userForm.get('lastName')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_LAST_NAME' | translate }}</span>
         </div>
       </div>
 
       <div class="form-group">
-        <input formControlName="email" required type="email" placeholder="Email" />
+        <input formControlName="email" required type="email" [placeholder]="'REGISTER_FORM.EMAIL' | translate" />
         <div class="error" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
-            <span *ngIf="userForm.get('email')?.errors?.['required']">El email es obligatorio</span>
-            <span *ngIf="userForm.get('email')?.errors?.['email']">Formato de email inválido</span>
+            <span *ngIf="userForm.get('email')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_EMAIL' | translate }}</span>
+            <span *ngIf="userForm.get('email')?.errors?.['email']">{{ 'REGISTER_FORM.INVALID_EMAIL' | translate }}</span>
         </div>
       </div>
 
       <div class="form-group">
-        <app-input-custom [type]="'password'" [placeholder]="'Contraseña'" [controles]="password"
+        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.PASSWORD' | translate" [controles]="password"
           name="password"></app-input-custom>
       </div>
 
       <div class="form-group">
-        <app-input-custom [type]="'password'" [placeholder]="'Confirmar Contraseña'" [controles]="confirmPassword"
+        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.CONFIRM_PASSWORD' | translate" [controles]="confirmPassword"
           name="confirmPassword"></app-input-custom>
         <div class="error" *ngIf="confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched" class="error-message">
-          Las contraseñas no coinciden
+          {{ 'REGISTER_FORM.PASSWORD_MISMATCH' | translate }}
         </div>
       </div>
 
       <!-- Botón -->
-      <button class="btn-login" type="submit" (click)="onSubmitUser()" [disabled]="userForm.invalid">Registrarme</button>
+      <button class="btn-login" type="submit" (click)="onSubmitUser()" [disabled]="userForm.invalid">
+        {{ 'REGISTER_FORM.SUBMIT' | translate }}
+      </button>
 
       <!-- Links extra -->
       <div class="extra-links">
-        <a href="/auth/login" class="link">¿Ya tienes una cuenta? Inicia sesión</a>
+        <a href="/auth/login" class="link">
+          {{ 'REGISTER_FORM.ALREADY_ACCOUNT' | translate }} {{ 'REGISTER_FORM.LOGIN_LINK' | translate }}
+        </a>
       </div>
     </form>
   </div>

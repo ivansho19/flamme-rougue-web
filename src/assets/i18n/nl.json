@@ -113,6 +113,50 @@
     "CITY": "Stad",
     "CANCEL": "Annuleren"
   },
+  "LOGIN": {
+    "TITLE": "Flamme Rouge",
+    "SUBTITLE": "Inloggen",
+    "EMAIL_PLACEHOLDER": "E-mail",
+    "PASSWORD_PLACEHOLDER": "Wachtwoord",
+    "SUBMIT": "Inloggen",
+    "NO_ACCOUNT": "Nog geen account?",
+    "REGISTER": "Registreren",
+    "FORGOT_PASSWORD": "Wachtwoord vergeten?",
+    "FOOTER": "2025 © Flamme Rouge | Alle rechten voorbehouden"
+  },
+  "LOGOUT_DIALOG": {
+    "TITLE": "Wil je uitloggen?",
+    "GREETING": "Hallo",
+    "MESSAGE": "als je uitlogt, moet je opnieuw inloggen om toegang te krijgen tot Flamme Rouge. Zorg dat je je informatie hebt opgeslagen voordat je vertrekt.",
+    "CONFIRM": "Uitloggen",
+    "CANCEL": "Annuleren"
+  },
+  "REGISTER": {
+    "ADVERTISER_TITLE": "Ben je een adverteerder?",
+    "ADVERTISER_DESC": "Doe mee en laat je talent aan de wereld zien.",
+    "ADVERTISER_CTA": "Registreren als adverteerder",
+    "USER_TITLE": "Ben je een gebruiker?",
+    "USER_DESC": "Ontdek en maak contact met de beste talenten.",
+    "USER_CTA": "Registreren als gebruiker"
+  },
+  "REGISTER_FORM": {
+    "USER_TITLE": "Registreren",
+    "USER_SUBTITLE": "Maak je account aan",
+    "ADVERTISER_TITLE": "Registratie adverteerder",
+    "FIRST_NAME": "Voornaam",
+    "LAST_NAME": "Achternaam",
+    "EMAIL": "E-mail",
+    "PASSWORD": "Wachtwoord",
+    "CONFIRM_PASSWORD": "Bevestig wachtwoord",
+    "REQUIRED_FIRST_NAME": "Voornaam is verplicht",
+    "REQUIRED_LAST_NAME": "Achternaam is verplicht",
+    "REQUIRED_EMAIL": "E-mail is verplicht",
+    "INVALID_EMAIL": "Ongeldig e-mailformaat",
+    "PASSWORD_MISMATCH": "Wachtwoorden komen niet overeen",
+    "SUBMIT": "Account aanmaken",
+    "ALREADY_ACCOUNT": "Heb je al een account?",
+    "LOGIN_LINK": "Inloggen"
+  },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROOD - Maximale zichtbaarheid",
     "DESCRIPTION": "Verschijnt in de Top 5 van je stad en op de startpagina. Slechts 5 profielen kunnen tegelijkertijd TOP zijn in elke stad.",

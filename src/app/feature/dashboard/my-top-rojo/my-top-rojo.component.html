@@ -21,6 +21,14 @@
     (planSelected)="onPlanSelectedForTopRojo($event)">
   </app-create-top-rojo-form>
 
+  <!-- Renew TOP ROJO Plan Modal -->
+  <app-plan-selection-modal-top-rojo
+    [isOpen]="showRenewPlanModal"
+    [profileName]="displayName"
+    (close)="closeRenewPlanModal()"
+    (planSelected)="onRenewPlanSelected($event)">
+  </app-plan-selection-modal-top-rojo>
+
   <!-- Tabs -->
   <div class="tabs-container">
     <button class="tab" 
@@ -78,31 +86,17 @@
         <div class="timer-box">
           <div class="timer">
             <i class="bi bi-hourglass-split"></i>
-            <span *ngIf="top.daysRemaining > 0">
-              {{ top.daysRemaining }}d {{ top.hoursRemaining }}h
-            </span>
-            <span *ngIf="top.daysRemaining === 0">
-              {{ top.hoursRemaining }}h {{ 'TOP_ROJO.REMAINING' | translate }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Statistics -->
-        <div class="stats">
-          <div class="stat-item">
-            <i class="bi bi-eye"></i>
-            <span class="stat-value">{{ top.views }}</span>
-            <span class="stat-label">{{ 'TOP_ROJO.VIEWS' | translate }}</span>
-          </div>
-          <div class="stat-item">
-            <i class="bi bi-hand-index"></i>
-            <span class="stat-value">{{ top.clicks }}</span>
-            <span class="stat-label">{{ 'TOP_ROJO.CLICKS' | translate }}</span>
-          </div>
-          <div class="stat-item">
-            <i class="bi bi-chat-dots"></i>
-            <span class="stat-value">{{ top.inquiries }}</span>
-            <span class="stat-label">{{ 'TOP_ROJO.INQUIRIES' | translate }}</span>
+            <ng-container *ngIf="getRemainingTime(top) as remaining">
+              <span *ngIf="remaining.days > 0">
+                {{ remaining.days }}d {{ remaining.hours }}h
+              </span>
+              <span *ngIf="remaining.days === 0">
+                {{ remaining.hours }}h {{ 'TOP_ROJO.REMAINING' | translate }}
+              </span>
+              <span class="timer-subtext">
+                {{ remaining.elapsedHours }}h / {{ remaining.totalHours }}h
+              </span>
+            </ng-container>
           </div>
         </div>
 
@@ -163,29 +157,6 @@
           <i class="bi bi-plus"></i>
           {{ 'TOP_ROJO.RENEW_AGAIN' | translate }}
         </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Summary Statistics -->
-  <div class="summary-section" *ngIf="dashboard && dashboard.statistics">
-    <h3>{{ 'TOP_ROJO.STATISTICS' | translate }}</h3>
-    <div class="summary-grid">
-      <div class="summary-card">
-        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_SPENT' | translate }}</span>
-        <span class="summary-value">€{{ dashboard.statistics.totalSpent || 0 }}</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_VIEWS' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.totalViews || 0 }}</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">{{ 'TOP_ROJO.TOTAL_CLICKS' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.totalClicks || 0 }}</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">{{ 'TOP_ROJO.CONV_RATE' | translate }}</span>
-        <span class="summary-value">{{ dashboard.statistics.conversionRate || 0 }}%</span>
       </div>
     </div>
   </div>

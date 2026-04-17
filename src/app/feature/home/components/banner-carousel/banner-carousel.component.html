@@ -13,7 +13,7 @@
               <span><i class="bi bi-telephone"></i> {{ item.phone }}</span>
             </div>
             <a *ngIf="item.buttonUrl" [routerLink]="item.buttonUrl">
-              <button class="carousel-btn">{{ item.buttonText }}</button>
+              <button class="btn-custom">{{ item.buttonText }}</button>
             </a>
             <button *ngIf="item.buttonText && !item.buttonUrl" class="carousel-btn">
               {{ item.buttonText }}

@@ -27,7 +27,9 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   
   // Modal de creación
   showCreateForm = false;
-  isCreating = false;
+  showRenewPlanModal = false;
+  renewTargetId: string | null = null;
+  topRojoId: string = '';
   
   // Profile info
   profileId: string = '';
@@ -106,19 +108,9 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (profile: any) => {
-          console.log('[MyTopRojo] Perfil cargado:');
-          console.log('  - displayName:', profile?.displayName);
-          console.log('  - city:', profile?.city);
-          console.log('  - country:', profile?.country);
-          
           this.displayName = profile?.displayName || '';
           this.city = profile?.city || '';
           this.country = profile?.country || '';
-          
-          console.log('[MyTopRojo] Valores asignados al componente:');
-          console.log('  - this.displayName:', this.displayName);
-          console.log('  - this.city:', this.city);
-          console.log('  - this.country:', this.country);
         },
         error: (error) => {
           console.error('Error loading profile:', error);
@@ -149,40 +141,57 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
     this.showCreateForm = false;
   }
 
+  closeRenewPlanModal(): void {
+    this.showRenewPlanModal = false;
+    this.topRojoId = '';
+  }
+
+  onRenewPlanSelected(plan: TopRojoPlanOption): void {
+    const planType = plan.id;
+    const topRojoId = this.topRojoId;
+
+    if (!topRojoId) {
+      this.toastService.showToast('ERROR', 'No se encontro el TOP ROJO a renovar', 'error', 5);
+      this.closeRenewPlanModal();
+      return;
+    }
+
+    if (!planType || !['top_24h', 'top_3d', 'top_7d'].includes(planType)) {
+      this.toastService.showToast('ERROR', 'Plan invalido', 'error', 5);
+      return;
+    }
+
+    this.loading = true;
+    this.topRojoService
+      .renewTopRojo(topRojoId, planType)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastService.showToast('FELICIDADES', 'TOP ROJO renovado exitosamente', 'success', 5);
+          this.closeRenewPlanModal();
+          this.loadDashboard();
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error renovando TOP ROJO:', error);
+          this.toastService.showToast('ERROR', 'Ocurrio un error al renovar TOP ROJO', 'error', 5);
+          this.loading = false;
+        }
+      });
+  }
+
   /**
    * Manejar selección de plan y creación de TOP ROJO
    */
   onPlanSelectedForTopRojo(event: { formData: any; plan: TopRojoPlanOption }): void {
-    console.log('[MyTopRojo] onPlanSelectedForTopRojo - Evento recibido:');
-    console.log('Event completo:', event);
-    
+    this.showRenewPlanModal = true;
     const { formData, plan } = event;
     const { country, city, title, description, phone, photo1File, photo2File } = formData;
     const planType = plan.id;
-
-    console.log('[MyTopRojo] Datos extraídos del evento:');
-    console.log('FormData:', formData);
-    console.log('Country:', country, '| Type:', typeof country);
-    console.log('City:', city, '| Type:', typeof city);
-    console.log('Title:', title);
-    console.log('Description:', description);
-    console.log('Phone:', phone);
-    console.log('Photo1:', photo1File ? 'Existe ✓' : 'NO existe ✗');
-    console.log('Photo2:', photo2File ? 'Existe ✓' : 'NO existe ✗');
-    console.log('Plan ID:', plan.id);
-    console.log('Plan Name:', plan.name);
-    console.log('Plan Type:', planType);
     
     // Obtener profileId y displayName desde localStorage EN EL MOMENTO
     const profileIdFromLS = localStorage.getItem('profileId');
     const userIdFromLS = localStorage.getItem('userId');
-    
-    console.log('[MyTopRojo] Datos desde localStorage:');
-    console.log('  - profileId from localStorage:', profileIdFromLS);
-    console.log('  - userId from localStorage:', userIdFromLS);
-    console.log('[MyTopRojo] Datos desde componente (this.):');
-    console.log('  - this.profileId:', this.profileId);
-    console.log('  - this.displayName:', this.displayName);
 
     // Validar que el plan sea válido
     if (!planType || !['top_24h', 'top_3d', 'top_7d'].includes(planType)) {
@@ -202,9 +211,8 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       this.toastService.showToast('error', 'Faltan datos del perfil o ubicación');
       return;
     }
-
-    console.log('[MyTopRojo] Todas las validaciones pasaron ✓ - Procediendo a crear TOP ROJO');
-    this.isCreating = true;
+    this.closeCreateForm();
+    this.loading = true;
 
     // Llamar al servicio para crear TOP ROJO con fotos
     this.topRojoService
@@ -223,24 +231,22 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
-          console.log('[MyTopRojo] TOP ROJO creado exitosamente, respuesta:', response);
-          this.isCreating = false;
-          
+        next: () => {
           // Resetear el formulario hijo ANTES de cerrar
           if (this.createFormComponent) {
-            console.log('[MyTopRojo] Reseteando formulario hijo...');
             this.createFormComponent.resetFormFromParent();
           }
           
-          this.toastService.showToast('success', 'TOP ROJO creado exitosamente');
-          this.showCreateForm = false;
+          this.toastService.showToast('FELICIDADES', 'TOP ROJO creado exitosamente 🎉', 'success', 5);
+          // Esperar un poco para que el backend procese el TOP ROJO
           this.loadDashboard();
+          this.showCreateForm = false;
+          this.loading = false;
         },
         error: (error) => {
           console.error('[MyTopRojo] Error creating TOP ROJO:', error);
-          this.isCreating = false;
-          this.toastService.showToast('error', 'Error al crear TOP ROJO');
+          this.loading = false;
+          this.toastService.showToast('ERROR', 'Ocurrio un error al crear TOP ROJO, Intente nuevamente', 'error', 5);
         }
       });
   }
@@ -263,7 +269,10 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   renewTopRojo(topRojoId: string): void {
     // Aquí se podría abrir un modal nuevo para seleccionar el plan
     // Por ahora simplemente recargamos
-    this.loadDashboard();
+    this.showRenewPlanModal = true;
+    this.topRojoId = topRojoId;
+    // this.loadDashboard();
+    // this.topRojoService.renewTopRojo(topRojoId, ).subscribe({
   }
 
   /**
@@ -299,8 +308,61 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
    */
   getProgressPercentage(top: ITopRojoResponse): number {
     const totalHours = TOP_ROJO_PLANS[top.planType]?.duration || 24;
-    const remainingHours = (top.daysRemaining * 24) + top.hoursRemaining;
+    const remainingHours = this.getRemainingTime(top).totalHours;
     const progressPercentage = ((totalHours - remainingHours) / totalHours) * 100;
     return Math.min(100, Math.max(0, progressPercentage));
+  }
+
+  /**
+   * Obtener tiempo restante en dias/horas
+   */
+  getRemainingTime(top: ITopRojoResponse): {
+    days: number;
+    hours: number;
+    totalHours: number;
+    elapsedHours: number;
+  } {
+    const daysRemaining = Number.isFinite(top.daysRemaining) ? top.daysRemaining : null;
+    const hoursRemaining = Number.isFinite(top.hoursRemaining) ? top.hoursRemaining : null;
+
+    if (daysRemaining !== null && hoursRemaining !== null) {
+      const totalHours = Math.max(0, (daysRemaining * 24) + hoursRemaining);
+      return {
+        days: Math.floor(totalHours / 24),
+        hours: totalHours % 24,
+        totalHours,
+        elapsedHours: this.getElapsedHours(top.startDate, top.endDate, totalHours)
+      };
+    }
+
+    const endDate = new Date(top.endDate);
+    if (Number.isNaN(endDate.getTime())) {
+      return { days: 0, hours: 0, totalHours: 0, elapsedHours: 0 };
+    }
+
+    const now = new Date();
+    const diffMs = endDate.getTime() - now.getTime();
+    const totalHours = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60)));
+
+    return {
+      days: Math.floor(totalHours / 24),
+      hours: totalHours % 24,
+      totalHours,
+      elapsedHours: this.getElapsedHours(top.startDate, top.endDate, totalHours)
+    };
+  }
+
+  private getElapsedHours(startDate: Date | string, endDate: Date | string, remainingHours: number): number {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return 0;
+    }
+
+    const totalMs = end.getTime() - start.getTime();
+    const totalHours = Math.max(0, Math.ceil(totalMs / (1000 * 60 * 60)));
+    const elapsedHours = Math.max(0, totalHours - remainingHours);
+    return Math.min(totalHours, elapsedHours);
   }
 }

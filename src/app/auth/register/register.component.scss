@@ -6,6 +6,7 @@
   width: 100%;
   font-family: "Segoe UI", sans-serif;
   overflow: hidden;
+  position: relative;
 }
 
 /* Mitades de portada */
@@ -147,11 +148,73 @@
   background: #e63950;
 }
 
+.login-topbar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 3;
+}
+
+.lang-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.lang-btn {
+  width: 34px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  &.active {
+    border-color: #a60f2b;
+    box-shadow: 0 0 0 2px rgba(166, 15, 43, 0.25);
+  }
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+
+  img {
+    width: 250px; /* 👈 reduje tamaño para pantallas más chicas */
+    height: auto;
+    max-width: 100%;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .register-container,
   .form-container {
     flex-direction: column;
+  }
+
+  .login-topbar {
+    top: 12px;
+    right: 12px;
   }
 
   .register-half,
