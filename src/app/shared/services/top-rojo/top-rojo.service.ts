@@ -10,7 +10,7 @@ import {
   TOP_ROJO_PLANS
 } from '../../models/top-rojo.model';
 import { LoaderService } from '../loader/loader.service';
-import { environment } from '../../../../environments/environment.dev';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
