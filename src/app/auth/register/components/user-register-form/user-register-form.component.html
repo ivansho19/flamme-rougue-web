@@ -6,6 +6,12 @@
 
   <!-- Caja del formulario -->
   <div class="login-box">
+
+    <div class="login-topbar">
+      <app-flags [flagOptions]="flagOptions" [selectedFlagUrl]="selectedFlagUrl" [currentLang]="currentLang"
+        (translate)="setFlag($event)">
+      </app-flags>
+    </div>
     <h1 class="custom-title">{{ 'REGISTER_FORM.USER_TITLE' | translate }}</h1>
     <h2 class="custom-title">{{ 'REGISTER_FORM.USER_SUBTITLE' | translate }}</h2>
 
@@ -13,34 +19,38 @@
       <div class="form-group">
         <input formControlName="name" required type="text" [placeholder]="'REGISTER_FORM.FIRST_NAME' | translate" />
         <div class="error" *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid">
-            <span *ngIf="userForm.get('name')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_FIRST_NAME' | translate }}</span>
+          <span *ngIf="userForm.get('name')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_FIRST_NAME' | translate
+            }}</span>
         </div>
       </div>
 
       <div class="form-group">
         <input formControlName="lastName" required type="text" [placeholder]="'REGISTER_FORM.LAST_NAME' | translate" />
         <div class="error" *ngIf="userForm.get('lastName')?.touched && userForm.get('lastName')?.invalid">
-            <span *ngIf="userForm.get('lastName')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_LAST_NAME' | translate }}</span>
+          <span *ngIf="userForm.get('lastName')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_LAST_NAME' | translate
+            }}</span>
         </div>
       </div>
 
       <div class="form-group">
         <input formControlName="email" required type="email" [placeholder]="'REGISTER_FORM.EMAIL' | translate" />
         <div class="error" *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
-            <span *ngIf="userForm.get('email')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_EMAIL' | translate }}</span>
-            <span *ngIf="userForm.get('email')?.errors?.['email']">{{ 'REGISTER_FORM.INVALID_EMAIL' | translate }}</span>
+          <span *ngIf="userForm.get('email')?.errors?.['required']">{{ 'REGISTER_FORM.REQUIRED_EMAIL' | translate
+            }}</span>
+          <span *ngIf="userForm.get('email')?.errors?.['email']">{{ 'REGISTER_FORM.INVALID_EMAIL' | translate }}</span>
         </div>
       </div>
 
       <div class="form-group">
-        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.PASSWORD' | translate" [controles]="password"
-          name="password"></app-input-custom>
+        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.PASSWORD' | translate"
+          [controles]="password" name="password"></app-input-custom>
       </div>
 
       <div class="form-group">
-        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.CONFIRM_PASSWORD' | translate" [controles]="confirmPassword"
-          name="confirmPassword"></app-input-custom>
-        <div class="error" *ngIf="confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched" class="error-message">
+        <app-input-custom [type]="'password'" [placeholder]="'REGISTER_FORM.CONFIRM_PASSWORD' | translate"
+          [controles]="confirmPassword" name="confirmPassword"></app-input-custom>
+        <div class="error" *ngIf="confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched"
+          class="error-message">
           {{ 'REGISTER_FORM.PASSWORD_MISMATCH' | translate }}
         </div>
       </div>

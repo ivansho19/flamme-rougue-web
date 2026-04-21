@@ -7,6 +7,8 @@ import { LoaderService } from "../../services/loader/loader.service";
 import { ProfileService } from "../../services/profile/profile.service";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
+import { GetCountries } from "../../clases/getCountries";
+import { GetFlags } from "../../clases/getFlagsOptions";
 
 @Component({
   selector: "app-header",
@@ -27,13 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  flagOptions = [
-    { url: 'https://flagcdn.com/fr.svg', label: 'Francés', lang: 'fr' },
-    { url: 'https://flagcdn.com/nl.svg', label: 'Belga', lang: 'nl' },
-    { url: 'https://flagcdn.com/gb.svg', label: 'Inglés', lang: 'en' },
-    { url: 'https://flagcdn.com/es.svg', label: 'Español', lang: 'es' }
-  ];
-
+  flagOptions = GetFlags.getFlagsOptions();
   constructor(
     private route: Router,
     private eRef: ElementRef,
@@ -48,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentLang = storedLang || 'es';
     this.translate.setDefaultLang('es');
     this.translate.use(this.currentLang);
-    const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+    const activeFlag = this.flagOptions.find((flag: { url: string; label: string; lang: string }) => flag.lang === this.currentLang);
     if (activeFlag) {
       this.selectedFlagUrl = activeFlag.url;
     }
