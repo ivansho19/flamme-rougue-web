@@ -8,6 +8,7 @@ export const environment = {
   api_register_client: `${urlBase}/auth/registerClient`,
   api_forgot_password: `${urlBase}/auth/forgot-password`,
   api_profile: `${urlBase}/profiles`,
+  api_topRojo: `${urlBase}/top-rojo`,
   api_client_by_email: `${urlBase}/auth/client`,
 
 };

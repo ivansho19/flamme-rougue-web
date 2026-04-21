@@ -7,17 +7,12 @@
   <!-- Mitad derecha con login -->
   <div class="login-right">
     <div class="login-topbar">
-      <div class="lang-switch" aria-label="Language selector">
-        <button
-          class="lang-btn"
-          type="button"
-          *ngFor="let flag of flagOptions"
-          (click)="setFlag(flag)"
-          [class.active]="flag.lang === currentLang"
-          [attr.aria-label]="flag.label">
-          <img [src]="flag.url" [alt]="flag.label" />
-        </button>
-      </div>
+      <app-flags 
+      [flagOptions]="flagOptions" 
+      [selectedFlagUrl]="selectedFlagUrl" 
+      [currentLang]="currentLang" 
+      (translate)="setFlag($event)">
+    </app-flags>
     </div>
     <div class="logo-container">
       <img src="assets/images/logo_HD.png" alt="Flamme Rouge Logo" />

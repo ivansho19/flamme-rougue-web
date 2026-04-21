@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { TopRojoModalComponent } from './top-rojo-modal/top-rojo-modal.component';
 import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selection-modal.component';
+import { FlagsComponent } from './flags/flags.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selecti
     ProfilePreviewComponent,
     ToastAlertComponent,
     TopRojoModalComponent,
-    PlanSelectionModalComponent
+    PlanSelectionModalComponent,
+    FlagsComponent
   ],
   exports: [
     LoaderComponent,
@@ -43,7 +45,8 @@ import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selecti
     ToastAlertComponent,
     TranslateModule,
     TopRojoModalComponent,
-    PlanSelectionModalComponent
+    PlanSelectionModalComponent,
+    FlagsComponent
   ],
   imports: [
     CommonModule,

@@ -175,7 +175,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         localStorage.removeItem('adult-consent');
         localStorage.removeItem('profileId');
         this.route.navigate(['/auth/login']);
-        console.log('Sesión cerrada');
       }
     });
   }

@@ -204,14 +204,11 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
     const finalProfileId = profileIdFromLS || this.profileId;
     
     if (!finalProfileId || !country || !city) {
-      console.error('[MyTopRojo] Faltan datos críticos:');
-      console.error('  - profileId:', finalProfileId || '(VACIO)');
-      console.error('  - country:', country || '(VACIO)');
-      console.error('  - city:', city || '(VACIO)');
       this.toastService.showToast('error', 'Faltan datos del perfil o ubicación');
       return;
     }
     this.closeCreateForm();
+    this.closeRenewPlanModal();
     this.loading = true;
 
     // Llamar al servicio para crear TOP ROJO con fotos

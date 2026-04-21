@@ -6,6 +6,7 @@ import { delay, Subscription } from 'rxjs';
 import { LoaderService } from '../../shared/services/loader/loader.service';
 import { ToastService } from '../../shared/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GetFlags } from '../../shared/clases/getFlagsOptions';
 
 @Component({
   selector: 'app-login',
@@ -19,12 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   showPassword: boolean = false;
   currentLang = 'es';
   selectedFlagUrl = 'https://flagcdn.com/es.svg';
-  flagOptions = [
-    { url: 'https://flagcdn.com/es.svg', label: 'Espanol', lang: 'es' },
-    { url: 'https://flagcdn.com/gb.svg', label: 'English', lang: 'en' },
-    { url: 'https://flagcdn.com/fr.svg', label: 'Francais', lang: 'fr' },
-    { url: 'https://flagcdn.com/nl.svg', label: 'Nederlands', lang: 'nl' }
-  ];
+  flagOptions = GetFlags.getFlagsOptions();
 
   constructor(private fb: FormBuilder, private authService: AuthService, 
     private router: Router, private loaderService: LoaderService, 
@@ -43,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currentLang = storedLang || 'es';
     this.translate.setDefaultLang('es');
     this.translate.use(this.currentLang);
-    const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+    const activeFlag = this.flagOptions.find((flag: any) => flag.lang === this.currentLang);
     if (activeFlag) {
       this.selectedFlagUrl = activeFlag.url;
     }
@@ -98,7 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.showPassword = !this.showPassword;
   }
 
-  setFlag(flag: { url: string; label: string; lang: string }) {
+  setFlag(flag: any) {
     this.selectedFlagUrl = flag.url;
     this.currentLang = flag.lang;
     localStorage.setItem('app-lang', flag.lang);

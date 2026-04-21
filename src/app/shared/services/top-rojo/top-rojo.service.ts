@@ -16,7 +16,7 @@ import { environment } from '../../../../environments/environment.dev';
   providedIn: 'root'
 })
 export class TopRojoService {
-  private readonly apiProfile = environment.api_profile;
+  private readonly apiTopRojo = environment.api_topRojo;
 
   constructor(
     private http: HttpClient,
@@ -34,7 +34,7 @@ export class TopRojoService {
    * Crear/Comprar TOP ROJO
    */
   createTopRojo(request: ITopRojoCreateRequest): Observable<any> {
-    return this.http.post(`${this.apiProfile}/top-rojo/create`, request)
+    return this.http.post(`${this.apiTopRojo}/create`, request)
       .pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -43,7 +43,7 @@ export class TopRojoService {
    */
   getTopRojoByCity(city: string, country: string): Observable<ITopRojoListResponse> {
     return this.http.get<ITopRojoListResponse>(
-      `${this.apiProfile}/top-rojo/city/${city}/${country}`
+      `${this.apiTopRojo}/city/${city}/${country}`
     ).pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -53,7 +53,7 @@ export class TopRojoService {
    */
   getMyTopRojo(userId: string): Observable<IMyTopRojoDashboard> {
     return this.http.get<any>(
-      `${this.apiProfile}/top-rojo/user/${userId}/my-tops`
+      `${this.apiTopRojo}/user/${userId}/my-tops`
     ).pipe(
       // Mapear la respuesta y asegurar estructura correcta
       (source) => new Observable(subscriber => {
@@ -195,7 +195,7 @@ export class TopRojoService {
    */
   getProfileTopRojo(profileId: string): Observable<ITopRojoResponse> {
     return this.http.get<ITopRojoResponse>(
-      `${this.apiProfile}/top-rojo/${profileId}`
+      `${this.apiTopRojo}/${profileId}`
     ).pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -203,7 +203,7 @@ export class TopRojoService {
    * Renovar TOP ROJO expirado
    */
   renewTopRojo(topRojoId: string, planType: string): Observable<any> {
-    return this.http.post(`${this.apiProfile}/top-rojo/${topRojoId}/renew`, { planType })
+    return this.http.post(`${this.apiTopRojo}/${topRojoId}/renew`, { planType })
       .pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -211,7 +211,7 @@ export class TopRojoService {
    * Cancelar TOP ROJO
    */
   cancelTopRojo(topRojoId: string): Observable<any> {
-    return this.http.post(`${this.apiProfile}/top-rojo/${topRojoId}/cancel`, {})
+    return this.http.post(`${this.apiTopRojo}/${topRojoId}/cancel`, {})
       .pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -220,7 +220,7 @@ export class TopRojoService {
    */
   getFeaturedTopRojo(limit: number = 5): Observable<ITopRojoResponse[]> {
     return this.http.get<ITopRojoResponse[]>(
-      `${this.apiProfile}/top-rojo/featured?limit=${limit}`
+      `${this.apiTopRojo}/featured?limit=${limit}`
     ).pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -229,7 +229,7 @@ export class TopRojoService {
    */
   getAllTopRojo(): Observable<ITopRojoAllResponse> {
     return this.http.get<ITopRojoAllResponse>(
-      `${this.apiProfile}/top-rojo/all`
+      `${this.apiTopRojo}/all`
     ).pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 
@@ -237,14 +237,14 @@ export class TopRojoService {
    * Incrementar visualización
    */
   trackView(topRojoId: string): Observable<any> {
-    return this.http.post(`${this.apiProfile}/top-rojo/${topRojoId}/track-view`, {});
+    return this.http.post(`${this.apiTopRojo}/${topRojoId}/track-view`, {});
   }
 
   /**
    * Incrementar clicks
    */
   trackClick(topRojoId: string): Observable<any> {
-    return this.http.post(`${this.apiProfile}/top-rojo/${topRojoId}/track-click`, {});
+    return this.http.post(`${this.apiTopRojo}/${topRojoId}/track-click`, {});
   }
 
   /**

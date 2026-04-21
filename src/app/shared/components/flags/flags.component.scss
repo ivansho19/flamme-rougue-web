@@ -1,0 +1,40 @@
+.lang-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.lang-btn {
+  width: 34px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  &.active {
+    border-color: #a60f2b;
+    box-shadow: 0 0 0 2px rgba(166, 15, 43, 0.25);
+  }
+}

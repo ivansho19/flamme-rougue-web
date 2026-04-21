@@ -1,0 +1,11 @@
+<div class="lang-switch" aria-label="Language selector">
+        <button
+          class="lang-btn"
+          type="button"
+          *ngFor="let flag of flagOptions"
+          (click)="setFlag(flag)"
+          [class.active]="flag.lang === currentLang"
+          [attr.aria-label]="flag.label">
+          <img [src]="flag.url" [alt]="flag.label" />
+        </button>
+      </div>

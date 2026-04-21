@@ -239,12 +239,6 @@ export class CreateTopRojoFormComponent implements OnInit {
       photo1File: this.photo1File,
       photo2File: this.photo2File
     };
-
-    console.log('[CreateTopRojoForm] onPlanSelected - Emitiendo datos:');
-    console.log('FormData:', formDataToEmit);
-    console.log('Plan:', plan);
-    
-    console.log('[CreateTopRojoForm] ESPERANDO respuesta del componente padre antes de resetear...');
     
     this.planSelected.emit({
       formData: formDataToEmit,
@@ -290,26 +284,6 @@ export class CreateTopRojoFormComponent implements OnInit {
    */
   closePlanModal(): void {
     this.showPlanModal = false;
-  }
-
-  /**
-   * Debug: Inspeccionar el estado del formulario (llamar desde la consola)
-   */
-  debugForm(): void {
-    console.log('=== DEBUG FORM STATE ===');
-    console.log('Form value:', this.topRojoForm.value);
-    console.log('Form valid:', this.topRojoForm.valid);
-    console.log('Form dirty:', this.topRojoForm.dirty);
-    console.log('Form touched:', this.topRojoForm.touched);
-    console.log('photo1File:', this.photo1File);
-    console.log('photo2File:', this.photo2File);
-    console.log('cities length:', this.cities.length);
-    console.log('country value:', this.topRojoForm.get('country')?.value);
-    console.log('city value:', this.topRojoForm.get('city')?.value);
-    console.log('title value:', this.topRojoForm.get('title')?.value);
-    console.log('description value:', this.topRojoForm.get('description')?.value);
-    console.log('phone value:', this.topRojoForm.get('phone')?.value);
-    console.log('=== END DEBUG ===');
   }
 
   /**
