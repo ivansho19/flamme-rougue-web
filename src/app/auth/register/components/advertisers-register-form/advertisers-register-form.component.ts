@@ -91,6 +91,7 @@ export class AdvertisersRegisterFormComponent implements OnInit {
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('user', JSON.stringify(response.name));
                     localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userId', response._id);
                     this.router.navigate(['/create-profile'], { queryParams: { email } }); // Redirige a la página de culminar el registro y publicar el perfil
                 },
                 error: (error) => {

@@ -350,12 +350,12 @@
 
           <div class="field">
           <input formControlName="email" type="email" placeholder="{{ 'PROFILE_FORM.EMAIL_PLACEHOLDER' | translate }}"
-            [class.input-error]="isInvalid('basicInfo.email')">
-          <div class="error" *ngIf="isInvalid('basicInfo.email')">
-            <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['required']">
+            [class.input-error]="isInvalid('realData.email')">
+          <div class="error" *ngIf="isInvalid('realData.email')">
+            <span *ngIf="profileForm.get('realData.email')?.errors?.['required']">
               {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
             </span>
-            <span *ngIf="profileForm.get('basicInfo.email')?.errors?.['email']">
+            <span *ngIf="profileForm.get('realData.email')?.errors?.['email']">
               {{ 'PROFILE_FORM.INVALID_EMAIL_ERROR' | translate }}
             </span>
           </div>

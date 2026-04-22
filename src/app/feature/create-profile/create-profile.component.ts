@@ -520,10 +520,32 @@ export class ProfileEditComponent implements OnInit {
         const languagesValue = languagesControl?.value ?? [];
         const hasLanguages = Array.isArray(languagesValue) && languagesValue.length > 0;
         
-        const personalDataComplete = gender && orientation && birthDate && nationality && 
+        const personalDataComplete = gender && orientation && birthDate && nationality &&
                                     heightValid && hairColor && eyeColor && weightValid && hasLanguages;
-        
-        return basicInfoComplete && personalDataComplete && hasImage;
+
+        // RealData validations
+        const realName = this.profileForm.get('realData.realName')?.valid ?? false;
+        const realBirthDate = this.profileForm.get('realData.realBirthDate')?.valid ?? false;
+        const realAge = this.profileForm.get('realData.realAge')?.valid ?? false;
+        const realEmail = this.profileForm.get('realData.email')?.valid ?? false;
+        const realNationality = this.profileForm.get('realData.realNationality')?.valid ?? false;
+        const contactPhone = this.profileForm.get('realData.contactPhone')?.valid ?? false;
+        const documentType = this.profileForm.get('realData.documentType')?.value;
+        const documentFrontValid = this.profileForm.get('realData.documentFront')?.valid ?? false;
+        const documentBackValid = this.profileForm.get('realData.documentBack')?.valid ?? false;
+        const documentSingleValid = this.profileForm.get('realData.documentSingle')?.valid ?? false;
+
+        let documentsComplete = false;
+        if (documentType === 'dni') {
+            documentsComplete = documentFrontValid && documentBackValid;
+        } else if (documentType === 'passport') {
+            documentsComplete = documentSingleValid;
+        }
+
+        const realDataComplete = realName && realBirthDate && realAge && realEmail &&
+            realNationality && contactPhone && documentsComplete;
+
+        return basicInfoComplete && personalDataComplete && realDataComplete && hasImage;
     }
 
     get canPublish(): boolean {
