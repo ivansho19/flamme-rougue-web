@@ -260,6 +260,9 @@
             <button type="submit" class="btn-primary">
                 {{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}
             </button>
+            <button type="button" class="btn-primary" (click)="goToPublishedProfile()">
+                {{ 'PROFILE_FORM.VIEW_PROFILE' | translate }}
+            </button>
             <button type="button" class="btn-primary" [hidden]="showPlanSection" (click)="togglePlanSection()">
                 {{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}
             </button>

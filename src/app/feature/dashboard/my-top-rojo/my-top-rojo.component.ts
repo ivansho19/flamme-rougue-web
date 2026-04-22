@@ -62,7 +62,6 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   loadDashboard(): void {
     const userId = localStorage.getItem('userId');
     if (!userId) {
-      this.toastService.showToast('error', 'Usuario no autenticado');
       return;
     }
 

@@ -219,6 +219,16 @@
 
   .register-half,
   .form-half {
-    height: 50vh;
+    height: auto;
+    min-height: 0;
+  }
+
+  .form-container {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .form-half:last-child {
+    display: none;
   }
 }

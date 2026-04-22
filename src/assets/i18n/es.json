@@ -102,6 +102,7 @@
     "SAVE_CHANGES": "Guardar cambios",
     "UPDATE_PLAN": "Actualizar plan",
     "SAVE_PLAN": "Guardar plan",
+    "VIEW_PROFILE": "Ir al perfil",
     "REQUIRED_ERROR": "Este campo es obligatorio",
     "INVALID_EMAIL_ERROR": "Formato de email inválido"
   },

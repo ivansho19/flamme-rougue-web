@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
 import { IProfileCreateRequest } from '../create-profile/models/IProfileCreate.model';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
@@ -57,7 +58,8 @@ export class UpdateProfileComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private profileService: ProfileService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -237,6 +239,16 @@ export class UpdateProfileComponent implements OnInit {
         console.error('Error cargando cliente:', error);
       }
     });
+  }
+
+  goToPublishedProfile(): void {
+    const targetProfileId = this.profileId || localStorage.getItem('profileId') || '';
+    if (!targetProfileId) {
+      this.toastService.showToast('Error', 'Perfil no encontrado', 'error', 4);
+      return;
+    }
+
+    this.router.navigate(['/profile', targetProfileId]);
   }
 
   private getProfileByUser(userId: string) {

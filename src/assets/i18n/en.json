@@ -103,6 +103,7 @@
     "SAVE_CHANGES": "Save changes",
     "UPDATE_PLAN": "Update plan",
     "SAVE_PLAN": "Save plan",
+    "VIEW_PROFILE": "Go to profile",
     "REQUIRED_ERROR": "This field is required",
     "INVALID_EMAIL_ERROR": "Invalid email format"
   },
