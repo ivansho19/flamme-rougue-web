@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../shared/services/profile/profile.service';
+import { TranslateService } from '@ngx-translate/core';
+import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { IProfileResponse } from './models/IProfile.model';
 import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
 
@@ -19,12 +21,16 @@ export class ProfilesComponent implements OnInit {
     dislikeCount = 0;
     userReaction: 'like' | 'dislike' | null = null;
     private embla: EmblaCarouselType | null = null;
+    private readonly serviceLabelMap = new Map<string, string>(
+      GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
+    );
     @ViewChild('emblaViewport') emblaViewport?: ElementRef<HTMLDivElement>;
 
     constructor(
       private route: ActivatedRoute,
       private router: Router,
-      private profileService: ProfileService
+      private profileService: ProfileService,
+      private translate: TranslateService
     ) { }
 
     ngOnInit() {
@@ -157,6 +163,10 @@ export class ProfilesComponent implements OnInit {
       return [];
     }
 
+    getServiceLabel(value: string): string {
+      return this.serviceLabelMap.get(value) || value;
+    }
+
     goToEditProfile() {
       if (this.profileData?._id) {
         localStorage.setItem('profileId', this.profileData._id);
@@ -180,7 +190,8 @@ export class ProfilesComponent implements OnInit {
       }
 
       const name = this.profileData?.displayName || 'perfil';
-      const text = encodeURIComponent(`Hola ${name}, vi tu perfil en FlammeRouge y quisiera mas informacion.`);
+      const message = this.translate.instant('PROFILE.WHATSAPP_MESSAGE', { name });
+      const text = encodeURIComponent(message);
       const url = `https://wa.me/${cleanPhone}?text=${text}`;
       window.open(url, '_blank');
     }

@@ -29,9 +29,9 @@
     "NATIONALITY": "Nationaliteit",
     "LANGUAGES": "Talen",
     "HEIGHT": "Lengte",
-    "WEIGHT": "Gewicht"
-    ,
-    "POSSIBILITIES": "Mogelijkheden"
+    "WEIGHT": "Gewicht",
+    "POSSIBILITIES": "Mogelijkheden",
+    "WHATSAPP_MESSAGE": "Hallo {{name}}, ik zag je profiel op FlammeRouge en wil graag meer informatie."
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Profielafbeeldingen",
@@ -106,6 +106,34 @@
     "VIEW_PROFILE": "Ga naar profiel",
     "REQUIRED_ERROR": "Dit veld is verplicht",
     "INVALID_EMAIL_ERROR": "Ongeldig e-mailformaat"
+  },
+  "SERVICES": {
+    "RELAXING_MASSAGE": "Ontspannende massage",
+    "SENSUAL_MASSAGE": "Sensuele massage",
+    "TANTRIC_MASSAGE": "Tantrische massage",
+    "IN_PERSON_SERVICE": "Persoonlijke service",
+    "AFFECTIONATE_EXPERIENCE": "Affectieve ervaring",
+    "SHOWER_AVAILABLE": "Douche beschikbaar",
+    "DINNER_COMPANIONSHIP": "Diner / begeleiding",
+    "DATE_LIKE_COMPANIONSHIP": "Begeleiding zoals een date",
+    "CLUB_SAUNA_VISITS": "Bezoek aan clubs en sauna's",
+    "STRIPTEASE": "Striptease",
+    "NIGHT_COMPANIONSHIP": "Nachtelijke begeleiding",
+    "CUSTOM_EXPERIENCES": "Unieke en persoonlijke ervaringen",
+    "COUPLES": "Koppels",
+    "TRAVEL_SOCIAL_COMPANIONSHIP": "Reizen / sociale begeleiding"
+  },
+  "LANGUAGES": {
+    "ENGLISH": "Engels",
+    "BELGIAN": "Belgisch",
+    "FRENCH": "Frans",
+    "SPANISH": "Spaans",
+    "ITALIAN": "Italiaans",
+    "RUSSIAN": "Russisch",
+    "ARABIC": "Arabisch",
+    "UKRAINIAN": "Oekraïens",
+    "CHINESE": "Chinees",
+    "JAPANESE": "Japans"
   },
   "COMMON": {
     "YEARS": "jaar",

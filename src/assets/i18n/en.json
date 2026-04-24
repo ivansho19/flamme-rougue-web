@@ -29,9 +29,9 @@
     "NATIONALITY": "Nationality",
     "LANGUAGES": "Languages",
     "HEIGHT": "Height",
-    "WEIGHT": "Weight"
-    ,
-    "POSSIBILITIES": "Possibilities"
+    "WEIGHT": "Weight",
+    "POSSIBILITIES": "Possibilities",
+    "WHATSAPP_MESSAGE": "Hi {{name}}, I saw your profile on FlammeRouge and would like more information."
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Profile images",
@@ -106,6 +106,34 @@
     "VIEW_PROFILE": "Go to profile",
     "REQUIRED_ERROR": "This field is required",
     "INVALID_EMAIL_ERROR": "Invalid email format"
+  },
+  "SERVICES": {
+    "RELAXING_MASSAGE": "Relaxing massage",
+    "SENSUAL_MASSAGE": "Sensual massage",
+    "TANTRIC_MASSAGE": "Tantric massage",
+    "IN_PERSON_SERVICE": "In-person service",
+    "AFFECTIONATE_EXPERIENCE": "Affectionate experience",
+    "SHOWER_AVAILABLE": "Shower available",
+    "DINNER_COMPANIONSHIP": "Dinner / companionship",
+    "DATE_LIKE_COMPANIONSHIP": "Date-like companionship",
+    "CLUB_SAUNA_VISITS": "Club and sauna visits",
+    "STRIPTEASE": "Striptease",
+    "NIGHT_COMPANIONSHIP": "Night companionship",
+    "CUSTOM_EXPERIENCES": "Unique, personalized experiences",
+    "COUPLES": "Couples",
+    "TRAVEL_SOCIAL_COMPANIONSHIP": "Travel / social companionship"
+  },
+  "LANGUAGES": {
+    "ENGLISH": "English",
+    "BELGIAN": "Belgian",
+    "FRENCH": "French",
+    "SPANISH": "Spanish",
+    "ITALIAN": "Italian",
+    "RUSSIAN": "Russian",
+    "ARABIC": "Arabic",
+    "UKRAINIAN": "Ukrainian",
+    "CHINESE": "Chinese",
+    "JAPANESE": "Japanese"
   },
   "COMMON": {
     "YEARS": "years",

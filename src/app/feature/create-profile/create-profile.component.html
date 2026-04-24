@@ -268,7 +268,7 @@
           (selectionChange)="onLanguagesChange($event)" [class.input-error]="isInvalid('personalData.languages')"
           [attr.aria-label]="'PROFILE_FORM.LANGUAGES_ARIA' | translate">
           <mat-chip-option *ngFor="let language of languageOptions" [value]="language.value">
-            {{ language.label }}
+            {{ language.label | translate }}
           </mat-chip-option>
         </mat-chip-listbox>
         <div class="error" *ngIf="isInvalid('personalData.languages')">
@@ -292,7 +292,7 @@
             [attr.aria-label]="'PROFILE_FORM.SERVICES_ARIA' | translate"
           >
             <mat-chip-option *ngFor="let option of posibilityOptions" [value]="option.value">
-              {{ option.label }}
+              {{ option.label | translate }}
             </mat-chip-option>
           </mat-chip-listbox>
         </div>
