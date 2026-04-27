@@ -91,39 +91,41 @@
       <div class="card comments-card">
         <div class="comments-header">
           <h2 class="custom-card-title">Comentarios</h2>
-          <span class="comments-count">2</span>
+          <span class="comments-count">{{ comments.length }}</span>
         </div>
 
         <div class="comment-list">
-          <div class="comment-item">
-            <div class="comment-avatar">M</div>
-            <div class="comment-body">
-              <div class="comment-meta">
-                <span class="comment-author">Maria G.</span>
-                <span class="comment-time">hace 2 horas</span>
-              </div>
-              <p class="comment-text">Muy buena atencion, todo claro y puntual. Recomendado.</p>
-            </div>
+          <div class="comments-loading" *ngIf="commentsLoading">Cargando comentarios...</div>
+          <div class="comments-empty" *ngIf="!commentsLoading && !comments.length">
+            Aun no hay comentarios.
           </div>
-
-          <div class="comment-item">
-            <div class="comment-avatar">J</div>
+          <div class="comment-item" *ngFor="let comment of comments">
+            <div class="comment-avatar">{{ comment.author?.name?.charAt(0) || 'U' }}</div>
             <div class="comment-body">
               <div class="comment-meta">
-                <span class="comment-author">Juan C.</span>
-                <span class="comment-time">ayer</span>
+                <span class="comment-author">{{ comment.author?.name || 'Usuario' }}</span>
+                <span class="comment-time" *ngIf="comment.createdAt">{{ comment.createdAt | date:'mediumDate' }}</span>
               </div>
-              <p class="comment-text">Excelente experiencia, seguro vuelvo a contactar.</p>
+              <p class="comment-text">{{ comment.text }}</p>
+              <p class="comment-reply" *ngIf="comment.providerReply">{{ comment.providerReply }}</p>
             </div>
           </div>
         </div>
         <div class="comment-input">
           <div class="comment-avatar">U</div>
           <div class="comment-box">
-            <textarea rows="3" placeholder="Agrega un comentario..."></textarea>
+            <textarea
+              rows="3"
+              placeholder="Agrega un comentario..."
+              [value]="newCommentText"
+              (input)="onCommentInput($any($event.target).value)"
+            ></textarea>
+            <div class="comment-error" *ngIf="commentError">{{ commentError }}</div>
             <div class="comment-actions">
-              <button type="button" class="comment-btn ghost">Cancelar</button>
-              <button type="button" class="comment-btn">Comentar</button>
+              <button type="button" class="comment-btn ghost" (click)="onCommentInput('')">Cancelar</button>
+              <button type="button" class="comment-btn" (click)="submitComment()" [disabled]="commentSubmitting">
+                {{ commentSubmitting ? 'Enviando...' : 'Comentar' }}
+              </button>
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
-import { last } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { GetFlags } from '../../../../shared/clases/getFlagsOptions';
 
@@ -80,6 +79,7 @@ export class UserRegisterFormComponent implements OnInit {
                     localStorage.setItem('token', response.token);
                     localStorage.setItem('user', JSON.stringify(response.name));
                     localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userId', response._id);
                     this.router.navigate(['/home']);
                 },
                 error: (error) => {

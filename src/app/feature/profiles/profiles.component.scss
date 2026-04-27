@@ -420,6 +420,26 @@ body {
   color: #6b6b6b;
   font-size: 12px;
 }
+.comments-loading,
+.comments-empty,
+.comment-error {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.comment-error {
+  color: #a20f1f;
+  margin-top: 0.4rem;
+}
+
+.comment-reply {
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid #a20f1f;
+  background: #fff3e8;
+  color: #7f0a16;
+  font-size: 0.9rem;
+}
 
 .comment-text {
   margin: 0;

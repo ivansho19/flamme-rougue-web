@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { GetPosibilities } from '../../clases/getPosibilityOptions';
 
 export interface ProfilePreviewData {
   name: string;
@@ -33,6 +34,9 @@ export class ProfilePreviewComponent {
   @Input() showContactAction = true;
 
   fallbackImage = "assets/images/model.webp";
+  private readonly serviceLabelMap = new Map<string, string>(
+    GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
+  );
 
   get galleryThumbs(): string[] {
     return (this.profile?.galleryImages ?? []).slice(0, 3);
@@ -53,5 +57,9 @@ export class ProfilePreviewComponent {
     }
 
     return `${value}${suffix ?? ""}`;
+  }
+
+  getServiceLabel(value: string): string {
+    return this.serviceLabelMap.get(value) || value;
   }
 }

@@ -67,7 +67,7 @@
       <div class="card" *ngIf="data.posibilities?.length">
         <h2 class="custom-card-title">{{ 'PROFILE.POSSIBILITIES' | translate }}</h2>
         <ul class="possibilities-list">
-          <li *ngFor="let item of data.posibilities">✔ {{ item }}</li>
+          <li *ngFor="let item of data.posibilities">✔ {{ getServiceLabel(item) | translate }}</li>
         </ul>
       </div>
     </div>

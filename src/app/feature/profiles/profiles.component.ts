@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../shared/services/profile/profile.service';
+import { CommentsService, CommentItem } from '../../shared/services/comments/comments.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { IProfileResponse } from './models/IProfile.model';
@@ -20,6 +21,11 @@ export class ProfilesComponent implements OnInit {
     likeCount = 10;
     dislikeCount = 0;
     userReaction: 'like' | 'dislike' | null = null;
+    comments: CommentItem[] = [];
+    commentsLoading = false;
+    commentSubmitting = false;
+    commentError = '';
+    newCommentText = '';
     private embla: EmblaCarouselType | null = null;
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
@@ -30,6 +36,7 @@ export class ProfilesComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private profileService: ProfileService,
+      private commentsService: CommentsService,
       private translate: TranslateService
     ) { }
 
@@ -47,10 +54,67 @@ export class ProfilesComponent implements OnInit {
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
           this.profileData = response?.profile ?? response ?? null;
+          this.loadComments();
         },
         error: (error) => {
           console.error('Error cargando perfil:', error);
           this.profileData = null;
+        }
+      });
+    }
+
+    private loadComments() {
+      if (!this.profileId) {
+        return;
+      }
+
+      this.commentsLoading = true;
+      this.commentsService.getCommentsByProfile(this.profileId).subscribe({
+        next: (comments) => {
+          this.comments = Array.isArray(comments) ? comments : [];
+          this.commentsLoading = false;
+        },
+        error: () => {
+          this.comments = [];
+          this.commentsLoading = false;
+        }
+      });
+    }
+
+    onCommentInput(value: string) {
+      this.newCommentText = value;
+      if (this.commentError) {
+        this.commentError = '';
+      }
+    }
+
+    submitComment() {
+      const text = this.newCommentText.trim();
+      if (!text) {
+        this.commentError = 'Ingresa un comentario.';
+        return;
+      }
+
+      const authorId = localStorage.getItem('userId');
+      if (!authorId) {
+        this.commentError = 'Debes iniciar sesión para comentar.';
+        return;
+      }
+
+      this.commentSubmitting = true;
+      this.commentsService.createComment({
+        profileId: this.profileId,
+        authorId,
+        text
+      }).subscribe({
+        next: () => {
+          this.newCommentText = '';
+          this.commentSubmitting = false;
+          this.loadComments();
+        },
+        error: (error) => {
+          this.commentSubmitting = false;
+          this.commentError = error?.error?.message || 'No se pudo enviar el comentario.';
         }
       });
     }

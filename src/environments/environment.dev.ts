@@ -11,5 +11,8 @@ export const environment = {
   api_profile: `${urlBase}/profiles`,
   api_topRojo: `${urlBase}/top-rojo`,
   api_client_by_email: `${urlBase}/auth/client`,
+  api_comments: `${urlBase}/comments`,
+  paypalClientId: '',
+  paypalCurrency: 'EUR',
 
 };
