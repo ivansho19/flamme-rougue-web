@@ -26,6 +26,9 @@ export class ProfilesComponent implements OnInit {
     commentSubmitting = false;
     commentError = '';
     newCommentText = '';
+    replySubmitting: Record<string, boolean> = {};
+    replyError: Record<string, string> = {};
+    replyText: Record<string, string> = {};
     private embla: EmblaCarouselType | null = null;
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
@@ -91,13 +94,13 @@ export class ProfilesComponent implements OnInit {
     submitComment() {
       const text = this.newCommentText.trim();
       if (!text) {
-        this.commentError = 'Ingresa un comentario.';
+        this.commentError = this.translate.instant('PROFILE.COMMENT_ERROR_REQUIRED');
         return;
       }
 
       const authorId = localStorage.getItem('userId');
       if (!authorId) {
-        this.commentError = 'Debes iniciar sesión para comentar.';
+        this.commentError = this.translate.instant('PROFILE.COMMENT_ERROR_LOGIN');
         return;
       }
 
@@ -114,7 +117,52 @@ export class ProfilesComponent implements OnInit {
         },
         error: (error) => {
           this.commentSubmitting = false;
-          this.commentError = error?.error?.message || 'No se pudo enviar el comentario.';
+          this.commentError = error?.error?.message || this.translate.instant('PROFILE.COMMENT_ERROR_GENERIC');
+        }
+      });
+    }
+
+    isProfileOwner(): boolean {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        return false;
+      }
+      return this.profileData?.objectId === userId;
+    }
+
+    onReplyInput(commentId: string, value: string) {
+      this.replyText[commentId] = value;
+      if (this.replyError[commentId]) {
+        this.replyError[commentId] = '';
+      }
+    }
+
+    submitReply(comment: CommentItem) {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        this.replyError[comment._id] = this.translate.instant('PROFILE.COMMENT_REPLY_ERROR_LOGIN');
+        return;
+      }
+
+      const text = (this.replyText[comment._id] || '').trim();
+      if (!text) {
+        this.replyError[comment._id] = this.translate.instant('PROFILE.COMMENT_REPLY_ERROR_REQUIRED');
+        return;
+      }
+
+      this.replySubmitting[comment._id] = true;
+      this.commentsService.addProviderReply(comment._id, {
+        replyText: text,
+        userId
+      }).subscribe({
+        next: () => {
+          this.replySubmitting[comment._id] = false;
+          this.replyText[comment._id] = '';
+          this.loadComments();
+        },
+        error: (error) => {
+          this.replySubmitting[comment._id] = false;
+          this.replyError[comment._id] = error?.error?.message || this.translate.instant('PROFILE.COMMENT_REPLY_ERROR_GENERIC');
         }
       });
     }

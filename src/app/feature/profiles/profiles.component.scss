@@ -439,6 +439,34 @@ body {
   background: #fff3e8;
   color: #7f0a16;
   font-size: 0.9rem;
+
+  .comment-reply-label {
+    font-weight: 700;
+    margin-right: 0.35rem;
+  }
+}
+
+.reply-box {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+    border-radius: 10px;
+    border: 1px solid #e7d9c4;
+    padding: 0.6rem 0.75rem;
+    background: #fff;
+    font-size: 0.95rem;
+  }
+}
+
+.reply-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
 
 .comment-text {

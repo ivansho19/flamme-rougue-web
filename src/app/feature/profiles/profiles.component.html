@@ -90,14 +90,14 @@
 
       <div class="card comments-card">
         <div class="comments-header">
-          <h2 class="custom-card-title">Comentarios</h2>
+          <h2 class="custom-card-title">{{ 'PROFILE.COMMENTS_TITLE' | translate }}</h2>
           <span class="comments-count">{{ comments.length }}</span>
         </div>
 
         <div class="comment-list">
-          <div class="comments-loading" *ngIf="commentsLoading">Cargando comentarios...</div>
+          <div class="comments-loading" *ngIf="commentsLoading">{{ 'PROFILE.COMMENTS_LOADING' | translate }}</div>
           <div class="comments-empty" *ngIf="!commentsLoading && !comments.length">
-            Aun no hay comentarios.
+            {{ 'PROFILE.COMMENTS_EMPTY' | translate }}
           </div>
           <div class="comment-item" *ngFor="let comment of comments">
             <div class="comment-avatar">{{ comment.author?.name?.charAt(0) || 'U' }}</div>
@@ -107,7 +107,34 @@
                 <span class="comment-time" *ngIf="comment.createdAt">{{ comment.createdAt | date:'mediumDate' }}</span>
               </div>
               <p class="comment-text">{{ comment.text }}</p>
-              <p class="comment-reply" *ngIf="comment.providerReply">{{ comment.providerReply }}</p>
+              <p class="comment-reply" *ngIf="comment.providerReply">
+                <span class="comment-reply-label">
+                  {{ (profileData.displayName ? ('PROFILE.COMMENT_REPLY_LABEL_NAME' | translate:{ name: profileData.displayName }) : ('PROFILE.COMMENT_REPLY_LABEL_FALLBACK' | translate)) }}:
+                </span>
+                {{ comment.providerReply }}
+              </p>
+              <div class="reply-box" *ngIf="isProfileOwner() && !comment.providerReply">
+                <textarea
+                  rows="2"
+                  [placeholder]="'PROFILE.COMMENT_REPLY_PLACEHOLDER' | translate"
+                  [value]="replyText[comment._id] || ''"
+                  (input)="onReplyInput(comment._id, $any($event.target).value)"
+                ></textarea>
+                <div class="comment-error" *ngIf="replyError[comment._id]">{{ replyError[comment._id] }}</div>
+                <div class="reply-actions">
+                  <button type="button" class="comment-btn ghost" (click)="onReplyInput(comment._id, '')">
+                    {{ 'PROFILE.COMMENT_CANCEL' | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    class="comment-btn"
+                    (click)="submitReply(comment)"
+                    [disabled]="replySubmitting[comment._id]"
+                  >
+                    {{ replySubmitting[comment._id] ? ('PROFILE.COMMENT_REPLY_SUBMITTING' | translate) : ('PROFILE.COMMENT_REPLY_SUBMIT' | translate) }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -116,15 +143,17 @@
           <div class="comment-box">
             <textarea
               rows="3"
-              placeholder="Agrega un comentario..."
+              [placeholder]="'PROFILE.COMMENT_PLACEHOLDER' | translate"
               [value]="newCommentText"
               (input)="onCommentInput($any($event.target).value)"
             ></textarea>
             <div class="comment-error" *ngIf="commentError">{{ commentError }}</div>
             <div class="comment-actions">
-              <button type="button" class="comment-btn ghost" (click)="onCommentInput('')">Cancelar</button>
+              <button type="button" class="comment-btn ghost" (click)="onCommentInput('')">
+                {{ 'PROFILE.COMMENT_CANCEL' | translate }}
+              </button>
               <button type="button" class="comment-btn" (click)="submitComment()" [disabled]="commentSubmitting">
-                {{ commentSubmitting ? 'Enviando...' : 'Comentar' }}
+                {{ commentSubmitting ? ('PROFILE.COMMENT_SUBMITTING' | translate) : ('PROFILE.COMMENT_SUBMIT' | translate) }}
               </button>
             </div>
           </div>
