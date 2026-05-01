@@ -26,6 +26,7 @@
         <div>
           <h1>{{ profileData.displayName }}</h1>
           <p class="subtitle">{{ 'PROFILE.SUBTITLE' | translate }} <span>{{ profileData.city }}</span></p>
+          <p class="subtitle">{{ 'PROFILE.ZONE' | translate }} <span>{{ profileData.zone }}</span></p>
         </div>
         <button class="contact-pill phone-pill" type="button" *ngIf="profileData.phone != null">
           <span class="phone">{{ profileData.phone }}</span>
@@ -45,11 +46,6 @@
         <button type="button" class="like-toggle" [class.active]="userReaction === 'like'" (click)="toggleReaction('like')">
           <i class="bi bi-hand-thumbs-up like-icon" aria-hidden="true"></i>
           <span>{{ likeCount }}</span>
-        </button>
-        <span class="likes-separator">-</span>
-        <button type="button" class="like-toggle" [class.active]="userReaction === 'dislike'" (click)="toggleReaction('dislike')">
-          <i class="bi bi-hand-thumbs-down like-icon" aria-hidden="true"></i>
-          <span>{{ dislikeCount }}</span>
         </button>
       </div>
 

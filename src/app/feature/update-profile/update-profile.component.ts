@@ -42,7 +42,7 @@ export class UpdateProfileComponent implements OnInit {
   existingAvailability: string[] = [];
   selectedPlanId: number | null = null;
   selectedPlan: PlanOption | null = null;
-  showPlanSection = false;
+  showPlanModal = false;
   countries: Country[] = [];
   cities: string[] = [];
   languageOptions: any[] = [];
@@ -307,7 +307,8 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   private getProfile(id: string) {
-    if (!id) {
+    if (!id || id === 'null') {
+      this.router.navigate(['/create-profile']);
       return;
     }
 
@@ -411,17 +412,28 @@ export class UpdateProfileComponent implements OnInit {
     this.selectedPlan = plan;
   }
 
+  handlePlanSelectionFromModal(plan: PlanOption): void {
+    this.selectedPlanId = plan.id;
+    this.selectedPlan = plan;
+    this.showPlanModal = false;
+    this.updatePlan();
+  }
+
   updatePlan() {
     if (!this.selectedPlanId) {
       this.toastService.showToast('Selecciona un plan', 'Debes elegir un plan para actualizar', 'error', 4);
       return;
     }
 
-    this.updateProfile();
+    this.updateProfile(true);
   }
 
-  togglePlanSection() {
-    this.showPlanSection = true;
+  openPlanModal(): void {
+    this.showPlanModal = true;
+  }
+
+  closePlanModal(): void {
+    this.showPlanModal = false;
   }
 
   get canSave(): boolean {
@@ -473,6 +485,19 @@ export class UpdateProfileComponent implements OnInit {
       galleryImages: this.profile.galleryImages,
       posibilities: posibilitiesList
     };
+  }
+
+  get currentPlanKey(): string | null {
+    if (this.selectedPlanId === 1) {
+      return 'PROFILE_FORM.PLAN_BASIC';
+    }
+    if (this.selectedPlanId === 2) {
+      return 'PROFILE_FORM.PLAN_PRO';
+    }
+    if (this.selectedPlanId === 3) {
+      return 'PROFILE_FORM.PLAN_VIP';
+    }
+    return null;
   }
 
   isInvalid(controlPath: string): boolean {
@@ -615,7 +640,7 @@ export class UpdateProfileComponent implements OnInit {
       .replace(/(^-|-$)/g, '') || 'user';
   }
 
-  async updateProfile() {
+  async updateProfile(planUpdated: boolean = false) {
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
       this.toastService.showToast('Formulario incompleto', 'Completa los campos obligatorios', 'error', 4);
@@ -720,7 +745,11 @@ export class UpdateProfileComponent implements OnInit {
       this.profileService.updateProfile(lookupId, profilePayload).subscribe({
         next: () => {
           this.loading = false;
-          this.toastService.showToast('Perfil actualizado', 'Los cambios se guardaron', 'success', 5);
+          if (planUpdated) {
+            this.toastService.showToast('Plan actualizado', 'El plan se actualizo correctamente', 'success', 5);
+          } else {
+            this.toastService.showToast('Perfil actualizado', 'Los cambios se guardaron', 'success', 5);
+          }
         },
         error: (error) => {
           console.error('Error actualizando perfil:', error);

@@ -1,7 +1,12 @@
 <div class="profile-wrapper">
     <!-- FORM -->
     <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="form-card slide-up">
-        <h2 class="section-title">{{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}</h2>
+        <h2 class="section-title">
+            {{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}
+            <span class="current-plan" *ngIf="currentPlanKey">
+                {{ 'PROFILE_FORM.CURRENT_PLAN' | translate }}: {{ currentPlanKey | translate }}
+            </span>
+        </h2>
 
         <mat-accordion class="profile-accordion">
             <mat-expansion-panel [expanded]="true" class="accordion-panel">
@@ -258,29 +263,27 @@
 
         <div class="plan-actions">
             <button type="submit" class="btn-primary">
-                {{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}
+                <span class="btn-label-desktop">{{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}</span>
+                <span class="btn-label-mobile">{{ 'PROFILE_FORM.SAVE_CHANGES_SHORT' | translate }}</span>
+            </button>
+            <button type="button" class="btn-primary" (click)="openPlanModal()">
+                <span class="btn-label-desktop">{{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}</span>
+                <span class="btn-label-mobile">{{ 'PROFILE_FORM.UPDATE_PLAN_SHORT' | translate }}</span>
             </button>
             <button type="button" class="btn-primary" (click)="goToPublishedProfile()">
-                {{ 'PROFILE_FORM.VIEW_PROFILE' | translate }}
-            </button>
-            <button type="button" class="btn-primary" [hidden]="showPlanSection" (click)="togglePlanSection()">
-                {{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}
-            </button>
-            <button type="button" class="btn-primary" *ngIf="showPlanSection" (click)="updatePlan()">
-                {{ 'PROFILE_FORM.SAVE_PLAN' | translate }}
+                <span class="btn-label-desktop">{{ 'PROFILE_FORM.VIEW_PROFILE' | translate }}</span>
+                <span class="btn-label-mobile">{{ 'PROFILE_FORM.VIEW_PROFILE_SHORT' | translate }}</span>
             </button>
         </div>
     </form>
 
-
-
-    <div class="preview-section" *ngIf="showPlanSection">
-        <h2 class="section-title">{{ 'PROFILE_FORM.PREVIEW_TITLE' | translate }}</h2>
-        <app-profile-preview [profile]="previewProfile"></app-profile-preview>
-    </div>
-
-    <app-planes *ngIf="showPlanSection" [selectedPlanId]="selectedPlanId"
-        (planSelected)="planSelected($event)"></app-planes>
+    <app-plan-selection-modal
+        [isOpen]="showPlanModal"
+        [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
+        [updateMode]="true"
+        (close)="closePlanModal()"
+        (planSelected)="handlePlanSelectionFromModal($event)">
+    </app-plan-selection-modal>
 
 
 

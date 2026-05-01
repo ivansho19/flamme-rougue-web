@@ -145,6 +145,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return user ? JSON.parse(user) : null;
   }
 
+  isClient(): boolean {
+    const client = localStorage.getItem('client');
+    return client ? JSON.parse(client) : false;
+  }
+
   navigateToProfile(){
     const user = localStorage.getItem('user');
     if(user){

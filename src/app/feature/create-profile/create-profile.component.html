@@ -8,6 +8,9 @@
       <mat-expansion-panel [expanded]="true" class="accordion-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-description>
+            <span class="panel-status" *ngIf="isImagesComplete">Completado</span>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="images-card fade-in">
@@ -53,6 +56,9 @@
       <mat-expansion-panel class="accordion-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-description>
+            <span class="panel-status" *ngIf="isBasicInfoComplete">Completado</span>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div formGroupName="basicInfo" class="card">
@@ -164,6 +170,9 @@
       <mat-expansion-panel class="accordion-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-description>
+            <span class="panel-status" *ngIf="isPersonalDataComplete">Completado</span>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div formGroupName="personalData" class="card">
@@ -281,6 +290,9 @@
       <mat-expansion-panel class="accordion-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.SERVICES_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-description>
+            <span class="panel-status" *ngIf="isServicesComplete">Completado</span>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="card">
@@ -301,6 +313,9 @@
       <mat-expansion-panel class="accordion-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.REAL_DATA_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-description>
+            <span class="panel-status" *ngIf="isRealDataComplete">Completado</span>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div formGroupName="realData" class="card">

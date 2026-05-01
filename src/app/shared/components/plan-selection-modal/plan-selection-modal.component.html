@@ -3,10 +3,15 @@
     
     <!-- Header -->
     <div class="modal-header">
-      <div class="header-content">
+      <div class="header-content" *ngIf="!updateMode">
         <div class="progress-badge">100%</div>
         <h2>¡Perfil completado!</h2>
         <p class="header-subtitle">{{ profileName }}, estás listo para anunciarte con nosotros</p>
+      </div>
+       <div class="header-content" *ngIf="updateMode">
+        <div class="progress-badge">100%</div>
+        <h2>¡Elige un plan para actualizar!</h2>
+        <p class="header-subtitle">{{ profileName }}, estás listo para actualizar tu plan con nosotros</p>
       </div>
       <button class="close-btn" (click)="onClose()">✕</button>
     </div>
@@ -100,7 +105,7 @@
       <div class="plan-info">
         <div class="info-item">
           <i class="bi bi-credit-card"></i>
-          <span>Pago seguro via Stripe</span>
+          <span>Pago seguro via PayPal</span>
         </div>
         <div class="info-item">
           <i class="bi bi-arrow-repeat"></i>
@@ -119,11 +124,10 @@
       <button class="btn btn-secondary" (click)="onClose()">
         Decidir después
       </button>
-      <button class="btn btn-primary" 
-        (click)="confirmPlan()"
-        [disabled]="!selectedPlanId">
-        Confirmar Plan y Publicar
-      </button>
+      <div class="paypal-wrapper">
+        <div #paypalButtons></div>
+        <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+      </div>
     </div>
 
   </div>

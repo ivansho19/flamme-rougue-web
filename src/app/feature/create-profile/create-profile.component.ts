@@ -548,6 +548,30 @@ export class ProfileEditComponent implements OnInit {
         return basicInfoComplete && personalDataComplete && realDataComplete && hasImage;
     }
 
+    get isImagesComplete(): boolean {
+        return !!this.profile?.profileImage;
+    }
+
+    get isBasicInfoComplete(): boolean {
+        const basicInfoGroup = this.profileForm?.get('basicInfo');
+        return !!basicInfoGroup?.valid;
+    }
+
+    get isPersonalDataComplete(): boolean {
+        const personalDataGroup = this.profileForm?.get('personalData');
+        return !!personalDataGroup?.valid;
+    }
+
+    get isServicesComplete(): boolean {
+        const value = this.profileForm?.get('posibilities')?.value ?? [];
+        return Array.isArray(value) ? value.length > 0 : !!value;
+    }
+
+    get isRealDataComplete(): boolean {
+        const realDataGroup = this.profileForm?.get('realData');
+        return !!realDataGroup?.valid;
+    }
+
     get canPublish(): boolean {
         return this.isProfileComplete && !!this.selectedPlanId;
     }

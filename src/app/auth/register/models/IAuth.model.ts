@@ -14,5 +14,6 @@ export interface IAuthResponse {
     name: string;
     email: string;
     profileId?: any;
+    client?: boolean;
     token: string;
 }

@@ -10,6 +10,7 @@ export interface IProfileResponse {
   bio?: string;
   phone?: string;
   city?: string;
+  zone?: string;
   availability?: string[];
   availabity?: string[] | string;
   gender?: string;

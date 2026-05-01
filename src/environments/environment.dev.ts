@@ -12,7 +12,7 @@ export const environment = {
   api_topRojo: `${urlBase}/top-rojo`,
   api_client_by_email: `${urlBase}/auth/client`,
   api_comments: `${urlBase}/comments`,
-  paypalClientId: '',
+  paypalClientId: 'AVhZngsPo6biCfIKcqWQ6TK3f9Pl_nCnqopcE7IrbDLONt9gqu0LceWpIhAL28arCbWc0kA1rSODytHt',
   paypalCurrency: 'EUR',
 
 };
