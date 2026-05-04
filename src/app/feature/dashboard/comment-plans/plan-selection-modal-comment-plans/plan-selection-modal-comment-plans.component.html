@@ -1,0 +1,51 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()"></div>
+
+<div class="modal-container" *ngIf="isOpen">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-content">
+        <h2>{{ 'COMMENT_PLANS.MODAL_TITLE' | translate }}</h2>
+        <p class="subtitle">{{ 'COMMENT_PLANS.MODAL_SUBTITLE' | translate }}</p>
+      </div>
+      <button class="close-btn" type="button" (click)="onClose()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="plans-container">
+      <div
+        class="plan-card"
+        *ngFor="let plan of plans"
+        [class.selected]="selectedPlanId === plan.id"
+        [class.disabled]="!plan.selectable"
+        (click)="selectPlan(plan.id)">
+        <div class="plan-header">
+          <h3>{{ plan.name | translate }}</h3>
+          <span class="duration" *ngIf="plan.badge">{{ plan.badge | translate }}</span>
+        </div>
+
+        <div class="plan-price">
+          <span class="price">{{ plan.price }}</span>
+          <span class="period">/ {{ plan.period | translate }}</span>
+        </div>
+
+        <ul class="plan-features">
+          <li *ngFor="let feature of plan.features">✔ {{ feature | translate }}</li>
+        </ul>
+
+        <div class="plan-check" *ngIf="selectedPlanId === plan.id && plan.selectable">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" type="button" (click)="onClose()">
+        {{ 'COMMENT_PLANS.MODAL_CLOSE' | translate }}
+      </button>
+      <button class="btn btn-primary" type="button" (click)="confirmSelection()">
+        {{ 'COMMENT_PLANS.MODAL_CONFIRM' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

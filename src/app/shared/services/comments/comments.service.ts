@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { AuthHeaders } from '../../clases/getAuthHeaders';
 
 export interface CommentAuthor {
   name: string;
@@ -23,6 +24,7 @@ export interface CommentItem {
 })
 export class CommentsService {
   private readonly apiComments = environment.api_comments;
+  stateComment = new Subject<{ state: boolean }>();
 
   constructor(private http: HttpClient) {}
 
@@ -31,10 +33,18 @@ export class CommentsService {
   }
 
   createComment(payload: { profileId: string; authorId: string; text: string; rating?: number | null }): Observable<any> {
-    return this.http.post(`${this.apiComments}`, payload);
+    return this.http.post(`${this.apiComments}`, payload, { headers: AuthHeaders.getAuthHeaders() });
   }
 
   addProviderReply(commentId: string, payload: { replyText: string; userId: string }): Observable<any> {
-    return this.http.patch(`${this.apiComments}/${commentId}/reply`, payload);
+    return this.http.patch(`${this.apiComments}/${commentId}/reply`, payload, { headers: AuthHeaders.getAuthHeaders() });
+  }
+  
+  getStateComment() {
+    return this.stateComment.asObservable();
+  }
+
+  setStateComment(state: boolean) {
+    this.stateComment.next({state})
   }
 }

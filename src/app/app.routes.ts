@@ -57,6 +57,11 @@ export const routes: Routes = [
         path: 'dashboard/my-top-rojo',
         loadChildren: () =>
           import('./feature/dashboard/my-top-rojo/my-top-rojo.module').then((m) => m.MyTopRojoModule),
+      },
+      {
+        path: 'dashboard/comment-plans',
+        loadChildren: () =>
+          import('./feature/dashboard/comment-plans/comment-plans.module').then((m) => m.CommentPlansModule),
       }]
   },
   {

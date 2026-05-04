@@ -11,6 +11,13 @@ export const environment = {
   api_topRojo: `${urlBase}/top-rojo`,
   api_client_by_email: `${urlBase}/auth/client`,
   api_comments: `${urlBase}/comments`,
+  api_ratings_toggle: `${urlBase}/ratings/toggle`,
+  api_ratings_profile: `${urlBase}/ratings/profile`,
+  api_comment_plans_activate: `${urlBase}/comment-plans/activate`,
+  api_comment_plans_status: `${urlBase}/comment-plans/status`,
+  api_comment_plans_cancel: `${urlBase}/comment-plans/cancel`,
+  api_paypal_create_order: `${urlBase}/paypal/create-order`,
+  api_paypal_capture_order: `${urlBase}/paypal/capture-order`,
   paypalClientId: 'AVhZngsPo6biCfIKcqWQ6TK3f9Pl_nCnqopcE7IrbDLONt9gqu0LceWpIhAL28arCbWc0kA1rSODytHt',
   paypalCurrency: 'EUR',
 

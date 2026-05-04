@@ -10,7 +10,7 @@ import { Route, Router } from '@angular/router';
 
 export class LayoutComponent implements OnInit, OnDestroy {
   public subscription = new Subscription
-  public loader: any = {}
+  public loader = false
   loaderSubscription: Subscription = new Subscription;
   isHomePage = false;
 

@@ -9,7 +9,7 @@
         <span class="username" *ngIf="getUserName()">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
         <div class="header-icons">
             <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
-            <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
+            <button *ngIf="isClient()" (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
                     [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
@@ -24,6 +24,9 @@
             </div>
             <button class="publish-top-btn" *ngIf="getUserName() && isClient()" (click)="openTopRojoModal()" [title]="'HEADER.PUBLISH_TOP' | translate">
                 <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
+            </button>
+            <button class="publish-top-btn" *ngIf="getUserName() && !isClient()" (click)="navigateToCommentPlans()" [title]="'HEADER.COMMENT_PLANS' | translate">
+                <i class="bi bi-chat-left-text"></i> {{ 'HEADER.COMMENT_PLANS' | translate }}
             </button>
             <button class="icon-btn" *ngIf="getUserName()" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
         </div>
@@ -48,6 +51,9 @@
             </button>
             <button class="mobile-item publish-top" type="button" *ngIf="getUserName()" (click)="openTopRojoModal(); closeMobileMenu()">
                 <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
+            </button>
+            <button class="mobile-item publish-top" type="button" *ngIf="getUserName() && !isClient()" (click)="navigateToCommentPlans(); closeMobileMenu()">
+                <i class="bi bi-chat-left-text"></i> {{ 'HEADER.COMMENT_PLANS' | translate }}
             </button>
             <div class="mobile-divider"></div>
             <div class="mobile-languages">

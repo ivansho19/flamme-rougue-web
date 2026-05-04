@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { PlanOption } from '../../model/planes.model';
 import { environment } from '../../../../environments/environment';
+import { PaymentService } from '../../services/payment/payment.service';
 
 declare global {
   interface Window {
@@ -77,6 +79,8 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     },
   ];
 
+  constructor(private paymentService: PaymentService) {}
+
   ngOnInit(): void {
     // Pre-seleccionar Plan Pro por defecto
     this.selectedPlanId = 2;
@@ -127,6 +131,11 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
       return;
     }
 
+    if (!localStorage.getItem('token')) {
+      this.paypalError = 'Debes iniciar sesion para pagar con PayPal.';
+      return;
+    }
+
     const container = this.paypalButtons.nativeElement;
     container.innerHTML = '';
 
@@ -145,7 +154,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
             shape: 'rect',
             label: 'pay'
           },
-          createOrder: (_data: any, actions: any) => {
+          createOrder: async (_data: any, actions: any) => {
             const plan = this.getSelectedPlan();
             if (!plan) {
               this.paypalError = 'Selecciona un plan para continuar.';
@@ -155,26 +164,34 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
             const amount = this.parsePlanPrice(plan.price);
             const currency = environment.paypalCurrency || 'EUR';
 
-            return actions.order.create({
-              intent: 'CAPTURE',
-              purchase_units: [
-                {
-                  description: plan.name,
-                  amount: {
-                    currency_code: currency,
-                    value: amount
-                  }
-                }
-              ]
-            });
+            try {
+              const response = await firstValueFrom(
+                this.paymentService.createPayPalOrder(Number(amount), currency)
+              );
+              return response.orderId;
+            } catch (error) {
+              this.paypalError = 'No se pudo crear la orden de PayPal.';
+              return actions.reject();
+            }
           },
-          onApprove: (_data: any, actions: any) => {
-            return actions.order.capture().then(() => {
+          onApprove: async (data: any, actions: any) => {
+            try {
+              const response = await firstValueFrom(
+                this.paymentService.capturePayPalOrder(data.orderID)
+              );
+              if (response.status !== 'COMPLETED') {
+                this.paypalError = 'El pago no se completo correctamente.';
+                return actions.reject();
+              }
+
               const plan = this.getSelectedPlan();
               if (plan) {
                 this.planSelected.emit(plan);
               }
-            });
+            } catch (error) {
+              this.paypalError = 'Error al capturar el pago con PayPal.';
+              return actions.reject();
+            }
           },
           onError: () => {
             this.paypalError = 'Error al procesar el pago con PayPal.';

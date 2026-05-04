@@ -2,10 +2,13 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { CommentsService, CommentItem } from '../../shared/services/comments/comments.service';
+import { RatingsService } from '../../shared/services/ratings/ratings.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { IProfileResponse } from './models/IProfile.model';
 import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
+import { CommentPlansService } from '../../shared/services/comment-plans/comment-plans.service';
+import { CommentPlanStatus } from '../../shared/models/comment-plans.model';
 
 @Component({
     selector: 'app-profiles',
@@ -18,9 +21,9 @@ export class ProfilesComponent implements OnInit {
     profileData: IProfileResponse | null = null;
     fallbackImage = 'assets/images/model.webp';
     showGallery = false;
-    likeCount = 10;
-    dislikeCount = 0;
-    userReaction: 'like' | 'dislike' | null = null;
+    likeCount = 0;
+    userReaction: 'like' | null = null;
+    likeError = '';
     comments: CommentItem[] = [];
     commentsLoading = false;
     commentSubmitting = false;
@@ -29,6 +32,11 @@ export class ProfilesComponent implements OnInit {
     replySubmitting: Record<string, boolean> = {};
     replyError: Record<string, string> = {};
     replyText: Record<string, string> = {};
+    planStatus: CommentPlanStatus | null = null;
+    loading = false;
+    actionLoading = false;
+    error = '';
+    showPlanModal = false;
     private embla: EmblaCarouselType | null = null;
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
@@ -40,7 +48,9 @@ export class ProfilesComponent implements OnInit {
       private router: Router,
       private profileService: ProfileService,
       private commentsService: CommentsService,
-      private translate: TranslateService
+      private ratingsService: RatingsService,
+      private translate: TranslateService,
+      private commentPlansService: CommentPlansService
     ) { }
 
     ngOnInit() {
@@ -57,11 +67,42 @@ export class ProfilesComponent implements OnInit {
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
           this.profileData = response?.profile ?? response ?? null;
+          this.loadLikes();
           this.loadComments();
         },
         error: (error) => {
           console.error('Error cargando perfil:', error);
           this.profileData = null;
+        }
+      });
+    }
+
+    private loadLikes() {
+      if (!this.profileId) {
+        return;
+      }
+
+      this.ratingsService.getLikesCount(this.profileId).subscribe({
+        next: (response) => {
+          this.likeCount = response?.likesCount ?? 0;
+        },
+        error: () => {
+          this.likeCount = 0;
+        }
+      });
+
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        this.userReaction = null;
+        return;
+      }
+
+      this.ratingsService.getUserLikeStatus(this.profileId, userId).subscribe({
+        next: (response) => {
+          this.userReaction = response?.isLiked ? 'like' : null;
+        },
+        error: () => {
+          this.userReaction = null;
         }
       });
     }
@@ -99,7 +140,8 @@ export class ProfilesComponent implements OnInit {
       }
 
       const authorId = localStorage.getItem('userId');
-      if (!authorId) {
+      const token = localStorage.getItem('token');
+      if (!authorId || !token) {
         this.commentError = this.translate.instant('PROFILE.COMMENT_ERROR_LOGIN');
         return;
       }
@@ -118,6 +160,7 @@ export class ProfilesComponent implements OnInit {
         error: (error) => {
           this.commentSubmitting = false;
           this.commentError = error?.error?.message || this.translate.instant('PROFILE.COMMENT_ERROR_GENERIC');
+          this.showPlanModal = true;
         }
       });
     }
@@ -139,7 +182,8 @@ export class ProfilesComponent implements OnInit {
 
     submitReply(comment: CommentItem) {
       const userId = localStorage.getItem('userId');
-      if (!userId) {
+      const token = localStorage.getItem('token');
+      if (!userId || !token) {
         this.replyError[comment._id] = this.translate.instant('PROFILE.COMMENT_REPLY_ERROR_LOGIN');
         return;
       }
@@ -308,30 +352,92 @@ export class ProfilesComponent implements OnInit {
       window.open(url, '_blank');
     }
 
-    toggleReaction(type: 'like' | 'dislike') {
-      if (this.userReaction === type) {
-        this.userReaction = null;
-        if (type === 'like') {
-          this.likeCount = Math.max(0, this.likeCount - 1);
-        } else {
-          this.dislikeCount = Math.max(0, this.dislikeCount - 1);
-        }
+    getStatusPlanService(){
+      this.commentPlansService.getStatus().subscribe({
+      next: (status) => {
+        this.planStatus = status;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'No se pudo cargar el estado del plan.';
+        this.loading = false;
+      }
+    });
+    }
+
+    toggleLike() {
+      const userId = localStorage.getItem('userId');
+      if (!userId || !this.profileId) {
+        this.likeError = 'Debes iniciar sesion para dar like.';
         return;
       }
 
-      if (this.userReaction === 'like') {
-        this.likeCount = Math.max(0, this.likeCount - 1);
-      }
-      if (this.userReaction === 'dislike') {
-        this.dislikeCount = Math.max(0, this.dislikeCount - 1);
-      }
+      this.likeError = '';
 
-      this.userReaction = type;
-      if (type === 'like') {
-        this.likeCount += 1;
-      } else {
-        this.dislikeCount += 1;
-      }
+      const wasLiked = this.userReaction === 'like';
+      this.ratingsService.toggleLike(this.profileId, userId).subscribe({
+        next: (response) => {
+          this.userReaction = response?.isLiked ? 'like' : null;
+          if (response?.isLiked && !wasLiked) {
+            this.likeCount += 1;
+          }
+          if (!response?.isLiked && wasLiked) {
+            this.likeCount = Math.max(0, this.likeCount - 1);
+          }
+        },
+        error: () => {
+          // No UI error specified for likes.
+        }
+      });
     }
+
+    get currentPlanType(): 'free' | 'monthly' | 'annual' {
+    const planType = this.planStatus?.planType;
+    if (planType === 'monthly' || planType === 'annual') {
+      return planType;
+    }
+    return 'free';
+  }
+
+  closePlanModal(): void {
+    this.showPlanModal = false;
+  }
+
+  onPlanSelected(planType: 'monthly' | 'annual'): void {
+    this.showPlanModal = false;
+    this.activatePlan(planType);
+  }
+
+  activatePlan(planType: 'monthly' | 'annual'): void {
+    if (this.actionLoading) {
+      return;
+    }
+
+    this.actionLoading = true;
+    this.commentPlansService.activatePlan(planType).subscribe({
+      next: () => {
+        this.actionLoading = false;
+        this.loadStatus();
+      },
+      error: () => {
+        this.actionLoading = false;
+        this.error = 'No se pudo activar el plan.';
+      }
+    });
+  }
+
+  loadStatus(): void {
+    this.loading = true;
+    this.commentPlansService.getStatus().subscribe({
+      next: (status) => {
+        this.planStatus = status;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'No se pudo cargar el estado del plan.';
+        this.loading = false;
+      }
+    });
+  }
 
 }

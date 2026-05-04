@@ -189,6 +189,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.route.navigate(['/dashboard/my-top-rojo']);
   }
 
+  navigateToCommentPlans() {
+    this.route.navigate(['/dashboard/comment-plans']);
+  }
+
   ngOnDestroy(): void {
     // Limpieza opcional si añades listeners manuales (no necesario con HostListener)
     this.destroy$.next();

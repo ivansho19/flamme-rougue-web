@@ -1,0 +1,76 @@
+<div class="comment-plan-dashboard">
+  <div class="section-header">
+    <h2>
+      <span class="badge-icon"><i class="bi bi-chat-left-text"></i></span>
+      {{ 'COMMENT_PLANS.TITLE' | translate }}
+    </h2>
+  </div>
+
+  <div class="state-card error" *ngIf="error && !loading">
+    {{ error }}
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <app-loader></app-loader>
+  </div>
+
+  <div class="plan-grid" *ngIf="!loading && !error">
+    <div class="plan-card">
+      <div class="plan-header">
+        <div>
+          <h3>{{ planLabel }}</h3>
+          <p class="plan-status">{{ 'COMMENT_PLANS.STATUS_LABEL' | translate }}: {{ planStatus?.status || 'active' }}</p>
+        </div>
+        <span class="plan-badge" [class.free]="!isActivePlan">{{ badgeLabel }}</span>
+      </div>
+
+      <div class="plan-meta">
+        <div>
+          <span class="meta-label">{{ 'COMMENT_PLANS.START' | translate }}</span>
+          <span>{{ planStatus?.startedAt ? (planStatus?.startedAt | date:'mediumDate') : '-' }}</span>
+        </div>
+        <div>
+          <span class="meta-label">{{ 'COMMENT_PLANS.EXPIRES' | translate }}</span>
+          <span>{{ planStatus?.expiresAt ? (planStatus?.expiresAt | date:'mediumDate') : '-' }}</span>
+        </div>
+      </div>
+
+      <div class="usage-block" *ngIf="planStatus?.usage">
+        <div class="usage-header">
+          <span>{{ 'COMMENT_PLANS.USAGE' | translate }}</span>
+          <span class="usage-count">{{ usageLabel }}</span>
+        </div>
+        <div class="usage-bar">
+          <div class="usage-fill" [style.width.%]="usagePercent"></div>
+        </div>
+        <p class="usage-note">{{ 'COMMENT_PLANS.WINDOW' | translate }}: {{ planStatus?.usage?.window }}</p>
+      </div>
+
+      <div class="plan-actions">
+        <button class="btn primary" type="button" (click)="openPlanModal()" [disabled]="actionLoading">
+          {{ isActivePlan ? ('COMMENT_PLANS.CHANGE_PLAN' | translate) : ('COMMENT_PLANS.CHOOSE_PLAN' | translate) }}
+        </button>
+        <button class="btn ghost" type="button" *ngIf="isActivePlan" (click)="cancelPlan()" [disabled]="actionLoading">
+          {{ 'COMMENT_PLANS.CANCEL_PLAN' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>{{ 'COMMENT_PLANS.BENEFITS_TITLE' | translate }}</h3>
+      <ul>
+        <li>{{ 'COMMENT_PLANS.BENEFIT_MONTHLY' | translate }}</li>
+        <li>{{ 'COMMENT_PLANS.BENEFIT_ANNUAL' | translate }}</li>
+        <li>{{ 'COMMENT_PLANS.BENEFIT_BADGE' | translate }}</li>
+      </ul>
+      <div class="info-note">{{ 'COMMENT_PLANS.BENEFIT_NOTE' | translate }}</div>
+    </div>
+  </div>
+
+  <app-plan-selection-modal-comment-plans
+    [isOpen]="showPlanModal"
+    [currentPlan]="currentPlanType"
+    (close)="closePlanModal()"
+    (planSelected)="onPlanSelected($event)">
+  </app-plan-selection-modal-comment-plans>
+</div>
