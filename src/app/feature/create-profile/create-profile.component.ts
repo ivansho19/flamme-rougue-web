@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -53,6 +53,7 @@ export class ProfileEditComponent implements OnInit {
 
     selectedPlanId: number | null = null;
     selectedPlan: PlanOption | null = null;
+    paymentCompleted = false;
     
     showPlanModal = false;
     previousIsProfileComplete = false;
@@ -79,7 +80,8 @@ export class ProfileEditComponent implements OnInit {
         private authService: AuthService,
         private profileService: ProfileService,
         private router: Router,
-        private toastService: ToastService
+        private toastService: ToastService,
+        private ngZone: NgZone
     ) { }
 
     ngOnInit() {
@@ -405,6 +407,7 @@ export class ProfileEditComponent implements OnInit {
     handlePlanSelectionFromModal(plan: PlanOption): void {
         this.selectedPlanId = plan.id;
         this.selectedPlan = plan;
+        this.paymentCompleted = true;
         this.showPlanModal = false;
         console.log('Plan seleccionado desde modal:', plan);
         // Auto-save profile after plan confirmation
@@ -877,6 +880,11 @@ export class ProfileEditComponent implements OnInit {
     }
 
     async saveProfile() {
+                if (!this.paymentCompleted) {
+                    this.toastService.showToast('error', 'Completa el pago con PayPal para publicar tu perfil');
+                    this.showPlanModal = true;
+                    return;
+                }
                 // Validar que haya un plan seleccionado
                 if (!this.selectedPlanId) {
                     this.toastService.showToast('error', 'Falta seleccionar un plan para poder publicar tu perfil');
@@ -1002,13 +1010,12 @@ export class ProfileEditComponent implements OnInit {
                                 }
                                 
                                 // 6️⃣ GUARDAR DATOS REALES (KYC) SI TIENEN DOCUMENTO
-                                this.saveKYCData(objectId).then(() => {
-                                    this.loading = false;
-                                    this.router.navigate(['/home']);
-                                }).catch((kycError) => {
+                                this.saveKYCData(objectId).catch((kycError) => {
                                     console.warn('KYC guardado parcialmente con error:', kycError);
-                                    // Aún así navega al home aunque KYC falle
-                                    this.loading = false;
+                                });
+
+                                this.loading = false;
+                                this.ngZone.run(() => {
                                     this.router.navigate(['/home']);
                                 });
                                 },

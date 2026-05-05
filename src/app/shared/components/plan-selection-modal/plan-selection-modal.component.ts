@@ -4,12 +4,6 @@ import { PlanOption } from '../../model/planes.model';
 import { environment } from '../../../../environments/environment';
 import { PaymentService } from '../../services/payment/payment.service';
 
-declare global {
-  interface Window {
-    paypal?: any;
-  }
-}
-
 @Component({
   selector: 'app-plan-selection-modal',
   templateUrl: './plan-selection-modal.component.html',
@@ -22,6 +16,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   
   @Output() close = new EventEmitter<void>();
   @Output() planSelected = new EventEmitter<PlanOption>();
+  @Output() paymentCompleted = new EventEmitter<PlanOption>();
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
 
@@ -121,9 +116,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   }
 
   private schedulePayPalRender(): void {
-    setTimeout(() => {
-      this.initPayPalButtons();
-    }, 0);
+    setTimeout(() => this.initPayPalButtons(), 0);
   }
 
   private initPayPalButtons(): void {
@@ -141,7 +134,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
 
     this.loadPayPalScript()
       .then(() => {
-        const paypal = window.paypal;
+        const paypal = (window as any).paypal;
         if (!paypal) {
           this.paypalError = 'No se pudo cargar PayPal. Intenta nuevamente.';
           return;
@@ -186,6 +179,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
 
               const plan = this.getSelectedPlan();
               if (plan) {
+                this.paymentCompleted.emit(plan);
                 this.planSelected.emit(plan);
               }
             } catch (error) {
@@ -204,7 +198,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   }
 
   private loadPayPalScript(): Promise<void> {
-    if (window.paypal) {
+    if ((window as any).paypal) {
       return Promise.resolve();
     }
 

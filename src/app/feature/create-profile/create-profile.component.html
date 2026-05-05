@@ -450,7 +450,7 @@
     [isOpen]="showPlanModal"
     [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
     (close)="closePlanModal()"
-    (planSelected)="handlePlanSelectionFromModal($event)">
+    (paymentCompleted)="handlePlanSelectionFromModal($event)">
   </app-plan-selection-modal>
 
   <!-- Publish Button - Triggers plan selection if not chosen yet -->
