@@ -246,6 +246,8 @@ export class ProfileEditComponent implements OnInit {
             personalData: this.fb.group({
                 gender: ['', Validators.required],
                 orientation: ['', Validators.required],
+                alcohol: [''],
+                cigarette: [''],
                 birthDate: [null, [Validators.required, this.minAgeValidator(18)]],
                 age: [null, Validators.required],
                 nationality: ['', Validators.required],
@@ -984,6 +986,8 @@ export class ProfileEditComponent implements OnInit {
                                 availability: availabilityList,
                                 gender: personalData.gender || '',
                                 orientation: personalData.orientation || '',
+                                alcohol: personalData.alcohol || 'No',
+                                cigarette: personalData.cigarette || 'No',
                                 birthDate: personalData.birthDate || null,
                                 age: personalData.age,
                                 nationality: personalData.nationality || '',

@@ -36,4 +36,6 @@ export interface IProfileCreateRequest {
   imagesMain?: IImageData;
   imagesGallery?: IImageData[];
   posibilities?: string[];
+  alcohol?: string;
+  cigarette?: string;
 }

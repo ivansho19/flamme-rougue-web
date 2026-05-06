@@ -29,5 +29,7 @@ export interface IProfileResponse {
   isPremium?: boolean;
   imagesGallery?: IProfileImage[];
   imagesMain?: IProfileImage;
+  alcohol?: string;
+  cigarette?: string;
   posibilities?: string[];
 }

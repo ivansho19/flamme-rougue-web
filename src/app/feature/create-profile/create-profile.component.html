@@ -207,6 +207,24 @@
 
       <div class="grid-2">
         <div class="field">
+          <select formControlName="alcohol">
+            <option value="" disabled selected>{{ 'PROFILE_FORM.ALCOHOL_PLACEHOLDER' | translate }}</option>
+            <option value="Si">{{ 'PROFILE_FORM.YES_OPTION' | translate }}</option>
+            <option value="No">{{ 'PROFILE_FORM.NO_OPTION' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <select formControlName="cigarette">
+            <option value="" disabled selected>{{ 'PROFILE_FORM.CIGARETTE_PLACEHOLDER' | translate }}</option>
+            <option value="Si">{{ 'PROFILE_FORM.YES_OPTION' | translate }}</option>
+            <option value="No">{{ 'PROFILE_FORM.NO_OPTION' | translate }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
           <mat-form-field appearance="outline" class="full-width">
             <input matInput [matDatepicker]="birthPicker" formControlName="birthDate" placeholder="{{ 'PROFILE_FORM.BIRTHDATE_PLACEHOLDER' | translate }}">
             <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
