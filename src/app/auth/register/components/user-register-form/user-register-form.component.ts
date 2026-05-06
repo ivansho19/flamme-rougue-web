@@ -80,6 +80,7 @@ export class UserRegisterFormComponent implements OnInit {
                     localStorage.setItem('user', JSON.stringify(response.name));
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('userId', response._id);
+                    localStorage.setItem('client', 'false');
                     this.router.navigate(['/home']);
                 },
                 error: (error) => {
