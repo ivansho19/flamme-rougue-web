@@ -1012,6 +1012,8 @@ export class ProfileEditComponent implements OnInit {
                                 if (storedProfileId) {
                                     localStorage.setItem('profileId', storedProfileId);
                                 }
+
+                                localStorage.setItem('client', 'true');
                                 
                                 // 6️⃣ GUARDAR DATOS REALES (KYC) SI TIENEN DOCUMENTO
                                 this.saveKYCData(objectId).catch((kycError) => {

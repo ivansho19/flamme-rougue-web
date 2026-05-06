@@ -9,7 +9,7 @@
         <span class="username" *ngIf="getUserName()">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
         <div class="header-icons">
             <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
-            <button *ngIf="isClient()" (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
+            <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
                     [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
