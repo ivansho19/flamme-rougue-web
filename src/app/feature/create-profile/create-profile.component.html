@@ -138,7 +138,20 @@
               [class.input-error]="isInvalid('basicInfo.phone')">
           </div>
           <div class="error" *ngIf="isInvalid('basicInfo.phone')">
-            {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+            <span *ngIf="profileForm.get('basicInfo.phone')?.errors?.['required']">
+              {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+            </span>
+            <span *ngIf="profileForm.get('basicInfo.phone')?.errors?.['pattern']">
+              {{ 'PROFILE_FORM.PHONE_NUMERIC_ERROR' | translate }}
+            </span>
+            <span *ngIf="profileForm.get('basicInfo.phone')?.errors?.['maxlength']">
+              {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
+            </span>
+          </div>
+          <div class="error" *ngIf="isInvalid('basicInfo.phonePrefix')">
+            <span *ngIf="profileForm.get('basicInfo.phonePrefix')?.errors?.['maxlength']">
+              {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
+            </span>
           </div>
         </div>
 
@@ -377,8 +390,17 @@
                 placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}"
                 [class.input-error]="isInvalid('realData.contactPhone')">
               <div class="error" *ngIf="isInvalid('realData.contactPhone')">
+              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['required']">
                 {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+              </span>
+              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['pattern']">
+                {{ 'PROFILE_FORM.CONTACT_PHONE_NUMERIC_ERROR' | translate }}
+              </span>
+              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['maxlength']">
+                {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
+              </span>
               </div>
+
             </div>
           </div>
 
