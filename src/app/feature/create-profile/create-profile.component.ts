@@ -974,12 +974,11 @@ export class ProfileEditComponent implements OnInit {
                             : typeof posibilitiesValue === 'string'
                                 ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
                                 : [];
-
                         const profilePayload: IProfileCreateRequest = {
                                 objectId,
                                 displayName: basicInfo.publicName || '',
                                 bio: basicInfo.description || '',
-                            phone: this.getPhoneWithPrefix(basicInfo),
+                                phone: this.getPhoneWithPrefix(basicInfo),
                                 country: basicInfo.country || '',
                                 city: basicInfo.city || '',
                                 zone: basicInfo.zone || '',
@@ -988,6 +987,8 @@ export class ProfileEditComponent implements OnInit {
                                 orientation: personalData.orientation || '',
                                 alcohol: personalData.alcohol || 'No',
                                 cigarette: personalData.cigarette || 'No',
+                                isActiveProfile: !!this.paymentCompleted,
+                                isVerify: false,
                                 birthDate: personalData.birthDate || null,
                                 age: personalData.age,
                                 nationality: personalData.nationality || '',

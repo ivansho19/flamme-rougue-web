@@ -14,6 +14,7 @@ export class CardComponent {
     @Input() plan: string[] | null = null;
     @Input() buttonText: string = 'Go somewhere';
     @Input() buttonUrl: string = '#';
+    @Input() isVerified: boolean = false;
 
     get planBadgeLabel(): string | null {
         if (this.plan && this.plan[0] === '2') {

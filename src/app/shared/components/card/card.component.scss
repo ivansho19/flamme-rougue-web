@@ -132,7 +132,18 @@
     color: #7f0a16;
     font-weight: 600;
     font-size: 0.9rem;
-    flex-wrap: wrap;
+  }
+
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+  }
+
+  .verified-badge.is-hidden {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .city-badge {

@@ -14,8 +14,10 @@
       <p class="custom-card-describe">{{ describe }}</p>
     </div>
     <div class="verified-row">
-      <span class="verified-icon" aria-hidden="true">&#10003;</span>
-      <span class="verified-text">Verificado</span>
+      <span class="verified-badge" [class.is-hidden]="!isVerified">
+        <span class="verified-icon" aria-hidden="true">&#10003;</span>
+        <span class="verified-text">{{ 'PROFILE.VERIFIED' | translate }}</span>
+      </span>
       <span class="city-badge" *ngIf="city">
         <span class="city-icon material-icons" aria-hidden="true">place</span>
         <span class="city-text">{{ city }}</span>

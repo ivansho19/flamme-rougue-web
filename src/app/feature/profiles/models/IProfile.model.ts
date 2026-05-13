@@ -32,4 +32,6 @@ export interface IProfileResponse {
   alcohol?: string;
   cigarette?: string;
   posibilities?: string[];
+  isActiveProfile?: boolean;
+  isVerify?: boolean;
 }

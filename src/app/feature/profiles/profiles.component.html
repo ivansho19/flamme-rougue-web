@@ -36,8 +36,8 @@
       <div class="profile-divider"></div>
 
       <div class="badges">
-        <span class="badge gold" *ngIf="planBadgeLabel">★ {{ 'PROFILE.GOLD' | translate }}</span>
-        <span class="badge verified">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
+        <!-- <span class="badge gold" *ngIf="planBadgeLabel">★ {{ 'PROFILE.GOLD' | translate }}</span> -->
+        <span class="badge verified" *ngIf="profileData.isVerify">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
       </div>
 
       <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>

@@ -38,4 +38,6 @@ export interface IProfileCreateRequest {
   posibilities?: string[];
   alcohol?: string;
   cigarette?: string;
+  isActiveProfile?: boolean;
+  isVerify?: boolean;
 }
