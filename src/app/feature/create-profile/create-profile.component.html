@@ -342,7 +342,7 @@
         </div>
       </mat-expansion-panel>
 
-      <mat-expansion-panel class="accordion-panel">
+      <mat-expansion-panel class="accordion-panel" (opened)="kycInfoModal.open()">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ 'PROFILE_FORM.REAL_DATA_TITLE' | translate }}</mat-panel-title>
           <mat-panel-description>
@@ -503,5 +503,9 @@
     (click)="publishProfile()">
     {{ selectedPlanId ? ('PROFILE_FORM.PUBLISH_PROFILE' | translate) : 'Elige tu plan y publica tu perfil' }}
   </button>
+  <app-kyc-info-modal
+    #kycInfoModal
+    imageSrc="assets/images/kyc_es.png">
+  </app-kyc-info-modal>
   <app-loader *ngIf="loading"></app-loader>
 </div>

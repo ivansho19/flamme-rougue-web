@@ -1,0 +1,79 @@
+.kyc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 18, 18, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  opacity: 0;
+  animation: kycFadeIn 220ms ease-out forwards;
+}
+
+.kyc-modal {
+  width: min(620px, 92vw);
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  transform: translateY(10px) scale(0.98);
+  animation: kycSlideIn 240ms ease-out forwards;
+}
+
+.kyc-modal img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.kyc-modal-body {
+  padding: 1.25rem 1.5rem 0.5rem;
+}
+
+.kyc-modal-body h3 {
+  margin: 0 0 0.5rem;
+  color: #7f0000;
+  font-size: 1.1rem;
+}
+
+.kyc-modal-body p {
+  margin: 0;
+  color: #444;
+  line-height: 1.45;
+}
+
+.kyc-modal-actions {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kyc-modal-close {
+  border: none;
+  border-radius: 999px;
+  background: #a60d0d;
+  color: #ffffff;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@keyframes kycFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kycSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

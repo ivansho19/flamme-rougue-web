@@ -1,0 +1,14 @@
+<div class="kyc-modal-backdrop" *ngIf="isOpen" (click)="onClose()">
+  <div class="kyc-modal" (click)="$event.stopPropagation()">
+    <img [src]="imageSrc" alt="KYC">
+    <div class="kyc-modal-body">
+      <h3>{{ 'PROFILE_FORM.KYC_INFO_TITLE' | translate }}</h3>
+      <p>{{ 'PROFILE_FORM.KYC_INFO_BODY' | translate }}</p>
+    </div>
+    <div class="kyc-modal-actions">
+      <button type="button" class="kyc-modal-close" (click)="onClose()">
+        {{ 'PROFILE_FORM.KYC_INFO_BUTTON' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

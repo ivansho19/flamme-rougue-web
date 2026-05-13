@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TopRojoModalComponent } from './top-rojo-modal/top-rojo-modal.component';
 import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selection-modal.component';
 import { FlagsComponent } from './flags/flags.component';
+import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { FlagsComponent } from './flags/flags.component';
     ToastAlertComponent,
     TopRojoModalComponent,
     PlanSelectionModalComponent,
-    FlagsComponent
+    FlagsComponent,
+    KycInfoModalComponent
   ],
   exports: [
     LoaderComponent,
@@ -46,7 +48,8 @@ import { FlagsComponent } from './flags/flags.component';
     TranslateModule,
     TopRojoModalComponent,
     PlanSelectionModalComponent,
-    FlagsComponent
+    FlagsComponent,
+    KycInfoModalComponent
   ],
   imports: [
     CommonModule,

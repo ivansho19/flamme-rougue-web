@@ -48,7 +48,6 @@ export class ProfileEditComponent implements OnInit {
     profileData: any;
     clientData: any;
     userId: string | null = null; // Reemplaza con el ID real del usuario
-
     profileForm!: FormGroup;
 
     selectedPlanId: number | null = null;

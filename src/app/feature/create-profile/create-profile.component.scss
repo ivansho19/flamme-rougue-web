@@ -518,6 +518,7 @@ input, textarea, select {
   transition: all .3s ease;
 }
 
+
 .drop-zone.dragging::after {
   box-shadow: inset 0 0 40px rgba(183,28,28,0.2);
 }
