@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { TopRojoService } from '../../../shared/services/top-rojo/top-rojo.service';
 import { CloudinaryService } from '../../../shared/services/cloudinary/cloudinary.service';
 import { ProfileService } from '../../../shared/services/profile/profile.service';
@@ -43,7 +44,8 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
     private topRojoService: TopRojoService,
     private cloudinaryService: CloudinaryService,
     private profileService: ProfileService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -121,7 +123,16 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
    * Abrir modal para crear TOP ROJO
    */
   openCreateForm(): void {
-    console.log('[MyTopRojo] openCreateForm - Abriendo formulario de creación');
+    const profileIdFromLS = localStorage.getItem('profileId');
+    const finalProfileId = profileIdFromLS || this.profileId;
+
+    if (!finalProfileId) {
+      this.toastService.showToast('Error','Primero debes crear tu perfil para publicar un TOP ROJO', 'error', 5);
+      setTimeout(() => {
+        this.router.navigate(['/create-profile']);
+      }, 5000);
+      return;
+    }
     this.showCreateForm = true;
   }
 

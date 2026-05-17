@@ -156,6 +156,7 @@
   padding: 20px 24px 24px;
   border-top: 1px solid #f0f0f0;
   background: #faf6f0;
+  align-items: center;
 
   .btn {
     flex: 1;
@@ -175,6 +176,17 @@
     background: #a20f1f;
     color: #f2daac;
   }
+}
+
+.paypal-wrapper {
+  flex: 2;
+  min-height: 44px;
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #e74c3c;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 520px) {

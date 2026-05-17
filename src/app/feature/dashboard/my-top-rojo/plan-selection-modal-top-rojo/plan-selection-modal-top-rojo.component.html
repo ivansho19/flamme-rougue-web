@@ -49,9 +49,10 @@
       <button class="btn btn-secondary" (click)="closeModal()">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
-      <button class="btn btn-primary" (click)="confirmSelection()">
-        {{ 'TOP_ROJO.CONFIRM_PLAN' | translate }}
-      </button>
+      <div class="paypal-wrapper">
+        <div #paypalButtons></div>
+        <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+      </div>
     </div>
   </div>
 </div>

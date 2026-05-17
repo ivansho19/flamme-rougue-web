@@ -43,9 +43,10 @@
       <button class="btn btn-secondary" type="button" (click)="onClose()">
         {{ 'COMMENT_PLANS.MODAL_CLOSE' | translate }}
       </button>
-      <button class="btn btn-primary" type="button" (click)="confirmSelection()">
-        {{ 'COMMENT_PLANS.MODAL_CONFIRM' | translate }}
-      </button>
+      <div class="paypal-wrapper">
+        <div #paypalButtons></div>
+        <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+      </div>
     </div>
   </div>
 </div>

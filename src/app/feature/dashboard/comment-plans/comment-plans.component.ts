@@ -56,7 +56,7 @@ export class CommentPlansComponent implements OnInit {
     this.commentPlansService.activatePlan(planType).subscribe({
       next: () => {
         this.actionLoading = false;
-        this.loadStatus();
+         this.loadStatus();
       },
       error: () => {
         this.actionLoading = false;

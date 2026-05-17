@@ -417,13 +417,18 @@ export class ProfilesComponent implements OnInit {
     this.commentPlansService.activatePlan(planType).subscribe({
       next: () => {
         this.actionLoading = false;
-        this.loadStatus();
+        this.refreshPlanStatus();
       },
       error: () => {
         this.actionLoading = false;
         this.error = 'No se pudo activar el plan.';
       }
     });
+  }
+
+  private refreshPlanStatus(): void {
+    this.loadStatus();
+    setTimeout(() => this.loadStatus(), 1500);
   }
 
   loadStatus(): void {
