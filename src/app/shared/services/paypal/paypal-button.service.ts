@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 type PayPalButtonsConfig = {
   style?: Record<string, string>;
+  fundingSource?: unknown;
   createOrder: (data: unknown, actions: any) => Promise<string> | string;
   onApprove: (data: any, actions: any) => Promise<void> | void;
   onError?: (error: unknown) => void;
@@ -32,7 +33,16 @@ export class PayPalButtonService {
       throw new Error('No se pudo cargar PayPal. Intenta nuevamente.');
     }
 
-    paypal.Buttons(config).render(container);
+    const mergedConfig: PayPalButtonsConfig = {
+      ...config,
+      fundingSource: (window as any).paypal?.FUNDING?.PAYPAL,
+      style: {
+        ...config.style,
+        label: 'paypal'
+      }
+    };
+
+    paypal.Buttons(mergedConfig).render(container);
   }
 
   private ensureSdkLoaded(clientId: string, currency: string): Promise<void> {
@@ -46,7 +56,7 @@ export class PayPalButtonService {
 
     this.scriptPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}&disable-funding=card`;
       script.async = true;
       script.onload = () => resolve();
       script.onerror = () => reject();

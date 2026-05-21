@@ -24,6 +24,11 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'admin/dashboard',
+    loadChildren: () =>
+      import('./feature/admin/admin-dashboard/admin-dashboard.module').then((m) => m.AdminDashboardModule),
+  },
+  {
     path: '',
     component: LayoutComponent,
     children: [

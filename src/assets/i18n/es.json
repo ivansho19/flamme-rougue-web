@@ -47,6 +47,7 @@
     "COMMENT_REPLY_SUBMIT": "Responder",
     "COMMENT_REPLY_SUBMITTING": "Enviando...",
     "COMMENT_ERROR_REQUIRED": "Ingresa un comentario.",
+    "COMMENT_ERROR_CLIENT": "Solo usuarios pueden comentar.",
     "COMMENT_ERROR_LOGIN": "Debes iniciar sesión para comentar.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Ingresa una respuesta.",
     "COMMENT_REPLY_ERROR_LOGIN": "Debes iniciar sesión para responder.",
@@ -146,6 +147,12 @@
     "VIEW_PROFILE_SHORT": "Ver perfil",
     "REQUIRED_ERROR": "Este campo es obligatorio",
     "INVALID_EMAIL_ERROR": "Formato de email inválido"
+    ,
+    "TOAST_PAYPAL_REQUIRED": "Completa el pago con PayPal para publicar tu perfil",
+    "TOAST_WHATSAPP_PENDING": "Pago por WhatsApp iniciado. Tu perfil quedara en validacion hasta confirmar el pago.",
+    "TOAST_PLAN_REQUIRED": "Falta seleccionar un plan para poder publicar tu perfil",
+    "TOAST_KYC_WARNING": "Perfil creado, pero hubo un error al guardar los datos reales",
+    "INACTIVE_WARNING": "Tu perfil se encuentra inactivo. Comunicate con el administrador para activarlo."
   },
   "SERVICES": {
     "RELAXING_MASSAGE": "Masaje relajante",
@@ -181,6 +188,119 @@
     "KG": "kg",
     "CITY": "Ciudad",
     "CANCEL": "Cancelar"
+  },
+  "WHATSAPP_CONFIRM": {
+    "TITLE": "Confirmar pago por WhatsApp",
+    "CTA": "Ir a WhatsApp",
+    "PROFILE_MESSAGE": "Tu perfil quedara en validacion hasta que se confirme el pago por WhatsApp.\nUna vez validado, nuestro equipo lo publicara y recibiras la confirmacion.",
+    "TOP_ROJO_MESSAGE": "El TOP ROJO se activara cuando se confirme el pago por WhatsApp.\nNuestro equipo validara el pago y lo publicara durante el tiempo del plan elegido.",
+    "COMMENT_PLANS_MESSAGE": "El plan de comentarios se activara cuando se confirme el pago por WhatsApp.\nNuestro equipo validara el pago y se habilitaran los comentarios segun el plan elegido."
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Dashboard",
+    "SUBTITLE": "Resumen general de la plataforma",
+    "HEADER": {
+      "ADMIN": "Administrador"
+    },
+    "SIDEBAR": {
+      "SUBTITLE": "Admin Panel",
+      "DASHBOARD": "Dashboard",
+      "MANAGEMENT": "Gestion",
+      "PROFILES": "Perfiles",
+      "PLANS": "Planes",
+      "PAYMENTS": "Pagos",
+      "TRANSACTIONS": "Transacciones",
+      "KYC": "Verificacion KYC",
+      "DOCUMENTS": "Documentos",
+      "PENDING": "Pendientes",
+      "REPORTS": "Reportes",
+      "STATS": "Estadisticas",
+      "CHARTS": "Graficas",
+      "ACTIVITY": "Actividad",
+      "CONFIG": "Configuracion",
+      "USERS": "Usuarios",
+      "SETTINGS": "Ajustes",
+      "NOTIFICATIONS": "Notificaciones",
+      "LOGOUT": "Cerrar sesion"
+    },
+    "CARDS": {
+      "TOTAL_PROFILES": "Perfiles totales",
+      "ACTIVE_PROFILES": "Perfiles activos",
+      "KYC_PENDING": "Pendientes KYC",
+      "POPULAR_PLAN": "Plan mas popular",
+      "VS_LAST_MONTH": "vs. mes anterior",
+      "REQUIRES_REVIEW": "requiere revision",
+      "OF_TOTAL": "del total"
+    },
+    "TABLE": {
+      "TITLE": "Todos los perfiles",
+      "SUBTITLE": "Administra y controla todos los perfiles creados en la plataforma",
+      "SEARCH": "Buscar perfil...",
+      "FILTERS": "Filtros",
+      "USER": "Usuario",
+      "EMAIL": "Email",
+      "PLAN": "Plan",
+      "PLAN_NONE": "Sin plan",
+      "STATUS": "Estatus",
+      "KYC": "KYC",
+      "CREATED": "Creado el",
+      "ACTIONS": "Acciones",
+      "EMPTY": "No hay perfiles para mostrar"
+    },
+    "STATUS": {
+      "ACTIVE": "Activo",
+      "INACTIVE": "Inactivo"
+    },
+    "KYC": {
+      "TITLE": "Verificacion KYC",
+      "SUBTITLE": "Revisa y valida documentos de identidad",
+      "UPLOADED": "Subido:",
+      "VERIFIED": "Verificado",
+      "PENDING": "Pendiente",
+      "REJECTED": "Rechazado",
+      "TAB_ALL": "Todos",
+      "TAB_PENDING": "Pendientes",
+      "REJECT_DISABLED": "Endpoint de rechazo pendiente",
+      "VIEW_ALL": "Ver todos los pendientes",
+      "EMPTY": "No hay KYC pendientes"
+    },
+    "CHART": {
+      "TITLE": "Perfiles creados ultimamente",
+      "SUBTITLE": "Crecimiento de nuevos perfiles",
+      "RANGE_30": "Ultimos 30 dias",
+      "TOTAL_NEW": "Total nuevos",
+      "DAILY_AVG": "Promedio diario"
+    },
+    "CONFIRM": {
+      "DELETE_TITLE": "Eliminar perfil",
+      "DELETE_MESSAGE": "Esta accion eliminara el perfil de forma permanente.",
+      "DELETE_CTA": "Eliminar",
+      "VERIFY_TITLE": "Verificar KYC",
+      "VERIFY_MESSAGE": "Confirmas que los documentos son validos?",
+      "VERIFY_CTA": "Verificar"
+    },
+    "TOAST": {
+      "LOAD_ERROR_TITLE": "Error",
+      "LOAD_ERROR_MESSAGE": "No se pudo cargar el panel administrativo.",
+      "ACTIVATE_SUCCESS_TITLE": "Perfil activado",
+      "ACTIVATE_SUCCESS_MESSAGE": "El perfil se activo correctamente.",
+      "ACTIVATE_ERROR_TITLE": "Error",
+      "ACTIVATE_ERROR_MESSAGE": "No se pudo activar el perfil.",
+      "DEACTIVATE_SUCCESS_TITLE": "Perfil desactivado",
+      "DEACTIVATE_SUCCESS_MESSAGE": "El perfil se desactivo correctamente.",
+      "DEACTIVATE_ERROR_TITLE": "Error",
+      "DEACTIVATE_ERROR_MESSAGE": "No se pudo desactivar el perfil.",
+      "DELETE_SUCCESS_TITLE": "Perfil eliminado",
+      "DELETE_SUCCESS_MESSAGE": "El perfil se elimino correctamente.",
+      "DELETE_ERROR_TITLE": "Error",
+      "DELETE_ERROR_MESSAGE": "No se pudo eliminar el perfil.",
+      "VERIFY_SUCCESS_TITLE": "KYC verificado",
+      "VERIFY_SUCCESS_MESSAGE": "El KYC se verifico correctamente.",
+      "VERIFY_ERROR_TITLE": "Error",
+      "VERIFY_ERROR_MESSAGE": "No se pudo verificar el KYC.",
+      "VERIFY_MISSING_TITLE": "KYC no encontrado",
+      "VERIFY_MISSING_MESSAGE": "No se encontro el ID de verificacion."
+    }
   },
   "COMMENT_PLANS": {
     "TITLE": "Plan de comentarios",

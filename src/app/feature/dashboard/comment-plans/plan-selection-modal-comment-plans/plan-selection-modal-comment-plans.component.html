@@ -43,10 +43,25 @@
       <button class="btn btn-secondary" type="button" (click)="onClose()">
         {{ 'COMMENT_PLANS.MODAL_CLOSE' | translate }}
       </button>
-      <div class="paypal-wrapper">
-        <div #paypalButtons></div>
-        <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+      <div class="payment-actions">
+        <div class="paypal-wrapper">
+          <div #paypalButtons></div>
+          <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+        </div>
+        <button class="btn btn-whatsapp" type="button" (click)="openWhatsAppConfirm()">
+          Pagar via <i class="bi bi-whatsapp"></i>
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<app-confirm-action-modal
+  [isOpen]="isWhatsAppConfirmOpen"
+  [title]="'WHATSAPP_CONFIRM.TITLE' | translate"
+  [message]="'WHATSAPP_CONFIRM.COMMENT_PLANS_MESSAGE' | translate"
+  [confirmLabel]="'WHATSAPP_CONFIRM.CTA' | translate"
+  [cancelLabel]="'COMMON.CANCEL' | translate"
+  (confirm)="confirmWhatsAppPayment()"
+  (cancel)="closeWhatsAppConfirm()">
+</app-confirm-action-modal>

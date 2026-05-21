@@ -176,10 +176,25 @@
     background: #a20f1f;
     color: #f2daac;
   }
+
+  .btn-whatsapp {
+    background: #25d366;
+    color: #ffffff;
+  }
+
+  .btn-whatsapp:hover {
+    background: #1ebe5d;
+  }
+}
+
+.payment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
 }
 
 .paypal-wrapper {
-  flex: 2;
   min-height: 44px;
 }
 

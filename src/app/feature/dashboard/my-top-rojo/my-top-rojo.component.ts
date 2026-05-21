@@ -8,7 +8,7 @@ import { ToastService } from '../../../shared/services/toast/toast.service';
 import { CreateTopRojoFormComponent } from './create-top-rojo-form/create-top-rojo-form.component';
 import { TopRojoPlanOption } from './plan-selection-modal-top-rojo/plan-selection-modal-top-rojo.component';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-top-rojo',
@@ -171,21 +171,28 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.loading) {
+      return;
+    }
+
     this.loading = true;
     this.topRojoService
       .renewTopRojo(topRojoId, planType)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
       .subscribe({
         next: () => {
           this.toastService.showToast('FELICIDADES', 'TOP ROJO renovado exitosamente', 'success', 5);
           this.closeRenewPlanModal();
           this.loadDashboard();
-          this.loading = false;
         },
         error: (error) => {
           console.error('Error renovando TOP ROJO:', error);
           this.toastService.showToast('ERROR', 'Ocurrio un error al renovar TOP ROJO', 'error', 5);
-          this.loading = false;
         }
       });
   }

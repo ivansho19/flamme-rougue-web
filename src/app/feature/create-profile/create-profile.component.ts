@@ -16,6 +16,7 @@ import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { Country } from '../../shared/model/country.model';
 import { PlanOption } from '../../shared/model/planes.model';
 import { ToastService } from '../../shared/services/toast/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-create-profile',
@@ -53,6 +54,7 @@ export class ProfileEditComponent implements OnInit {
     selectedPlanId: number | null = null;
     selectedPlan: PlanOption | null = null;
     paymentCompleted = false;
+    pendingWhatsAppPayment = false;
     
     showPlanModal = false;
     previousIsProfileComplete = false;
@@ -80,7 +82,8 @@ export class ProfileEditComponent implements OnInit {
         private profileService: ProfileService,
         private router: Router,
         private toastService: ToastService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private translate: TranslateService
     ) { }
 
     ngOnInit() {
@@ -409,9 +412,20 @@ export class ProfileEditComponent implements OnInit {
         this.selectedPlanId = plan.id;
         this.selectedPlan = plan;
         this.paymentCompleted = true;
+        this.pendingWhatsAppPayment = false;
         this.showPlanModal = false;
         console.log('Plan seleccionado desde modal:', plan);
         // Auto-save profile after plan confirmation
+        this.saveProfile();
+    }
+
+    handleWhatsAppConfirmFromModal(plan: PlanOption): void {
+        this.selectedPlanId = plan.id;
+        this.selectedPlan = plan;
+        this.paymentCompleted = false;
+        this.pendingWhatsAppPayment = true;
+        this.showPlanModal = false;
+        console.log('Plan seleccionado para WhatsApp:', plan);
         this.saveProfile();
     }
 
@@ -881,14 +895,26 @@ export class ProfileEditComponent implements OnInit {
     }
 
     async saveProfile() {
-                if (!this.paymentCompleted) {
-                    this.toastService.showToast('error', 'Completa el pago con PayPal para publicar tu perfil');
+                if (!this.paymentCompleted && !this.pendingWhatsAppPayment) {
+                    this.toastService.showToast(
+                        'error',
+                        this.translate.instant('PROFILE_FORM.TOAST_PAYPAL_REQUIRED')
+                    );
                     this.showPlanModal = true;
                     return;
                 }
+                if (this.pendingWhatsAppPayment) {
+                    this.toastService.showToast(
+                        'info',
+                        this.translate.instant('PROFILE_FORM.TOAST_WHATSAPP_PENDING')
+                    );
+                }
                 // Validar que haya un plan seleccionado
                 if (!this.selectedPlanId) {
-                    this.toastService.showToast('error', 'Falta seleccionar un plan para poder publicar tu perfil');
+                    this.toastService.showToast(
+                        'error',
+                        this.translate.instant('PROFILE_FORM.TOAST_PLAN_REQUIRED')
+                    );
                     return;
                 }
 
@@ -986,7 +1012,7 @@ export class ProfileEditComponent implements OnInit {
                                 orientation: personalData.orientation || '',
                                 alcohol: personalData.alcohol || 'No',
                                 cigarette: personalData.cigarette || 'No',
-                                isActiveProfile: !!this.paymentCompleted,
+                                isActiveProfile: this.paymentCompleted && !this.pendingWhatsAppPayment,
                                 isVerify: false,
                                 birthDate: personalData.birthDate || null,
                                 age: personalData.age,
@@ -1019,6 +1045,7 @@ export class ProfileEditComponent implements OnInit {
                                 });
 
                                 this.loading = false;
+                                this.pendingWhatsAppPayment = false;
                                 this.ngZone.run(() => {
                                     this.router.navigate(['/home']);
                                 });
@@ -1086,7 +1113,10 @@ export class ProfileEditComponent implements OnInit {
 
         } catch (error) {
             console.error('Error al guardar KYC:', error);
-            this.toastService.showToast('warning', 'Perfil creado, pero hubo un error al guardar los datos reales');
+            this.toastService.showToast(
+                'warning',
+                this.translate.instant('PROFILE_FORM.TOAST_KYC_WARNING')
+            );
             throw error;
         }
     }

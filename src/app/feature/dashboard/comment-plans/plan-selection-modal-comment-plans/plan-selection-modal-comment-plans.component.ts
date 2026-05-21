@@ -30,6 +30,8 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
 
   selectedPlanId: CommentPlanType = 'monthly';
   paypalError = '';
+  private readonly whatsAppPhone = '51999999999';
+  isWhatsAppConfirmOpen = false;
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
 
@@ -103,6 +105,28 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
 
   onClose(): void {
     this.close.emit();
+  }
+
+  openWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = true;
+  }
+
+  closeWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = false;
+  }
+
+  confirmWhatsAppPayment(): void {
+    this.isWhatsAppConfirmOpen = false;
+    this.openWhatsAppPayment();
+  }
+
+  openWhatsAppPayment(): void {
+    const plan = this.getSelectedPlan();
+    const planName = plan?.name || 'Plan comentarios';
+    const planPrice = plan?.price || '';
+    const message = `Hola, quiero informacion para pagar el plan ${planName} por EUR ${this.parsePlanPrice(planPrice)}. Gracias.`;
+    const url = `https://wa.me/${this.whatsAppPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   }
 
   private schedulePayPalRender(): void {

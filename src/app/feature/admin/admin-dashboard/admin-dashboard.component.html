@@ -1,0 +1,259 @@
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div>
+      <div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-header">
+      <div>
+        <h1>{{ 'ADMIN_DASHBOARD.TITLE' | translate }}</h1>
+        <p>{{ 'ADMIN_DASHBOARD.SUBTITLE' | translate }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" type="button">
+          <i class="bi bi-bell"></i>
+          <span class="notif-dot">3</span>
+        </button>
+        <div class="admin-user">
+          <div class="avatar">A</div>
+          <div>
+            <strong>{{ 'ADMIN_DASHBOARD.HEADER.ADMIN' | translate }}</strong>
+            <span>Jose lopez</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-icon red">
+          <i class="bi bi-people"></i>
+        </div>
+        <div>
+          <p>{{ 'ADMIN_DASHBOARD.CARDS.TOTAL_PROFILES' | translate }}</p>
+          <h3>{{ totalProfiles }}</h3>
+          <span class="stat-change">+18% {{ 'ADMIN_DASHBOARD.CARDS.VS_LAST_MONTH' | translate }}</span>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon green">
+          <i class="bi bi-check2-circle"></i>
+        </div>
+        <div>
+          <p>{{ 'ADMIN_DASHBOARD.CARDS.ACTIVE_PROFILES' | translate }}</p>
+          <h3>{{ activeProfiles }}</h3>
+          <span class="stat-change">+12% {{ 'ADMIN_DASHBOARD.CARDS.VS_LAST_MONTH' | translate }}</span>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon amber">
+          <i class="bi bi-clock"></i>
+        </div>
+        <div>
+          <p>{{ 'ADMIN_DASHBOARD.CARDS.KYC_PENDING' | translate }}</p>
+          <h3>{{ pendingKyc }}</h3>
+          <span class="stat-change">{{ 'ADMIN_DASHBOARD.CARDS.REQUIRES_REVIEW' | translate }}</span>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon blue">
+          <i class="bi bi-stars"></i>
+        </div>
+        <div>
+          <p>{{ 'ADMIN_DASHBOARD.CARDS.POPULAR_PLAN' | translate }}</p>
+          <h3>{{ popularPlanLabel }}</h3>
+          <span class="stat-change">{{ popularPlanPercent }}% {{ 'ADMIN_DASHBOARD.CARDS.OF_TOTAL' | translate }}</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>{{ 'ADMIN_DASHBOARD.TABLE.TITLE' | translate }}</h2>
+            <p>{{ 'ADMIN_DASHBOARD.TABLE.SUBTITLE' | translate }}</p>
+          </div>
+          <div class="panel-actions">
+            <div class="search-box">
+              <i class="bi bi-search"></i>
+              <input
+                type="text"
+                [(ngModel)]="searchTerm"
+                (input)="onSearchChange()"
+                [placeholder]="'ADMIN_DASHBOARD.TABLE.SEARCH' | translate" />
+            </div>
+            <button class="filter-btn" type="button">
+              <i class="bi bi-sliders"></i>
+              {{ 'ADMIN_DASHBOARD.TABLE.FILTERS' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="filteredProfiles.length; else emptyState">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.USER' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.EMAIL' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.PLAN' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.STATUS' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.KYC' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.CREATED' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let profile of filteredProfiles">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar">
+                      {{ getProfileName(profile).slice(0, 1) }}
+                    </div>
+                    <div>
+                      <strong>{{ getProfileName(profile) }}</strong>
+                      <span>{{ getProfileHandle(profile) }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ getProfileEmail(profile) }}</td>
+                <td>
+                  <span [class]="getPlanBadgeClass(getPlanLevel(profile))">
+                    {{ getPlanLabel(getPlanLevel(profile)) }}
+                  </span>
+                </td>
+                <td>
+                  <span [class]="getStatusClass(profile)">
+                    {{ getStatusLabel(profile) }}
+                  </span>
+                </td>
+                <td>
+                  <span [class]="getKycClass(profile)">
+                    {{ getKycLabel(profile) }}
+                  </span>
+                </td>
+                <td>{{ profile?.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="icon-btn ghost" type="button" (click)="goToProfile(profile)">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button
+                      class="icon-btn ghost"
+                      type="button"
+                      (click)="activateProfile(profile)">
+                      <i class="bi bi-toggle-on"></i>
+                    </button>
+                    <button class="icon-btn ghost danger" type="button" (click)="openDeleteConfirm(profile)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <mat-paginator
+          [length]="totalProfilesCount"
+          [pageIndex]="pageIndex"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[10, 15, 25, 50]"
+          (page)="onPageChange($event)">
+        </mat-paginator>
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <i class="bi bi-inboxes"></i>
+            <p>{{ 'ADMIN_DASHBOARD.TABLE.EMPTY' | translate }}</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="panel kyc-panel">
+        <div class="panel-header">
+          <div>
+            <h2>{{ 'ADMIN_DASHBOARD.KYC.TITLE' | translate }}</h2>
+            <p>{{ 'ADMIN_DASHBOARD.KYC.SUBTITLE' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="kyc-tabs">
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="currentKycTab === 'all'"
+            (click)="setKycTab('all')">
+            {{ 'ADMIN_DASHBOARD.KYC.TAB_ALL' | translate }}
+            <span class="tab-count">{{ kycTotalCount }}</span>
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="currentKycTab === 'pending'"
+            (click)="setKycTab('pending')">
+            {{ 'ADMIN_DASHBOARD.KYC.TAB_PENDING' | translate }}
+            <span class="tab-count">{{ pendingKyc }}</span>
+          </button>
+        </div>
+
+        <div class="kyc-list">
+          <div class="kyc-card" *ngFor="let kyc of displayedKycItems">
+            <img [src]="getKycAvatar(kyc)" alt="KYC" />
+            <div class="kyc-info">
+              <strong>{{ kyc?.fullName || '---' }}</strong>
+              <span>{{ getKycDocumentType(kyc) }} · {{ getKycDocumentNumber(kyc) }}</span>
+              <small>
+                {{ 'ADMIN_DASHBOARD.KYC.UPLOADED' | translate }}
+                {{ getKycUploadedAt(kyc) | date: 'dd/MM/yyyy' }}
+              </small>
+            </div>
+            <div class="kyc-actions">
+              <button class="icon-btn success" type="button" (click)="openVerifyConfirm(kyc)">
+                <i class="bi bi-check2"></i>
+              </button>
+              <button class="icon-btn ghost" type="button">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="!displayedKycItems.length">
+            <i class="bi bi-shield-check"></i>
+            <p>{{ 'ADMIN_DASHBOARD.KYC.EMPTY' | translate }}</p>
+          </div>
+        </div>
+
+        <mat-paginator
+          *ngIf="currentKycTab === 'all'"
+          [length]="currentKycTab === 'all' ? kycTotalCount : displayedKycItems.length"
+          [pageIndex]="kycPageIndex"
+          [pageSize]="kycPageSize"
+          [pageSizeOptions]="[5, 10, 20]"
+          (page)="onKycPageChange($event)">
+        </mat-paginator>
+
+        <button class="link-btn" type="button">
+          {{ 'ADMIN_DASHBOARD.KYC.VIEW_ALL' | translate }}
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<app-confirm-action-modal
+  [isOpen]="confirmOpen"
+  [title]="confirmTitle"
+  [message]="confirmMessage"
+  [confirmLabel]="confirmCta"
+  [cancelLabel]="'COMMON.CANCEL' | translate"
+  (confirm)="confirmActionExecution()"
+  (cancel)="closeConfirm()">
+</app-confirm-action-modal>

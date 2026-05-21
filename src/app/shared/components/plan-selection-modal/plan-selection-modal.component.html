@@ -124,9 +124,14 @@
       <button class="btn btn-secondary" (click)="onClose()">
         Decidir después
       </button>
-      <div class="paypal-wrapper">
-        <div #paypalButtons></div>
-        <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+      <div class="payment-actions">
+        <div class="paypal-wrapper">
+          <div #paypalButtons></div>
+          <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
+        </div>
+        <button class="btn btn-whatsapp" type="button" (click)="openWhatsAppConfirm()">
+          Pagar via  <i class="bi bi-whatsapp"></i>
+        </button>
       </div>
     </div>
 
@@ -135,3 +140,13 @@
 
 <!-- Modal Backdrop -->
 <div class="modal-backdrop" *ngIf="isOpen" [class.show]="isOpen"></div>
+
+<app-confirm-action-modal
+  [isOpen]="isWhatsAppConfirmOpen"
+  [title]="'WHATSAPP_CONFIRM.TITLE' | translate"
+  [message]="'WHATSAPP_CONFIRM.PROFILE_MESSAGE' | translate"
+  [confirmLabel]="'WHATSAPP_CONFIRM.CTA' | translate"
+  [cancelLabel]="'COMMON.CANCEL' | translate"
+  (confirm)="confirmWhatsAppPayment()"
+  (cancel)="closeWhatsAppConfirm()">
+</app-confirm-action-modal>

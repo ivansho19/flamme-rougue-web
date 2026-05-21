@@ -164,6 +164,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
     &.btn-secondary {
       background: #f0f0f0;
@@ -185,9 +189,36 @@
   }
 }
 
+.payment-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: #ffffff;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+
 .paypal-wrapper {
-  flex: 2;
+  flex: 0 0 auto;
   min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paypal-wrapper > div {
+  width: 100%;
+}
+
+.btn-whatsapp {
+  width: 100%;
 }
 
 .error {

@@ -50,6 +50,7 @@ export class UpdateProfileComponent implements OnInit {
   weekDays: any[] = [];
   isDraggingMain = false;
   isDraggingGallery = false;
+  isProfileInactive = false;
   @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
   @ViewChild('galleryInput') galleryInput!: ElementRef<HTMLInputElement>;
 
@@ -242,6 +243,9 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   goToPublishedProfile(): void {
+    if (this.isProfileInactive) {
+      return;
+    }
     const targetProfileId = this.profileId || localStorage.getItem('profileId') || '';
     if (!targetProfileId) {
       this.toastService.showToast('Error', 'Perfil no encontrado', 'error', 4);
@@ -254,6 +258,7 @@ export class UpdateProfileComponent implements OnInit {
   private getProfileByUser(userId: string) {
     this.profileService.getProfileByUser(userId).subscribe({
       next: (response) => {
+        this.updateInactiveState(response);
         const profile = response?.profile ?? response ?? null;
         if (!profile?._id) {
           this.toastService.showToast('Perfil no encontrado', 'Crea tu perfil primero', 'error', 4);
@@ -314,6 +319,7 @@ export class UpdateProfileComponent implements OnInit {
 
     this.profileService.getProfileById(id).subscribe({
       next: (response) => {
+        this.updateInactiveState(response);
         const profile = response?.profile ?? response ?? null;
         if (!profile) {
           return;
@@ -407,6 +413,12 @@ export class UpdateProfileComponent implements OnInit {
     this.selectedPlanId = Number.isNaN(normalized) ? null : normalized;
   }
 
+  private updateInactiveState(response: any): void {
+    const warning = response?.warning ?? response?.profile?.warning ?? '';
+    const normalized = typeof warning === 'string' ? warning.toLowerCase() : '';
+    this.isProfileInactive = normalized.includes('perfil inactivo');
+  }
+
   planSelected(plan: PlanOption) {
     this.selectedPlanId = plan.id;
     this.selectedPlan = plan;
@@ -420,6 +432,9 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   updatePlan() {
+    if (this.isProfileInactive) {
+      return;
+    }
     if (!this.selectedPlanId) {
       this.toastService.showToast('Selecciona un plan', 'Debes elegir un plan para actualizar', 'error', 4);
       return;
@@ -429,6 +444,9 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   openPlanModal(): void {
+    if (this.isProfileInactive) {
+      return;
+    }
     this.showPlanModal = true;
   }
 
@@ -641,6 +659,9 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   async updateProfile(planUpdated: boolean = false) {
+    if (this.isProfileInactive) {
+      return;
+    }
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
       this.toastService.showToast('Formulario incompleto', 'Completa los campos obligatorios', 'error', 4);
@@ -746,9 +767,9 @@ export class UpdateProfileComponent implements OnInit {
         next: () => {
           this.loading = false;
           if (planUpdated) {
-            this.toastService.showToast('Plan actualizado', 'El plan se actualizo correctamente', 'success', 5);
+            this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 5);
           } else {
-            this.toastService.showToast('Perfil actualizado', 'Los cambios se guardaron', 'success', 5);
+            this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 5);
           }
         },
         error: (error) => {

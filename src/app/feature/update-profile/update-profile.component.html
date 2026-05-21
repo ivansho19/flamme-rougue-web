@@ -7,6 +7,9 @@
                 {{ 'PROFILE_FORM.CURRENT_PLAN' | translate }}: {{ currentPlanKey | translate }}
             </span>
         </h2>
+        <div class="inactive-warning" *ngIf="isProfileInactive">
+            {{ 'PROFILE_FORM.INACTIVE_WARNING' | translate }}
+        </div>
 
         <mat-accordion class="profile-accordion">
             <mat-expansion-panel [expanded]="true" class="accordion-panel">
@@ -262,15 +265,15 @@
         </mat-accordion>
 
         <div class="plan-actions">
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary" [disabled]="isProfileInactive">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.SAVE_CHANGES_SHORT' | translate }}</span>
             </button>
-            <button type="button" class="btn-primary" (click)="openPlanModal()">
+            <button type="button" class="btn-primary" (click)="openPlanModal()" [disabled]="isProfileInactive">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.UPDATE_PLAN_SHORT' | translate }}</span>
             </button>
-            <button type="button" class="btn-primary" (click)="goToPublishedProfile()">
+            <button type="button" class="btn-primary" (click)="goToPublishedProfile()" [disabled]="isProfileInactive">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.VIEW_PROFILE' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.VIEW_PROFILE_SHORT' | translate }}</span>
             </button>

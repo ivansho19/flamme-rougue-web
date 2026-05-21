@@ -40,6 +40,23 @@
   min-width: 220px;
 }
 
+.plan-actions .btn-primary:disabled {
+  background: #d8d8d8;
+  color: #7a7a7a;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.inactive-warning {
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  background: #fff4f2;
+  border: 1px solid #f4bdb6;
+  color: #9b1c11;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
 .btn-label-mobile {
   display: none;
 }

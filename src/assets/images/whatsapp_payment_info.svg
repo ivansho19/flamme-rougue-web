@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#f7f4ef" />
+  <rect x="40" y="40" width="720" height="370" rx="24" fill="#ffffff" stroke="#e6d8c6" stroke-width="2" />
+  <text x="70" y="100" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#7f0a16" font-weight="700">Pago por WhatsApp</text>
+  <text x="70" y="150" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#333333">Hola, soy [NOMBRE].</text>
+  <text x="70" y="185" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#333333">Quiero informacion para pagar el plan [PLAN] ([DURACION])</text>
+  <text x="70" y="220" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#333333">por EUR [PRECIO]. Gracias.</text>
+  <rect x="70" y="270" width="260" height="52" rx="12" fill="#25d366" />
+  <text x="200" y="304" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="700">Enviar WhatsApp</text>
+  <text x="70" y="360" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#7a6a55">Reemplaza los campos entre corchetes con los datos del usuario.</text>
+</svg>

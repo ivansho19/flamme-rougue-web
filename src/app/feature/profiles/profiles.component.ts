@@ -146,6 +146,12 @@ export class ProfilesComponent implements OnInit {
         return;
       }
 
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.commentError = this.translate.instant('PROFILE.COMMENT_ERROR_CLIENT');
+        return;
+      }
+
       this.commentSubmitting = true;
       this.commentsService.createComment({
         profileId: this.profileId,

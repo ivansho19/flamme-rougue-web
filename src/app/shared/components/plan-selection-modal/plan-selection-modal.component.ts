@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { PlanOption } from '../../model/planes.model';
 import { environment } from '../../../../environments/environment';
 import { PaymentService } from '../../services/payment/payment.service';
+import { PayPalButtonService } from '../../services/paypal/paypal-button.service';
 
 @Component({
   selector: 'app-plan-selection-modal',
@@ -17,12 +18,14 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   @Output() close = new EventEmitter<void>();
   @Output() planSelected = new EventEmitter<PlanOption>();
   @Output() paymentCompleted = new EventEmitter<PlanOption>();
+  @Output() whatsAppConfirmed = new EventEmitter<PlanOption>();
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
 
   selectedPlanId: number | null = null;
   paypalError = '';
-  private paypalScriptPromise: Promise<void> | null = null;
+  private readonly whatsAppPhone = '51999999999';
+  isWhatsAppConfirmOpen = false;
 
   plans: PlanOption[] = [
     {
@@ -74,7 +77,11 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     },
   ];
 
-  constructor(private paymentService: PaymentService) {}
+  constructor(
+    private paymentService: PaymentService,
+    private ngZone: NgZone,
+    private payPalButtonService: PayPalButtonService
+  ) {}
 
   ngOnInit(): void {
     // Pre-seleccionar Plan Pro por defecto
@@ -115,6 +122,37 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     this.close.emit();
   }
 
+  openWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = true;
+  }
+
+  closeWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = false;
+  }
+
+  confirmWhatsAppPayment(): void {
+    const plan = this.getSelectedPlan();
+    if (!plan) {
+      this.paypalError = 'Selecciona un plan para continuar.';
+      this.isWhatsAppConfirmOpen = false;
+      return;
+    }
+
+    this.isWhatsAppConfirmOpen = false;
+    this.whatsAppConfirmed.emit(plan);
+    this.openWhatsAppPayment();
+  }
+
+  openWhatsAppPayment(): void {
+    const plan = this.getSelectedPlan();
+    const planName = plan?.name || 'Plan';
+    const planPrice = plan?.price || '';
+    const displayName = this.profileName || 'cliente';
+    const message = `Hola, soy ${displayName}. Quiero informacion para pagar el plan ${planName} por EUR ${this.parsePlanPrice(planPrice)}. Gracias.`;
+    const url = `https://wa.me/${this.whatsAppPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+
   private schedulePayPalRender(): void {
     setTimeout(() => this.initPayPalButtons(), 0);
   }
@@ -132,15 +170,14 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     const container = this.paypalButtons.nativeElement;
     container.innerHTML = '';
 
-    this.loadPayPalScript()
-      .then(() => {
-        const paypal = (window as any).paypal;
-        if (!paypal) {
-          this.paypalError = 'No se pudo cargar PayPal. Intenta nuevamente.';
-          return;
-        }
+    const currency = environment.paypalCurrency || 'EUR';
 
-        paypal.Buttons({
+    this.payPalButtonService
+      .renderButtons({
+        container,
+        clientId: environment.paypalClientId,
+        currency,
+        config: {
           style: {
             layout: 'vertical',
             color: 'gold',
@@ -155,7 +192,6 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
             }
 
             const amount = this.parsePlanPrice(plan.price);
-            const currency = environment.paypalCurrency || 'EUR';
 
             try {
               const response = await firstValueFrom(
@@ -179,8 +215,10 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
 
               const plan = this.getSelectedPlan();
               if (plan) {
-                this.paymentCompleted.emit(plan);
-                this.planSelected.emit(plan);
+                this.ngZone.run(() => {
+                  this.paymentCompleted.emit(plan);
+                  this.planSelected.emit(plan);
+                });
               }
             } catch (error) {
               this.paypalError = 'Error al capturar el pago con PayPal.';
@@ -190,39 +228,13 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
           onError: () => {
             this.paypalError = 'Error al procesar el pago con PayPal.';
           }
-        }).render(container);
+        }
       })
-      .catch(() => {
-        this.paypalError = 'No se pudo cargar PayPal. Intenta nuevamente.';
+      .catch((error) => {
+        this.paypalError = error instanceof Error
+          ? error.message
+          : 'No se pudo cargar PayPal. Intenta nuevamente.';
       });
-  }
-
-  private loadPayPalScript(): Promise<void> {
-    if ((window as any).paypal) {
-      return Promise.resolve();
-    }
-
-    if (this.paypalScriptPromise) {
-      return this.paypalScriptPromise;
-    }
-
-    const clientId = environment.paypalClientId;
-    if (!clientId) {
-      this.paypalError = 'Falta configurar el Client ID de PayPal.';
-      return Promise.reject();
-    }
-
-    this.paypalScriptPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      const currency = environment.paypalCurrency || 'EUR';
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`;
-      script.async = true;
-      script.onload = () => resolve();
-      script.onerror = () => reject();
-      document.body.appendChild(script);
-    });
-
-    return this.paypalScriptPromise;
   }
 
   private getSelectedPlan(): PlanOption | null {

@@ -47,6 +47,7 @@
     "COMMENT_REPLY_SUBMIT": "Reply",
     "COMMENT_REPLY_SUBMITTING": "Sending...",
     "COMMENT_ERROR_REQUIRED": "Please enter a comment.",
+    "COMMENT_ERROR_CLIENT": "Only users can comment.",
     "COMMENT_ERROR_LOGIN": "You must sign in to comment.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Please enter a reply.",
     "COMMENT_REPLY_ERROR_LOGIN": "You must sign in to reply.",
@@ -147,6 +148,12 @@
     "VIEW_PROFILE_SHORT": "View profile",
     "REQUIRED_ERROR": "This field is required",
     "INVALID_EMAIL_ERROR": "Invalid email format"
+    ,
+    "TOAST_PAYPAL_REQUIRED": "Complete the PayPal payment to publish your profile",
+    "TOAST_WHATSAPP_PENDING": "WhatsApp payment started. Your profile will stay in review until payment is confirmed.",
+    "TOAST_PLAN_REQUIRED": "You must select a plan to publish your profile",
+    "TOAST_KYC_WARNING": "Profile created, but there was an error saving the real data",
+    "INACTIVE_WARNING": "Your profile is inactive. Please contact the administrator to activate it."
   },
   "SERVICES": {
     "RELAXING_MASSAGE": "Relaxing massage",
@@ -182,6 +189,119 @@
     "KG": "kg",
     "CITY": "City",
     "CANCEL": "Cancel"
+  },
+  "WHATSAPP_CONFIRM": {
+    "TITLE": "Confirm WhatsApp payment",
+    "CTA": "Go to WhatsApp",
+    "PROFILE_MESSAGE": "Your profile will stay in review until the WhatsApp payment is confirmed.\nOnce validated, our team will publish it and send you a confirmation.",
+    "TOP_ROJO_MESSAGE": "TOP ROJO will activate once the WhatsApp payment is confirmed.\nOur team will validate the payment and publish it for the selected plan duration.",
+    "COMMENT_PLANS_MESSAGE": "The comment plan will activate once the WhatsApp payment is confirmed.\nOur team will validate the payment and enable comments according to the selected plan."
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Dashboard",
+    "SUBTITLE": "Platform overview",
+    "HEADER": {
+      "ADMIN": "Administrator"
+    },
+    "SIDEBAR": {
+      "SUBTITLE": "Admin Panel",
+      "DASHBOARD": "Dashboard",
+      "MANAGEMENT": "Management",
+      "PROFILES": "Profiles",
+      "PLANS": "Plans",
+      "PAYMENTS": "Payments",
+      "TRANSACTIONS": "Transactions",
+      "KYC": "KYC Verification",
+      "DOCUMENTS": "Documents",
+      "PENDING": "Pending",
+      "REPORTS": "Reports",
+      "STATS": "Stats",
+      "CHARTS": "Charts",
+      "ACTIVITY": "Activity",
+      "CONFIG": "Configuration",
+      "USERS": "Users",
+      "SETTINGS": "Settings",
+      "NOTIFICATIONS": "Notifications",
+      "LOGOUT": "Sign out"
+    },
+    "CARDS": {
+      "TOTAL_PROFILES": "Total profiles",
+      "ACTIVE_PROFILES": "Active profiles",
+      "KYC_PENDING": "KYC pending",
+      "POPULAR_PLAN": "Most popular plan",
+      "VS_LAST_MONTH": "vs. last month",
+      "REQUIRES_REVIEW": "needs review",
+      "OF_TOTAL": "of total"
+    },
+    "TABLE": {
+      "TITLE": "All profiles",
+      "SUBTITLE": "Manage and control all profiles created on the platform",
+      "SEARCH": "Search profile...",
+      "FILTERS": "Filters",
+      "USER": "User",
+      "EMAIL": "Email",
+      "PLAN": "Plan",
+      "PLAN_NONE": "No plan",
+      "STATUS": "Status",
+      "KYC": "KYC",
+      "CREATED": "Created",
+      "ACTIONS": "Actions",
+      "EMPTY": "No profiles to display"
+    },
+    "STATUS": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive"
+    },
+    "KYC": {
+      "TITLE": "KYC Verification",
+      "SUBTITLE": "Review and validate identity documents",
+      "UPLOADED": "Uploaded:",
+      "VERIFIED": "Verified",
+      "PENDING": "Pending",
+      "REJECTED": "Rejected",
+      "TAB_ALL": "All",
+      "TAB_PENDING": "Pending",
+      "REJECT_DISABLED": "Reject endpoint not available",
+      "VIEW_ALL": "View all pending",
+      "EMPTY": "No pending KYC"
+    },
+    "CHART": {
+      "TITLE": "Profiles created recently",
+      "SUBTITLE": "New profile growth",
+      "RANGE_30": "Last 30 days",
+      "TOTAL_NEW": "Total new",
+      "DAILY_AVG": "Daily average"
+    },
+    "CONFIRM": {
+      "DELETE_TITLE": "Delete profile",
+      "DELETE_MESSAGE": "This action will permanently remove the profile.",
+      "DELETE_CTA": "Delete",
+      "VERIFY_TITLE": "Verify KYC",
+      "VERIFY_MESSAGE": "Do you confirm the documents are valid?",
+      "VERIFY_CTA": "Verify"
+    },
+    "TOAST": {
+      "LOAD_ERROR_TITLE": "Error",
+      "LOAD_ERROR_MESSAGE": "Unable to load the admin dashboard.",
+      "ACTIVATE_SUCCESS_TITLE": "Profile activated",
+      "ACTIVATE_SUCCESS_MESSAGE": "The profile was activated successfully.",
+      "ACTIVATE_ERROR_TITLE": "Error",
+      "ACTIVATE_ERROR_MESSAGE": "Unable to activate the profile.",
+      "DEACTIVATE_SUCCESS_TITLE": "Profile deactivated",
+      "DEACTIVATE_SUCCESS_MESSAGE": "The profile was deactivated successfully.",
+      "DEACTIVATE_ERROR_TITLE": "Error",
+      "DEACTIVATE_ERROR_MESSAGE": "Unable to deactivate the profile.",
+      "DELETE_SUCCESS_TITLE": "Profile deleted",
+      "DELETE_SUCCESS_MESSAGE": "The profile was deleted successfully.",
+      "DELETE_ERROR_TITLE": "Error",
+      "DELETE_ERROR_MESSAGE": "Unable to delete the profile.",
+      "VERIFY_SUCCESS_TITLE": "KYC verified",
+      "VERIFY_SUCCESS_MESSAGE": "The KYC was verified successfully.",
+      "VERIFY_ERROR_TITLE": "Error",
+      "VERIFY_ERROR_MESSAGE": "Unable to verify the KYC.",
+      "VERIFY_MISSING_TITLE": "KYC not found",
+      "VERIFY_MISSING_MESSAGE": "Verification ID was not found."
+    }
   },
   "COMMENT_PLANS": {
     "TITLE": "Comment plans",

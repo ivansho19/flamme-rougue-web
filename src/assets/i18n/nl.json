@@ -47,6 +47,7 @@
     "COMMENT_REPLY_SUBMIT": "Antwoorden",
     "COMMENT_REPLY_SUBMITTING": "Versturen...",
     "COMMENT_ERROR_REQUIRED": "Vul een reactie in.",
+    "COMMENT_ERROR_CLIENT": "Alleen gebruikers kunnen reageren.",
     "COMMENT_ERROR_LOGIN": "Je moet inloggen om te reageren.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Vul een antwoord in.",
     "COMMENT_REPLY_ERROR_LOGIN": "Je moet inloggen om te antwoorden.",
@@ -147,6 +148,12 @@
     "VIEW_PROFILE_SHORT": "Profiel",
     "REQUIRED_ERROR": "Dit veld is verplicht",
     "INVALID_EMAIL_ERROR": "Ongeldig e-mailformaat"
+    ,
+    "TOAST_PAYPAL_REQUIRED": "Voltooi de PayPal-betaling om je profiel te publiceren",
+    "TOAST_WHATSAPP_PENDING": "WhatsApp-betaling gestart. Je profiel blijft in beoordeling totdat de betaling is bevestigd.",
+    "TOAST_PLAN_REQUIRED": "Je moet een plan selecteren om je profiel te publiceren",
+    "TOAST_KYC_WARNING": "Profiel aangemaakt, maar er is een fout opgetreden bij het opslaan van de echte gegevens",
+    "INACTIVE_WARNING": "Je profiel is inactief. Neem contact op met de beheerder om het te activeren."
   },
   "SERVICES": {
     "RELAXING_MASSAGE": "Ontspannende massage",
@@ -182,6 +189,119 @@
     "KG": "kg",
     "CITY": "Stad",
     "CANCEL": "Annuleren"
+  },
+  "WHATSAPP_CONFIRM": {
+    "TITLE": "WhatsApp-betaling bevestigen",
+    "CTA": "Ga naar WhatsApp",
+    "PROFILE_MESSAGE": "Je profiel blijft in beoordeling totdat de WhatsApp-betaling is bevestigd.\nNa validatie zal ons team het publiceren en ontvang je een bevestiging.",
+    "TOP_ROJO_MESSAGE": "TOP ROJO wordt geactiveerd zodra de WhatsApp-betaling is bevestigd.\nOns team valideert de betaling en publiceert het voor de gekozen looptijd.",
+    "COMMENT_PLANS_MESSAGE": "Het reactieplan wordt geactiveerd zodra de WhatsApp-betaling is bevestigd.\nOns team valideert de betaling en schakelt reacties in volgens het gekozen plan."
+  },
+  "ADMIN_DASHBOARD": {
+    "TITLE": "Dashboard",
+    "SUBTITLE": "Platformoverzicht",
+    "HEADER": {
+      "ADMIN": "Beheerder"
+    },
+    "SIDEBAR": {
+      "SUBTITLE": "Admin Panel",
+      "DASHBOARD": "Dashboard",
+      "MANAGEMENT": "Beheer",
+      "PROFILES": "Profielen",
+      "PLANS": "Plannen",
+      "PAYMENTS": "Betalingen",
+      "TRANSACTIONS": "Transacties",
+      "KYC": "KYC-verificatie",
+      "DOCUMENTS": "Documenten",
+      "PENDING": "In behandeling",
+      "REPORTS": "Rapporten",
+      "STATS": "Statistieken",
+      "CHARTS": "Grafieken",
+      "ACTIVITY": "Activiteit",
+      "CONFIG": "Configuratie",
+      "USERS": "Gebruikers",
+      "SETTINGS": "Instellingen",
+      "NOTIFICATIONS": "Meldingen",
+      "LOGOUT": "Afmelden"
+    },
+    "CARDS": {
+      "TOTAL_PROFILES": "Totaal profielen",
+      "ACTIVE_PROFILES": "Actieve profielen",
+      "KYC_PENDING": "KYC in behandeling",
+      "POPULAR_PLAN": "Meest populair plan",
+      "VS_LAST_MONTH": "vs. vorige maand",
+      "REQUIRES_REVIEW": "vereist controle",
+      "OF_TOTAL": "van het totaal"
+    },
+    "TABLE": {
+      "TITLE": "Alle profielen",
+      "SUBTITLE": "Beheer en controleer alle profielen op het platform",
+      "SEARCH": "Zoek profiel...",
+      "FILTERS": "Filters",
+      "USER": "Gebruiker",
+      "EMAIL": "Email",
+      "PLAN": "Plan",
+      "PLAN_NONE": "Geen plan",
+      "STATUS": "Status",
+      "KYC": "KYC",
+      "CREATED": "Aangemaakt",
+      "ACTIONS": "Acties",
+      "EMPTY": "Geen profielen om te tonen"
+    },
+    "STATUS": {
+      "ACTIVE": "Actief",
+      "INACTIVE": "Inactief"
+    },
+    "KYC": {
+      "TITLE": "KYC-verificatie",
+      "SUBTITLE": "Controleer en valideer identiteitsdocumenten",
+      "UPLOADED": "Geupload:",
+      "VERIFIED": "Geverifieerd",
+      "PENDING": "In behandeling",
+      "REJECTED": "Afgewezen",
+      "TAB_ALL": "Alle",
+      "TAB_PENDING": "In behandeling",
+      "REJECT_DISABLED": "Reject-endpoint niet beschikbaar",
+      "VIEW_ALL": "Bekijk alle in behandeling",
+      "EMPTY": "Geen KYC in behandeling"
+    },
+    "CHART": {
+      "TITLE": "Recent aangemaakte profielen",
+      "SUBTITLE": "Groei van nieuwe profielen",
+      "RANGE_30": "Laatste 30 dagen",
+      "TOTAL_NEW": "Totaal nieuw",
+      "DAILY_AVG": "Dagelijks gemiddelde"
+    },
+    "CONFIRM": {
+      "DELETE_TITLE": "Profiel verwijderen",
+      "DELETE_MESSAGE": "Deze actie verwijdert het profiel permanent.",
+      "DELETE_CTA": "Verwijderen",
+      "VERIFY_TITLE": "KYC verifiëren",
+      "VERIFY_MESSAGE": "Bevestig je dat de documenten geldig zijn?",
+      "VERIFY_CTA": "Verifiëren"
+    },
+    "TOAST": {
+      "LOAD_ERROR_TITLE": "Fout",
+      "LOAD_ERROR_MESSAGE": "Kan het admin dashboard niet laden.",
+      "ACTIVATE_SUCCESS_TITLE": "Profiel geactiveerd",
+      "ACTIVATE_SUCCESS_MESSAGE": "Het profiel is succesvol geactiveerd.",
+      "ACTIVATE_ERROR_TITLE": "Fout",
+      "ACTIVATE_ERROR_MESSAGE": "Kan het profiel niet activeren.",
+      "DEACTIVATE_SUCCESS_TITLE": "Profiel gedeactiveerd",
+      "DEACTIVATE_SUCCESS_MESSAGE": "Het profiel is succesvol gedeactiveerd.",
+      "DEACTIVATE_ERROR_TITLE": "Fout",
+      "DEACTIVATE_ERROR_MESSAGE": "Kan het profiel niet deactiveren.",
+      "DELETE_SUCCESS_TITLE": "Profiel verwijderd",
+      "DELETE_SUCCESS_MESSAGE": "Het profiel is succesvol verwijderd.",
+      "DELETE_ERROR_TITLE": "Fout",
+      "DELETE_ERROR_MESSAGE": "Kan het profiel niet verwijderen.",
+      "VERIFY_SUCCESS_TITLE": "KYC geverifieerd",
+      "VERIFY_SUCCESS_MESSAGE": "De KYC is succesvol geverifieerd.",
+      "VERIFY_ERROR_TITLE": "Fout",
+      "VERIFY_ERROR_MESSAGE": "Kan de KYC niet verifiëren.",
+      "VERIFY_MISSING_TITLE": "KYC niet gevonden",
+      "VERIFY_MISSING_MESSAGE": "Verificatie-ID niet gevonden."
+    }
   },
   "COMMENT_PLANS": {
     "TITLE": "Reactieplannen",

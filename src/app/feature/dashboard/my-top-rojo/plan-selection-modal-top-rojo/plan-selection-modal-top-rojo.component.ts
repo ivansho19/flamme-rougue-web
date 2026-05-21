@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TOP_ROJO_PLANS, TopRojoPlantType } from '../../../../shared/models/top-rojo.model';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -28,12 +28,15 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   selectedPlanId: TopRojoPlantType | null = null;
   plans: TopRojoPlanOption[] = [];
   paypalError = '';
+  private readonly whatsAppPhone = '51999999999';
+  isWhatsAppConfirmOpen = false;
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
 
   constructor(
     private paymentService: PaymentService,
-    private payPalButtonService: PayPalButtonService
+    private payPalButtonService: PayPalButtonService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +89,31 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
 
   closeModal(): void {
     this.close.emit();
+  }
+
+  openWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = true;
+  }
+
+  closeWhatsAppConfirm(): void {
+    this.isWhatsAppConfirmOpen = false;
+  }
+
+  confirmWhatsAppPayment(): void {
+    this.isWhatsAppConfirmOpen = false;
+    this.openWhatsAppPayment();
+  }
+
+  openWhatsAppPayment(): void {
+    const plan = this.getSelectedPlan();
+    const planName = plan?.name || 'TOP ROJO';
+    const planDuration = plan ? this.getDurationText(plan.duration) : '';
+    const planPrice = plan?.price ?? '';
+    const displayName = this.profileName || 'cliente';
+    const durationText = planDuration ? ` (${planDuration})` : '';
+    const message = `Hola, soy ${displayName}. Quiero informacion para pagar el plan ${planName}${durationText} por EUR ${planPrice}. Gracias.`;
+    const url = `https://wa.me/${this.whatsAppPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   }
 
   getDurationText(hours: number): string {
@@ -156,8 +184,10 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
 
               const plan = this.getSelectedPlan();
               if (plan) {
-                this.planSelected.emit(plan);
-                this.close.emit();
+                this.ngZone.run(() => {
+                  this.planSelected.emit(plan);
+                  this.close.emit();
+                });
               }
             } catch (error) {
               this.paypalError = 'Error al capturar el pago con PayPal.';

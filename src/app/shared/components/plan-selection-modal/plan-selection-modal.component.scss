@@ -362,6 +362,22 @@
     }
   }
 
+  .btn-whatsapp {
+    background: #25d366;
+    color: #ffffff;
+  }
+
+  .btn-whatsapp:hover {
+    background: #1ebe5d;
+  }
+
+  .payment-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 240px;
+  }
+
   .btn-primary {
     background: linear-gradient(135deg, #b71c1c, #8C030E);
     color: white;
@@ -451,6 +467,10 @@
       .error {
         text-align: left;
       }
+    }
+
+    .payment-actions {
+      width: 100%;
     }
   }
 

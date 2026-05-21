@@ -18,6 +18,7 @@ import { TopRojoModalComponent } from './top-rojo-modal/top-rojo-modal.component
 import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selection-modal.component';
 import { FlagsComponent } from './flags/flags.component';
 import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component';
+import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component
     TopRojoModalComponent,
     PlanSelectionModalComponent,
     FlagsComponent,
-    KycInfoModalComponent
+    KycInfoModalComponent,
+    ConfirmActionModalComponent
   ],
   exports: [
     LoaderComponent,
@@ -49,7 +51,8 @@ import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component
     TopRojoModalComponent,
     PlanSelectionModalComponent,
     FlagsComponent,
-    KycInfoModalComponent
+    KycInfoModalComponent,
+    ConfirmActionModalComponent
   ],
   imports: [
     CommonModule,
