@@ -113,6 +113,14 @@
                                 {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
                             </div>
                         </div>
+
+                        <div class="field" *ngIf="cities.length > 0">
+                            <input formControlName="zone" placeholder="{{ 'PROFILE_FORM.ZONE_PLACEHOLDER' | translate }}"
+                                [class.input-error]="isInvalid('basicInfo.zone')">
+                            <div class="error" *ngIf="isInvalid('basicInfo.zone')">
+                                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                            </div>
+                        </div>
                     </div>
 
                     <div class="grid-2">

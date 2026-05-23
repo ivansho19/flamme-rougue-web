@@ -16,4 +16,5 @@ export interface IAuthResponse {
     profileId?: any;
     client?: boolean;
     token: string;
+    isAdmin?: boolean;
 }

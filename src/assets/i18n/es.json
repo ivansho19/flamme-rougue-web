@@ -10,7 +10,8 @@
     "SEARCH_HINT": "Escribe al menos 3 caracteres para buscar",
     "LOGOUT": "Cerrar sesión",
     "PUBLISH_TOP": "Publicar TOP",
-    "COMMENT_PLANS": "Plan comentarios"
+    "COMMENT_PLANS": "Plan comentarios",
+    "GO_DASHBOARD": "Ir al Dashboard"
   },
   "PROFILE": {
     "SUBTITLE": "Recepcion privada",
@@ -245,6 +246,12 @@
       "KYC": "KYC",
       "CREATED": "Creado el",
       "ACTIONS": "Acciones",
+      "TOOLTIP": {
+        "VIEW": "Ver perfil",
+        "ACTIVATE": "Activar",
+        "DEACTIVATE": "Desactivar",
+        "DELETE": "Eliminar perfil"
+      },
       "EMPTY": "No hay perfiles para mostrar"
     },
     "STATUS": {

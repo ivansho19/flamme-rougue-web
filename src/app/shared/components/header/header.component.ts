@@ -159,6 +159,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  navigateToDashboard(){
+    return this.route.navigate(['/admin/dashboard']);
+  }
+
+  isAdmin(): boolean {
+    const isAdmin = localStorage.getItem('isAdmin');
+    return isAdmin ? JSON.parse(isAdmin) : false;
+  }
+
   logout() {
 
     const dialogRef = this.dialog.open(LogoutConfirmDialogComponent, {

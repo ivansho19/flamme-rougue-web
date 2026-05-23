@@ -246,6 +246,12 @@
       "KYC": "KYC",
       "CREATED": "Aangemaakt",
       "ACTIONS": "Acties",
+      "TOOLTIP": {
+        "VIEW": "Profiel bekijken",
+        "ACTIVATE": "Activeren",
+        "DEACTIVATE": "Deactiveren",
+        "DELETE": "Profiel verwijderen"
+      },
       "EMPTY": "Geen profielen om te tonen"
     },
     "STATUS": {

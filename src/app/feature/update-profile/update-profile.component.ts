@@ -194,6 +194,7 @@ export class UpdateProfileComponent implements OnInit {
         description: ['', Validators.required],
         country: ['', Validators.required],
         city: ['', Validators.required],
+        zone: ['', Validators.required],
         phone: ['', Validators.required],
         availabilitySlots: this.fb.array([])
       }),
@@ -286,6 +287,7 @@ export class UpdateProfileComponent implements OnInit {
         email: currentBasicInfo.email || client.email || '',
         country: currentBasicInfo.country || countryValue || '',
         city: currentBasicInfo.city || client.city || '',
+        zone: currentBasicInfo.zone || client.zone || '',
         phone: currentBasicInfo.phone || client.phone || ''
       }
     });
@@ -365,6 +367,7 @@ export class UpdateProfileComponent implements OnInit {
         description: profile.bio || '',
         country: countryValue || '',
         city: profile.city || '',
+        zone: profile.zone || '',
         phone: profile.phone || ''
       },
       personalData: {
@@ -745,6 +748,7 @@ export class UpdateProfileComponent implements OnInit {
         phone: basicInfo.phone || '',
         country: basicInfo.country || '',
         city: basicInfo.city || '',
+        zone: basicInfo.zone || '',
         availability: finalAvailability,
         gender: personalData.gender || '',
         birthDate: personalData.birthDate || null,

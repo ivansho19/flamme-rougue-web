@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { AdminService } from '../../../shared/services/admin/admin.service';
 import { ToastService } from '../../../shared/services/toast/toast.service';
 
@@ -42,6 +42,7 @@ export class AdminDashboardComponent implements OnInit {
   kycPageSize = 10;
   private readonly kycAllPageSize = 100;
   private pendingKycLoaded = false;
+  private readonly togglingProfileIds = new Set<string>();
 
   constructor(
     private adminService: AdminService,
@@ -291,48 +292,57 @@ export class AdminDashboardComponent implements OnInit {
 
   activateProfile(profile: any): void {
     const profileId = this.getProfileId(profile);
-    if (!profileId) {
+    if (!profileId || this.togglingProfileIds.has(profileId)) {
       return;
     }
 
     const nextActive = !this.isActive(profile);
 
-    this.adminService.activateProfile(profileId, nextActive).subscribe({
-      next: () => {
-        profile.isActiveProfile = nextActive;
-        this.refreshStats();
-        this.toastService.showToast(
-          this.translate.instant(
-            nextActive
-              ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_SUCCESS_TITLE'
-              : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_SUCCESS_TITLE'
-          ),
-          this.translate.instant(
-            nextActive
-              ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_SUCCESS_MESSAGE'
-              : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_SUCCESS_MESSAGE'
-          ),
-          'success',
-          4
-        );
-      },
-      error: () => {
-        this.toastService.showToast(
-          this.translate.instant(
-            nextActive
-              ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_ERROR_TITLE'
-              : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_ERROR_TITLE'
-          ),
-          this.translate.instant(
-            nextActive
-              ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_ERROR_MESSAGE'
-              : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_ERROR_MESSAGE'
-          ),
-          'error',
-          4
-        );
-      }
-    });
+    this.togglingProfileIds.add(profileId);
+
+    this.adminService.activateProfile(profileId, nextActive)
+      .pipe(finalize(() => this.togglingProfileIds.delete(profileId)))
+      .subscribe({
+        next: () => {
+          profile.isActiveProfile = nextActive;
+          this.refreshStats();
+          this.toastService.showToast(
+            this.translate.instant(
+              nextActive
+                ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_SUCCESS_TITLE'
+                : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_SUCCESS_TITLE'
+            ),
+            this.translate.instant(
+              nextActive
+                ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_SUCCESS_MESSAGE'
+                : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_SUCCESS_MESSAGE'
+            ),
+            'success',
+            4
+          );
+        },
+        error: () => {
+          this.toastService.showToast(
+            this.translate.instant(
+              nextActive
+                ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_ERROR_TITLE'
+                : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_ERROR_TITLE'
+            ),
+            this.translate.instant(
+              nextActive
+                ? 'ADMIN_DASHBOARD.TOAST.ACTIVATE_ERROR_MESSAGE'
+                : 'ADMIN_DASHBOARD.TOAST.DEACTIVATE_ERROR_MESSAGE'
+            ),
+            'error',
+            4
+          );
+        }
+      });
+  }
+
+  isProfileToggling(profile: any): boolean {
+    const profileId = this.getProfileId(profile);
+    return !!profileId && this.togglingProfileIds.has(profileId);
   }
 
   deleteProfile(profile: any): void {
@@ -414,6 +424,10 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
     this.router.navigate(['/profile', profileId]);
+  }
+
+  getProfileImage(profile: any): string {
+    return profile?.imagesMain?.url || 'Perfil';
   }
 
   getProfileName(profile: any): string {

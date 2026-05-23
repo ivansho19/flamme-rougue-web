@@ -28,6 +28,9 @@
             <button class="publish-top-btn" *ngIf="getUserName() && !isClient()" (click)="navigateToCommentPlans()" [title]="'HEADER.COMMENT_PLANS' | translate">
                 <i class="bi bi-chat-left-text"></i> {{ 'HEADER.COMMENT_PLANS' | translate }}
             </button>
+            <button class="publish-top-btn" *ngIf="isAdmin()" (click)="navigateToDashboard()" [title]="'HEADER.GO_DASHBOARD' | translate">
+                <i class="bi bi-speedometer2"></i> {{ 'HEADER.GO_DASHBOARD' | translate }}
+            </button>
             <button class="icon-btn" *ngIf="getUserName()" (click)="logout()"><i class="bi bi-box-arrow-right"></i></button>
         </div>
     </div>

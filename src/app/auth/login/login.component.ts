@@ -66,7 +66,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           localStorage.setItem('userEmail', email);
           localStorage.setItem('client', JSON.stringify(response.client));
           localStorage.setItem('profileId', response.profileId);
-          this.router.navigate(['/home']);
+          localStorage.setItem('isAdmin', JSON.stringify(response.isAdmin));
+          if(response.isAdmin){
+            this.router.navigate(['/admin/dashboard']);
+          }else{
+            this.router.navigate(['/home']);
+          }
+          
         },
         error: (error) => {
           console.error('Error en el inicio de sesión:', error);

@@ -433,6 +433,32 @@
   gap: 8px;
 }
 
+.profile-toggle {
+  transform: scale(0.85);
+  transform-origin: center;
+}
+
+.profile-toggle.is-active ::ng-deep .mdc-switch__track {
+  background-color: #dbf6e7 !important;
+}
+
+.profile-toggle.is-active ::ng-deep .mdc-switch__handle {
+  background-color: #0f8b46 !important;
+}
+
+.profile-toggle.is-inactive ::ng-deep .mdc-switch__track {
+  background-color: #f1f1f1 !important;
+}
+
+.profile-toggle.is-inactive ::ng-deep .mdc-switch__handle {
+  background-color: #a0a0a0 !important;
+}
+
+.profile-toggle.mat-mdc-slide-toggle-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .empty-state {
   text-align: center;
   padding: 24px;
@@ -527,18 +553,6 @@
   background: #f3f3f3;
   color: #a0a0a0;
   cursor: not-allowed;
-}
-
-.link-btn {
-  margin-top: auto;
-  background: transparent;
-  border: none;
-  color: #d2272a;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .chart-panel {

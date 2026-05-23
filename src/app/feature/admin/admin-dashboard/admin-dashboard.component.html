@@ -7,26 +7,6 @@
   </aside>
 
   <div class="admin-main">
-    <header class="admin-header">
-      <div>
-        <h1>{{ 'ADMIN_DASHBOARD.TITLE' | translate }}</h1>
-        <p>{{ 'ADMIN_DASHBOARD.SUBTITLE' | translate }}</p>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" type="button">
-          <i class="bi bi-bell"></i>
-          <span class="notif-dot">3</span>
-        </button>
-        <div class="admin-user">
-          <div class="avatar">A</div>
-          <div>
-            <strong>{{ 'ADMIN_DASHBOARD.HEADER.ADMIN' | translate }}</strong>
-            <span>Jose lopez</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
     <section class="stats-grid">
       <article class="stat-card">
         <div class="stat-icon red">
@@ -113,8 +93,8 @@
               <tr *ngFor="let profile of filteredProfiles">
                 <td>
                   <div class="user-cell">
-                    <div class="user-avatar">
-                      {{ getProfileName(profile).slice(0, 1) }}
+                    <div>
+                      <img class="user-avatar" [src]="getProfileImage(profile)" alt="{{ getProfileName(profile) }}" />
                     </div>
                     <div>
                       <strong>{{ getProfileName(profile) }}</strong>
@@ -141,16 +121,29 @@
                 <td>{{ profile?.createdAt | date: 'dd/MM/yyyy' }}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="icon-btn ghost" type="button" (click)="goToProfile(profile)">
-                      <i class="bi bi-eye"></i>
-                    </button>
                     <button
                       class="icon-btn ghost"
                       type="button"
-                      (click)="activateProfile(profile)">
-                      <i class="bi bi-toggle-on"></i>
+                      [matTooltip]="'ADMIN_DASHBOARD.TABLE.TOOLTIP.VIEW' | translate"
+                      (click)="goToProfile(profile)">
+                      <i class="bi bi-eye"></i>
                     </button>
-                    <button class="icon-btn ghost danger" type="button" (click)="openDeleteConfirm(profile)">
+                    <mat-slide-toggle
+                      class="profile-toggle"
+                      [class.is-active]="isActive(profile)"
+                      [class.is-inactive]="!isActive(profile)"
+                      [disabled]="isProfileToggling(profile)"
+                      [matTooltip]="isActive(profile)
+                        ? ('ADMIN_DASHBOARD.TABLE.TOOLTIP.DEACTIVATE' | translate)
+                        : ('ADMIN_DASHBOARD.TABLE.TOOLTIP.ACTIVATE' | translate)"
+                      [checked]="isActive(profile)"
+                      (change)="activateProfile(profile)">
+                    </mat-slide-toggle>
+                    <button
+                      class="icon-btn ghost danger"
+                      type="button"
+                      [matTooltip]="'ADMIN_DASHBOARD.TABLE.TOOLTIP.DELETE' | translate"
+                      (click)="openDeleteConfirm(profile)">
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
@@ -238,11 +231,6 @@
           [pageSizeOptions]="[5, 10, 20]"
           (page)="onKycPageChange($event)">
         </mat-paginator>
-
-        <button class="link-btn" type="button">
-          {{ 'ADMIN_DASHBOARD.KYC.VIEW_ALL' | translate }}
-          <i class="bi bi-arrow-right"></i>
-        </button>
       </div>
     </section>
   </div>

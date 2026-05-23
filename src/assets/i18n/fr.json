@@ -246,6 +246,12 @@
       "KYC": "KYC",
       "CREATED": "Cree le",
       "ACTIONS": "Actions",
+      "TOOLTIP": {
+        "VIEW": "Voir le profil",
+        "ACTIVATE": "Activer",
+        "DEACTIVATE": "Desactiver",
+        "DELETE": "Supprimer le profil"
+      },
       "EMPTY": "Aucun profil a afficher"
     },
     "STATUS": {
