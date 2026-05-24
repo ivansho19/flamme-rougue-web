@@ -11,6 +11,7 @@ export const environment = {
   api_profile: `${urlBase}/profiles`,
   api_admin: `${urlBase}/admin`,
   api_topRojo: `${urlBase}/top-rojo`,
+  api_notifications: `${urlBase}/notifications`,
   api_client_by_email: `${urlBase}/auth/client`,
   api_comments: `${urlBase}/comments`,
   api_ratings_toggle: `${urlBase}/ratings/toggle`,

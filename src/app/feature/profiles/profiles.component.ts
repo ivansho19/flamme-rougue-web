@@ -147,7 +147,7 @@ export class ProfilesComponent implements OnInit {
       }
 
       const user = localStorage.getItem('user');
-      if (user) {
+      if (!user) {
         this.commentError = this.translate.instant('PROFILE.COMMENT_ERROR_CLIENT');
         return;
       }

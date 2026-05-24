@@ -9,6 +9,108 @@
         <span class="username" *ngIf="getUserName()">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
         <div class="header-icons">
             <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
+            <div class="notif-wrapper" *ngIf="isAdmin()">
+                <button
+                    class="icon-btn notif-btn"
+                    type="button"
+                    matBadge="{{ adminNotificationCount }}"
+                    matBadgeColor="warn"
+                    matBadgeSize="small"
+                    matBadgePosition="above after"
+                    [matBadgeHidden]="adminNotificationCount === 0"
+                    (click)="onNotificationsClick()">
+                    <i class="bi bi-bell"></i>
+                </button>
+                <div class="notifications-popover" *ngIf="notificationsOpen">
+                    <div class="popover-header">
+                        <span>{{ 'HEADER.NOTIFICATIONS' | translate }}</span>
+                        <div class="popover-actions">
+                            <span class="popover-count" *ngIf="adminNotificationCount > 0">{{ adminNotificationCount }}</span>
+                            <button class="notif-clear" type="button" (click)="clearNotifications()">
+                                {{ 'HEADER.NOTIFICATIONS_CLEAR' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="popover-body" *ngIf="!notificationsLoading; else notifLoading">
+                        <ng-container *ngIf="adminNotifications.length; else notifEmpty">
+                            <div class="notif-list">
+                                <button
+                                    class="notif-item"
+                                    type="button"
+                                    *ngFor="let notification of adminNotifications"
+                                    [class.unread]="isNotificationUnread(notification)"
+                                    (click)="goToNotificationsPanel()">
+                                    <div class="notif-item-header">
+                                        <span class="notif-title">{{ notification?.title }}</span>
+                                        <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                    </div>
+                                    <div class="notif-message">{{ notification?.message }}</div>
+                                </button>
+                            </div>
+                            <button class="notif-cta" type="button" (click)="goToNotificationsPanel()">
+                                {{ 'HEADER.NOTIFICATIONS_GO_PANEL' | translate }}
+                            </button>
+                        </ng-container>
+                        <ng-template #notifEmpty>
+                            <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_EMPTY' | translate }}</div>
+                        </ng-template>
+                    </div>
+                    <ng-template #notifLoading>
+                        <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_LOADING' | translate }}</div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="notif-wrapper" *ngIf="isClient()">
+                <button
+                    class="icon-btn notif-btn"
+                    type="button"
+                    matBadge="{{ profileNotificationCount }}"
+                    matBadgeColor="warn"
+                    matBadgeSize="small"
+                    matBadgePosition="above after"
+                    [matBadgeHidden]="profileNotificationCount === 0"
+                    (click)="onProfileNotificationsClick()">
+                    <i class="bi bi-bell"></i>
+                </button>
+                <div class="notifications-popover" *ngIf="profileNotificationsOpen">
+                    <div class="popover-header">
+                        <span>{{ 'HEADER.NOTIFICATIONS' | translate }}</span>
+                        <div class="popover-actions">
+                            <span class="popover-count" *ngIf="profileNotificationCount > 0">{{ profileNotificationCount }}</span>
+                            <button class="notif-clear" type="button" (click)="clearProfileNotifications()">
+                                {{ 'HEADER.NOTIFICATIONS_CLEAR' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="popover-body" *ngIf="!profileNotificationsLoading; else profileNotifLoading">
+                        <ng-container *ngIf="profileNotifications.length; else profileNotifEmpty">
+                            <div class="notif-list">
+                                <button
+                                    class="notif-item"
+                                    type="button"
+                                    *ngFor="let notification of profileNotifications"
+                                    [class.unread]="isNotificationUnread(notification)"
+                                    (click)="handleProfileNotificationClick(notification)">
+                                    <div class="notif-item-header">
+                                        <span class="notif-title">{{ notification?.title }}</span>
+                                        <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                    </div>
+                                    <div class="notif-message">{{ notification?.message }}</div>
+                                </button>
+                            </div>
+                            <button class="notif-cta" type="button" (click)="goToProfileNotificationsPanel()">
+                                {{ 'HEADER.NOTIFICATIONS_GO_PROFILE' | translate }}
+                            </button>
+                        </ng-container>
+                        <ng-template #profileNotifEmpty>
+                            <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_EMPTY' | translate }}</div>
+                        </ng-template>
+                    </div>
+                    <ng-template #profileNotifLoading>
+                        <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_LOADING' | translate }}</div>
+                    </ng-template>
+                </div>
+            </div>
             <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
@@ -49,6 +151,110 @@
             <button class="mobile-item" type="button" (click)="toggleSearch(); closeMobileMenu()">
                 <i class="bi bi-search"></i> {{ 'HEADER.SEARCH' | translate }}
             </button>
+            <button
+                class="mobile-item"
+                *ngIf="isAdmin()"
+                type="button"
+                matBadge="{{ adminNotificationCount }}"
+                matBadgeColor="warn"
+                matBadgeSize="small"
+                matBadgePosition="above after"
+                [matBadgeHidden]="adminNotificationCount === 0"
+                (click)="onNotificationsClick(); closeMobileMenu()">
+                <i class="bi bi-bell"></i> {{ 'HEADER.NOTIFICATIONS' | translate }}
+            </button>
+            <button
+                class="mobile-item"
+                *ngIf="isClient()"
+                type="button"
+                matBadge="{{ profileNotificationCount }}"
+                matBadgeColor="warn"
+                matBadgeSize="small"
+                matBadgePosition="above after"
+                [matBadgeHidden]="profileNotificationCount === 0"
+                (click)="onProfileNotificationsClick(); closeMobileMenu()">
+                <i class="bi bi-bell"></i> {{ 'HEADER.NOTIFICATIONS' | translate }}
+            </button>
+            <div class="mobile-notifications" *ngIf="isClient() && profileNotificationsOpen">
+                <div class="mobile-notifications-card">
+                    <div class="mobile-notifications-header">
+                        <span>{{ 'HEADER.NOTIFICATIONS' | translate }}</span>
+                        <div class="popover-actions">
+                            <span class="popover-count" *ngIf="profileNotificationCount > 0">{{ profileNotificationCount }}</span>
+                            <button class="notif-clear" type="button" (click)="clearProfileNotifications()">
+                                {{ 'HEADER.NOTIFICATIONS_CLEAR' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mobile-notifications-body" *ngIf="!profileNotificationsLoading; else profileNotifLoadingMobile">
+                        <ng-container *ngIf="profileNotifications.length; else profileNotifEmptyMobile">
+                            <div class="notif-list">
+                                <button
+                                    class="notif-item"
+                                    type="button"
+                                    *ngFor="let notification of profileNotifications"
+                                    [class.unread]="isNotificationUnread(notification)"
+                                    (click)="handleProfileNotificationClick(notification); closeMobileMenu()">
+                                    <div class="notif-item-header">
+                                        <span class="notif-title">{{ notification?.title }}</span>
+                                        <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                    </div>
+                                    <div class="notif-message">{{ notification?.message }}</div>
+                                </button>
+                            </div>
+                            <button class="notif-cta" type="button" (click)="goToProfileNotificationsPanel(); closeMobileMenu()">
+                                {{ 'HEADER.NOTIFICATIONS_GO_PROFILE' | translate }}
+                            </button>
+                        </ng-container>
+                        <ng-template #profileNotifEmptyMobile>
+                            <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_EMPTY' | translate }}</div>
+                        </ng-template>
+                    </div>
+                    <ng-template #profileNotifLoadingMobile>
+                        <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_LOADING' | translate }}</div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="mobile-notifications" *ngIf="isAdmin() && notificationsOpen">
+                <div class="mobile-notifications-card">
+                    <div class="mobile-notifications-header">
+                        <span>{{ 'HEADER.NOTIFICATIONS' | translate }}</span>
+                        <div class="popover-actions">
+                            <span class="popover-count" *ngIf="adminNotificationCount > 0">{{ adminNotificationCount }}</span>
+                            <button class="notif-clear" type="button" (click)="clearNotifications()">
+                                {{ 'HEADER.NOTIFICATIONS_CLEAR' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mobile-notifications-body" *ngIf="!notificationsLoading; else notifLoadingMobile">
+                        <ng-container *ngIf="adminNotifications.length; else notifEmptyMobile">
+                            <div class="notif-list">
+                                <button
+                                    class="notif-item"
+                                    type="button"
+                                    *ngFor="let notification of adminNotifications"
+                                    [class.unread]="isNotificationUnread(notification)"
+                                    (click)="goToNotificationsPanel(); closeMobileMenu()">
+                                    <div class="notif-item-header">
+                                        <span class="notif-title">{{ notification?.title }}</span>
+                                        <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                    </div>
+                                    <div class="notif-message">{{ notification?.message }}</div>
+                                </button>
+                            </div>
+                            <button class="notif-cta" type="button" (click)="goToNotificationsPanel(); closeMobileMenu()">
+                                {{ 'HEADER.NOTIFICATIONS_GO_PANEL' | translate }}
+                            </button>
+                        </ng-container>
+                        <ng-template #notifEmptyMobile>
+                            <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_EMPTY' | translate }}</div>
+                        </ng-template>
+                    </div>
+                    <ng-template #notifLoadingMobile>
+                        <div class="notif-empty">{{ 'HEADER.NOTIFICATIONS_LOADING' | translate }}</div>
+                    </ng-template>
+                </div>
+            </div>
             <button class="mobile-item" type="button" (click)="navigateToProfile(); closeMobileMenu()">
                 <i class="bi bi-person"></i> {{ 'HEADER.PROFILE' | translate }}
             </button>

@@ -11,7 +11,18 @@
     "LOGOUT": "Cerrar sesión",
     "PUBLISH_TOP": "Publicar TOP",
     "COMMENT_PLANS": "Plan comentarios",
-    "GO_DASHBOARD": "Ir al Dashboard"
+    "GO_DASHBOARD": "Ir al Dashboard",
+    "NOTIFICATIONS": "Notificaciones",
+    "NOTIFICATIONS_EMPTY": "No hay notificaciones",
+    "NOTIFICATIONS_LOADING": "Cargando...",
+    "NOTIFICATIONS_GO_PANEL": "Ir al panel",
+    "NOTIFICATIONS_GO_PROFILE": "Ir al perfil",
+    "NOTIFICATIONS_CLEAR": "Limpiar",
+    "TIME_AGO": "hace",
+    "TIME_NOW": "ahora",
+    "TIME_MIN": "m",
+    "TIME_HOUR": "h",
+    "TIME_DAY": "d"
   },
   "PROFILE": {
     "SUBTITLE": "Recepcion privada",

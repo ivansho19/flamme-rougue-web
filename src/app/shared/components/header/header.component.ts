@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { GetCountries } from "../../clases/getCountries";
 import { GetFlags } from "../../clases/getFlagsOptions";
+import { NotificationsService } from "../../services/notifications/notifications.service";
 
 @Component({
   selector: "app-header",
@@ -24,6 +25,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchResults: Array<{ id: string; name: string; city?: string; imageUrl?: string }> = [];
   searchLoading = false;
   currentLang = 'es';
+  adminNotificationCount = 0;
+  notificationsOpen = false;
+  notificationsLoading = false;
+  latestAdminNotification: { title?: string; message?: string; createdAt?: string } | null = null;
+  adminNotifications: Array<{ title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  profileNotificationCount = 0;
+  profileNotificationsOpen = false;
+  profileNotificationsLoading = false;
+  profileNotifications: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  private readonly adminNotificationsStatus: 'unread' | 'read' | undefined = undefined;
+  private readonly profileNotificationsStatus: 'unread' | 'read' | undefined = undefined;
   private search$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
@@ -36,7 +48,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private loaderService: LoaderService,
     private profileService: ProfileService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private notificationsService: NotificationsService
   ) { }
 
   ngOnInit(): void {
@@ -79,6 +92,73 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((results) => {
         this.searchResults = results;
         this.searchLoading = false;
+      });
+
+    this.refreshAdminNotifications();
+    this.refreshProfileNotifications();
+  }
+
+  private refreshAdminNotifications(): void {
+    if (!this.isAdmin()) {
+      this.adminNotificationCount = 0;
+      this.latestAdminNotification = null;
+      return;
+    }
+
+    this.notificationsLoading = true;
+    this.notificationsService
+      .getAdminNotifications(this.adminNotificationsStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          const data = Array.isArray(response?.data) ? response.data : [];
+          const filtered = data.filter((item: any) =>
+            item?.type === 'profile_created' || item?.type === 'payment_processed'
+          );
+          this.adminNotifications = filtered;
+          this.adminNotificationCount = filtered.length;
+          this.latestAdminNotification = filtered[0] ?? null;
+          this.notificationsLoading = false;
+        },
+        error: () => {
+          this.adminNotificationCount = 0;
+          this.latestAdminNotification = null;
+          this.adminNotifications = [];
+          this.notificationsLoading = false;
+        }
+      });
+  }
+
+  private refreshProfileNotifications(): void {
+    if (!this.isClient()) {
+      this.profileNotificationCount = 0;
+      this.profileNotifications = [];
+      return;
+    }
+
+    const profileId = this.getStoredProfileId();
+    if (!profileId) {
+      this.profileNotificationCount = 0;
+      this.profileNotifications = [];
+      return;
+    }
+
+    this.profileNotificationsLoading = true;
+    this.notificationsService
+      .getProfileNotifications(profileId, this.profileNotificationsStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          const total = response?.total ?? response?.data?.length ?? 0;
+          this.profileNotificationCount = Number(total) || 0;
+          this.profileNotifications = Array.isArray(response?.data) ? response.data : [];
+          this.profileNotificationsLoading = false;
+        },
+        error: () => {
+          this.profileNotificationCount = 0;
+          this.profileNotifications = [];
+          this.profileNotificationsLoading = false;
+        }
       });
   }
 
@@ -137,6 +217,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.dropdownOpen = false;
       this.searchOpen = false;
       this.mobileMenuOpen = false;
+      this.notificationsOpen = false;
+      this.profileNotificationsOpen = false;
     }
   }
 
@@ -161,6 +243,109 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateToDashboard(){
     return this.route.navigate(['/admin/dashboard']);
+  }
+
+  onNotificationsClick(): void {
+    if (!this.isAdmin()) {
+      return;
+    }
+    this.notificationsOpen = !this.notificationsOpen;
+    if (this.notificationsOpen) {
+      this.refreshAdminNotifications();
+    }
+  }
+
+  onProfileNotificationsClick(): void {
+    if (!this.isClient()) {
+      return;
+    }
+    this.profileNotificationsOpen = !this.profileNotificationsOpen;
+    if (this.profileNotificationsOpen) {
+      this.refreshProfileNotifications();
+    }
+  }
+
+  goToNotificationsPanel(): void {
+    this.notificationsOpen = false;
+    this.navigateToDashboard();
+  }
+
+  goToProfileNotificationsPanel(): void {
+    this.profileNotificationsOpen = false;
+    const profileId = this.getStoredProfileId();
+    if (profileId) {
+      this.route.navigate(['/profile', profileId]);
+      return;
+    }
+    this.navigateToProfile();
+  }
+
+  clearNotifications(): void {
+    this.adminNotifications = [];
+    this.latestAdminNotification = null;
+    this.adminNotificationCount = 0;
+  }
+
+  clearProfileNotifications(): void {
+    this.profileNotifications = [];
+    this.profileNotificationCount = 0;
+    const profileId = this.getStoredProfileId();
+    if (!profileId) {
+      return;
+    }
+    this.notificationsService
+      .markAllNotificationsRead()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
+  }
+
+  handleProfileNotificationClick(notification: { _id?: string; status?: string }): void {
+    if (this.isNotificationUnread(notification) && notification?._id) {
+      this.notificationsService
+        .markNotificationsRead([notification._id])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe();
+      notification.status = 'read';
+      this.profileNotificationCount = Math.max(0, this.profileNotificationCount - 1);
+    }
+    this.goToProfileNotificationsPanel();
+  }
+
+  isNotificationUnread(notification: { status?: string } | null): boolean {
+    return (notification?.status || '').toLowerCase() === 'unread';
+  }
+
+  getRelativeTime(value?: string): string {
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
+
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 60) {
+      return this.translate.instant('HEADER.TIME_NOW');
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) {
+      return `${this.translate.instant('HEADER.TIME_AGO')} ${minutes}${this.translate.instant('HEADER.TIME_MIN')}`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+      return `${this.translate.instant('HEADER.TIME_AGO')} ${hours}${this.translate.instant('HEADER.TIME_HOUR')}`;
+    }
+
+    const days = Math.floor(hours / 24);
+    return `${this.translate.instant('HEADER.TIME_AGO')} ${days}${this.translate.instant('HEADER.TIME_DAY')}`;
+  }
+
+  private getStoredProfileId(): string {
+    return localStorage.getItem('profileId') || '';
   }
 
   isAdmin(): boolean {

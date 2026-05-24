@@ -10,7 +10,18 @@
     "SEARCH_HINT": "Typ minstens 3 tekens om te zoeken",
     "LOGOUT": "Afmelden",
     "PUBLISH_TOP": "TOP publiceren",
-    "COMMENT_PLANS": "Reactieplannen"
+    "COMMENT_PLANS": "Reactieplannen",
+    "NOTIFICATIONS": "Meldingen",
+    "NOTIFICATIONS_EMPTY": "Geen meldingen",
+    "NOTIFICATIONS_LOADING": "Laden...",
+    "NOTIFICATIONS_GO_PANEL": "Ga naar het paneel",
+    "NOTIFICATIONS_GO_PROFILE": "Ga naar het profiel",
+    "NOTIFICATIONS_CLEAR": "Wissen",
+    "TIME_AGO": "geleden",
+    "TIME_NOW": "nu",
+    "TIME_MIN": "m",
+    "TIME_HOUR": "h",
+    "TIME_DAY": "d"
   },
   "PROFILE": {
     "SUBTITLE": "Prive ontvangst",

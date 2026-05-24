@@ -10,7 +10,18 @@
     "SEARCH_HINT": "Tapez au moins 3 caracteres pour rechercher",
     "LOGOUT": "Déconnexion",
     "PUBLISH_TOP": "Publier TOP",
-    "COMMENT_PLANS": "Plan commentaires"
+    "COMMENT_PLANS": "Plan commentaires",
+    "NOTIFICATIONS": "Notifications",
+    "NOTIFICATIONS_EMPTY": "Aucune notification",
+    "NOTIFICATIONS_LOADING": "Chargement...",
+    "NOTIFICATIONS_GO_PANEL": "Aller au panneau",
+    "NOTIFICATIONS_GO_PROFILE": "Aller au profil",
+    "NOTIFICATIONS_CLEAR": "Effacer",
+    "TIME_AGO": "il y a",
+    "TIME_NOW": "maintenant",
+    "TIME_MIN": "m",
+    "TIME_HOUR": "h",
+    "TIME_DAY": "j"
   },
   "PROFILE": {
     "SUBTITLE": "Reception privee",

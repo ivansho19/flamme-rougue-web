@@ -10,7 +10,18 @@
     "SEARCH_HINT": "Type at least 3 characters to search",
     "LOGOUT": "Logout",
     "PUBLISH_TOP": "Publish TOP",
-    "COMMENT_PLANS": "Comment plans"
+    "COMMENT_PLANS": "Comment plans",
+    "NOTIFICATIONS": "Notifications",
+    "NOTIFICATIONS_EMPTY": "No notifications",
+    "NOTIFICATIONS_LOADING": "Loading...",
+    "NOTIFICATIONS_GO_PANEL": "Go to panel",
+    "NOTIFICATIONS_GO_PROFILE": "Go to profile",
+    "NOTIFICATIONS_CLEAR": "Clear",
+    "TIME_AGO": "ago",
+    "TIME_NOW": "now",
+    "TIME_MIN": "m",
+    "TIME_HOUR": "h",
+    "TIME_DAY": "d"
   },
   "PROFILE": {
     "SUBTITLE": "Private reception",

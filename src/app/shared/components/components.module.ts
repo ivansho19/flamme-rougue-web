@@ -13,6 +13,7 @@ import { ProfilePreviewComponent } from './profile-preview/profile-preview.compo
 import { ToastAlertComponent } from './toast-alert/toast-alert.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatBadgeModule } from '@angular/material/badge';
 import { TranslateModule } from '@ngx-translate/core';
 import { TopRojoModalComponent } from './top-rojo-modal/top-rojo-modal.component';
 import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selection-modal.component';
@@ -61,6 +62,7 @@ import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-acti
     ReactiveFormsModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatBadgeModule,
     TranslateModule
 ],
   providers: []
