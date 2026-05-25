@@ -47,6 +47,22 @@
                                     <div class="notif-message">{{ notification?.message }}</div>
                                 </button>
                             </div>
+                            <div class="notif-section" *ngIf="showAdminHistory">
+                                <div class="notif-section-title">{{ 'HEADER.NOTIFICATIONS_HISTORY' | translate }}</div>
+                                <div class="notif-list">
+                                    <button
+                                        class="notif-item"
+                                        type="button"
+                                        *ngFor="let notification of adminReadHistory"
+                                        (click)="goToNotificationsPanel()">
+                                        <div class="notif-item-header">
+                                            <span class="notif-title">{{ notification?.title }}</span>
+                                            <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                        </div>
+                                        <div class="notif-message">{{ notification?.message }}</div>
+                                    </button>
+                                </div>
+                            </div>
                             <button class="notif-cta" type="button" (click)="goToNotificationsPanel()">
                                 {{ 'HEADER.NOTIFICATIONS_GO_PANEL' | translate }}
                             </button>
@@ -97,6 +113,22 @@
                                     </div>
                                     <div class="notif-message">{{ notification?.message }}</div>
                                 </button>
+                            </div>
+                            <div class="notif-section" *ngIf="showProfileHistory">
+                                <div class="notif-section-title">{{ 'HEADER.NOTIFICATIONS_HISTORY' | translate }}</div>
+                                <div class="notif-list">
+                                    <button
+                                        class="notif-item"
+                                        type="button"
+                                        *ngFor="let notification of profileReadHistory"
+                                        (click)="goToProfileNotificationsPanel()">
+                                        <div class="notif-item-header">
+                                            <span class="notif-title">{{ notification?.title }}</span>
+                                            <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                        </div>
+                                        <div class="notif-message">{{ notification?.message }}</div>
+                                    </button>
+                                </div>
                             </div>
                             <button class="notif-cta" type="button" (click)="goToProfileNotificationsPanel()">
                                 {{ 'HEADER.NOTIFICATIONS_GO_PROFILE' | translate }}
@@ -202,6 +234,22 @@
                                     <div class="notif-message">{{ notification?.message }}</div>
                                 </button>
                             </div>
+                            <div class="notif-section" *ngIf="showProfileHistory">
+                                <div class="notif-section-title">{{ 'HEADER.NOTIFICATIONS_HISTORY' | translate }}</div>
+                                <div class="notif-list">
+                                    <button
+                                        class="notif-item"
+                                        type="button"
+                                        *ngFor="let notification of profileReadHistory"
+                                        (click)="goToProfileNotificationsPanel(); closeMobileMenu()">
+                                        <div class="notif-item-header">
+                                            <span class="notif-title">{{ notification?.title }}</span>
+                                            <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                        </div>
+                                        <div class="notif-message">{{ notification?.message }}</div>
+                                    </button>
+                                </div>
+                            </div>
                             <button class="notif-cta" type="button" (click)="goToProfileNotificationsPanel(); closeMobileMenu()">
                                 {{ 'HEADER.NOTIFICATIONS_GO_PROFILE' | translate }}
                             </button>
@@ -241,6 +289,22 @@
                                     </div>
                                     <div class="notif-message">{{ notification?.message }}</div>
                                 </button>
+                            </div>
+                            <div class="notif-section" *ngIf="showAdminHistory">
+                                <div class="notif-section-title">{{ 'HEADER.NOTIFICATIONS_HISTORY' | translate }}</div>
+                                <div class="notif-list">
+                                    <button
+                                        class="notif-item"
+                                        type="button"
+                                        *ngFor="let notification of adminReadHistory"
+                                        (click)="goToNotificationsPanel(); closeMobileMenu()">
+                                        <div class="notif-item-header">
+                                            <span class="notif-title">{{ notification?.title }}</span>
+                                            <span class="notif-time">{{ getRelativeTime(notification?.createdAt) }}</span>
+                                        </div>
+                                        <div class="notif-message">{{ notification?.message }}</div>
+                                    </button>
+                                </div>
                             </div>
                             <button class="notif-cta" type="button" (click)="goToNotificationsPanel(); closeMobileMenu()">
                                 {{ 'HEADER.NOTIFICATIONS_GO_PANEL' | translate }}

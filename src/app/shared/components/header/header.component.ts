@@ -30,12 +30,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationsLoading = false;
   latestAdminNotification: { title?: string; message?: string; createdAt?: string } | null = null;
   adminNotifications: Array<{ title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  adminReadHistory: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
   profileNotificationCount = 0;
   profileNotificationsOpen = false;
   profileNotificationsLoading = false;
   profileNotifications: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  profileReadHistory: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
   private readonly adminNotificationsStatus: 'unread' | 'read' | undefined = undefined;
-  private readonly profileNotificationsStatus: 'unread' | 'read' | undefined = undefined;
+  private profileNotificationsStatus: 'unread' | 'read' | undefined = 'unread';
+  private adminClearedAt: number | null = null;
+  private profileClearedAt: number | null = null;
   private search$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
@@ -115,9 +119,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
           const filtered = data.filter((item: any) =>
             item?.type === 'profile_created' || item?.type === 'payment_processed'
           );
-          this.adminNotifications = filtered;
-          this.adminNotificationCount = filtered.length;
-          this.latestAdminNotification = filtered[0] ?? null;
+          const visible = filtered.filter((item: any) =>
+            this.isAfterCleared(item?.createdAt, this.adminClearedAt)
+          );
+          this.adminNotifications = visible;
+          this.adminNotificationCount = visible.length;
+          this.latestAdminNotification = visible[0] ?? null;
           this.notificationsLoading = false;
         },
         error: () => {
@@ -151,7 +158,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (response) => {
           const total = response?.total ?? response?.data?.length ?? 0;
           this.profileNotificationCount = Number(total) || 0;
-          this.profileNotifications = Array.isArray(response?.data) ? response.data : [];
+          const items = Array.isArray(response?.data) ? response.data : [];
+          this.profileNotifications = items.filter((item: any) =>
+            this.isAfterCleared(item?.createdAt, this.profileClearedAt)
+          );
+          if (this.profileNotificationsStatus === 'unread') {
+            this.profileNotificationCount = this.profileNotifications.length;
+          }
           this.profileNotificationsLoading = false;
         },
         error: () => {
@@ -281,14 +294,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   clearNotifications(): void {
+    this.adminReadHistory = this.buildReadHistory(this.adminNotifications, this.adminReadHistory);
     this.adminNotifications = [];
     this.latestAdminNotification = null;
     this.adminNotificationCount = 0;
+    this.adminClearedAt = Date.now();
   }
 
   clearProfileNotifications(): void {
+    this.profileReadHistory = this.buildReadHistory(this.profileNotifications, this.profileReadHistory);
     this.profileNotifications = [];
     this.profileNotificationCount = 0;
+    this.profileClearedAt = Date.now();
     const profileId = this.getStoredProfileId();
     if (!profileId) {
       return;
@@ -308,10 +325,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       notification.status = 'read';
       this.profileNotificationCount = Math.max(0, this.profileNotificationCount - 1);
     }
+    this.profileReadHistory = this.buildReadHistory([notification], this.profileReadHistory);
     this.goToProfileNotificationsPanel();
   }
 
   isNotificationUnread(notification: { status?: string } | null): boolean {
+    if (!notification?.status) {
+      return true;
+    }
     return (notification?.status || '').toLowerCase() === 'unread';
   }
 
@@ -344,8 +365,55 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return `${this.translate.instant('HEADER.TIME_AGO')} ${days}${this.translate.instant('HEADER.TIME_DAY')}`;
   }
 
+  private isAfterCleared(value?: string, clearedAt?: number | null): boolean {
+    if (!clearedAt) {
+      return true;
+    }
+    if (!value) {
+      return false;
+    }
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return false;
+    }
+    return date.getTime() > clearedAt;
+  }
+
   private getStoredProfileId(): string {
     return localStorage.getItem('profileId') || '';
+  }
+
+  get showAdminHistory(): boolean {
+    return this.adminNotifications.length > 0 && this.adminReadHistory.length > 0;
+  }
+
+  get showProfileHistory(): boolean {
+    return this.profileNotifications.length > 0 && this.profileReadHistory.length > 0;
+  }
+
+  private buildReadHistory(
+    items: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }>,
+    currentHistory: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }>
+  ): Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> {
+    const normalized = items.map(item => ({
+      ...item,
+      status: 'read'
+    }));
+    const merged = [...normalized, ...currentHistory];
+    const unique = new Map<string, { _id?: string; title?: string; message?: string; createdAt?: string; status?: string }>();
+    merged.forEach(item => {
+      const key = item?._id || `${item?.title || ''}-${item?.createdAt || ''}`;
+      if (!unique.has(key)) {
+        unique.set(key, item);
+      }
+    });
+    return Array.from(unique.values())
+      .sort((a, b) => {
+        const aTime = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bTime - aTime;
+      })
+      .slice(0, 4);
   }
 
   isAdmin(): boolean {
@@ -369,6 +437,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         localStorage.removeItem('userEmail');
         localStorage.removeItem('adult-consent');
         localStorage.removeItem('profileId');
+        localStorage.removeItem('isAdmin');
         this.route.navigate(['/auth/login']);
       }
     });
