@@ -7,6 +7,7 @@ import { LoaderService } from '../../shared/services/loader/loader.service';
 import { ToastService } from '../../shared/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GetFlags } from '../../shared/clases/getFlagsOptions';
+import { NotificationsService } from '../../shared/services/notifications/notifications.service';
 
 @Component({
   selector: 'app-login',
@@ -22,9 +23,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   selectedFlagUrl = 'https://flagcdn.com/es.svg';
   flagOptions = GetFlags.getFlagsOptions();
 
-  constructor(private fb: FormBuilder, private authService: AuthService, 
-    private router: Router, private loaderService: LoaderService, 
-    private toastService: ToastService, private translate: TranslateService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private loaderService: LoaderService,
+    private toastService: ToastService,
+    private translate: TranslateService,
+    private notificationsService: NotificationsService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
@@ -67,6 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           localStorage.setItem('client', JSON.stringify(response.client));
           localStorage.setItem('profileId', response.profileId);
           localStorage.setItem('isAdmin', JSON.stringify(response.isAdmin));
+          this.notificationsService.connectSocket();
           if(response.isAdmin){
             this.router.navigate(['/admin/dashboard']);
           }else{

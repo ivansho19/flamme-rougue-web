@@ -3,6 +3,7 @@ const urlBase = 'http://localhost:5000/api';
 
 export const environment = {
   production: true,
+  socket_url: 'http://localhost:5000',
   api_login: `${urlBase}/auth/login`,
   api_register: `${urlBase}/auth/register`,
   api_register_client: `${urlBase}/auth/registerClient`,

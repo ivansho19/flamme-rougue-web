@@ -181,18 +181,18 @@
           <button
             type="button"
             class="tab-btn"
-            [class.active]="currentKycTab === 'all'"
-            (click)="setKycTab('all')">
-            {{ 'ADMIN_DASHBOARD.KYC.TAB_ALL' | translate }}
-            <span class="tab-count">{{ kycTotalCount }}</span>
-          </button>
-          <button
-            type="button"
-            class="tab-btn"
             [class.active]="currentKycTab === 'pending'"
             (click)="setKycTab('pending')">
             {{ 'ADMIN_DASHBOARD.KYC.TAB_PENDING' | translate }}
             <span class="tab-count">{{ pendingKyc }}</span>
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="currentKycTab === 'all'"
+            (click)="setKycTab('all')">
+            {{ 'ADMIN_DASHBOARD.KYC.TAB_ALL' | translate }}
+            <span class="tab-count">{{ kycTotalCount }}</span>
           </button>
         </div>
 

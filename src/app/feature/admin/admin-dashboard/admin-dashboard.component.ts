@@ -17,7 +17,7 @@ export class AdminDashboardComponent implements OnInit {
   kycItems: any[] = [];
   pendingKycItems: any[] = [];
   pendingKycItemsAll: any[] = [];
-  currentKycTab: 'all' | 'pending' = 'all';
+  currentKycTab: 'all' | 'pending' = 'pending';
   loading = false;
   searchTerm = '';
 
@@ -67,12 +67,13 @@ export class AdminDashboardComponent implements OnInit {
 
   loadProfiles(): void {
     this.loading = true;
-    this.adminService.getAllProfiles(this.pageIndex + 1, this.pageSize).subscribe({
+    const name = this.searchTerm.trim();
+    this.adminService.getAllProfiles(this.pageIndex + 1, this.pageSize, name || undefined).subscribe({
       next: (response) => {
         const list = response?.profiles ?? response?.data ?? response ?? [];
         this.profiles = Array.isArray(list) ? list : [];
         this.totalProfilesCount = response?.total ?? this.profiles.length;
-        this.applyFilters();
+        this.filteredProfiles = [...this.profiles];
         this.refreshStats();
         this.loading = false;
       },
@@ -89,18 +90,8 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   applyFilters(): void {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (!term) {
-      this.filteredProfiles = [...this.profiles];
-      return;
-    }
-
-    this.filteredProfiles = this.profiles.filter(profile => {
-      const name = this.getProfileName(profile).toLowerCase();
-      const email = this.getProfileEmail(profile).toLowerCase();
-      const id = this.getProfileId(profile).toLowerCase();
-      return name.includes(term) || email.includes(term) || id.includes(term);
-    });
+    this.pageIndex = 0;
+    this.loadProfiles();
   }
 
   refreshStats(): void {

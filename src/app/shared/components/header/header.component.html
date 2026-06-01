@@ -143,7 +143,13 @@
                     </ng-template>
                 </div>
             </div>
-            <button (click)="navigateToProfile()" class="icon-btn" [title]="'HEADER.PROFILE' | translate"><i class="bi bi-person"></i></button>
+            <button
+                *ngIf="!isAdmin() || isClient()"
+                (click)="navigateToProfile()"
+                class="icon-btn"
+                [title]="'HEADER.PROFILE' | translate">
+                <i class="bi bi-person"></i>
+            </button>
             <div class="dropdown-flag">
                 <button class="icon-btn dropdown-toggle" type="button" (click)="toggleDropdown()"
                     [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
@@ -319,7 +325,11 @@
                     </ng-template>
                 </div>
             </div>
-            <button class="mobile-item" type="button" (click)="navigateToProfile(); closeMobileMenu()">
+            <button
+                *ngIf="!isAdmin() || isClient()"
+                class="mobile-item"
+                type="button"
+                (click)="navigateToProfile(); closeMobileMenu()">
                 <i class="bi bi-person"></i> {{ 'HEADER.PROFILE' | translate }}
             </button>
             <button class="mobile-item publish-top" type="button" *ngIf="getUserName()" (click)="openTopRojoModal(); closeMobileMenu()">

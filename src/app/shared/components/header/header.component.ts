@@ -11,6 +11,7 @@ import { GetCountries } from "../../clases/getCountries";
 import { GetFlags } from "../../clases/getFlagsOptions";
 import { NotificationsService } from "../../services/notifications/notifications.service";
 
+
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -29,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationsOpen = false;
   notificationsLoading = false;
   latestAdminNotification: { title?: string; message?: string; createdAt?: string } | null = null;
-  adminNotifications: Array<{ title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  adminNotifications: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string; type?: string }> = [];
   adminReadHistory: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
   profileNotificationCount = 0;
   profileNotificationsOpen = false;
@@ -98,6 +99,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.searchLoading = false;
       });
 
+    this.notificationsService.connectSocket();
+    this.notificationsService
+      .onSocketAuthError()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.logout());
+
+    if (this.isAdmin()) {
+      this.notificationsLoading = true;
+      this.notificationsService
+        .watchAdminNotifications(this.adminNotificationsStatus)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((items) => {
+          this.applyAdminNotifications(items);
+          this.notificationsLoading = false;
+        });
+    }
+
+    if (this.isClient()) {
+      const profileId = this.getStoredProfileId();
+      if (profileId) {
+        this.profileNotificationsLoading = true;
+        this.notificationsService
+          .watchProfileNotifications(profileId, this.profileNotificationsStatus)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((items) => {
+            this.applyProfileNotifications(items);
+            this.profileNotificationsLoading = false;
+          });
+      }
+    }
+
     this.refreshAdminNotifications();
     this.refreshProfileNotifications();
   }
@@ -110,30 +142,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     this.notificationsLoading = true;
-    this.notificationsService
-      .getAdminNotifications(this.adminNotificationsStatus)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          const data = Array.isArray(response?.data) ? response.data : [];
-          const filtered = data.filter((item: any) =>
-            item?.type === 'profile_created' || item?.type === 'payment_processed'
-          );
-          const visible = filtered.filter((item: any) =>
-            this.isAfterCleared(item?.createdAt, this.adminClearedAt)
-          );
-          this.adminNotifications = visible;
-          this.adminNotificationCount = visible.length;
-          this.latestAdminNotification = visible[0] ?? null;
-          this.notificationsLoading = false;
-        },
-        error: () => {
-          this.adminNotificationCount = 0;
-          this.latestAdminNotification = null;
-          this.adminNotifications = [];
-          this.notificationsLoading = false;
-        }
-      });
+    this.notificationsService.requestAdminRefresh();
   }
 
   private refreshProfileNotifications(): void {
@@ -151,28 +160,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     this.profileNotificationsLoading = true;
-    this.notificationsService
-      .getProfileNotifications(profileId, this.profileNotificationsStatus)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          const total = response?.total ?? response?.data?.length ?? 0;
-          this.profileNotificationCount = Number(total) || 0;
-          const items = Array.isArray(response?.data) ? response.data : [];
-          this.profileNotifications = items.filter((item: any) =>
-            this.isAfterCleared(item?.createdAt, this.profileClearedAt)
-          );
-          if (this.profileNotificationsStatus === 'unread') {
-            this.profileNotificationCount = this.profileNotifications.length;
-          }
-          this.profileNotificationsLoading = false;
-        },
-        error: () => {
-          this.profileNotificationCount = 0;
-          this.profileNotifications = [];
-          this.profileNotificationsLoading = false;
-        }
-      });
+    this.notificationsService.requestProfileRefresh(profileId);
+  }
+
+  private applyAdminNotifications(items: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string; type?: string }>): void {
+    const filtered = items.filter((item: any) =>
+      item?.type === 'profile_created' || item?.type === 'payment_processed'
+    );
+    const visible = filtered.filter((item: any) =>
+      this.isAfterCleared(item?.createdAt, this.adminClearedAt)
+    );
+    this.adminNotifications = visible;
+    this.adminNotificationCount = visible.length;
+    this.latestAdminNotification = visible[0] ?? null;
+  }
+
+  private applyProfileNotifications(items: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }>): void {
+    const visible = items.filter((item: any) =>
+      this.isAfterCleared(item?.createdAt, this.profileClearedAt)
+    );
+    this.profileNotifications = visible;
+    if (this.profileNotificationsStatus === 'unread') {
+      this.profileNotificationCount = this.profileNotifications.length;
+    } else {
+      this.profileNotificationCount = visible.length;
+    }
   }
 
   toggleDropdown() {
@@ -431,6 +443,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Aquí llamas a tu servicio de logout
+        this.notificationsService.disconnectSocket();
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userId');

@@ -13,11 +13,14 @@ export class AdminService {
 
   constructor(private http: HttpClient, private loaderService: LoaderService) {}
 
-  getAllProfiles(page = 1, limit = 15): Observable<any> {
+  getAllProfiles(page = 1, limit = 15, name?: string): Observable<any> {
     this.loaderService.setLoaderState(true);
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('page', String(page))
       .set('limit', String(limit));
+    if (name) {
+      params = params.set('name', name);
+    }
     return this.http.get(`${this.apiAdmin}/getAllProfiles`, { params }).pipe(
       finalize(() => this.loaderService.setLoaderState(false))
     );
