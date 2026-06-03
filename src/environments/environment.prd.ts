@@ -1,4 +1,4 @@
-const urlBase = 'https://flamme-rouge-backend-production.up.railway.app/api';
+const urlBase = 'https://flamme-rouge-backend-production-913e.up.railway.app/api';
 
 
 export const environment = {
