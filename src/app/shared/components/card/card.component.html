@@ -1,8 +1,8 @@
 <div class="custom-card">
   <div class="card-image">
     <img [src]="image" class="custom-card-img" alt="Imagen" />
-    <div class="plan-badge" *ngIf="planBadgeLabel" [ngClass]="planBadgeClass">
-      {{ planBadgeLabel }}
+    <div class="plan-badge" *ngIf="planBadgeImage" [ngClass]="planBadgeClass">
+      <img [src]="planBadgeImage" alt="Plan" />
     </div>
   </div>
   <div class="custom-card-body">

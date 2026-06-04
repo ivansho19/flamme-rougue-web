@@ -1,0 +1,62 @@
+.card-skeleton {
+  width: 18rem;
+  height: 430px;
+  border-radius: 12px;
+  background: #f7e6c9;
+  border: 3px solid transparent;
+  box-shadow: 0 4px 12px rgba(178, 126, 131, 0.07);
+  padding: 12px;
+  margin: 20px auto 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+.skeleton-img {
+  height: 240px;
+  border-radius: 12px;
+  background: #ead6b0;
+}
+
+.skeleton-title {
+  height: 18px;
+  width: 60%;
+  border-radius: 999px;
+  background: #e1c999;
+}
+
+.skeleton-line {
+  height: 12px;
+  width: 100%;
+  border-radius: 999px;
+  background: #e1c999;
+}
+
+.skeleton-line.short {
+  width: 70%;
+}
+
+.skeleton-footer {
+  height: 16px;
+  width: 40%;
+  border-radius: 999px;
+  background: #e1c999;
+  margin-top: auto;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

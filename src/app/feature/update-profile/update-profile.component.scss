@@ -31,6 +31,16 @@
   border: 1px solid #e7d9c4;
   border-radius: 999px;
   padding: 0.4rem 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.current-plan-badge {
+  width: 50px;
+  height: 30px;
+  display: block;
+  object-fit: contain;
 }
 
 .plan-actions .btn-primary {

@@ -4,6 +4,7 @@
         <h2 class="section-title">
             {{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}
             <span class="current-plan" *ngIf="currentPlanKey">
+                <img class="current-plan-badge" *ngIf="currentPlanBadgeImage" [src]="currentPlanBadgeImage" alt="Plan" />
                 {{ 'PROFILE_FORM.CURRENT_PLAN' | translate }}: {{ currentPlanKey | translate }}
             </span>
         </h2>

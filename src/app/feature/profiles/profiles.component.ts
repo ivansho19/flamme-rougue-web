@@ -234,17 +234,14 @@ export class ProfilesComponent implements OnInit {
       return urls;
     }
 
-    get planBadgeLabel(): string | null {
-        if (this.profileData && this.profileData.plan?.[0] === '2') {
-            return 'Pro';
-        }
-        if (this.profileData && this.profileData.plan?.[0] === '3') {
-            return 'Premium';
-        }
-        if (this.profileData && (this.profileData.plan?.[0] === '0' || this.profileData.plan?.[0] === '1')) {
-            return 'Basico';
-        }
-        return null;
+    get planBadgeImage(): string | null {
+      if (this.profileData && this.profileData.plan?.[0] === '2') {
+        return 'assets/images/icon_pro.png';
+      }
+      if (this.profileData && this.profileData.plan?.[0] === '3') {
+        return 'assets/images/icon_vip.png';
+      }
+      return null;
     }
 
 

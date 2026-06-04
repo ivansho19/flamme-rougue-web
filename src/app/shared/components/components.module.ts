@@ -20,6 +20,7 @@ import { PlanSelectionModalComponent } from './plan-selection-modal/plan-selecti
 import { FlagsComponent } from './flags/flags.component';
 import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component';
 import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component';
+import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-acti
     PlanSelectionModalComponent,
     FlagsComponent,
     KycInfoModalComponent,
-    ConfirmActionModalComponent
+    ConfirmActionModalComponent,
+    CardSkeletonComponent
   ],
   exports: [
     LoaderComponent,
@@ -53,7 +55,8 @@ import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-acti
     PlanSelectionModalComponent,
     FlagsComponent,
     KycInfoModalComponent,
-    ConfirmActionModalComponent
+    ConfirmActionModalComponent,
+    CardSkeletonComponent
   ],
   imports: [
     CommonModule,

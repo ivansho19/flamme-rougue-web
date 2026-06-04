@@ -16,15 +16,12 @@ export class CardComponent {
     @Input() buttonUrl: string = '#';
     @Input() isVerified: boolean = false;
 
-    get planBadgeLabel(): string | null {
+    get planBadgeImage(): string | null {
         if (this.plan && this.plan[0] === '2') {
-            return 'Pro';
+            return 'assets/images/icon_pro.png';
         }
         if (this.plan && this.plan[0] === '3') {
-            return 'Premium';
-        }
-        if (this.plan && (this.plan[0] === '0' || this.plan[0] === '1')) {
-            return 'Basico';
+            return 'assets/images/icon_vip.png';
         }
         return null;
     }

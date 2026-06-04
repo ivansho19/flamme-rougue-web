@@ -23,6 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     anunciantes: any[] = [];
     destacados: any[] = [];
     carouselItems: EmblaItem[] = [];
+    cardsLoading = true;
+    skeletonItems = Array.from({ length: 8 });
 
     constructor(
         private route: Router,
@@ -60,13 +62,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.cardsLoading = true;
         this.profileService.getAllProfiles().subscribe({
             next: (response) => {
                 this.anunciantes = response?.profiles ?? response ?? [];
+                this.cardsLoading = false;
             },
             error: (error) => {
                 console.error('Error cargando perfiles:', error);
                 this.anunciantes = [];
+                this.cardsLoading = false;
             }
         });
 

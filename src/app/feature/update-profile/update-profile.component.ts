@@ -521,6 +521,16 @@ export class UpdateProfileComponent implements OnInit {
     return null;
   }
 
+  get currentPlanBadgeImage(): string | null {
+    if (this.selectedPlanId === 2) {
+      return 'assets/images/icon_pro.png';
+    }
+    if (this.selectedPlanId === 3) {
+      return 'assets/images/icon_vip.png';
+    }
+    return null;
+  }
+
   isInvalid(controlPath: string): boolean {
     const control = this.profileForm.get(controlPath);
     return !!(control && control.invalid && (control.touched || control.dirty));

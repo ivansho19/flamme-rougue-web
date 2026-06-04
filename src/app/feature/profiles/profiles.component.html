@@ -36,7 +36,9 @@
       <div class="profile-divider"></div>
 
       <div class="badges">
-        <!-- <span class="badge gold" *ngIf="planBadgeLabel">★ {{ 'PROFILE.GOLD' | translate }}</span> -->
+        <span class="badge bplan-image" *ngIf="planBadgeImage">
+          <img [src]="planBadgeImage" alt="Plan" />
+        </span>
         <span class="badge verified" *ngIf="profileData.isVerify">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
       </div>
 

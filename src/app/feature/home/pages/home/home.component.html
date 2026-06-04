@@ -7,19 +7,26 @@
   
 <div class="container text-center">
   <div class="row">
-    <div class="col-12 col-sm-6 col-md-6 col-lg-3" *ngFor="let card of anunciantes">
-      <app-card
-        [image]="card.imagesMain?.url || ''"
-        [title]="card.displayName"
-        [describe]="card.bio"
-        [age]="card.age"
-        [city]="card.city"
-        [isVerified]="card.isVerify"
-        [buttonUrl]="'/profile/' + card._id"
-        [plan]="card.plan"
-        (click)="goToProfile(card._id)">
-      </app-card>
-    </div>
+    <ng-container *ngIf="cardsLoading; else cardsLoaded">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-3" *ngFor="let _ of skeletonItems">
+        <app-card-skeleton></app-card-skeleton>
+      </div>
+    </ng-container>
+    <ng-template #cardsLoaded>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-3" *ngFor="let card of anunciantes">
+        <app-card
+          [image]="card.imagesMain?.url || ''"
+          [title]="card.displayName"
+          [describe]="card.bio"
+          [age]="card.age"
+          [city]="card.city"
+          [isVerified]="card.isVerify"
+          [buttonUrl]="'/profile/' + card._id"
+          [plan]="card.plan"
+          (click)="goToProfile(card._id)">
+        </app-card>
+      </div>
+    </ng-template>
   </div>
 </div>
 
