@@ -164,9 +164,12 @@ export class ProfilesComponent implements OnInit {
           this.loadComments();
         },
         error: (error) => {
+          const client = localStorage.getItem('client');
           this.commentSubmitting = false;
           this.commentError = error?.error?.message || this.translate.instant('PROFILE.COMMENT_ERROR_GENERIC');
-          this.showPlanModal = true;
+          if(!client){
+             this.showPlanModal = true;
+          }
         }
       });
     }
