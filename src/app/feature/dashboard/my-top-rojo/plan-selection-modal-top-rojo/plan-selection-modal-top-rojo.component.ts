@@ -157,7 +157,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
             const plan = this.getSelectedPlan();
             if (!plan) {
               this.paypalError = 'Selecciona un plan para continuar.';
-              return actions.reject();
+              throw new Error('Plan no seleccionado');
             }
 
             const amount = plan.price;
@@ -169,7 +169,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
               return response.orderId;
             } catch (error) {
               this.paypalError = 'No se pudo crear la orden de PayPal.';
-              return actions.reject();
+              throw error;
             }
           },
           onApprove: async (data: any, actions: any) => {
@@ -179,7 +179,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
               );
               if (response.status !== 'COMPLETED') {
                 this.paypalError = 'El pago no se completo correctamente.';
-                return actions.reject();
+                return;
               }
 
               const plan = this.getSelectedPlan();
@@ -191,7 +191,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
               }
             } catch (error) {
               this.paypalError = 'Error al capturar el pago con PayPal.';
-              return actions.reject();
+              return;
             }
           },
           onError: () => {

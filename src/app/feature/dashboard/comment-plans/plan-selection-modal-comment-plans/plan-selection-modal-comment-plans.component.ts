@@ -164,7 +164,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
             const plan = this.getSelectedPlan();
             if (!plan || !plan.selectable) {
               this.paypalError = 'Selecciona un plan para continuar.';
-              return actions.reject();
+              throw new Error('Plan no seleccionado');
             }
 
             const amount = this.parsePlanPrice(plan.price);
@@ -176,7 +176,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
               return response.orderId;
             } catch (error) {
               this.paypalError = 'No se pudo crear la orden de PayPal.';
-              return actions.reject();
+              throw error;
             }
           },
           onApprove: async (data: any, actions: any) => {
@@ -186,7 +186,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
               );
               if (response.status !== 'COMPLETED') {
                 this.paypalError = 'El pago no se completo correctamente.';
-                return actions.reject();
+                return;
               }
 
               if (this.selectedPlanId === 'monthly' || this.selectedPlanId === 'annual') {
@@ -195,7 +195,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
               }
             } catch (error) {
               this.paypalError = 'Error al capturar el pago con PayPal.';
-              return actions.reject();
+              return;
             }
           },
           onError: () => {

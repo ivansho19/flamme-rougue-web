@@ -10,6 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { GetCountries } from "../../clases/getCountries";
 import { GetFlags } from "../../clases/getFlagsOptions";
 import { NotificationsService } from "../../services/notifications/notifications.service";
+import { AuthSessionService } from "../../services/auth-session/auth-session.service";
 
 
 @Component({
@@ -54,7 +55,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService,
     private profileService: ProfileService,
     private translate: TranslateService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private authSessionService: AuthSessionService
   ) { }
 
   ngOnInit(): void {
@@ -103,7 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.notificationsService
       .onSocketAuthError()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.logout());
+      .subscribe(() => this.authSessionService.logout(true));
 
     if (this.isAdmin()) {
       this.notificationsLoading = true;
@@ -442,16 +444,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Aquí llamas a tu servicio de logout
-        this.notificationsService.disconnectSocket();
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('adult-consent');
-        localStorage.removeItem('profileId');
-        localStorage.removeItem('isAdmin');
-        this.route.navigate(['/auth/login']);
+        this.authSessionService.logout();
       }
     });
   }

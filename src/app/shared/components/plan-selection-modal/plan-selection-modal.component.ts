@@ -188,7 +188,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
             const plan = this.getSelectedPlan();
             if (!plan) {
               this.paypalError = 'Selecciona un plan para continuar.';
-              return actions.reject();
+              throw new Error('Plan no seleccionado');
             }
 
             const amount = this.parsePlanPrice(plan.price);
@@ -200,7 +200,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
               return response.orderId;
             } catch (error) {
               this.paypalError = 'No se pudo crear la orden de PayPal.';
-              return actions.reject();
+              throw error;
             }
           },
           onApprove: async (data: any, actions: any) => {
@@ -210,7 +210,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
               );
               if (response.status !== 'COMPLETED') {
                 this.paypalError = 'El pago no se completo correctamente.';
-                return actions.reject();
+                return;
               }
 
               const plan = this.getSelectedPlan();
@@ -222,7 +222,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
               }
             } catch (error) {
               this.paypalError = 'Error al capturar el pago con PayPal.';
-              return actions.reject();
+              return;
             }
           },
           onError: () => {
