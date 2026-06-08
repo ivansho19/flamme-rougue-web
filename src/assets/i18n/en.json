@@ -408,6 +408,7 @@
     "PUBLISH_NEW": "New TOP RED",
     "PUBLISH_NOW": "Publish TOP RED",
     "ACTIVE": "Active",
+    "PENDING": "Pending",
     "EXPIRED": "Expired",
     "NO_ACTIVE": "You have no active TOP RED",
     "NO_ACTIVE_DESC": "Buy a TOP RED to increase your visibility and reach more customers.",
@@ -431,6 +432,8 @@
     "TOTAL_CLICKS": "Total clicks",
     "CONV_RATE": "Conversion rate",
     "COMPLETE": "completed",
+    "PENDING_REVIEW": "Pending review",
+    "PENDING_REVIEW_DESC": "Your TOP RED is waiting for admin activation once the payment is validated.",
     "EXPIRED_ON": "Expired on"
   }
 }

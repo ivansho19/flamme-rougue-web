@@ -408,6 +408,7 @@
     "PUBLISH_NEW": "Nouveau TOP ROUGE",
     "PUBLISH_NOW": "Publier TOP ROUGE",
     "ACTIVE": "Actifs",
+    "PENDING": "En attente",
     "EXPIRED": "Expirés",
     "NO_ACTIVE": "Tu n'as pas de TOP ROUGE actifs",
     "NO_ACTIVE_DESC": "Achète un TOP ROUGE pour augmenter ta visibilité et atteindre plus de clients.",
@@ -431,6 +432,8 @@
     "TOTAL_CLICKS": "Clics totaux",
     "CONV_RATE": "Taux de conversion",
     "COMPLETE": "complété",
+    "PENDING_REVIEW": "En attente de révision",
+    "PENDING_REVIEW_DESC": "Ton TOP ROUGE attend l'activation par l'administrateur une fois le paiement validé.",
     "EXPIRED_ON": "Expiré le"
   }
 }

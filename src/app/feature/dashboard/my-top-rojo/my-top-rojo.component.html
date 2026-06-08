@@ -40,6 +40,15 @@
         {{ dashboard?.active?.length }}
       </span>
     </button>
+    <button class="tab pending-tab"
+      [class.active]="activeTab === 'pending'"
+      (click)="activeTab = 'pending'">
+      <i class="bi bi-hourglass"></i>
+      {{ 'TOP_ROJO.PENDING' | translate }}
+      <span class="tab-badge pending-badge" *ngIf="dashboard?.pending?.length">
+        {{ dashboard?.pending?.length }}
+      </span>
+    </button>
     <button class="tab" 
       [class.active]="activeTab === 'expired'"
       (click)="activeTab = 'expired'">
@@ -59,6 +68,12 @@
     <button class="btn btn-primary" (click)="openCreateForm()">
       {{ 'TOP_ROJO.PUBLISH_NOW' | translate }}
     </button>
+  </div>
+
+  <div class="empty-state pending-empty" *ngIf="!loading && !dashboard?.pending?.length && activeTab === 'pending'">
+    <div class="empty-icon">⏳</div>
+    <h3>{{ 'TOP_ROJO.NO_PENDING' | translate }}</h3>
+    <p>{{ 'TOP_ROJO.NO_PENDING_DESC' | translate }}</p>
   </div>
 
   <!-- Loading -->
@@ -119,6 +134,33 @@
           <i class="bi bi-trash"></i>
           {{ 'TOP_ROJO.CANCEL' | translate }}
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP ROJO Expirados -->
+  <div *ngIf="!loading && activeTab === 'pending'" class="tops-grid">
+    <div class="top-card pending" *ngFor="let top of dashboard?.pending || []">
+      <div class="top-card-header pending-header">
+        <div class="top-badge pending-state">⏳ {{ 'TOP_ROJO.PENDING' | translate }}</div>
+        <span class="top-plan">{{ getPlanName(top.planType) }}</span>
+      </div>
+
+      <div class="top-card-image">
+        <img [src]="top.profileImage" [alt]="top.displayName" />
+      </div>
+
+      <div class="top-card-content">
+        <h3>{{ top.displayName }}</h3>
+        <p class="city">{{ top.city }}, {{ top.country }}</p>
+
+        <div class="pending-box">
+          <i class="bi bi-shield-lock"></i>
+          <div>
+            <strong>{{ 'TOP_ROJO.PENDING_REVIEW' | translate }}</strong>
+            <p>{{ 'TOP_ROJO.PENDING_REVIEW_DESC' | translate }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

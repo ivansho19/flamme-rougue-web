@@ -20,11 +20,12 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   
   dashboard: IMyTopRojoDashboard | null = {
     active: [],
+    pending: [],
     expired: [],
     statistics: { totalSpent: 0, totalViews: 0, totalClicks: 0, conversionRate: 0 }
   };
   loading = false;
-  activeTab: 'active' | 'expired' = 'active';
+  activeTab: 'active' | 'pending' | 'expired' = 'active';
   
   // Modal de creación
   showCreateForm = false;
@@ -73,7 +74,7 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: IMyTopRojoDashboard) => {
-          this.dashboard = data || { active: [], expired: [], statistics: { totalSpent: 0, totalViews: 0, totalClicks: 0, conversionRate: 0 } };
+          this.dashboard = data || { active: [], pending: [], expired: [], statistics: { totalSpent: 0, totalViews: 0, totalClicks: 0, conversionRate: 0 } };
           this.loading = false;
         },
         error: (error) => {
@@ -200,9 +201,9 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   /**
    * Manejar selección de plan y creación de TOP ROJO
    */
-  onPlanSelectedForTopRojo(event: { formData: any; plan: TopRojoPlanOption }): void {
+  onPlanSelectedForTopRojo(event: { formData: any; plan: TopRojoPlanOption; status: 'active' | 'pending' }): void {
     this.showRenewPlanModal = true;
-    const { formData, plan } = event;
+    const { formData, plan, status } = event;
     const { country, city, title, description, phone, photo1File, photo2File } = formData;
     const planType = plan.id;
     
@@ -241,6 +242,7 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
         city,
         country,
         planType,
+        status,
         this.cloudinaryService
       )
       .pipe(takeUntil(this.destroy$))

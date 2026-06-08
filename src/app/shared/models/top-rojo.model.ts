@@ -3,7 +3,7 @@
 // ============================================
 
 export type TopRojoPlantType = 'top_24h' | 'top_3d' | 'top_7d';
-export type TopRojoStatus = 'active' | 'expired' | 'cancelled';
+export type TopRojoStatus = 'active' | 'pending' | 'expired' | 'cancelled';
 
 /**
  * Planes TOP ROJO disponibles
@@ -41,6 +41,7 @@ export interface ITopRojoCreateRequest {
   planType: TopRojoPlantType; // 'top_24h' | 'top_3d' | 'top_7d'
   city: string;               // Ciudad donde será visible
   country: string;            // País
+  status: string;
   title?: string;             // Título del TOP ROJO
   description?: string;       // Descripción del servicio
   contactPhone?: string;      // Número de contacto adicional
@@ -105,6 +106,7 @@ export interface ITopRojoListResponse {
  */
 export interface IMyTopRojoDashboard {
   active: ITopRojoResponse[];
+  pending: ITopRojoResponse[];
   expired: ITopRojoResponse[];
   statistics: {
     totalSpent: number;

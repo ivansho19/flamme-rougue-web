@@ -418,6 +418,7 @@
     "CONTINUE_TO_PLAN": "Continuar a planes",
     "MIN_CHARS": "Mínimo {{min}} caracteres requeridos",
     "ACTIVE": "Activos",
+    "PENDING": "Pendientes",
     "EXPIRED": "Expirados",
     "NO_ACTIVE": "No tienes TOP ROJO activos",
     "NO_ACTIVE_DESC": "Compra un TOP ROJO para aumentar tu visibilidad y llegar a más clientes.",
@@ -442,6 +443,8 @@
     "TOTAL_CLICKS": "Clicks totales",
     "CONV_RATE": "Tasa de conversión",
     "COMPLETE": "completado",
+    "PENDING_REVIEW": "Pendiente de revisión",
+    "PENDING_REVIEW_DESC": "Tu TOP ROJO está en espera de activación por el administrador una vez validado el pago.",
     "EXPIRED_ON": "Expiró el",
     "CONFIRM_PLAN": "Confirmar plan"
   }

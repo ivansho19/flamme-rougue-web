@@ -24,6 +24,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   
   @Output() close = new EventEmitter<void>();
   @Output() planSelected = new EventEmitter<TopRojoPlanOption>();
+  @Output() whatsAppPlanSelected = new EventEmitter<TopRojoPlanOption>();
 
   selectedPlanId: TopRojoPlantType | null = null;
   plans: TopRojoPlanOption[] = [];
@@ -100,6 +101,10 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   }
 
   confirmWhatsAppPayment(): void {
+    const plan = this.getSelectedPlan();
+    if (plan) {
+      this.whatsAppPlanSelected.emit(plan);
+    }
     this.isWhatsAppConfirmOpen = false;
     this.openWhatsAppPayment();
   }

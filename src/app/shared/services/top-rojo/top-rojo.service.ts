@@ -85,15 +85,17 @@ export class TopRojoService {
     // Si la respuesta ES un array, dividir en activos y expirados
     if (Array.isArray(response)) {
       const active = response.filter(top => top.status === 'active');
+      const pending = response.filter(top => top.status === 'pending');
       const expired = response.filter(top => top.status === 'expired');
       return {
         active: this.mapTopRojoArray(active),
+        pending: this.mapTopRojoArray(pending),
         expired: this.mapTopRojoArray(expired),
         statistics: {
-          totalSpent: this.calculateTotalSpent(active, expired),
-          totalViews: (active.concat(expired)).reduce((sum, t) => sum + (t.views || 0), 0),
-          totalClicks: (active.concat(expired)).reduce((sum, t) => sum + (t.clicks || 0), 0),
-          conversionRate: this.calculateConversionRate(active.concat(expired))
+          totalSpent: this.calculateTotalSpent(active, pending, expired),
+          totalViews: (active.concat(pending, expired)).reduce((sum, t) => sum + (t.views || 0), 0),
+          totalClicks: (active.concat(pending, expired)).reduce((sum, t) => sum + (t.clicks || 0), 0),
+          conversionRate: this.calculateConversionRate(active.concat(pending, expired))
         }
       };
     }
@@ -101,15 +103,17 @@ export class TopRojoService {
     // Si tiene estructura {active, expired}
     if (responseActive || responseExpired) {
       const activeList = Array.isArray(responseActive) ? responseActive : [];
+      const pendingList = Array.isArray(response?.pendingTops || response?.pending) ? (response?.pendingTops || response?.pending) : [];
       const expiredList = Array.isArray(responseExpired) ? responseExpired : [];
-      const allList = activeList.concat(expiredList);
+      const allList = activeList.concat(pendingList, expiredList);
 
       const totalViews = apiStats?.totalViews ?? allList.reduce((sum: number, t: any) => sum + (t.views || t.viewCount || 0), 0);
       const totalClicks = apiStats?.totalClicks ?? allList.reduce((sum: number, t: any) => sum + (t.clicks || t.clickCount || 0), 0);
-      const totalSpent = apiStats?.totalSpent ?? this.calculateTotalSpent(activeList, expiredList);
+      const totalSpent = apiStats?.totalSpent ?? this.calculateTotalSpent(activeList, pendingList, expiredList);
 
       return {
         active: this.mapTopRojoArray(activeList),
+        pending: this.mapTopRojoArray(pendingList),
         expired: this.mapTopRojoArray(expiredList),
         statistics: response.statistics || {
           totalSpent,
@@ -124,6 +128,7 @@ export class TopRojoService {
     console.warn('[TopRojoService] Respuesta del API no coincide con estructura esperada');
     return {
       active: [],
+      pending: [],
       expired: [],
       statistics: { totalSpent: 0, totalViews: 0, totalClicks: 0, conversionRate: 0 }
     };
@@ -176,8 +181,8 @@ export class TopRojoService {
   /**
    * Calcular gasto total
    */
-  private calculateTotalSpent(active: any[], expired: any[]): number {
-    return (active.concat(expired || [])).reduce((sum, top) => sum + (top.price || 0), 0);
+  private calculateTotalSpent(active: any[], pending: any[], expired: any[]): number {
+    return (active.concat(pending || [], expired || [])).reduce((sum, top) => sum + (top.price || 0), 0);
   }
 
   /**
@@ -262,6 +267,7 @@ export class TopRojoService {
     city: string,
     country: string,
     planType: string,
+    status: 'active' | 'pending',
     cloudinaryService: any
   ): Observable<any> {
     // Crear carpeta con formato: top-rojo/[nombre-real-usuario]+[id]
@@ -283,6 +289,7 @@ export class TopRojoService {
           planType: planType as 'top_24h' | 'top_3d' | 'top_7d',
           city,
           country,
+          status,
           title,
           description,
           contactPhone: phone,

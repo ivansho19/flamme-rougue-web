@@ -75,7 +75,8 @@ export class TopRojoModalComponent implements OnInit, OnDestroy {
       planType: this.selectedPlan,
       city: this.city,
       country: this.country,
-      displayName: '' 
+      displayName: '',
+      status: 'PENDING || ACTIVE',
     };
 
     this.topRojoService

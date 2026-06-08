@@ -408,6 +408,7 @@
     "PUBLISH_NEW": "Nieuw TOP ROOD",
     "PUBLISH_NOW": "TOP ROOD publiceren",
     "ACTIVE": "Actief",
+    "PENDING": "In behandeling",
     "EXPIRED": "Verlopen",
     "NO_ACTIVE": "Je hebt geen actieve TOP ROOD",
     "NO_ACTIVE_DESC": "Koop een TOP ROOD om je zichtbaarheid te vergroten en meer klanten te bereiken.",
@@ -431,6 +432,8 @@
     "TOTAL_CLICKS": "Totale klikken",
     "CONV_RATE": "Conversieratio",
     "COMPLETE": "voltooid",
+    "PENDING_REVIEW": "In afwachting van beoordeling",
+    "PENDING_REVIEW_DESC": "Je TOP ROOD wacht op activatie door de beheerder zodra de betaling is gevalideerd.",
     "EXPIRED_ON": "Verlopen op"
   }
 }

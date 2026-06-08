@@ -30,7 +30,7 @@ export class CreateTopRojoFormComponent implements OnInit {
   
   @Output() close = new EventEmitter<void>();
   @Output() formComplete = new EventEmitter<any>();
-  @Output() planSelected = new EventEmitter<{ formData: any; plan: TopRojoPlanOption }>();
+  @Output() planSelected = new EventEmitter<{ formData: any; plan: TopRojoPlanOption; status: 'active' | 'pending' }>();
 
   @ViewChild('photoInput1') photoInput1!: ElementRef<HTMLInputElement>;
   @ViewChild('photoInput2') photoInput2!: ElementRef<HTMLInputElement>;
@@ -230,6 +230,14 @@ export class CreateTopRojoFormComponent implements OnInit {
    * Manejar selección de plan
    */
   onPlanSelected(plan: TopRojoPlanOption): void {
+    this.emitPlanSelection(plan, 'active');
+  }
+
+  onWhatsAppPlanSelected(plan: TopRojoPlanOption): void {
+    this.emitPlanSelection(plan, 'pending');
+  }
+
+  private emitPlanSelection(plan: TopRojoPlanOption, status: 'active' | 'pending'): void {
     const formDataToEmit = {
       country: this.topRojoForm.value.country,
       city: this.topRojoForm.value.city,
@@ -242,11 +250,11 @@ export class CreateTopRojoFormComponent implements OnInit {
     
     this.planSelected.emit({
       formData: formDataToEmit,
-      plan: plan
+      plan: plan,
+      status
     });
     
     // NO resetear aquí - dejar que el componente padre lo maneje después de la creación exitosa
-    // this.resetForm();
   }
 
   /**
