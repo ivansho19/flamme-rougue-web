@@ -80,4 +80,14 @@ export class AdminService {
 
     return this.http.get(`${this.apiAdmin}/top-rojo`, { params });
   }
+
+  updateAdminTopRojoStatus(
+    topRojoId: string,
+    status: 'pending' | 'active' | 'expired' | 'cancelled'
+  ): Observable<any> {
+    this.loaderService.setLoaderState(true);
+    return this.http.put(`${this.apiAdmin}/top-rojo/${topRojoId}/status`, { status }).pipe(
+      finalize(() => this.loaderService.setLoaderState(false))
+    );
+  }
 }

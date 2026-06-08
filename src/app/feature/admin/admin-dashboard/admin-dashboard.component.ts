@@ -56,6 +56,8 @@ export class AdminDashboardComponent implements OnInit {
   private pendingKycLoaded = false;
   private readonly togglingProfileIds = new Set<string>();
   private readonly topRojoUpdatingIds = new Set<string>();
+  private topRojoLoaded = false;
+  private topRojoSummaryLoaded = false;
   private topRojoSummary = {
     total: 0,
     pending: 0,
@@ -74,8 +76,6 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.initLanguage();
-    this.loadTopRojo();
-    this.loadTopRojoSummary();
     this.loadProfiles();
     this.loadKyc();
     this.loadAllPendingKyc();
@@ -83,9 +83,16 @@ export class AdminDashboardComponent implements OnInit {
 
   setAdminSection(section: 'top-rojo' | 'users'): void {
     this.activeAdminSection = section;
-    if (section === 'top-rojo' && !this.topRojoItems.length) {
-      this.loadTopRojo();
+    if (section === 'top-rojo' && !this.topRojoLoaded) {
+      this.refreshTopRojoData();
+    } else if (section === 'top-rojo' && !this.topRojoSummaryLoaded) {
+      this.loadTopRojoSummary();
     }
+  }
+
+  refreshTopRojoData(): void {
+    this.loadTopRojo();
+    this.loadTopRojoSummary();
   }
 
   loadTopRojo(): void {
@@ -105,6 +112,7 @@ export class AdminDashboardComponent implements OnInit {
           : [];
         this.topRojoFilteredTotalCount = Number(payload?.total ?? this.topRojoItems.length);
         this.topRojoTotalPages = Number(payload?.totalPages ?? 1);
+        this.topRojoLoaded = true;
         this.topRojoLoading = false;
       },
       error: () => {
@@ -135,15 +143,10 @@ export class AdminDashboardComponent implements OnInit {
           expired: Number((response.expired as any)?.total ?? 0),
           cancelled: Number((response.cancelled as any)?.total ?? 0)
         };
+        this.topRojoSummaryLoaded = true;
       },
       error: () => {
-        this.topRojoSummary = {
-          total: this.topRojoItems.length,
-          pending: 0,
-          active: 0,
-          expired: 0,
-          cancelled: 0
-        };
+        this.topRojoSummaryLoaded = false;
       }
     });
   }
@@ -411,13 +414,39 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   activateTopRojo(topRojo: any): void {
-    this.closeConfirm();
-    this.toastService.showToast(
-      this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_TITLE'),
-      this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_MESSAGE'),
-      'error',
-      4
-    );
+    const topRojoId = this.getTopRojoId(topRojo);
+    if (!topRojoId || this.topRojoUpdatingIds.has(topRojoId)) {
+      this.closeConfirm();
+      return;
+    }
+
+    this.topRojoUpdatingIds.add(topRojoId);
+
+    this.adminService.updateAdminTopRojoStatus(topRojoId, 'active')
+      .pipe(finalize(() => this.topRojoUpdatingIds.delete(topRojoId)))
+      .subscribe({
+        next: () => {
+          this.closeConfirm();
+          this.refreshTopRojoData();
+          this.topRojoStatusFilter = 'active';
+          this.setTopRojoStatusFilter('active');
+          this.toastService.showToast(
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_SUCCESS_TITLE'),
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_SUCCESS_MESSAGE'),
+            'success',
+            4
+          );
+        },
+        error: () => {
+          this.closeConfirm();
+          this.toastService.showToast(
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_TITLE'),
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_MESSAGE'),
+            'error',
+            4
+          );
+        }
+      });
   }
 
   cancelManagedTopRojo(topRojo: any): void {
@@ -434,8 +463,7 @@ export class AdminDashboardComponent implements OnInit {
       .subscribe({
         next: () => {
           this.closeConfirm();
-          this.loadTopRojo();
-          this.loadTopRojoSummary();
+          this.refreshTopRojoData();
           this.toastService.showToast(
             this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_SUCCESS_TITLE'),
             this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_SUCCESS_MESSAGE'),
@@ -601,19 +629,25 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   get topRojoTotalCount(): number {
-    return this.topRojoSummary.total;
+    return this.topRojoSummaryLoaded ? this.topRojoSummary.total : this.topRojoItems.length;
   }
 
   get topRojoPendingCount(): number {
-    return this.topRojoSummary.pending;
+    return this.topRojoSummaryLoaded
+      ? this.topRojoSummary.pending
+      : this.topRojoItems.filter(top => this.getTopRojoStatus(top) === 'pending').length;
   }
 
   get topRojoActiveCount(): number {
-    return this.topRojoSummary.active;
+    return this.topRojoSummaryLoaded
+      ? this.topRojoSummary.active
+      : this.topRojoItems.filter(top => this.getTopRojoStatus(top) === 'active').length;
   }
 
   get topRojoExpiredCount(): number {
-    return this.topRojoSummary.expired;
+    return this.topRojoSummaryLoaded
+      ? this.topRojoSummary.expired
+      : this.topRojoItems.filter(top => this.getTopRojoStatus(top) === 'expired').length;
   }
 
   getTopRojoId(topRojo: any): string {
