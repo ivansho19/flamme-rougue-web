@@ -212,8 +212,16 @@
   "ADMIN_DASHBOARD": {
     "TITLE": "Dashboard",
     "SUBTITLE": "Platform overview",
+    "SECTIONS": {
+      "TOP_ROJO": "Top Red",
+      "USERS": "Advertisers"
+    },
     "HEADER": {
       "ADMIN": "Administrator"
+    },
+    "USERS": {
+      "WIP_TITLE": "Users section in progress",
+      "WIP_SUBTITLE": "The UI is ready so we can connect the new users API when it is available."
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -283,6 +291,40 @@
       "VIEW_ALL": "View all pending",
       "EMPTY": "No pending KYC"
     },
+    "TOP_ROJO": {
+      "TITLE": "Global TOP RED management",
+      "SUBTITLE": "Monitor active, pending, and expired campaigns from a single panel.",
+      "REFRESH": "Refresh",
+      "EMPTY": "There are no TOP RED items to display right now.",
+      "FILTERS": {
+        "ALL": "All"
+      },
+      "CARDS": {
+        "TOTAL": "Total TOP RED",
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "EXPIRED": "Expired"
+      },
+      "TABLE": {
+        "PROFILE": "Profile",
+        "PLAN": "Plan",
+        "LOCATION": "Location",
+        "STATUS": "Status",
+        "PERIOD": "Period",
+        "PERFORMANCE": "Performance"
+      },
+      "STATUS": {
+        "ACTIVE": "Active",
+        "PENDING": "Pending",
+        "EXPIRED": "Expired",
+        "CANCELLED": "Cancelled"
+      },
+      "TOOLTIP": {
+        "VIEW": "View profile",
+        "ACTIVATE": "Activate pending TOP RED",
+        "CANCEL": "Cancel TOP RED"
+      }
+    },
     "CHART": {
       "TITLE": "Profiles created recently",
       "SUBTITLE": "New profile growth",
@@ -296,11 +338,25 @@
       "DELETE_CTA": "Delete",
       "VERIFY_TITLE": "Verify KYC",
       "VERIFY_MESSAGE": "Do you confirm the documents are valid?",
-      "VERIFY_CTA": "Verify"
+      "VERIFY_CTA": "Verify",
+      "ACTIVATE_TOP_TITLE": "Activate TOP RED",
+      "ACTIVATE_TOP_MESSAGE": "Do you confirm this pending TOP RED should move to active status?",
+      "ACTIVATE_TOP_CTA": "Activate",
+      "CANCEL_TOP_TITLE": "Cancel TOP RED",
+      "CANCEL_TOP_MESSAGE": "This action will cancel the selected TOP RED.",
+      "CANCEL_TOP_CTA": "Cancel TOP"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Error",
       "LOAD_ERROR_MESSAGE": "Unable to load the admin dashboard.",
+      "TOP_ROJO_LOAD_ERROR_TITLE": "Error",
+      "TOP_ROJO_LOAD_ERROR_MESSAGE": "The global TOP RED list could not be loaded.",
+      "TOP_ROJO_CANCEL_SUCCESS_TITLE": "TOP RED cancelled",
+      "TOP_ROJO_CANCEL_SUCCESS_MESSAGE": "The TOP RED was cancelled successfully.",
+      "TOP_ROJO_CANCEL_ERROR_TITLE": "Error",
+      "TOP_ROJO_CANCEL_ERROR_MESSAGE": "The TOP RED could not be cancelled.",
+      "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Endpoint pending",
+      "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "Share the TOP RED activation endpoint and I will wire it into this flow.",
       "ACTIVATE_SUCCESS_TITLE": "Profile activated",
       "ACTIVATE_SUCCESS_MESSAGE": "The profile was activated successfully.",
       "ACTIVATE_ERROR_TITLE": "Error",

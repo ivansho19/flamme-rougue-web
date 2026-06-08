@@ -212,8 +212,16 @@
   "ADMIN_DASHBOARD": {
     "TITLE": "Dashboard",
     "SUBTITLE": "Platformoverzicht",
+    "SECTIONS": {
+      "TOP_ROJO": "Top Rood",
+      "USERS": "Adverteerders"
+    },
     "HEADER": {
       "ADMIN": "Beheerder"
+    },
+    "USERS": {
+      "WIP_TITLE": "Gebruikerssectie in voorbereiding",
+      "WIP_SUBTITLE": "De UI staat klaar zodat we de nieuwe gebruikers-API kunnen koppelen zodra die beschikbaar is."
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -283,6 +291,39 @@
       "VIEW_ALL": "Bekijk alle in behandeling",
       "EMPTY": "Geen KYC in behandeling"
     },
+    "TOP_ROJO": {
+      "TITLE": "Globaal TOP ROOD-beheer",
+      "SUBTITLE": "Beheer actieve, wachtende en verlopen campagnes vanuit één paneel.",
+      "REFRESH": "Vernieuwen",
+      "EMPTY": "Er zijn momenteel geen TOP ROOD-items om te tonen.",
+      "FILTERS": {
+        "ALL": "Alle"
+      },
+      "CARDS": {
+        "TOTAL": "Totaal TOP ROOD",
+        "PENDING": "In behandeling",
+        "ACTIVE": "Actief",
+        "EXPIRED": "Verlopen"
+      },
+      "TABLE": {
+        "PROFILE": "Profiel",
+        "PLAN": "Plan",
+        "LOCATION": "Locatie",
+        "STATUS": "Status",
+        "PERIOD": "Periode"
+      },
+      "STATUS": {
+        "ACTIVE": "Actief",
+        "PENDING": "In behandeling",
+        "EXPIRED": "Verlopen",
+        "CANCELLED": "Geannuleerd"
+      },
+      "TOOLTIP": {
+        "VIEW": "Profiel bekijken",
+        "ACTIVATE": "Wachtende TOP ROOD activeren",
+        "CANCEL": "TOP ROOD annuleren"
+      }
+    },
     "CHART": {
       "TITLE": "Recent aangemaakte profielen",
       "SUBTITLE": "Groei van nieuwe profielen",
@@ -296,11 +337,25 @@
       "DELETE_CTA": "Verwijderen",
       "VERIFY_TITLE": "KYC verifiëren",
       "VERIFY_MESSAGE": "Bevestig je dat de documenten geldig zijn?",
-      "VERIFY_CTA": "Verifiëren"
+      "VERIFY_CTA": "Verifiëren",
+      "ACTIVATE_TOP_TITLE": "TOP ROOD activeren",
+      "ACTIVATE_TOP_MESSAGE": "Bevestig je dat deze wachtende TOP ROOD actief moet worden gemaakt?",
+      "ACTIVATE_TOP_CTA": "Activeren",
+      "CANCEL_TOP_TITLE": "TOP ROOD annuleren",
+      "CANCEL_TOP_MESSAGE": "Deze actie annuleert de geselecteerde TOP ROOD.",
+      "CANCEL_TOP_CTA": "TOP annuleren"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Fout",
       "LOAD_ERROR_MESSAGE": "Kan het admin dashboard niet laden.",
+      "TOP_ROJO_LOAD_ERROR_TITLE": "Fout",
+      "TOP_ROJO_LOAD_ERROR_MESSAGE": "De globale TOP ROOD-lijst kon niet worden geladen.",
+      "TOP_ROJO_CANCEL_SUCCESS_TITLE": "TOP ROOD geannuleerd",
+      "TOP_ROJO_CANCEL_SUCCESS_MESSAGE": "De TOP ROOD is succesvol geannuleerd.",
+      "TOP_ROJO_CANCEL_ERROR_TITLE": "Fout",
+      "TOP_ROJO_CANCEL_ERROR_MESSAGE": "De TOP ROOD kon niet worden geannuleerd.",
+      "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Endpoint ontbreekt",
+      "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "Deel het activatie-endpoint van TOP ROOD en ik koppel het in deze flow.",
       "ACTIVATE_SUCCESS_TITLE": "Profiel geactiveerd",
       "ACTIVATE_SUCCESS_MESSAGE": "Het profiel is succesvol geactiveerd.",
       "ACTIVATE_ERROR_TITLE": "Fout",

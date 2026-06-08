@@ -56,4 +56,28 @@ export class AdminService {
       finalize(() => this.loaderService.setLoaderState(false))
     );
   }
+
+  getAdminTopRojo(
+    page = 1,
+    limit = 10,
+    status?: 'pending' | 'active' | 'expired' | 'cancelled',
+    showLoader = true
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('page', String(page))
+      .set('limit', String(limit));
+
+    if (status) {
+      params = params.set('status', status);
+    }
+
+    if (showLoader) {
+      this.loaderService.setLoaderState(true);
+      return this.http.get(`${this.apiAdmin}/top-rojo`, { params }).pipe(
+        finalize(() => this.loaderService.setLoaderState(false))
+      );
+    }
+
+    return this.http.get(`${this.apiAdmin}/top-rojo`, { params });
+  }
 }

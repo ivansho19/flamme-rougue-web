@@ -53,7 +53,191 @@
       </article>
     </section>
 
-    <section class="content-grid">
+    <section class="admin-section-tabs">
+       <button
+        type="button"
+        class="section-tab"
+        [class.active]="activeAdminSection === 'users'"
+        (click)="setAdminSection('users')">
+        <i class="bi bi-people"></i>
+        {{ 'ADMIN_DASHBOARD.SECTIONS.USERS' | translate }}
+      </button>
+      <button
+        type="button"
+        class="section-tab"
+        [class.active]="activeAdminSection === 'top-rojo'"
+        (click)="setAdminSection('top-rojo')">
+        <i class="bi bi-stars"></i>
+        {{ 'ADMIN_DASHBOARD.SECTIONS.TOP_ROJO' | translate }}
+        <span class="section-tab-badge">{{ topRojoPendingCount }}</span>
+      </button>
+     
+    </section>
+
+    <section class="top-rojo-admin" *ngIf="activeAdminSection === 'top-rojo'">
+      <div class="top-rojo-summary-grid">
+        <article class="top-summary-card">
+          <span>{{ 'ADMIN_DASHBOARD.TOP_ROJO.CARDS.TOTAL' | translate }}</span>
+          <strong>{{ topRojoTotalCount }}</strong>
+        </article>
+        <article class="top-summary-card pending">
+          <span>{{ 'ADMIN_DASHBOARD.TOP_ROJO.CARDS.PENDING' | translate }}</span>
+          <strong>{{ topRojoPendingCount }}</strong>
+        </article>
+        <article class="top-summary-card active">
+          <span>{{ 'ADMIN_DASHBOARD.TOP_ROJO.CARDS.ACTIVE' | translate }}</span>
+          <strong>{{ topRojoActiveCount }}</strong>
+        </article>
+        <article class="top-summary-card expired">
+          <span>{{ 'ADMIN_DASHBOARD.TOP_ROJO.CARDS.EXPIRED' | translate }}</span>
+          <strong>{{ topRojoExpiredCount }}</strong>
+        </article>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TITLE' | translate }}</h2>
+            <p>{{ 'ADMIN_DASHBOARD.TOP_ROJO.SUBTITLE' | translate }}</p>
+          </div>
+          <div class="panel-actions">
+            <button class="filter-btn" type="button" (click)="loadTopRojo()">
+              <i class="bi bi-arrow-repeat"></i>
+              {{ 'ADMIN_DASHBOARD.TOP_ROJO.REFRESH' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="top-rojo-filter-tabs">
+          <button
+            type="button"
+            class="top-filter-tab"
+            [class.active]="topRojoStatusFilter === 'all'"
+            (click)="setTopRojoStatusFilter('all')">
+            {{ 'ADMIN_DASHBOARD.TOP_ROJO.FILTERS.ALL' | translate }}
+            <span>{{ topRojoTotalCount }}</span>
+          </button>
+          <button
+            type="button"
+            class="top-filter-tab"
+            [class.active]="topRojoStatusFilter === 'pending'"
+            (click)="setTopRojoStatusFilter('pending')">
+            {{ 'ADMIN_DASHBOARD.TOP_ROJO.STATUS.PENDING' | translate }}
+            <span>{{ topRojoPendingCount }}</span>
+          </button>
+          <button
+            type="button"
+            class="top-filter-tab"
+            [class.active]="topRojoStatusFilter === 'active'"
+            (click)="setTopRojoStatusFilter('active')">
+            {{ 'ADMIN_DASHBOARD.TOP_ROJO.STATUS.ACTIVE' | translate }}
+            <span>{{ topRojoActiveCount }}</span>
+          </button>
+          <button
+            type="button"
+            class="top-filter-tab"
+            [class.active]="topRojoStatusFilter === 'expired'"
+            (click)="setTopRojoStatusFilter('expired')">
+            {{ 'ADMIN_DASHBOARD.TOP_ROJO.STATUS.EXPIRED' | translate }}
+            <span>{{ topRojoExpiredCount }}</span>
+          </button>
+        </div>
+
+        <div class="loading-state" *ngIf="topRojoLoading">
+          <app-loader></app-loader>
+        </div>
+
+        <div class="table-wrapper" *ngIf="!topRojoLoading && topRojoItems.length; else topRojoEmptyState">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PROFILE' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PLAN' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TABLE.LOCATION' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TABLE.STATUS' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PERIOD' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let topRojo of topRojoItems">
+                <td>
+                  <div class="user-cell">
+                    <div>
+                      <img class="user-avatar" [src]="getTopRojoImage(topRojo)" [alt]="getTopRojoDisplayName(topRojo)" />
+                    </div>
+                    <div>
+                      <strong>{{ getTopRojoDisplayName(topRojo) }}</strong>
+                      <span>#{{ getTopRojoId(topRojo) | slice:-6 }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="plan-badge vip">{{ getTopRojoPlanLabel(topRojo) }}</span>
+                </td>
+                <td>{{ getTopRojoLocation(topRojo) }}</td>
+                <td>
+                  <span [class]="getTopRojoStatusClass(topRojo)">
+                    {{ getTopRojoStatusLabel(topRojo) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="top-period-cell">
+                    <strong>{{ topRojo?.startDate | date: 'dd/MM/yyyy' }}</strong>
+                    <span>{{ topRojo?.endDate | date: 'dd/MM/yyyy' }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      class="icon-btn ghost"
+                      type="button"
+                      [matTooltip]="'ADMIN_DASHBOARD.TOP_ROJO.TOOLTIP.VIEW' | translate"
+                      (click)="goToTopRojoProfile(topRojo)">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button
+                      class="icon-btn success"
+                      type="button"
+                      [disabled]="!canActivateTopRojo(topRojo) || isTopRojoUpdating(topRojo)"
+                      [matTooltip]="'ADMIN_DASHBOARD.TOP_ROJO.TOOLTIP.ACTIVATE' | translate"
+                      (click)="openActivateTopConfirm(topRojo)">
+                      <i class="bi bi-check2-circle"></i>
+                    </button>
+                    <button
+                      class="icon-btn ghost danger"
+                      type="button"
+                      [disabled]="!canCancelTopRojo(topRojo) || isTopRojoUpdating(topRojo)"
+                      [matTooltip]="'ADMIN_DASHBOARD.TOP_ROJO.TOOLTIP.CANCEL' | translate"
+                      (click)="openCancelTopConfirm(topRojo)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #topRojoEmptyState>
+          <div class="empty-state">
+            <i class="bi bi-stars"></i>
+            <p>{{ 'ADMIN_DASHBOARD.TOP_ROJO.EMPTY' | translate }}</p>
+          </div>
+        </ng-template>
+
+        <mat-paginator
+          *ngIf="!topRojoLoading && topRojoFilteredTotalCount"
+          [length]="topRojoFilteredTotalCount"
+          [pageIndex]="topRojoPageIndex"
+          [pageSize]="topRojoPageSize"
+          [pageSizeOptions]="[10, 15, 25, 50]"
+          (page)="onTopRojoPageChange($event)">
+        </mat-paginator>
+      </div>
+    </section>
+
+    <section class="content-grid" *ngIf="activeAdminSection === 'users'">
       <div class="panel">
         <div class="panel-header">
           <div>

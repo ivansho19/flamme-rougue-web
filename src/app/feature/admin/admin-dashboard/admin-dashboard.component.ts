@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, forkJoin } from 'rxjs';
 import { AdminService } from '../../../shared/services/admin/admin.service';
+import { TopRojoService } from '../../../shared/services/top-rojo/top-rojo.service';
 import { ToastService } from '../../../shared/services/toast/toast.service';
+
+type TopRojoAdminStatusFilter = 'all' | 'pending' | 'active' | 'expired' | 'cancelled';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -12,22 +15,27 @@ import { ToastService } from '../../../shared/services/toast/toast.service';
   styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent implements OnInit {
+  activeAdminSection: 'top-rojo' | 'users' = 'users';
   profiles: any[] = [];
   filteredProfiles: any[] = [];
   kycItems: any[] = [];
   pendingKycItems: any[] = [];
   pendingKycItemsAll: any[] = [];
+  topRojoItems: any[] = [];
+  topRojoStatusFilter: TopRojoAdminStatusFilter = 'all';
   currentKycTab: 'all' | 'pending' = 'pending';
   loading = false;
+  topRojoLoading = false;
   searchTerm = '';
 
   confirmOpen = false;
   confirmTitle = '';
   confirmMessage = '';
   confirmCta = '';
-  confirmAction: 'delete' | 'verify' | null = null;
+  confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | null = null;
   selectedProfile: any | null = null;
   selectedKyc: any | null = null;
+  selectedTopRojo: any | null = null;
 
   totalProfiles = 0;
   activeProfiles = 0;
@@ -37,15 +45,28 @@ export class AdminDashboardComponent implements OnInit {
   totalProfilesCount = 0;
   pageIndex = 0;
   pageSize = 15;
+  topRojoPageIndex = 0;
+  topRojoPageSize = 10;
+  topRojoFilteredTotalCount = 0;
+  topRojoTotalPages = 0;
   kycTotalCount = 0;
   kycPageIndex = 0;
   kycPageSize = 10;
   private readonly kycAllPageSize = 100;
   private pendingKycLoaded = false;
   private readonly togglingProfileIds = new Set<string>();
+  private readonly topRojoUpdatingIds = new Set<string>();
+  private topRojoSummary = {
+    total: 0,
+    pending: 0,
+    active: 0,
+    expired: 0,
+    cancelled: 0
+  };
 
   constructor(
     private adminService: AdminService,
+    private topRojoService: TopRojoService,
     private toastService: ToastService,
     private translate: TranslateService,
     private router: Router
@@ -53,9 +74,90 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.initLanguage();
+    this.loadTopRojo();
+    this.loadTopRojoSummary();
     this.loadProfiles();
     this.loadKyc();
     this.loadAllPendingKyc();
+  }
+
+  setAdminSection(section: 'top-rojo' | 'users'): void {
+    this.activeAdminSection = section;
+    if (section === 'top-rojo' && !this.topRojoItems.length) {
+      this.loadTopRojo();
+    }
+  }
+
+  loadTopRojo(): void {
+    this.topRojoLoading = true;
+    const status = this.topRojoStatusFilter === 'all' ? undefined : this.topRojoStatusFilter;
+    this.adminService.getAdminTopRojo(
+      this.topRojoPageIndex + 1,
+      this.topRojoPageSize,
+      status,
+      false
+    ).subscribe({
+      next: (response) => {
+        const payload = response as any;
+        const list = payload?.data ?? payload?.tops ?? payload ?? [];
+        this.topRojoItems = Array.isArray(list)
+          ? [...list].sort((left, right) => this.getTopRojoStatusOrder(left) - this.getTopRojoStatusOrder(right))
+          : [];
+        this.topRojoFilteredTotalCount = Number(payload?.total ?? this.topRojoItems.length);
+        this.topRojoTotalPages = Number(payload?.totalPages ?? 1);
+        this.topRojoLoading = false;
+      },
+      error: () => {
+        this.topRojoLoading = false;
+        this.toastService.showToast(
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_LOAD_ERROR_TITLE'),
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_LOAD_ERROR_MESSAGE'),
+          'error',
+          4
+        );
+      }
+    });
+  }
+
+  loadTopRojoSummary(): void {
+    forkJoin({
+      all: this.adminService.getAdminTopRojo(1, 1, undefined, false),
+      pending: this.adminService.getAdminTopRojo(1, 1, 'pending', false),
+      active: this.adminService.getAdminTopRojo(1, 1, 'active', false),
+      expired: this.adminService.getAdminTopRojo(1, 1, 'expired', false),
+      cancelled: this.adminService.getAdminTopRojo(1, 1, 'cancelled', false)
+    }).subscribe({
+      next: (response) => {
+        this.topRojoSummary = {
+          total: Number((response.all as any)?.total ?? 0),
+          pending: Number((response.pending as any)?.total ?? 0),
+          active: Number((response.active as any)?.total ?? 0),
+          expired: Number((response.expired as any)?.total ?? 0),
+          cancelled: Number((response.cancelled as any)?.total ?? 0)
+        };
+      },
+      error: () => {
+        this.topRojoSummary = {
+          total: this.topRojoItems.length,
+          pending: 0,
+          active: 0,
+          expired: 0,
+          cancelled: 0
+        };
+      }
+    });
+  }
+
+  setTopRojoStatusFilter(status: TopRojoAdminStatusFilter): void {
+    this.topRojoStatusFilter = status;
+    this.topRojoPageIndex = 0;
+    this.loadTopRojo();
+  }
+
+  onTopRojoPageChange(event: PageEvent): void {
+    this.topRojoPageIndex = event.pageIndex;
+    this.topRojoPageSize = event.pageSize;
+    this.loadTopRojo();
   }
 
   private initLanguage(): void {
@@ -264,6 +366,7 @@ export class AdminDashboardComponent implements OnInit {
     this.confirmAction = null;
     this.selectedProfile = null;
     this.selectedKyc = null;
+    this.selectedTopRojo = null;
   }
 
   confirmActionExecution(): void {
@@ -279,6 +382,77 @@ export class AdminDashboardComponent implements OnInit {
     if (this.confirmAction === 'verify' && this.selectedKyc) {
       this.verifyKyc(this.selectedKyc);
     }
+
+    if (this.confirmAction === 'activate-top' && this.selectedTopRojo) {
+      this.activateTopRojo(this.selectedTopRojo);
+    }
+
+    if (this.confirmAction === 'cancel-top' && this.selectedTopRojo) {
+      this.cancelManagedTopRojo(this.selectedTopRojo);
+    }
+  }
+
+  openActivateTopConfirm(topRojo: any): void {
+    this.selectedTopRojo = topRojo;
+    this.confirmAction = 'activate-top';
+    this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_TOP_TITLE');
+    this.confirmMessage = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_TOP_MESSAGE');
+    this.confirmCta = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_TOP_CTA');
+    this.confirmOpen = true;
+  }
+
+  openCancelTopConfirm(topRojo: any): void {
+    this.selectedTopRojo = topRojo;
+    this.confirmAction = 'cancel-top';
+    this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.CANCEL_TOP_TITLE');
+    this.confirmMessage = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.CANCEL_TOP_MESSAGE');
+    this.confirmCta = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.CANCEL_TOP_CTA');
+    this.confirmOpen = true;
+  }
+
+  activateTopRojo(topRojo: any): void {
+    this.closeConfirm();
+    this.toastService.showToast(
+      this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_TITLE'),
+      this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_ACTIVATE_ERROR_MESSAGE'),
+      'error',
+      4
+    );
+  }
+
+  cancelManagedTopRojo(topRojo: any): void {
+    const topRojoId = this.getTopRojoId(topRojo);
+    if (!topRojoId || this.topRojoUpdatingIds.has(topRojoId)) {
+      this.closeConfirm();
+      return;
+    }
+
+    this.topRojoUpdatingIds.add(topRojoId);
+
+    this.topRojoService.cancelTopRojo(topRojoId)
+      .pipe(finalize(() => this.topRojoUpdatingIds.delete(topRojoId)))
+      .subscribe({
+        next: () => {
+          this.closeConfirm();
+          this.loadTopRojo();
+          this.loadTopRojoSummary();
+          this.toastService.showToast(
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_SUCCESS_TITLE'),
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_SUCCESS_MESSAGE'),
+            'success',
+            4
+          );
+        },
+        error: () => {
+          this.closeConfirm();
+          this.toastService.showToast(
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_ERROR_TITLE'),
+            this.translate.instant('ADMIN_DASHBOARD.TOAST.TOP_ROJO_CANCEL_ERROR_MESSAGE'),
+            'error',
+            4
+          );
+        }
+      });
   }
 
   activateProfile(profile: any): void {
@@ -415,6 +589,123 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
     this.router.navigate(['/profile', profileId]);
+  }
+
+  goToTopRojoProfile(topRojo: any): void {
+    const profileId = topRojo?.profileId || topRojo?.profile?._id || topRojo?.profile?.id;
+    if (!profileId) {
+      return;
+    }
+
+    this.router.navigate(['/profile', profileId]);
+  }
+
+  get topRojoTotalCount(): number {
+    return this.topRojoSummary.total;
+  }
+
+  get topRojoPendingCount(): number {
+    return this.topRojoSummary.pending;
+  }
+
+  get topRojoActiveCount(): number {
+    return this.topRojoSummary.active;
+  }
+
+  get topRojoExpiredCount(): number {
+    return this.topRojoSummary.expired;
+  }
+
+  getTopRojoId(topRojo: any): string {
+    return topRojo?._id || topRojo?.id || '';
+  }
+
+  getTopRojoDisplayName(topRojo: any): string {
+    return topRojo?.displayName || topRojo?.title || topRojo?.profile?.displayName || 'TOP ROJO';
+  }
+
+  getTopRojoImage(topRojo: any): string {
+    return topRojo?.profileImage || topRojo?.images?.[0]?.url || 'assets/images/logo_mini.png';
+  }
+
+  getTopRojoLocation(topRojo: any): string {
+    const city = topRojo?.city || '-';
+    const country = topRojo?.country || '-';
+    return `${city}, ${country}`;
+  }
+
+  getTopRojoPlanLabel(topRojo: any): string {
+    switch (topRojo?.planType) {
+      case 'top_7d':
+        return 'TOP 7D';
+      case 'top_3d':
+        return 'TOP 3D';
+      case 'top_24h':
+        return 'TOP 24H';
+      default:
+        return '-';
+    }
+  }
+
+  getTopRojoStatus(topRojo: any): 'active' | 'pending' | 'expired' | 'cancelled' {
+    const rawStatus = typeof topRojo?.status === 'string' ? topRojo.status.toLowerCase() : '';
+
+    if (rawStatus === 'pending' || rawStatus === 'active' || rawStatus === 'expired' || rawStatus === 'cancelled') {
+      return rawStatus;
+    }
+
+    const endDate = topRojo?.endDate ? new Date(topRojo.endDate) : null;
+    if (endDate && !Number.isNaN(endDate.getTime()) && endDate.getTime() < Date.now()) {
+      return 'expired';
+    }
+
+    return 'active';
+  }
+
+  getTopRojoStatusLabel(topRojo: any): string {
+    const status = this.getTopRojoStatus(topRojo).toUpperCase();
+    return this.translate.instant(`ADMIN_DASHBOARD.TOP_ROJO.STATUS.${status}`);
+  }
+
+  getTopRojoStatusClass(topRojo: any): string {
+    return `top-status-pill ${this.getTopRojoStatus(topRojo)}`;
+  }
+
+  getTopRojoViews(topRojo: any): number {
+    return Number(topRojo?.views ?? topRojo?.viewCount ?? 0);
+  }
+
+  getTopRojoClicks(topRojo: any): number {
+    return Number(topRojo?.clicks ?? topRojo?.clickCount ?? 0);
+  }
+
+  canActivateTopRojo(topRojo: any): boolean {
+    return this.getTopRojoStatus(topRojo) === 'pending';
+  }
+
+  canCancelTopRojo(topRojo: any): boolean {
+    const status = this.getTopRojoStatus(topRojo);
+    return status === 'pending' || status === 'active';
+  }
+
+  isTopRojoUpdating(topRojo: any): boolean {
+    const topRojoId = this.getTopRojoId(topRojo);
+    return !!topRojoId && this.topRojoUpdatingIds.has(topRojoId);
+  }
+
+  private getTopRojoStatusOrder(topRojo: any): number {
+    switch (this.getTopRojoStatus(topRojo)) {
+      case 'pending':
+        return 0;
+      case 'active':
+        return 1;
+      case 'expired':
+        return 2;
+      case 'cancelled':
+        return 3;
+      default:
+        return 4;
+    }
   }
 
   getProfileImage(profile: any): string {
