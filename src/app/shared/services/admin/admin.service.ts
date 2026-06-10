@@ -26,6 +26,28 @@ export class AdminService {
     );
   }
 
+  getAllUsers(page = 1, limit = 10, showLoader = true): Observable<any> {
+    const params = new HttpParams()
+      .set('page', String(page))
+      .set('limit', String(limit));
+
+    if (showLoader) {
+      this.loaderService.setLoaderState(true);
+      return this.http.get(`${this.apiAdmin}/getAllUsers`, { params }).pipe(
+        finalize(() => this.loaderService.setLoaderState(false))
+      );
+    }
+
+    return this.http.get(`${this.apiAdmin}/getAllUsers`, { params });
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    this.loaderService.setLoaderState(true);
+    return this.http.delete(`${this.apiAdmin}/deleteUser/${userId}`).pipe(
+      finalize(() => this.loaderService.setLoaderState(false))
+    );
+  }
+
   deleteProfile(profileId: string): Observable<any> {
     this.loaderService.setLoaderState(true);
     return this.http.delete(`${this.apiAdmin}/deleteProfile/${profileId}`).pipe(

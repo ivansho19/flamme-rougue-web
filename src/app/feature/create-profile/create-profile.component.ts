@@ -906,7 +906,9 @@ export class ProfileEditComponent implements OnInit {
                 if (this.pendingWhatsAppPayment) {
                     this.toastService.showToast(
                         'info',
-                        this.translate.instant('PROFILE_FORM.TOAST_WHATSAPP_PENDING')
+                        this.translate.instant('PROFILE_FORM.TOAST_WHATSAPP_PENDING'),
+                        'error',
+                        10
                     );
                 }
                 // Validar que haya un plan seleccionado

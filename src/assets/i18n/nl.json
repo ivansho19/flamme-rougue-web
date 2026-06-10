@@ -214,14 +214,28 @@
     "SUBTITLE": "Platformoverzicht",
     "SECTIONS": {
       "TOP_ROJO": "Top Rood",
-      "USERS": "Adverteerders"
+      "USERS": "Gebruikers",
+      "ANNOUNCER": "Adverteerders"
     },
     "HEADER": {
       "ADMIN": "Beheerder"
     },
     "USERS": {
       "WIP_TITLE": "Gebruikerssectie in voorbereiding",
-      "WIP_SUBTITLE": "De UI staat klaar zodat we de nieuwe gebruikers-API kunnen koppelen zodra die beschikbaar is."
+      "WIP_SUBTITLE": "De UI staat klaar zodat we de nieuwe gebruikers-API kunnen koppelen zodra die beschikbaar is.",
+      "TITLE": "Alle gebruikers",
+      "SUBTITLE": "Bekijk de globale lijst van gebruikers die op het platform geregistreerd zijn.",
+      "EMPTY": "Er zijn geen gebruikers om te tonen.",
+      "TABLE": {
+        "USER": "Gebruiker",
+        "EMAIL": "Email",
+        "PHONE": "Telefoon",
+        "CREATED": "Aangemaakt op",
+        "ACTION": "Actie"
+      },
+      "TOOLTIP": {
+        "DELETE": "Gebruiker verwijderen"
+      }
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -343,7 +357,10 @@
       "ACTIVATE_TOP_CTA": "Activeren",
       "CANCEL_TOP_TITLE": "TOP ROOD annuleren",
       "CANCEL_TOP_MESSAGE": "Deze actie annuleert de geselecteerde TOP ROOD.",
-      "CANCEL_TOP_CTA": "TOP annuleren"
+      "CANCEL_TOP_CTA": "TOP annuleren",
+      "DELETE_USER_TITLE": "Gebruiker verwijderen",
+      "DELETE_USER_MESSAGE": "Deze actie verwijdert de geselecteerde gebruiker permanent.",
+      "DELETE_USER_CTA": "Gebruiker verwijderen"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Fout",
@@ -358,6 +375,12 @@
       "TOP_ROJO_CANCEL_ERROR_MESSAGE": "De TOP ROOD kon niet worden geannuleerd.",
       "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Fout",
       "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "De TOP ROOD kon niet worden geactiveerd.",
+      "USERS_LOAD_ERROR_TITLE": "Fout",
+      "USERS_LOAD_ERROR_MESSAGE": "De gebruikerslijst kon niet worden geladen.",
+      "USERS_DELETE_SUCCESS_TITLE": "Gebruiker verwijderd",
+      "USERS_DELETE_SUCCESS_MESSAGE": "De gebruiker is succesvol verwijderd.",
+      "USERS_DELETE_ERROR_TITLE": "Fout",
+      "USERS_DELETE_ERROR_MESSAGE": "De gebruiker kon niet worden verwijderd.",
       "ACTIVATE_SUCCESS_TITLE": "Profiel geactiveerd",
       "ACTIVATE_SUCCESS_MESSAGE": "Het profiel is succesvol geactiveerd.",
       "ACTIVATE_ERROR_TITLE": "Fout",

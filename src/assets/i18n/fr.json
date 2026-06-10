@@ -214,14 +214,28 @@
     "SUBTITLE": "Vue d'ensemble de la plateforme",
     "SECTIONS": {
       "TOP_ROJO": "Top Rouge",
-      "USERS": "Annonceurs"
+      "USERS": "Utilisateurs",
+      "ANNOUNCER": "Annonceurs"
     },
     "HEADER": {
       "ADMIN": "Administrateur"
     },
     "USERS": {
       "WIP_TITLE": "Section utilisateurs en préparation",
-      "WIP_SUBTITLE": "L'interface est prête pour connecter la nouvelle API utilisateurs dès qu'elle sera disponible."
+      "WIP_SUBTITLE": "L'interface est prête pour connecter la nouvelle API utilisateurs dès qu'elle sera disponible.",
+      "TITLE": "Tous les utilisateurs",
+      "SUBTITLE": "Consulte la liste globale des utilisateurs inscrits sur la plateforme.",
+      "EMPTY": "Aucun utilisateur à afficher.",
+      "TABLE": {
+        "USER": "Utilisateur",
+        "EMAIL": "Email",
+        "PHONE": "Téléphone",
+        "CREATED": "Créé le",
+        "ACTION": "Action"
+      },
+      "TOOLTIP": {
+        "DELETE": "Supprimer l'utilisateur"
+      }
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -344,7 +358,10 @@
       "ACTIVATE_TOP_CTA": "Activer",
       "CANCEL_TOP_TITLE": "Annuler le TOP ROUGE",
       "CANCEL_TOP_MESSAGE": "Cette action annulera le TOP ROUGE sélectionné.",
-      "CANCEL_TOP_CTA": "Annuler le TOP"
+      "CANCEL_TOP_CTA": "Annuler le TOP",
+      "DELETE_USER_TITLE": "Supprimer l'utilisateur",
+      "DELETE_USER_MESSAGE": "Cette action supprimera définitivement l'utilisateur sélectionné.",
+      "DELETE_USER_CTA": "Supprimer l'utilisateur"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Erreur",
@@ -359,6 +376,12 @@
       "TOP_ROJO_CANCEL_ERROR_MESSAGE": "Impossible d'annuler le TOP ROUGE.",
       "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Erreur",
       "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "Impossible d'activer le TOP ROUGE.",
+      "USERS_LOAD_ERROR_TITLE": "Erreur",
+      "USERS_LOAD_ERROR_MESSAGE": "Impossible de charger la liste des utilisateurs.",
+      "USERS_DELETE_SUCCESS_TITLE": "Utilisateur supprimé",
+      "USERS_DELETE_SUCCESS_MESSAGE": "L'utilisateur a été supprimé avec succès.",
+      "USERS_DELETE_ERROR_TITLE": "Erreur",
+      "USERS_DELETE_ERROR_MESSAGE": "Impossible de supprimer l'utilisateur.",
       "ACTIVATE_SUCCESS_TITLE": "Profil active",
       "ACTIVATE_SUCCESS_MESSAGE": "Le profil a ete active avec succes.",
       "ACTIVATE_ERROR_TITLE": "Erreur",

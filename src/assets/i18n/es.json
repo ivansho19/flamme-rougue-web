@@ -214,14 +214,28 @@
     "SUBTITLE": "Resumen general de la plataforma",
     "SECTIONS": {
       "TOP_ROJO": "Top Rojo",
-      "USERS": "Anunciantes"
+      "USERS": "Usuarios",
+      "ANNOUNCER": "Anunciantes"
     },
     "HEADER": {
       "ADMIN": "Administrador"
     },
     "USERS": {
       "WIP_TITLE": "Sección de usuarios en preparación",
-      "WIP_SUBTITLE": "Dejamos la UI lista para conectar el nuevo API cuando esté disponible."
+      "WIP_SUBTITLE": "Dejamos la UI lista para conectar el nuevo API cuando esté disponible.",
+      "TITLE": "Todos los usuarios",
+      "SUBTITLE": "Consulta el listado global de usuarios registrados en la plataforma.",
+      "EMPTY": "No hay usuarios para mostrar.",
+      "TABLE": {
+        "USER": "Usuario",
+        "EMAIL": "Email",
+        "PHONE": "Teléfono",
+        "CREATED": "Creado el",
+        "ACTION": "Acción"
+      },
+      "TOOLTIP": {
+        "DELETE": "Eliminar usuario"
+      }
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -344,7 +358,10 @@
       "ACTIVATE_TOP_CTA": "Activar",
       "CANCEL_TOP_TITLE": "Cancelar TOP ROJO",
       "CANCEL_TOP_MESSAGE": "Esta acción cancelará el TOP ROJO seleccionado.",
-      "CANCEL_TOP_CTA": "Cancelar TOP"
+      "CANCEL_TOP_CTA": "Cancelar TOP",
+      "DELETE_USER_TITLE": "Eliminar usuario",
+      "DELETE_USER_MESSAGE": "Esta acción eliminará el usuario seleccionado de forma permanente.",
+      "DELETE_USER_CTA": "Eliminar usuario"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Error",
@@ -359,6 +376,12 @@
       "TOP_ROJO_CANCEL_ERROR_MESSAGE": "No se pudo cancelar el TOP ROJO.",
       "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Error",
       "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "No se pudo activar el TOP ROJO.",
+      "USERS_LOAD_ERROR_TITLE": "Error",
+      "USERS_LOAD_ERROR_MESSAGE": "No se pudo cargar el listado de usuarios.",
+      "USERS_DELETE_SUCCESS_TITLE": "Usuario eliminado",
+      "USERS_DELETE_SUCCESS_MESSAGE": "El usuario se eliminó correctamente.",
+      "USERS_DELETE_ERROR_TITLE": "Error",
+      "USERS_DELETE_ERROR_MESSAGE": "No se pudo eliminar el usuario.",
       "ACTIVATE_SUCCESS_TITLE": "Perfil activado",
       "ACTIVATE_SUCCESS_MESSAGE": "El perfil se activo correctamente.",
       "ACTIVATE_ERROR_TITLE": "Error",

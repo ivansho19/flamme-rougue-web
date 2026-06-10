@@ -15,9 +15,10 @@ type TopRojoAdminStatusFilter = 'all' | 'pending' | 'active' | 'expired' | 'canc
   styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent implements OnInit {
-  activeAdminSection: 'top-rojo' | 'users' = 'users';
+  activeAdminSection: 'top-rojo' | 'users' | 'announcer' = 'announcer';
   profiles: any[] = [];
   filteredProfiles: any[] = [];
+  users: any[] = [];
   kycItems: any[] = [];
   pendingKycItems: any[] = [];
   pendingKycItemsAll: any[] = [];
@@ -26,16 +27,18 @@ export class AdminDashboardComponent implements OnInit {
   currentKycTab: 'all' | 'pending' = 'pending';
   loading = false;
   topRojoLoading = false;
+  usersLoading = false;
   searchTerm = '';
 
   confirmOpen = false;
   confirmTitle = '';
   confirmMessage = '';
   confirmCta = '';
-  confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | null = null;
+  confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | 'delete-user' | null = null;
   selectedProfile: any | null = null;
   selectedKyc: any | null = null;
   selectedTopRojo: any | null = null;
+  selectedUser: any | null = null;
 
   totalProfiles = 0;
   activeProfiles = 0;
@@ -43,8 +46,11 @@ export class AdminDashboardComponent implements OnInit {
   popularPlanLabel = '';
   popularPlanPercent = 0;
   totalProfilesCount = 0;
+  totalUsersCount = 0;
   pageIndex = 0;
   pageSize = 15;
+  usersPageIndex = 0;
+  usersPageSize = 10;
   topRojoPageIndex = 0;
   topRojoPageSize = 10;
   topRojoFilteredTotalCount = 0;
@@ -57,6 +63,7 @@ export class AdminDashboardComponent implements OnInit {
   private readonly togglingProfileIds = new Set<string>();
   private readonly topRojoUpdatingIds = new Set<string>();
   private topRojoLoaded = false;
+  private usersLoaded = false;
   private topRojoSummaryLoaded = false;
   private topRojoSummary = {
     total: 0,
@@ -81,12 +88,14 @@ export class AdminDashboardComponent implements OnInit {
     this.loadAllPendingKyc();
   }
 
-  setAdminSection(section: 'top-rojo' | 'users'): void {
+  setAdminSection(section: 'top-rojo' | 'users' | 'announcer'): void {
     this.activeAdminSection = section;
     if (section === 'top-rojo' && !this.topRojoLoaded) {
       this.refreshTopRojoData();
     } else if (section === 'top-rojo' && !this.topRojoSummaryLoaded) {
       this.loadTopRojoSummary();
+    } else if (section === 'users' && !this.usersLoaded) {
+      this.loadUsers();
     }
   }
 
@@ -192,6 +201,34 @@ export class AdminDashboardComponent implements OnInit {
         );
       }
     });
+  }
+
+  loadUsers(): void {
+    this.usersLoading = true;
+    this.adminService.getAllUsers(this.usersPageIndex + 1, this.usersPageSize, false).subscribe({
+      next: (response) => {
+        const list = response?.data ?? response?.users ?? response ?? [];
+        this.users = Array.isArray(list) ? list.filter(user => !this.isAdminUser(user)) : [];
+        this.totalUsersCount = Number(response?.total ?? this.users.length);
+        this.usersLoaded = true;
+        this.usersLoading = false;
+      },
+      error: () => {
+        this.usersLoading = false;
+        this.toastService.showToast(
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_LOAD_ERROR_TITLE'),
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_LOAD_ERROR_MESSAGE'),
+          'error',
+          4
+        );
+      }
+    });
+  }
+
+  onUsersPageChange(event: PageEvent): void {
+    this.usersPageIndex = event.pageIndex;
+    this.usersPageSize = event.pageSize;
+    this.loadUsers();
   }
 
   applyFilters(): void {
@@ -364,12 +401,26 @@ export class AdminDashboardComponent implements OnInit {
     this.confirmOpen = true;
   }
 
+  openDeleteUserConfirm(user: any): void {
+    if (this.isAdminUser(user)) {
+      return;
+    }
+
+    this.selectedUser = user;
+    this.confirmAction = 'delete-user';
+    this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.DELETE_USER_TITLE');
+    this.confirmMessage = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.DELETE_USER_MESSAGE');
+    this.confirmCta = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.DELETE_USER_CTA');
+    this.confirmOpen = true;
+  }
+
   closeConfirm(): void {
     this.confirmOpen = false;
     this.confirmAction = null;
     this.selectedProfile = null;
     this.selectedKyc = null;
     this.selectedTopRojo = null;
+    this.selectedUser = null;
   }
 
   confirmActionExecution(): void {
@@ -392,6 +443,10 @@ export class AdminDashboardComponent implements OnInit {
 
     if (this.confirmAction === 'cancel-top' && this.selectedTopRojo) {
       this.cancelManagedTopRojo(this.selectedTopRojo);
+    }
+
+    if (this.confirmAction === 'delete-user' && this.selectedUser) {
+      this.deleteUser(this.selectedUser);
     }
   }
 
@@ -563,6 +618,43 @@ export class AdminDashboardComponent implements OnInit {
         this.toastService.showToast(
           this.translate.instant('ADMIN_DASHBOARD.TOAST.DELETE_ERROR_TITLE'),
           this.translate.instant('ADMIN_DASHBOARD.TOAST.DELETE_ERROR_MESSAGE'),
+          'error',
+          4
+        );
+      }
+    });
+  }
+
+  deleteUser(user: any): void {
+    const userId = this.getUserId(user);
+    if (!userId || this.isAdminUser(user)) {
+      this.closeConfirm();
+      return;
+    }
+
+    this.adminService.deleteUser(userId).subscribe({
+      next: () => {
+        this.users = this.users.filter(item => this.getUserId(item) !== userId);
+        this.totalUsersCount = Math.max(0, this.totalUsersCount - 1);
+        this.closeConfirm();
+        this.toastService.showToast(
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_DELETE_SUCCESS_TITLE'),
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_DELETE_SUCCESS_MESSAGE'),
+          'success',
+          4
+        );
+
+        if (!this.users.length && this.totalUsersCount > 0 && this.usersPageIndex > 0) {
+          this.usersPageIndex -= 1;
+        }
+
+        this.loadUsers();
+      },
+      error: () => {
+        this.closeConfirm();
+        this.toastService.showToast(
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_DELETE_ERROR_TITLE'),
+          this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_DELETE_ERROR_MESSAGE'),
           'error',
           4
         );
@@ -864,5 +956,31 @@ export class AdminDashboardComponent implements OnInit {
 
   getKycAvatar(kycItem: any): string {
     return kycItem?.documentImage?.[0]?.url || 'assets/images/gift/present.png';
+  }
+
+  getUserId(user: any): string {
+    return user?._id || user?.id || '';
+  }
+
+  isAdminUser(user: any): boolean {
+    return user?.isAdmin === true;
+  }
+
+  getUserFullName(user: any): string {
+    return [user?.name, user?.lastName].filter(Boolean).join(' ').trim() || '-';
+  }
+
+  getUserInitials(user: any): string {
+    const fullName = this.getUserFullName(user);
+    if (!fullName || fullName === '-') {
+      return 'U';
+    }
+
+    return fullName
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part: string) => part.charAt(0).toUpperCase())
+      .join('');
   }
 }

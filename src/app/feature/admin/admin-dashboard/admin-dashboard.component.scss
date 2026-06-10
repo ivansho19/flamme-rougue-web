@@ -317,6 +317,17 @@
   gap: 20px;
 }
 
+.users-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.users-avatar {
+  background: #ffe7e7;
+  color: #d2272a;
+}
+
 .top-rojo-filter-tabs {
   display: flex;
   gap: 10px;

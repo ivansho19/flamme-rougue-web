@@ -214,14 +214,28 @@
     "SUBTITLE": "Platform overview",
     "SECTIONS": {
       "TOP_ROJO": "Top Red",
-      "USERS": "Advertisers"
+      "USERS": "Users",
+      "ANNOUNCER": "Announcers"
     },
     "HEADER": {
       "ADMIN": "Administrator"
     },
     "USERS": {
       "WIP_TITLE": "Users section in progress",
-      "WIP_SUBTITLE": "The UI is ready so we can connect the new users API when it is available."
+      "WIP_SUBTITLE": "The UI is ready so we can connect the new users API when it is available.",
+      "TITLE": "All users",
+      "SUBTITLE": "Browse the global list of users registered on the platform.",
+      "EMPTY": "There are no users to display.",
+      "TABLE": {
+        "USER": "User",
+        "EMAIL": "Email",
+        "PHONE": "Phone",
+        "CREATED": "Created on",
+        "ACTION": "Action"
+      },
+      "TOOLTIP": {
+        "DELETE": "Delete user"
+      }
     },
     "SIDEBAR": {
       "SUBTITLE": "Admin Panel",
@@ -344,7 +358,10 @@
       "ACTIVATE_TOP_CTA": "Activate",
       "CANCEL_TOP_TITLE": "Cancel TOP RED",
       "CANCEL_TOP_MESSAGE": "This action will cancel the selected TOP RED.",
-      "CANCEL_TOP_CTA": "Cancel TOP"
+      "CANCEL_TOP_CTA": "Cancel TOP",
+      "DELETE_USER_TITLE": "Delete user",
+      "DELETE_USER_MESSAGE": "This action will permanently delete the selected user.",
+      "DELETE_USER_CTA": "Delete user"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Error",
@@ -359,6 +376,12 @@
       "TOP_ROJO_CANCEL_ERROR_MESSAGE": "The TOP RED could not be cancelled.",
       "TOP_ROJO_ACTIVATE_ERROR_TITLE": "Error",
       "TOP_ROJO_ACTIVATE_ERROR_MESSAGE": "The TOP RED could not be activated.",
+      "USERS_LOAD_ERROR_TITLE": "Error",
+      "USERS_LOAD_ERROR_MESSAGE": "The users list could not be loaded.",
+      "USERS_DELETE_SUCCESS_TITLE": "User deleted",
+      "USERS_DELETE_SUCCESS_MESSAGE": "The user was deleted successfully.",
+      "USERS_DELETE_ERROR_TITLE": "Error",
+      "USERS_DELETE_ERROR_MESSAGE": "The user could not be deleted.",
       "ACTIVATE_SUCCESS_TITLE": "Profile activated",
       "ACTIVATE_SUCCESS_MESSAGE": "The profile was activated successfully.",
       "ACTIVATE_ERROR_TITLE": "Error",

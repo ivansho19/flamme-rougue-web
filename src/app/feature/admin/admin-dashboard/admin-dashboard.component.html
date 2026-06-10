@@ -15,7 +15,6 @@
         <div>
           <p>{{ 'ADMIN_DASHBOARD.CARDS.TOTAL_PROFILES' | translate }}</p>
           <h3>{{ totalProfiles }}</h3>
-          <span class="stat-change">+18% {{ 'ADMIN_DASHBOARD.CARDS.VS_LAST_MONTH' | translate }}</span>
         </div>
       </article>
 
@@ -26,7 +25,6 @@
         <div>
           <p>{{ 'ADMIN_DASHBOARD.CARDS.ACTIVE_PROFILES' | translate }}</p>
           <h3>{{ activeProfiles }}</h3>
-          <span class="stat-change">+12% {{ 'ADMIN_DASHBOARD.CARDS.VS_LAST_MONTH' | translate }}</span>
         </div>
       </article>
 
@@ -57,10 +55,10 @@
        <button
         type="button"
         class="section-tab"
-        [class.active]="activeAdminSection === 'users'"
-        (click)="setAdminSection('users')">
-        <i class="bi bi-people"></i>
-        {{ 'ADMIN_DASHBOARD.SECTIONS.USERS' | translate }}
+        [class.active]="activeAdminSection === 'announcer'"
+        (click)="setAdminSection('announcer')">
+        <i class="bi bi-megaphone"></i>
+        {{ 'ADMIN_DASHBOARD.SECTIONS.ANNOUNCER' | translate }}
       </button>
       <button
         type="button"
@@ -70,6 +68,14 @@
         <i class="bi bi-stars"></i>
         {{ 'ADMIN_DASHBOARD.SECTIONS.TOP_ROJO' | translate }}
         <span class="section-tab-badge">{{ topRojoPendingCount }}</span>
+      </button>
+       <button
+        type="button"
+        class="section-tab"
+        [class.active]="activeAdminSection === 'users'"
+        (click)="setAdminSection('users')">
+        <i class="bi bi-people"></i>
+        {{ 'ADMIN_DASHBOARD.SECTIONS.USERS' | translate }}
       </button>
      
     </section>
@@ -237,7 +243,80 @@
       </div>
     </section>
 
-    <section class="content-grid" *ngIf="activeAdminSection === 'users'">
+    <section class="users-admin" *ngIf="activeAdminSection === 'users'">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>{{ 'ADMIN_DASHBOARD.USERS.TITLE' | translate }}</h2>
+            <p>{{ 'ADMIN_DASHBOARD.USERS.SUBTITLE' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="loading-state" *ngIf="usersLoading">
+          <app-loader></app-loader>
+        </div>
+
+        <div class="table-wrapper" *ngIf="!usersLoading && users.length; else usersEmptyState">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.USER' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.EMAIL' | translate }}</th>
+                <!-- <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.PHONE' | translate }}</th> -->
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.CREATED' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.ACTION' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar users-avatar">{{ getUserInitials(user) }}</div>
+                    <div>
+                      <strong>{{ getUserFullName(user) }}</strong>
+                      <span>#{{ getUserId(user) | slice:-6 }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ user?.email || '-' }}</td>
+                <!-- <td>{{ user?.phone || '-' }}</td> -->
+                <td>{{ user?.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      class="icon-btn ghost danger"
+                      type="button"
+                      [disabled]="isAdminUser(user)"
+                      [matTooltip]="'ADMIN_DASHBOARD.USERS.TOOLTIP.DELETE' | translate"
+                      (click)="openDeleteUserConfirm(user)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #usersEmptyState>
+          <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <p>{{ 'ADMIN_DASHBOARD.USERS.EMPTY' | translate }}</p>
+          </div>
+        </ng-template>
+
+        <mat-paginator
+          *ngIf="!usersLoading && totalUsersCount"
+          [length]="totalUsersCount"
+          [pageIndex]="usersPageIndex"
+          [pageSize]="usersPageSize"
+          [pageSizeOptions]="[10, 20, 50]"
+          (page)="onUsersPageChange($event)">
+        </mat-paginator>
+      </div>
+    </section>
+
+    <section class="content-grid" *ngIf="activeAdminSection === 'announcer'">
       <div class="panel">
         <div class="panel-header">
           <div>
