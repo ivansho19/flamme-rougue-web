@@ -21,6 +21,7 @@ import { FlagsComponent } from './flags/flags.component';
 import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component';
 import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component';
 import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
+import { LikeButtonComponent } from './like-button/like-button.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
     FlagsComponent,
     KycInfoModalComponent,
     ConfirmActionModalComponent,
-    CardSkeletonComponent
+    CardSkeletonComponent,
+    LikeButtonComponent
   ],
   exports: [
     LoaderComponent,
@@ -56,7 +58,8 @@ import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
     FlagsComponent,
     KycInfoModalComponent,
     ConfirmActionModalComponent,
-    CardSkeletonComponent
+    CardSkeletonComponent,
+    LikeButtonComponent
   ],
   imports: [
     CommonModule,

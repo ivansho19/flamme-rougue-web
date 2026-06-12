@@ -239,60 +239,7 @@ body {
   line-height: 1.5;
 }
 
-.likes-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 6px 0 6px;
-}
 
-.like-error {
-  color: #a20f1f;
-  font-size: 0.85rem;
-  margin: 0 0 6px;
-}
-
-.like-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid #e7d9c4;
-  background: #fff9ef;
-  color: #7f0a16;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.like-toggle.active {
-  background: #a20f1f;
-  border-color: #a20f1f;
-  color: #fff;
-}
-
-.like-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #f1e0c6;
-  color: #7f0a16;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
-.like-toggle.active .like-icon {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.likes-separator {
-  color: #6b6b6b;
-  font-weight: 600;
-}
 
 .card {
   border: 1px solid #e7d9c4;

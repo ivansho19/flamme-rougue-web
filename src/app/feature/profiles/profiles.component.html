@@ -44,13 +44,12 @@
 
       <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>
 
-      <div class="likes-bar">
-        <button type="button" class="like-toggle" [class.active]="userReaction === 'like'" (click)="toggleLike()">
-          <i class="bi bi-hand-thumbs-up like-icon" aria-hidden="true"></i>
-          <span>{{ likeCount }}</span>
-        </button>
-      </div>
-      <div class="like-error" *ngIf="likeError">{{ likeError }}</div>
+      <app-like-button
+        [likeCount]="likeCount"
+        [isActive]="userReaction === 'like'"
+        [errorMessage]="likeError"
+        (likeToggled)="toggleLike()"
+      ></app-like-button>
 
       <div class="card">
         <h2 class="custom-card-title">{{ 'PROFILE.CONTACT' | translate }}</h2>
