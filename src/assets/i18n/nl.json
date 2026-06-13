@@ -200,7 +200,8 @@
     "CM": "cm",
     "KG": "kg",
     "CITY": "Stad",
-    "CANCEL": "Annuleren"
+    "CANCEL": "Annuleren",
+    "BACK": "Terug"
   },
   "WHATSAPP_CONFIRM": {
     "TITLE": "WhatsApp-betaling bevestigen",
@@ -443,7 +444,8 @@
     "NO_ACCOUNT": "Nog geen account?",
     "REGISTER": "Registreren",
     "FORGOT_PASSWORD": "Wachtwoord vergeten?",
-    "FOOTER": "2025 © Flamme Rouge | Alle rechten voorbehouden"
+    "FOOTER": "2025 © Flamme Rouge | Alle rechten voorbehouden",
+    "GO_HOME": "Terug naar Home"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "Wil je uitloggen?",
@@ -458,7 +460,8 @@
     "ADVERTISER_CTA": "Registreren als adverteerder",
     "USER_TITLE": "Ben je een gebruiker?",
     "USER_DESC": "Ontdek en maak contact met de beste talenten.",
-    "USER_CTA": "Registreren als gebruiker"
+    "USER_CTA": "Registreren als gebruiker",
+    "BACK_TO_LOGIN": "Terug naar inloggen"
   },
   "REGISTER_FORM": {
     "USER_TITLE": "Registreren",

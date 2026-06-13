@@ -1,6 +1,10 @@
 <!-- Vista inicial (elegir tipo de registro) -->
 <div class="register-container" *ngIf="activeSection === 'choose'">
   <div class="login-topbar">
+    <a routerLink="/auth/login" class="back-home-btn" [title]="'REGISTER.BACK_TO_LOGIN' | translate">
+      <i class="bi bi-arrow-left"></i>
+      <span>{{ 'REGISTER.BACK_TO_LOGIN' | translate }}</span>
+    </a>
     <div class="lang-switch" aria-label="Language selector">
       <button
         class="lang-btn"
@@ -41,6 +45,12 @@
 <!-- Vista Registro Usuario -->
  <ng-container *ngIf="activeSection === 'usuario'">
   <div class="form-container" *ngIf="activeSection === 'usuario'">
+    <div class="login-topbar-register">
+      <button class="back-home-btn" type="button" (click)="handleActivateSection('choose')">
+        <i class="bi bi-arrow-left"></i>
+        <span>{{ 'COMMON.BACK' | translate }}</span>
+      </button>
+    </div>
   <!-- Mitad izquierda: Formulario -->
   <div class="form-half">
     <app-user-register-form></app-user-register-form>
@@ -57,6 +67,12 @@
 <!-- Vista Registro Anunciante -->
  <ng-container *ngIf="activeSection === 'anunciante'">
   <div class="form-container" *ngIf="activeSection === 'anunciante'">
+    <div class="login-topbar-register">
+      <button class="back-home-btn" type="button" (click)="handleActivateSection('choose')">
+        <i class="bi bi-arrow-left"></i>
+        <span>{{ 'COMMON.BACK' | translate }}</span>
+      </button>
+    </div>
   <!-- Mitad izquierda: Formulario -->
   <div class="form-half">
     <app-advertisers-register-form></app-advertisers-register-form>

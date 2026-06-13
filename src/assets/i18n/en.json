@@ -200,7 +200,8 @@
     "CM": "cm",
     "KG": "kg",
     "CITY": "City",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "BACK": "Back"
   },
   "WHATSAPP_CONFIRM": {
     "TITLE": "Confirm WhatsApp payment",
@@ -444,7 +445,8 @@
     "NO_ACCOUNT": "No account?",
     "REGISTER": "Register",
     "FORGOT_PASSWORD": "Forgot your password?",
-    "FOOTER": "2025 © Flamme Rouge | All rights reserved"
+    "FOOTER": "2025 © Flamme Rouge | All rights reserved",
+    "GO_HOME": "Go to Home"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "Do you want to log out?",
@@ -459,7 +461,8 @@
     "ADVERTISER_CTA": "Register as Advertiser",
     "USER_TITLE": "Are you a User?",
     "USER_DESC": "Discover and connect with the best talents.",
-    "USER_CTA": "Register as User"
+    "USER_CTA": "Register as User",
+    "BACK_TO_LOGIN": "Back to Login"
   },
   "REGISTER_FORM": {
     "USER_TITLE": "Register",
