@@ -259,6 +259,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return client ? JSON.parse(client) : false;
   }
 
+  shouldShowUserIcon(): boolean {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      return true;
+    }
+    const client = localStorage.getItem('client');
+    if (client !== null && JSON.parse(client) === false) {
+      return false;
+    }
+    return true;
+  }
+
   navigateToProfile(){
     const user = localStorage.getItem('user');
     if(user){

@@ -144,7 +144,7 @@
                 </div>
             </div>
             <button
-                *ngIf="!isAdmin() || isClient()"
+                *ngIf="shouldShowUserIcon()"
                 (click)="navigateToProfile()"
                 class="icon-btn"
                 [title]="'HEADER.PROFILE' | translate">
@@ -326,7 +326,7 @@
                 </div>
             </div>
             <button
-                *ngIf="!isAdmin() || isClient()"
+                *ngIf="shouldShowUserIcon()"
                 class="mobile-item"
                 type="button"
                 (click)="navigateToProfile(); closeMobileMenu()">
