@@ -498,6 +498,138 @@
     .header-subtitle {
       font-size: 0.8rem;
     }
+
+/* Shared modal theme override */
+.modal-overlay {
+  padding: 16px;
+}
+
+.modal-backdrop {
+  background: rgba(111, 33, 44, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: linear-gradient(145deg, rgba(255, 252, 246, 0.98), rgba(250, 240, 226, 0.96));
+  border: 1px solid rgba(165, 110, 86, 0.18);
+  box-shadow: 0 28px 60px rgba(99, 43, 49, 0.18), 0 10px 24px rgba(139, 87, 62, 0.12);
+}
+
+.modal-header {
+  background: transparent;
+  color: #6f2130;
+  border-bottom: 1px solid rgba(165, 110, 86, 0.14);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 7px;
+    background: linear-gradient(90deg, #7f1d2d 0%, #c99162 52%, #7f1d2d 100%);
+  }
+
+  .progress-badge {
+    background: rgba(255, 255, 255, 0.82);
+    color: #6f2130;
+    border: 1px solid rgba(111, 33, 48, 0.12);
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .header-subtitle {
+    color: #6f5b52;
+  }
+
+  .close-btn {
+    background: rgba(255, 255, 255, 0.82);
+    color: #6f2130;
+  }
+}
+
+.motivation-banner,
+.plan-info {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(177, 138, 112, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.motivation-banner {
+  i {
+    color: #8b3c3d;
+  }
+
+  p {
+    color: #5f534f;
+  }
+}
+
+.plan-card {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(177, 138, 112, 0.2);
+
+  &:hover,
+  &.selected {
+    border-color: #8b3c3d;
+  }
+
+  &.selected {
+    background: linear-gradient(135deg, rgba(127, 29, 45, 0.05), rgba(201, 145, 98, 0.08));
+    box-shadow: 0 8px 18px rgba(127, 29, 45, 0.12);
+  }
+
+  .plan-header h3,
+  .price,
+  .plan-check {
+    color: #8b3c3d;
+  }
+
+  .plan-features li {
+    color: #5f534f;
+    border-bottom-color: rgba(165, 110, 86, 0.1);
+  }
+}
+
+.plan-card.popular {
+  border-color: #8b3c3d;
+
+  .badge-recommended {
+    background: linear-gradient(90deg, #7f1d2d, #b64e48);
+  }
+}
+
+.plan-info .info-item {
+  color: #5f534f;
+
+  i {
+    color: #8b3c3d;
+  }
+}
+
+.modal-footer {
+  background: rgba(255, 255, 255, 0.32);
+  border-top: 1px solid rgba(165, 110, 86, 0.12);
+
+  .btn {
+    border-radius: 14px;
+    font-weight: 700;
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.82);
+    color: #6f2130;
+    border: 1px solid rgba(111, 33, 48, 0.18);
+  }
+
+  .btn-primary {
+    background: linear-gradient(90deg, #7f1d2d, #b64e48);
+    box-shadow: 0 10px 22px rgba(127, 29, 45, 0.24);
+  }
+}
   }
 
   .plan-card {

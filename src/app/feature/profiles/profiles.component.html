@@ -146,6 +146,7 @@
               [placeholder]="'PROFILE.COMMENT_PLACEHOLDER' | translate"
               [value]="newCommentText"
               (input)="onCommentInput($any($event.target).value)"
+              (focus)="onCommentFocus()"
             ></textarea>
             <div class="comment-error" *ngIf="commentError">{{ commentError }}</div>
             <div class="comment-actions">
@@ -185,3 +186,10 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de Reglas de la Comunidad -->
+  <app-rules-modal
+    [isOpen]="showRulesModal"
+    (close)="showRulesModal = false"
+    (confirm)="confirmSubmitComment()"
+  ></app-rules-modal>

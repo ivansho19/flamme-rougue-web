@@ -1,0 +1,53 @@
+<div class="rules-modal" *ngIf="isOpen">
+  <div class="rules-backdrop" (click)="onClose()"></div>
+  <div class="rules-dialog" role="dialog" aria-modal="true">
+    <div class="rules-header">
+      <img src="assets/images/logo_HD.png" alt="Flamme Rouge Logo" class="rules-logo" />
+      <h2 class="rules-title">{{ 'PROFILE.COMMUNITY_RULES.TITLE' | translate }}</h2>
+      <p class="rules-subtitle">{{ 'PROFILE.COMMUNITY_RULES.SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="rules-body">
+      <div class="rule-item">
+        <div class="rule-icon"><i class="bi bi-heart-fill"></i></div>
+        <div class="rule-content">
+          <h3>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.RESPECT.TITLE' | translate }}</h3>
+          <p>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.RESPECT.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="rule-item">
+        <div class="rule-icon"><i class="bi bi-chat-text-fill"></i></div>
+        <div class="rule-content">
+          <h3>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.REAL_OPINIONS.TITLE' | translate }}</h3>
+          <p>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.REAL_OPINIONS.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="rule-item">
+        <div class="rule-icon"><i class="bi bi-shield-lock-fill"></i></div>
+        <div class="rule-content">
+          <h3>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.PRIVACY.TITLE' | translate }}</h3>
+          <p>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.PRIVACY.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="rule-item">
+        <div class="rule-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="rule-content">
+          <h3>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.CONSEQUENCES.TITLE' | translate }}</h3>
+          <p>{{ 'PROFILE.COMMUNITY_RULES.ITEMS.CONSEQUENCES.DESCRIPTION' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-actions">
+      <button type="button" class="rules-btn cancel" (click)="onClose()">
+        {{ 'PROFILE.COMMUNITY_RULES.CANCEL' | translate }}
+      </button>
+      <button type="button" class="rules-btn confirm" (click)="onConfirm()">
+        {{ 'PROFILE.COMMUNITY_RULES.CONFIRM' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

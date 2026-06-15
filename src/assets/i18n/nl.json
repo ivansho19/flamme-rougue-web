@@ -64,7 +64,31 @@
     "COMMENT_REPLY_ERROR_REQUIRED": "Vul een antwoord in.",
     "COMMENT_REPLY_ERROR_LOGIN": "Je moet inloggen om te antwoorden.",
     "COMMENT_ERROR_GENERIC": "Kan de reactie niet versturen.",
-    "COMMENT_REPLY_ERROR_GENERIC": "Kan het antwoord niet opslaan."
+    "COMMENT_REPLY_ERROR_GENERIC": "Kan het antwoord niet opslaan.",
+    "COMMUNITY_RULES": {
+      "TITLE": "Communityregels",
+      "SUBTITLE": "Om te reageren op Flamme Rouge moet je akkoord gaan met onze gedragsregels voor de community.",
+      "CANCEL": "Annuleren",
+      "CONFIRM": "Accepteren",
+      "ITEMS": {
+        "RESPECT": {
+          "TITLE": "1. Absoluut respect",
+          "DESCRIPTION": "Beledigingen, discriminerende opmerkingen, gewelddadige taal of haatdragende uitlatingen zijn strikt verboden."
+        },
+        "REAL_OPINIONS": {
+          "TITLE": "2. Echte meningen",
+          "DESCRIPTION": "Reacties mogen alleen echte en nuttige ervaringen delen, op een respectvolle manier."
+        },
+        "PRIVACY": {
+          "TITLE": "3. Strikte privacy",
+          "DESCRIPTION": "Het is verboden persoonlijke informatie van de adverteerder te publiceren, zoals adres, privéleven of echte identiteit."
+        },
+        "CONSEQUENCES": {
+          "TITLE": "4. Gevolgen",
+          "DESCRIPTION": "Het overtreden van deze regels leidt tot verwijdering van de reactie en tot schorsing of permanente blokkering van je account."
+        }
+      }
+    }
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Profielafbeeldingen",

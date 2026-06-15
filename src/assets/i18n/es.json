@@ -65,7 +65,31 @@
     "COMMENT_REPLY_ERROR_REQUIRED": "Ingresa una respuesta.",
     "COMMENT_REPLY_ERROR_LOGIN": "Debes iniciar sesión para responder.",
     "COMMENT_ERROR_GENERIC": "No se pudo enviar el comentario.",
-    "COMMENT_REPLY_ERROR_GENERIC": "No se pudo guardar la respuesta."
+    "COMMENT_REPLY_ERROR_GENERIC": "No se pudo guardar la respuesta.",
+    "COMMUNITY_RULES": {
+      "TITLE": "Normas de la comunidad",
+      "SUBTITLE": "Para comentar en Flamme Rouge, debes comprometerte a respetar nuestras pautas de convivencia.",
+      "CANCEL": "Cancelar",
+      "CONFIRM": "Aceptar",
+      "ITEMS": {
+        "RESPECT": {
+          "TITLE": "1. Respeto absoluto",
+          "DESCRIPTION": "Queda estrictamente prohibido cualquier insulto, comentario discriminatorio, violento o de odio."
+        },
+        "REAL_OPINIONS": {
+          "TITLE": "2. Opiniones reales",
+          "DESCRIPTION": "Los comentarios deben centrarse únicamente en compartir experiencias reales y útiles de forma educada."
+        },
+        "PRIVACY": {
+          "TITLE": "3. Privacidad estricta",
+          "DESCRIPTION": "Está prohibido publicar información personal del anunciante, como dirección, vida íntima o identidad real."
+        },
+        "CONSEQUENCES": {
+          "TITLE": "4. Consecuencias",
+          "DESCRIPTION": "El incumplimiento causará la eliminación del comentario y la suspensión o el bloqueo permanente de tu cuenta."
+        }
+      }
+    }
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Imágenes del anuncio",

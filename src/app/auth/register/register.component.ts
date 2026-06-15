@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { delay, Subscription } from 'rxjs';
 import { LoaderService } from '../../shared/services/loader/loader.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GetFlags } from '../../shared/clases/getFlagsOptions';
 
 @Component({
   selector: 'app-register',
@@ -18,13 +19,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   activeSection: 'choose' | 'usuario' | 'anunciante' = 'choose';
   currentLang = 'es';
   selectedFlagUrl = 'https://flagcdn.com/es.svg';
-  flagOptions = [
-    { url: 'https://flagcdn.com/es.svg', label: 'Espanol', lang: 'es' },
-    { url: 'https://flagcdn.com/gb.svg', label: 'English', lang: 'en' },
-    { url: 'https://flagcdn.com/fr.svg', label: 'Francais', lang: 'fr' },
-    { url: 'https://flagcdn.com/nl.svg', label: 'Nederlands', lang: 'nl' }
-  ];
-
+  flagOptions = GetFlags.getFlagsOptions();
   constructor(private loaderService: LoaderService, private translate: TranslateService) { }
 
 
@@ -33,7 +28,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.currentLang = storedLang || 'es';
     this.translate.setDefaultLang('es');
     this.translate.use(this.currentLang);
-    const activeFlag = this.flagOptions.find(flag => flag.lang === this.currentLang);
+    const activeFlag = this.flagOptions.find((flag: any) => flag.lang === this.currentLang);
     if (activeFlag) {
       this.selectedFlagUrl = activeFlag.url;
     }

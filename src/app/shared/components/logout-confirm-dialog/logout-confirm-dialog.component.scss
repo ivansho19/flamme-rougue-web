@@ -45,3 +45,47 @@ button.btn-custom {
   font-size: 1rem;
   padding: 0.7rem;
 }
+
+/* Shared modal theme override */
+.logout-dialog-container {
+  background: linear-gradient(145deg, rgba(255, 252, 246, 0.98), rgba(250, 240, 226, 0.96));
+  border-radius: 24px;
+  border: 1px solid rgba(165, 110, 86, 0.18);
+  box-shadow: 0 28px 60px rgba(99, 43, 49, 0.18), 0 10px 24px rgba(139, 87, 62, 0.12);
+}
+
+.logout-dialog-divider {
+  border-top: 1px solid rgba(165, 110, 86, 0.14);
+}
+
+.logout-dialog-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #6f2130;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.logout-dialog-message {
+  color: #5f534f;
+  line-height: 1.6;
+}
+
+button.btn-custom {
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #7f1d2d, #b64e48) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(127, 29, 45, 0.24) !important;
+}
+
+button.btn-custom-cancel {
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(111, 33, 48, 0.18) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: #6f2130 !important;
+}

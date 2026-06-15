@@ -64,7 +64,31 @@
     "COMMENT_REPLY_ERROR_REQUIRED": "Please enter a reply.",
     "COMMENT_REPLY_ERROR_LOGIN": "You must sign in to reply.",
     "COMMENT_ERROR_GENERIC": "Could not send the comment.",
-    "COMMENT_REPLY_ERROR_GENERIC": "Could not save the reply."
+    "COMMENT_REPLY_ERROR_GENERIC": "Could not save the reply.",
+    "COMMUNITY_RULES": {
+      "TITLE": "Community rules",
+      "SUBTITLE": "To comment on Flamme Rouge, you must agree to follow our community guidelines.",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Accept",
+      "ITEMS": {
+        "RESPECT": {
+          "TITLE": "1. Absolute respect",
+          "DESCRIPTION": "Insults, discriminatory remarks, violent language, or hate speech are strictly prohibited."
+        },
+        "REAL_OPINIONS": {
+          "TITLE": "2. Real opinions",
+          "DESCRIPTION": "Comments must focus only on sharing real and useful experiences in a respectful way."
+        },
+        "PRIVACY": {
+          "TITLE": "3. Strict privacy",
+          "DESCRIPTION": "Posting the advertiser's personal information, such as address, private life, or real identity, is prohibited."
+        },
+        "CONSEQUENCES": {
+          "TITLE": "4. Consequences",
+          "DESCRIPTION": "Breaking these rules will result in comment removal and suspension or permanent blocking of your account."
+        }
+      }
+    }
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Profile images",

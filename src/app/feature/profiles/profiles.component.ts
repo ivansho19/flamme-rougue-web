@@ -17,6 +17,8 @@ import { CommentPlanStatus } from '../../shared/models/comment-plans.model';
 })
 export class ProfilesComponent implements OnInit {
 
+  private readonly commentRulesAcceptedStorageKey = 'commentRulesAccepted';
+
     profileId: string = '';
     profileData: IProfileResponse | null = null;
     fallbackImage = 'assets/images/model.webp';
@@ -37,6 +39,7 @@ export class ProfilesComponent implements OnInit {
     actionLoading = false;
     error = '';
     showPlanModal = false;
+    showRulesModal = false;
     private embla: EmblaCarouselType | null = null;
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
@@ -132,6 +135,14 @@ export class ProfilesComponent implements OnInit {
       }
     }
 
+    onCommentFocus() {
+      if (this.hasAcceptedCommentRules()) {
+        return;
+      }
+
+      this.showRulesModal = true;
+    }
+
     submitComment() {
       const text = this.newCommentText.trim();
       if (!text) {
@@ -167,11 +178,20 @@ export class ProfilesComponent implements OnInit {
           const client = localStorage.getItem('client');
           this.commentSubmitting = false;
           this.commentError = error?.error?.message || this.translate.instant('PROFILE.COMMENT_ERROR_GENERIC');
-          if(!client){
-             this.showPlanModal = true;
+          if (!client) {
+            this.showPlanModal = true;
           }
         }
       });
+    }
+
+    confirmSubmitComment() {
+      localStorage.setItem(this.commentRulesAcceptedStorageKey, 'true');
+      this.showRulesModal = false;
+    }
+
+    private hasAcceptedCommentRules(): boolean {
+      return localStorage.getItem(this.commentRulesAcceptedStorageKey) === 'true';
     }
 
     isProfileOwner(): boolean {

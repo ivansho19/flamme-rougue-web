@@ -392,3 +392,127 @@
     }
   }
 }
+
+/* Shared modal theme override */
+.modal-overlay {
+  background: rgba(111, 33, 44, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: linear-gradient(145deg, rgba(255, 252, 246, 0.98), rgba(250, 240, 226, 0.96));
+  border: 1px solid rgba(165, 110, 86, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 28px 60px rgba(99, 43, 49, 0.18), 0 10px 24px rgba(139, 87, 62, 0.12);
+}
+
+.modal-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(165, 110, 86, 0.14);
+  border-radius: 24px 24px 0 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 7px;
+    background: linear-gradient(90deg, #7f1d2d 0%, #c99162 52%, #7f1d2d 100%);
+  }
+
+  h2 {
+    color: #6f2130;
+    font-family: 'Cinzel', serif;
+  }
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(111, 33, 48, 0.12);
+  color: #6f2130;
+}
+
+.description {
+  .description-text {
+    color: #5f534f;
+  }
+
+  .benefit-item,
+  .benefit-item i {
+    color: #8b3c3d;
+  }
+}
+
+.plan-card,
+.city-info,
+.summary {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(177, 138, 112, 0.18);
+}
+
+.plan-card {
+  &:hover,
+  &.selected {
+    border-color: #8b3c3d;
+  }
+
+  &.selected {
+    background: linear-gradient(135deg, rgba(127, 29, 45, 0.05), rgba(201, 145, 98, 0.08));
+    box-shadow: 0 8px 18px rgba(127, 29, 45, 0.12);
+  }
+
+  .plan-header h3,
+  .plan-price .price,
+  .plan-check {
+    color: #8b3c3d;
+  }
+
+  .duration {
+    background: linear-gradient(90deg, #7f1d2d, #b64e48) !important;
+    color: #fff !important;
+  }
+
+  .plan-description {
+    color: #5f534f;
+  }
+}
+
+.city-info,
+.summary {
+  h4 {
+    color: #6f2130;
+  }
+}
+
+.city-info .detail-row span,
+.summary .summary-row {
+  color: #5f534f;
+}
+
+.summary .summary-row .price,
+.summary .summary-row .total-price {
+  color: #8b3c3d;
+}
+
+.modal-footer {
+  background: rgba(255, 255, 255, 0.32);
+  border-top: 1px solid rgba(165, 110, 86, 0.12);
+  border-radius: 0 0 24px 24px;
+}
+
+.btn {
+  border-radius: 14px;
+  font-weight: 700;
+
+  &.btn-primary {
+    background: linear-gradient(90deg, #7f1d2d, #b64e48);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(127, 29, 45, 0.24);
+  }
+
+  &.btn-secondary {
+    background: rgba(255, 255, 255, 0.82);
+    color: #6f2130;
+    border: 1px solid rgba(111, 33, 48, 0.18);
+  }
+}

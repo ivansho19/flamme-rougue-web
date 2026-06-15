@@ -22,6 +22,7 @@ import { KycInfoModalComponent } from './kyc-info-modal/kyc-info-modal.component
 import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-action-modal.component';
 import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
 import { LikeButtonComponent } from './like-button/like-button.component';
+import { RulesModalComponent } from './rules-modal/rules-modal.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LikeButtonComponent } from './like-button/like-button.component';
     KycInfoModalComponent,
     ConfirmActionModalComponent,
     CardSkeletonComponent,
-    LikeButtonComponent
+    LikeButtonComponent,
+    RulesModalComponent
   ],
   exports: [
     LoaderComponent,
@@ -59,7 +61,8 @@ import { LikeButtonComponent } from './like-button/like-button.component';
     KycInfoModalComponent,
     ConfirmActionModalComponent,
     CardSkeletonComponent,
-    LikeButtonComponent
+    LikeButtonComponent,
+    RulesModalComponent
   ],
   imports: [
     CommonModule,

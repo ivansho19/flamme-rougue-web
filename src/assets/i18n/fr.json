@@ -64,7 +64,31 @@
     "COMMENT_REPLY_ERROR_REQUIRED": "Veuillez saisir une réponse.",
     "COMMENT_REPLY_ERROR_LOGIN": "Vous devez vous connecter pour répondre.",
     "COMMENT_ERROR_GENERIC": "Impossible d'envoyer le commentaire.",
-    "COMMENT_REPLY_ERROR_GENERIC": "Impossible d'enregistrer la réponse."
+    "COMMENT_REPLY_ERROR_GENERIC": "Impossible d'enregistrer la réponse.",
+    "COMMUNITY_RULES": {
+      "TITLE": "Règles de la communauté",
+      "SUBTITLE": "Pour commenter sur Flamme Rouge, vous devez vous engager à respecter nos règles de vie en communauté.",
+      "CANCEL": "Annuler",
+      "CONFIRM": "Accepter",
+      "ITEMS": {
+        "RESPECT": {
+          "TITLE": "1. Respect absolu",
+          "DESCRIPTION": "Toute insulte, remarque discriminatoire, violente ou haineuse est strictement interdite."
+        },
+        "REAL_OPINIONS": {
+          "TITLE": "2. Avis authentiques",
+          "DESCRIPTION": "Les commentaires doivent uniquement partager des expériences réelles et utiles, de manière respectueuse."
+        },
+        "PRIVACY": {
+          "TITLE": "3. Confidentialité stricte",
+          "DESCRIPTION": "Il est interdit de publier des informations personnelles de l'annonceur, comme l'adresse, la vie privée ou l'identité réelle."
+        },
+        "CONSEQUENCES": {
+          "TITLE": "4. Conséquences",
+          "DESCRIPTION": "Le non-respect de ces règles entraînera la suppression du commentaire ainsi que la suspension ou le blocage définitif de votre compte."
+        }
+      }
+    }
   },
   "PROFILE_FORM": {
     "IMAGES_TITLE": "Images du profil",
