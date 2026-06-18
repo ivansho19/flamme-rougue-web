@@ -96,8 +96,21 @@
 
 .accordion-panel {
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+::ng-deep .profile-accordion .mat-expansion-panel {
+  overflow: visible !important;
+}
+
+::ng-deep .profile-accordion .mat-expansion-panel-body {
+  overflow: visible !important;
+}
+
+.field:has(.country-search.is-open) {
+  position: relative;
+  z-index: 45;
 }
 
 ::ng-deep .profile-accordion .mat-expansion-panel-header {

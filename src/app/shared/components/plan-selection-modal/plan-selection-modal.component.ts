@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { PlanOption } from '../../model/planes.model';
 import { environment } from '../../../../environments/environment';
@@ -80,7 +81,8 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   constructor(
     private paymentService: PaymentService,
     private ngZone: NgZone,
-    private payPalButtonService: PayPalButtonService
+    private payPalButtonService: PayPalButtonService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -145,10 +147,14 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
 
   openWhatsAppPayment(): void {
     const plan = this.getSelectedPlan();
-    const planName = plan?.name || 'Plan';
+    const planName = plan?.name || this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_PLAN');
     const planPrice = plan?.price || '';
-    const displayName = this.profileName || 'cliente';
-    const message = `Hola, soy ${displayName}. Quiero informacion para pagar el plan ${planName} por EUR ${this.parsePlanPrice(planPrice)}. Gracias.`;
+    const displayName = this.profileName || this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_CLIENT');
+    const message = this.translate.instant('WHATSAPP_PAYMENT.PROFILE_PLAN', {
+      name: displayName,
+      planName,
+      price: this.parsePlanPrice(planPrice)
+    });
     const url = `https://wa.me/${this.whatsAppPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   }

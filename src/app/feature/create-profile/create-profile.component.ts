@@ -297,8 +297,7 @@ export class ProfileEditComponent implements OnInit {
         this.addAvailabilitySlot();
     }
 
-    onCountryChange(event: Event) {
-        const value = (event.target as HTMLSelectElement).value;
+    onCountryChange(value: string) {
         this.setCitiesForCountry(value);
         this.profileForm.get('basicInfo.city')?.setValue('');
     }

@@ -307,8 +307,7 @@ export class UpdateProfileComponent implements OnInit {
     return found?.code ?? value;
   }
 
-  onCountryChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
+  onCountryChange(value: string) {
     this.setCitiesForCountry(value);
     this.profileForm.get('basicInfo.city')?.setValue('');
   }

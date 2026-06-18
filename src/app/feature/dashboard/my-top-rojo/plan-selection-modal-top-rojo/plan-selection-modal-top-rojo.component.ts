@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { TOP_ROJO_PLANS, TopRojoPlantType } from '../../../../shared/models/top-rojo.model';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -37,7 +38,8 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   constructor(
     private paymentService: PaymentService,
     private payPalButtonService: PayPalButtonService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -111,20 +113,30 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
 
   openWhatsAppPayment(): void {
     const plan = this.getSelectedPlan();
-    const planName = plan?.name || 'TOP ROJO';
+    const planName = plan?.name || this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_TOP_ROJO');
     const planDuration = plan ? this.getDurationText(plan.duration) : '';
     const planPrice = plan?.price ?? '';
-    const displayName = this.profileName || 'cliente';
-    const durationText = planDuration ? ` (${planDuration})` : '';
-    const message = `Hola, soy ${displayName}. Quiero informacion para pagar el plan ${planName}${durationText} por EUR ${planPrice}. Gracias.`;
+    const displayName = this.profileName || this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_CLIENT');
+    const durationSuffix = planDuration ? ` (${planDuration})` : '';
+    const message = this.translate.instant('WHATSAPP_PAYMENT.TOP_ROJO_PLAN', {
+      name: displayName,
+      planName,
+      durationSuffix,
+      price: planPrice
+    });
     const url = `https://wa.me/${this.whatsAppPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   }
 
   getDurationText(hours: number): string {
-    if (hours < 24) return `${hours}h`;
+    if (hours < 24) {
+      return this.translate.instant('WHATSAPP_PAYMENT.DURATION_HOURS', { hours });
+    }
+
     const days = Math.round(hours / 24);
-    return `${days}${days === 1 ? ' día' : ' días'}`;
+    return days === 1
+      ? this.translate.instant('WHATSAPP_PAYMENT.DURATION_DAY', { days })
+      : this.translate.instant('WHATSAPP_PAYMENT.DURATION_DAYS', { days });
   }
 
   private schedulePayPalRender(): void {

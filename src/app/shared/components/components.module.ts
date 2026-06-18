@@ -23,6 +23,7 @@ import { ConfirmActionModalComponent } from './confirm-action-modal/confirm-acti
 import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
 import { LikeButtonComponent } from './like-button/like-button.component';
 import { RulesModalComponent } from './rules-modal/rules-modal.component';
+import { CountrySearchSelectComponent } from './country-search-select/country-search-select.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { RulesModalComponent } from './rules-modal/rules-modal.component';
     ConfirmActionModalComponent,
     CardSkeletonComponent,
     LikeButtonComponent,
-    RulesModalComponent
+    RulesModalComponent,
+    CountrySearchSelectComponent
   ],
   exports: [
     LoaderComponent,
@@ -62,7 +64,8 @@ import { RulesModalComponent } from './rules-modal/rules-modal.component';
     ConfirmActionModalComponent,
     CardSkeletonComponent,
     LikeButtonComponent,
-    RulesModalComponent
+    RulesModalComponent,
+    CountrySearchSelectComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,46 @@
+<div
+  class="country-search"
+  [class.is-open]="isOpen"
+  [class.input-error]="hasError"
+  [class.is-disabled]="disabled">
+  <button
+    type="button"
+    class="country-search__trigger"
+    [disabled]="disabled"
+    (click)="toggleDropdown($event)"
+    [attr.aria-expanded]="isOpen"
+    aria-haspopup="listbox">
+    <span class="country-search__label" [class.is-placeholder]="isPlaceholderVisible">{{ closedLabel }}</span>
+    <i class="bi" [class.bi-chevron-up]="isOpen" [class.bi-chevron-down]="!isOpen" aria-hidden="true"></i>
+  </button>
+
+  <div class="country-search__dropdown" *ngIf="isOpen" (click)="$event.stopPropagation()">
+    <div class="country-search__search-wrap">
+      <input
+        #searchInput
+        type="text"
+        class="country-search__search"
+        [placeholder]="'PROFILE_FORM.COUNTRY_SEARCH_PLACEHOLDER' | translate"
+        [value]="searchTerm"
+        (input)="onSearchInput($any($event.target).value)"
+        autocomplete="off"
+        role="combobox"
+        aria-autocomplete="list"
+        [attr.aria-expanded]="true" />
+    </div>
+
+    <ul class="country-search__list" role="listbox">
+      <li
+        *ngFor="let country of filteredCountries"
+        role="option"
+        [attr.aria-selected]="country.code === selectedCode"
+        [class.is-selected]="country.code === selectedCode"
+        (click)="selectCountry(country)">
+        {{ country.name }}
+      </li>
+      <li class="country-search__empty" *ngIf="!filteredCountries.length" role="status">
+        {{ 'PROFILE_FORM.COUNTRY_NO_RESULTS' | translate }}
+      </li>
+    </ul>
+  </div>
+</div>

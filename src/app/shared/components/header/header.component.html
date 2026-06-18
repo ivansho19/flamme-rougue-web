@@ -332,7 +332,7 @@
                 (click)="navigateToProfile(); closeMobileMenu()">
                 <i class="bi bi-person"></i> {{ 'HEADER.PROFILE' | translate }}
             </button>
-            <button class="mobile-item publish-top" type="button" *ngIf="getUserName()" (click)="openTopRojoModal(); closeMobileMenu()">
+            <button class="mobile-item publish-top" type="button" *ngIf="getUserName() && isClient()" (click)="openTopRojoModal(); closeMobileMenu()">
                 <i class="bi bi-star-fill"></i> {{ 'HEADER.PUBLISH_TOP' | translate }}
             </button>
             <button class="mobile-item publish-top" type="button" *ngIf="getUserName() && !isClient()" (click)="navigateToCommentPlans(); closeMobileMenu()">

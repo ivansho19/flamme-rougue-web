@@ -106,6 +106,8 @@
     "DESCRIPTION_PLACEHOLDER": "Description",
     "DESCRIPTION_MAX_ERROR": "La description ne peut pas depasser 2500 caracteres",
     "COUNTRY_PLACEHOLDER": "Pays",
+    "COUNTRY_SEARCH_PLACEHOLDER": "Rechercher un pays...",
+    "COUNTRY_NO_RESULTS": "Aucun pays trouvé",
     "CITY_PLACEHOLDER": "Ville",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telephone",
@@ -233,6 +235,18 @@
     "PROFILE_MESSAGE": "Votre profil restera en validation jusqu'a confirmation du paiement WhatsApp.\nUne fois valide, notre equipe le publiera et vous enverra la confirmation.",
     "TOP_ROJO_MESSAGE": "Le TOP ROJO sera active apres confirmation du paiement WhatsApp.\nNotre equipe validera le paiement et le publiera pour la duree du plan choisi.",
     "COMMENT_PLANS_MESSAGE": "Le plan de commentaires sera active apres confirmation du paiement WhatsApp.\nNotre equipe validera le paiement et activera les commentaires selon le plan choisi."
+  },
+  "WHATSAPP_PAYMENT": {
+    "PROFILE_PLAN": "Bonjour, je suis {{name}}. Je souhaite des informations pour payer le plan {{planName}} pour EUR {{price}}. Merci.",
+    "COMMENT_PLAN": "Bonjour, je souhaite des informations pour payer le plan {{planName}} pour EUR {{price}}. Merci.",
+    "TOP_ROJO_PLAN": "Bonjour, je suis {{name}}. Je souhaite des informations pour payer le plan {{planName}}{{durationSuffix}} pour EUR {{price}}. Merci.",
+    "DEFAULT_CLIENT": "client",
+    "DEFAULT_PLAN": "Plan",
+    "DEFAULT_COMMENT_PLAN": "Plan commentaires",
+    "DEFAULT_TOP_ROJO": "TOP ROJO",
+    "DURATION_HOURS": "{{hours}}h",
+    "DURATION_DAY": "{{days}} jour",
+    "DURATION_DAYS": "{{days}} jours"
   },
   "ADMIN_DASHBOARD": {
     "TITLE": "Dashboard",

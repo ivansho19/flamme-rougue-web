@@ -106,6 +106,8 @@
     "DESCRIPTION_PLACEHOLDER": "Beschrijving",
     "DESCRIPTION_MAX_ERROR": "Beschrijving mag niet langer zijn dan 2500 tekens",
     "COUNTRY_PLACEHOLDER": "Land",
+    "COUNTRY_SEARCH_PLACEHOLDER": "Land zoeken...",
+    "COUNTRY_NO_RESULTS": "Geen landen gevonden",
     "CITY_PLACEHOLDER": "Stad",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telefoon",
@@ -233,6 +235,18 @@
     "PROFILE_MESSAGE": "Je profiel blijft in beoordeling totdat de WhatsApp-betaling is bevestigd.\nNa validatie zal ons team het publiceren en ontvang je een bevestiging.",
     "TOP_ROJO_MESSAGE": "TOP ROJO wordt geactiveerd zodra de WhatsApp-betaling is bevestigd.\nOns team valideert de betaling en publiceert het voor de gekozen looptijd.",
     "COMMENT_PLANS_MESSAGE": "Het reactieplan wordt geactiveerd zodra de WhatsApp-betaling is bevestigd.\nOns team valideert de betaling en schakelt reacties in volgens het gekozen plan."
+  },
+  "WHATSAPP_PAYMENT": {
+    "PROFILE_PLAN": "Hallo, ik ben {{name}}. Ik wil graag informatie om het {{planName}}-plan te betalen voor EUR {{price}}. Bedankt.",
+    "COMMENT_PLAN": "Hallo, ik wil graag informatie om het {{planName}}-plan te betalen voor EUR {{price}}. Bedankt.",
+    "TOP_ROJO_PLAN": "Hallo, ik ben {{name}}. Ik wil graag informatie om het {{planName}}{{durationSuffix}}-plan te betalen voor EUR {{price}}. Bedankt.",
+    "DEFAULT_CLIENT": "klant",
+    "DEFAULT_PLAN": "Plan",
+    "DEFAULT_COMMENT_PLAN": "Reactieplan",
+    "DEFAULT_TOP_ROJO": "TOP ROJO",
+    "DURATION_HOURS": "{{hours}}u",
+    "DURATION_DAY": "{{days}} dag",
+    "DURATION_DAYS": "{{days}} dagen"
   },
   "ADMIN_DASHBOARD": {
     "TITLE": "Dashboard",

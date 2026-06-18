@@ -101,11 +101,13 @@
 
       <div class="grid-2">
         <div class="field">
-          <select formControlName="country" (change)="onCountryChange($event)"
-            [class.input-error]="isInvalid('basicInfo.country')">
-            <option value="" disabled selected>{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</option>
-            <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
-          </select>
+          <app-country-search-select
+            formControlName="country"
+            [countries]="countries"
+            [hasError]="isInvalid('basicInfo.country')"
+            [placeholder]="'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate"
+            (countrySelected)="onCountryChange($event)">
+          </app-country-search-select>
           <div class="error" *ngIf="isInvalid('basicInfo.country')">
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </div>
