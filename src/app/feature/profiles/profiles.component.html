@@ -25,8 +25,11 @@
       <header class="profile-header">
         <div>
           <h1>{{ profileData.displayName }}</h1>
-          <p class="subtitle">{{ 'PROFILE.SUBTITLE' | translate }} <span>{{ profileData.city }}</span></p>
-          <p class="subtitle">{{ 'PROFILE.ZONE' | translate }} <span>{{ profileData.zone }}</span></p>
+          <p class="subtitle location-line">
+            <i class="bi bi-pin-map-fill location-icon" aria-hidden="true"></i>
+            {{ 'PROFILE.SUBTITLE' | translate }} <span>{{ profileData.city }}</span>
+          </p>
+          <p class="subtitle" *ngIf="profileData.zone">{{ 'PROFILE.ZONE' | translate }} <span>{{ profileData.zone }}</span></p>
         </div>
         <button class="contact-pill phone-pill" type="button" *ngIf="profileData.phone != null">
           <span class="phone">{{ profileData.phone }}</span>
@@ -39,7 +42,10 @@
         <span class="badge bplan-image" *ngIf="planBadgeImage">
           <img [src]="planBadgeImage" alt="Plan" />
         </span>
-        <span class="badge verified" *ngIf="profileData.isVerify">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
+        <span class="badge verified" *ngIf="profileData.isVerify">
+          <i class="bi bi-shield-fill-check" aria-hidden="true"></i>
+          {{ 'PROFILE.VERIFIED' | translate }}
+        </span>
       </div>
 
       <p class="bio" *ngIf="profileData.bio">{{ profileData.bio }}</p>
@@ -165,7 +171,8 @@
     [isOpen]="showPlanModal"
     [currentPlan]="currentPlanType"
     (close)="closePlanModal()"
-    (planSelected)="onPlanSelected($event)">
+    (planSelected)="onPlanSelected($event)"
+    (paymentWhatsApp)="onWhatsAppPayment($event)">
   </app-plan-selection-modal-comment-plans>
 </div>
 

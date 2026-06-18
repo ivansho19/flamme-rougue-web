@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize, forkJoin } from 'rxjs';
 import { AdminService } from '../../../shared/services/admin/admin.service';
+import { AdminUser } from '../../../shared/models/comment-plans.model';
 import { TopRojoService } from '../../../shared/services/top-rojo/top-rojo.service';
 import { ToastService } from '../../../shared/services/toast/toast.service';
 
@@ -18,7 +19,7 @@ export class AdminDashboardComponent implements OnInit {
   activeAdminSection: 'top-rojo' | 'users' | 'announcer' = 'announcer';
   profiles: any[] = [];
   filteredProfiles: any[] = [];
-  users: any[] = [];
+  users: AdminUser[] = [];
   kycItems: any[] = [];
   pendingKycItems: any[] = [];
   pendingKycItemsAll: any[] = [];
@@ -34,7 +35,7 @@ export class AdminDashboardComponent implements OnInit {
   confirmTitle = '';
   confirmMessage = '';
   confirmCta = '';
-  confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | 'delete-user' | null = null;
+  confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | 'delete-user' | 'activate-comment-plan' | 'expire-comment-plan' | null = null;
   selectedProfile: any | null = null;
   selectedKyc: any | null = null;
   selectedTopRojo: any | null = null;
@@ -47,6 +48,9 @@ export class AdminDashboardComponent implements OnInit {
   popularPlanPercent = 0;
   totalProfilesCount = 0;
   totalUsersCount = 0;
+  usersTotalPages = 0;
+  private commentPlansPendingTotal = 0;
+  private commentPlansPendingSummaryLoaded = false;
   pageIndex = 0;
   pageSize = 15;
   usersPageIndex = 0;
@@ -62,6 +66,7 @@ export class AdminDashboardComponent implements OnInit {
   private pendingKycLoaded = false;
   private readonly togglingProfileIds = new Set<string>();
   private readonly topRojoUpdatingIds = new Set<string>();
+  private readonly commentPlanUpdatingIds = new Set<string>();
   private topRojoLoaded = false;
   private usersLoaded = false;
   private topRojoSummaryLoaded = false;
@@ -94,9 +99,14 @@ export class AdminDashboardComponent implements OnInit {
       this.refreshTopRojoData();
     } else if (section === 'top-rojo' && !this.topRojoSummaryLoaded) {
       this.loadTopRojoSummary();
-    } else if (section === 'users' && !this.usersLoaded) {
-      this.loadUsers();
+    } else if (section === 'users') {
+      this.refreshUsersSection();
     }
+  }
+
+  refreshUsersSection(): void {
+    this.loadUsers();
+    this.loadCommentPlansPendingSummary();
   }
 
   refreshTopRojoData(): void {
@@ -207,9 +217,10 @@ export class AdminDashboardComponent implements OnInit {
     this.usersLoading = true;
     this.adminService.getAllUsers(this.usersPageIndex + 1, this.usersPageSize, false).subscribe({
       next: (response) => {
-        const list = response?.data ?? response?.users ?? response ?? [];
+        const list = response?.data ?? [];
         this.users = Array.isArray(list) ? list.filter(user => !this.isAdminUser(user)) : [];
         this.totalUsersCount = Number(response?.total ?? this.users.length);
+        this.usersTotalPages = Number(response?.totalPages ?? 1);
         this.usersLoaded = true;
         this.usersLoading = false;
       },
@@ -223,6 +234,27 @@ export class AdminDashboardComponent implements OnInit {
         );
       }
     });
+  }
+
+  private loadCommentPlansPendingSummary(): void {
+    if (this.commentPlansPendingSummaryLoaded) {
+      return;
+    }
+
+    this.adminService.getAllUsers(1, 500, false).subscribe({
+      next: (response) => {
+        const list = response?.data ?? [];
+        this.commentPlansPendingTotal = (Array.isArray(list) ? list : [])
+          .filter(user => !this.isAdminUser(user) && user.commentPlan?.status === 'pending')
+          .length;
+        this.commentPlansPendingSummaryLoaded = true;
+      }
+    });
+  }
+
+  private invalidateCommentPlansPendingSummary(): void {
+    this.commentPlansPendingSummaryLoaded = false;
+    this.commentPlansPendingTotal = 0;
   }
 
   onUsersPageChange(event: PageEvent): void {
@@ -414,6 +446,108 @@ export class AdminDashboardComponent implements OnInit {
     this.confirmOpen = true;
   }
 
+  openActivateCommentPlanConfirm(user: any): void {
+    this.selectedUser = user;
+    this.confirmAction = 'activate-comment-plan';
+    this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_COMMENT_PLAN_TITLE');
+    this.confirmMessage = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_COMMENT_PLAN_MESSAGE', {
+      name: this.getUserFullName(user),
+      plan: this.getCommentPlanTypeLabel(user)
+    });
+    this.confirmCta = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_COMMENT_PLAN_CTA');
+    this.confirmOpen = true;
+  }
+
+  openExpireCommentPlanConfirm(user: any): void {
+    this.selectedUser = user;
+    this.confirmAction = 'expire-comment-plan';
+    this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.EXPIRE_COMMENT_PLAN_TITLE');
+    this.confirmMessage = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.EXPIRE_COMMENT_PLAN_MESSAGE', {
+      name: this.getUserFullName(user),
+      plan: this.getCommentPlanTypeLabel(user)
+    });
+    this.confirmCta = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.EXPIRE_COMMENT_PLAN_CTA');
+    this.confirmOpen = true;
+  }
+
+  get commentPlansPendingCount(): number {
+    if (this.commentPlansPendingSummaryLoaded) {
+      return this.commentPlansPendingTotal;
+    }
+
+    return this.users.filter(user => this.canActivateCommentPlan(user)).length;
+  }
+
+  activateCommentPlan(user: any): void {
+    this.updateUserCommentPlanStatus(user, 'active', {
+      successTitle: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_ACTIVATE_SUCCESS_TITLE',
+      successMessage: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_ACTIVATE_SUCCESS_MESSAGE',
+      errorTitle: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_ACTIVATE_ERROR_TITLE',
+      errorMessage: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_ACTIVATE_ERROR_MESSAGE'
+    });
+  }
+
+  expireCommentPlan(user: any): void {
+    this.updateUserCommentPlanStatus(user, 'expired', {
+      successTitle: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_EXPIRE_SUCCESS_TITLE',
+      successMessage: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_EXPIRE_SUCCESS_MESSAGE',
+      errorTitle: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_EXPIRE_ERROR_TITLE',
+      errorMessage: 'ADMIN_DASHBOARD.TOAST.COMMENT_PLAN_EXPIRE_ERROR_MESSAGE'
+    });
+  }
+
+  private updateUserCommentPlanStatus(
+    user: AdminUser,
+    status: 'active' | 'expired',
+    toastKeys: { successTitle: string; successMessage: string; errorTitle: string; errorMessage: string }
+  ): void {
+    const commentPlanId = this.getCommentPlanId(user);
+    if (!commentPlanId || this.commentPlanUpdatingIds.has(commentPlanId)) {
+      this.closeConfirm();
+      return;
+    }
+
+    this.commentPlanUpdatingIds.add(commentPlanId);
+
+    this.adminService.updateCommentPlanStatus(commentPlanId, status)
+      .pipe(finalize(() => this.commentPlanUpdatingIds.delete(commentPlanId)))
+      .subscribe({
+        next: (response) => {
+          const plan = this.getUserCommentPlan(user);
+          if (plan && response?.data) {
+            plan.status = response.data.status;
+            plan.updatedAt = response.data.updatedAt;
+            plan.badge = response.data.badge;
+            plan.startedAt = response.data.startedAt;
+            plan.expiresAt = response.data.expiresAt;
+            if (response.data.id) {
+              plan._id = response.data.id;
+            }
+          } else if (plan) {
+            plan.status = status;
+          }
+          this.closeConfirm();
+          this.invalidateCommentPlansPendingSummary();
+          this.refreshUsersSection();
+          this.toastService.showToast(
+            this.translate.instant(toastKeys.successTitle),
+            this.translate.instant(toastKeys.successMessage),
+            'success',
+            4
+          );
+        },
+        error: () => {
+          this.closeConfirm();
+          this.toastService.showToast(
+            this.translate.instant(toastKeys.errorTitle),
+            this.translate.instant(toastKeys.errorMessage),
+            'error',
+            4
+          );
+        }
+      });
+  }
+
   closeConfirm(): void {
     this.confirmOpen = false;
     this.confirmAction = null;
@@ -447,6 +581,14 @@ export class AdminDashboardComponent implements OnInit {
 
     if (this.confirmAction === 'delete-user' && this.selectedUser) {
       this.deleteUser(this.selectedUser);
+    }
+
+    if (this.confirmAction === 'activate-comment-plan' && this.selectedUser) {
+      this.activateCommentPlan(this.selectedUser);
+    }
+
+    if (this.confirmAction === 'expire-comment-plan' && this.selectedUser) {
+      this.expireCommentPlan(this.selectedUser);
     }
   }
 
@@ -636,6 +778,8 @@ export class AdminDashboardComponent implements OnInit {
       next: () => {
         this.users = this.users.filter(item => this.getUserId(item) !== userId);
         this.totalUsersCount = Math.max(0, this.totalUsersCount - 1);
+        this.invalidateCommentPlansPendingSummary();
+        this.loadCommentPlansPendingSummary();
         this.closeConfirm();
         this.toastService.showToast(
           this.translate.instant('ADMIN_DASHBOARD.TOAST.USERS_DELETE_SUCCESS_TITLE'),
@@ -959,19 +1103,22 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getUserId(user: any): string {
-    return user?._id || user?.id || '';
+    const source = this.getUserFromItem(user);
+    return source?._id || source?.id || user?.userId || '';
   }
 
   isAdminUser(user: any): boolean {
-    return user?.isAdmin === true;
+    const source = this.getUserFromItem(user);
+    return source?.isAdmin === true || user?.isAdmin === true;
   }
 
-  getUserFullName(user: any): string {
+  getUserFullName(item: any): string {
+    const user = this.getUserFromItem(item);
     return [user?.name, user?.lastName].filter(Boolean).join(' ').trim() || '-';
   }
 
-  getUserInitials(user: any): string {
-    const fullName = this.getUserFullName(user);
+  getUserInitials(item: any): string {
+    const fullName = this.getUserFullName(item);
     if (!fullName || fullName === '-') {
       return 'U';
     }
@@ -982,5 +1129,96 @@ export class AdminDashboardComponent implements OnInit {
       .slice(0, 2)
       .map((part: string) => part.charAt(0).toUpperCase())
       .join('');
+  }
+
+  getUserCommentPlan(item: any): any | null {
+    if (item?.commentPlan && typeof item.commentPlan === 'object') {
+      return item.commentPlan;
+    }
+
+    return null;
+  }
+
+  getUserFromItem(item: any): any {
+    if (item?.email || item?.name || item?.lastName) {
+      return item;
+    }
+
+    return item?.user ?? {};
+  }
+
+  getCommentPlanUserId(user: any): string {
+    return this.getUserId(user);
+  }
+
+  getCommentPlanId(user: AdminUser): string {
+    const plan = this.getUserCommentPlan(user);
+    return plan?._id || plan?.id || '';
+  }
+
+  getCommentPlanStatus(item: any): 'pending' | 'active' | 'cancelled' | 'expired' | 'none' {
+    const rawStatus = this.getUserCommentPlan(item)?.status;
+    const normalized = typeof rawStatus === 'string' ? rawStatus.toLowerCase() : '';
+
+    if (normalized === 'pending' || normalized === 'active' || normalized === 'cancelled' || normalized === 'expired') {
+      return normalized;
+    }
+
+    return 'none';
+  }
+
+  getCommentPlanTypeLabel(user: any): string {
+    const planType = this.getUserCommentPlan(user)?.planType;
+
+    if (planType === 'monthly') {
+      return this.translate.instant('COMMENT_PLANS.PLAN_MONTHLY');
+    }
+    if (planType === 'annual') {
+      return this.translate.instant('COMMENT_PLANS.PLAN_ANNUAL');
+    }
+    if (planType === 'free') {
+      return this.translate.instant('COMMENT_PLANS.PLAN_FREE');
+    }
+
+    return this.translate.instant('ADMIN_DASHBOARD.USERS.COMMENT_PLAN_NONE');
+  }
+
+  getCommentPlanStatusLabel(user: any): string {
+    const status = this.getCommentPlanStatus(user).toUpperCase();
+    if (status === 'NONE') {
+      return this.translate.instant('ADMIN_DASHBOARD.USERS.COMMENT_PLAN_NONE');
+    }
+    return this.translate.instant(`ADMIN_DASHBOARD.USERS.COMMENT_PLAN_STATUS.${status}`);
+  }
+
+  getCommentPlanStatusClass(user: any): string {
+    return `comment-plan-status-pill ${this.getCommentPlanStatus(user)}`;
+  }
+
+  canActivateCommentPlan(user: AdminUser): boolean {
+    return this.getCommentPlanStatus(user) === 'pending' && !!this.getCommentPlanId(user);
+  }
+
+  canExpireCommentPlan(user: AdminUser): boolean {
+    return this.getCommentPlanStatus(user) === 'active' && !!this.getCommentPlanId(user);
+  }
+
+  isCommentPlanUpdating(user: AdminUser): boolean {
+    const commentPlanId = this.getCommentPlanId(user);
+    return !!commentPlanId && this.commentPlanUpdatingIds.has(commentPlanId);
+  }
+
+  getCommentPlanCreatedAt(item: any): string {
+    const plan = this.getUserCommentPlan(item);
+    const user = this.getUserFromItem(item);
+    return plan?.createdAt || user?.createdAt || item?.createdAt || '';
+  }
+
+  getUserEmail(item: any): string {
+    return this.getUserFromItem(item)?.email || item?.email || '-';
+  }
+
+  hasCommentPlan(item: any): boolean {
+    return this.getCommentPlanStatus(item) !== 'none';
   }
 }

@@ -146,9 +146,53 @@ body {
   font-size: 14px;
 }
 
+.subtitle.location-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-icon {
+  font-size: 0.85rem;
+  color: var(--primary-2);
+  line-height: 1;
+}
+
 .subtitle span {
   color: var(--primary-2);
   font-weight: 700;
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge i {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.badge.gold {
+  background: #caa14a;
+  color: #1f1f1f;
+}
+
+.badge.verified {
+  background: #a20f1f;
+  color: #fff;
+  align-self: center;
 }
 
 .contact-pill {
@@ -162,19 +206,6 @@ body {
 .phone-pill {
   border: none;
   cursor: pointer;
-}
-
-.badges {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.badge {
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
 }
 
 .bplan-image {
@@ -293,17 +324,6 @@ body {
 @keyframes badgeRingRotate {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
-}
-
-.badge.gold {
-  background: #caa14a;
-  color: #1f1f1f;
-}
-
-.badge.verified {
-  background: #a20f1f;
-  color: #fff;
-  align-self: center;
 }
 
 .bio {

@@ -249,17 +249,38 @@
       "WIP_TITLE": "Users section in progress",
       "WIP_SUBTITLE": "The UI is ready so we can connect the new users API when it is available.",
       "TITLE": "All users",
-      "SUBTITLE": "Browse the global list of users registered on the platform.",
+      "SUBTITLE": "Manage users and activate comment plans pending validation.",
+      "REFRESH": "Refresh",
       "EMPTY": "There are no users to display.",
+      "EMPTY_PENDING": "There are no pending comment plans on this page.",
+      "COMMENT_PLAN_NONE": "No plan",
+      "FILTERS": {
+        "ALL": "All",
+        "PENDING_PLANS": "Pending plans"
+      },
+      "CARDS": {
+        "PENDING_PLANS": "Plans pending activation",
+        "PENDING_PLANS_HINT": "Validate the payment and activate the plan to enable the user's comments."
+      },
       "TABLE": {
         "USER": "User",
         "EMAIL": "Email",
         "PHONE": "Phone",
+        "COMMENT_PLAN": "Comment plan",
+        "PLAN_STATUS": "Plan status",
         "CREATED": "Created on",
         "ACTION": "Action"
       },
+      "COMMENT_PLAN_STATUS": {
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "CANCELLED": "Cancelled",
+        "EXPIRED": "Expired"
+      },
       "TOOLTIP": {
-        "DELETE": "Delete user"
+        "DELETE": "Delete user",
+        "ACTIVATE_PLAN": "Activate comment plan",
+        "EXPIRE_PLAN": "Mark plan as expired"
       }
     },
     "SIDEBAR": {
@@ -386,7 +407,13 @@
       "CANCEL_TOP_CTA": "Cancel TOP",
       "DELETE_USER_TITLE": "Delete user",
       "DELETE_USER_MESSAGE": "This action will permanently delete the selected user.",
-      "DELETE_USER_CTA": "Delete user"
+      "DELETE_USER_CTA": "Delete user",
+      "ACTIVATE_COMMENT_PLAN_TITLE": "Activate comment plan",
+      "ACTIVATE_COMMENT_PLAN_MESSAGE": "Confirm activating the {{plan}} plan for {{name}}? The user will be able to use their included comments.",
+      "ACTIVATE_COMMENT_PLAN_CTA": "Activate plan",
+      "EXPIRE_COMMENT_PLAN_TITLE": "Mark plan as expired",
+      "EXPIRE_COMMENT_PLAN_MESSAGE": "Confirm marking the {{plan}} plan for {{name}} as expired? The user will lose access to included comments.",
+      "EXPIRE_COMMENT_PLAN_CTA": "Mark expired"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Error",
@@ -407,6 +434,16 @@
       "USERS_DELETE_SUCCESS_MESSAGE": "The user was deleted successfully.",
       "USERS_DELETE_ERROR_TITLE": "Error",
       "USERS_DELETE_ERROR_MESSAGE": "The user could not be deleted.",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_TITLE": "Plan activated",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_MESSAGE": "The comment plan was activated successfully.",
+      "COMMENT_PLAN_ACTIVATE_ERROR_TITLE": "Error",
+      "COMMENT_PLAN_ACTIVATE_ERROR_MESSAGE": "Unable to activate the comment plan.",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_TITLE": "Plan expired",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_MESSAGE": "The comment plan was marked as expired.",
+      "COMMENT_PLAN_EXPIRE_ERROR_TITLE": "Error",
+      "COMMENT_PLAN_EXPIRE_ERROR_MESSAGE": "Unable to mark the plan as expired.",
+      "COMMENT_PLANS_LOAD_ERROR_TITLE": "Error",
+      "COMMENT_PLANS_LOAD_ERROR_MESSAGE": "Unable to load pending comment plans.",
       "ACTIVATE_SUCCESS_TITLE": "Profile activated",
       "ACTIVATE_SUCCESS_MESSAGE": "The profile was activated successfully.",
       "ACTIVATE_ERROR_TITLE": "Error",
@@ -458,7 +495,15 @@
     "FEATURE_MONTHLY_LIMIT": "Up to 4 comments per month",
     "FEATURE_BADGE_MEMBER": "Member badge",
     "FEATURE_ANNUAL_UNLIMITED": "Unlimited comments",
-    "FEATURE_BADGE_TOP_MAN": "Top Man badge"
+    "FEATURE_BADGE_TOP_MAN": "Top Man badge",
+    "STATUS_PENDING": "Pending",
+    "STATUS_ACTIVE": "Active",
+    "STATUS_INACTIVE": "Inactive",
+    "PENDING_EYEBROW": "Under review",
+    "PENDING_ADMIN_TITLE": "Activation pending",
+    "PENDING_ADMIN_MESSAGE": "Your plan has been registered. An admin must validate the payment and activate it before you can use the included comments.",
+    "PENDING_ADMIN_NOTE": "You do not need to do anything else for now. We will notify you when the plan is active.",
+    "PENDING_USAGE_LOCKED": "Available once activated"
   },
   "LOGIN": {
     "TITLE": "Flamme Rouge",

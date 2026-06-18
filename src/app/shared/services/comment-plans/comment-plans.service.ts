@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { CommentPlanCancelResponse, CommentPlanStatus } from '../../models/comment-plans.model';
@@ -12,16 +12,24 @@ export class CommentPlansService {
 
   constructor(private http: HttpClient) {}
 
-  activatePlan(planType: 'monthly' | 'annual') {
+  activatePlan(planType: 'monthly' | 'annual', status: 'pending' | 'active') {
     return this.http.post<CommentPlanStatus>(
       this.apiActivate,
-      { planType },
+      { planType, status },
       { headers: AuthHeaders.getAuthHeaders() }
     );
   }
 
   getStatus() {
     return this.http.get<CommentPlanStatus>(this.apiStatus, {
+      headers: AuthHeaders.getAuthHeaders()
+    });
+  }
+
+  getStatusByUserId(userId: string) {
+    const params = new HttpParams().set('userId', userId);
+    return this.http.get<CommentPlanStatus>(this.apiStatus, {
+      params,
       headers: AuthHeaders.getAuthHeaders()
     });
   }

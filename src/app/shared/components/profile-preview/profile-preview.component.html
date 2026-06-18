@@ -21,7 +21,8 @@
       <header class="profile-header">
         <div>
           <h1>{{ data.name }}</h1>
-          <p class="subtitle" *ngIf="data.subtitleValue">
+          <p class="subtitle location-line" *ngIf="data.subtitleValue">
+            <i class="bi bi-pin-map-fill location-icon" aria-hidden="true"></i>
             {{ data.subtitleLabel || ('COMMON.CITY' | translate) }} <span>{{ data.subtitleValue }}</span>
           </p>
         </div>
@@ -32,7 +33,10 @@
 
       <div class="badges" *ngIf="data.isGold || data.isVerified">
         <span class="badge gold" *ngIf="data.isGold">★ {{ 'PROFILE.GOLD' | translate }}</span>
-        <span class="badge verified" *ngIf="data.isVerified">✔ {{ 'PROFILE.VERIFIED' | translate }}</span>
+        <span class="badge verified" *ngIf="data.isVerified">
+          <i class="bi bi-shield-fill-check" aria-hidden="true"></i>
+          {{ 'PROFILE.VERIFIED' | translate }}
+        </span>
       </div>
 
       <p class="bio" *ngIf="data.bio">{{ data.bio }}</p>

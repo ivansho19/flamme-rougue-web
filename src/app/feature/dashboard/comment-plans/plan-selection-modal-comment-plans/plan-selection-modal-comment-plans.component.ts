@@ -27,6 +27,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
 
   @Output() close = new EventEmitter<void>();
   @Output() planSelected = new EventEmitter<'monthly' | 'annual'>();
+  @Output() paymentWhatsApp = new EventEmitter<any>();
 
   selectedPlanId: CommentPlanType = 'monthly';
   paypalError = '';
@@ -116,7 +117,10 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
   }
 
   confirmWhatsAppPayment(): void {
+    debugger;
+    const plan = this.getSelectedPlan();
     this.isWhatsAppConfirmOpen = false;
+    this.paymentWhatsApp.emit({ plan, status: 'pending' });
     this.openWhatsAppPayment();
   }
 

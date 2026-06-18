@@ -14,6 +14,7 @@ export class CommentPlansComponent implements OnInit {
   actionLoading = false;
   error = '';
   showPlanModal = false;
+  status = '' as 'pending' | 'active';
 
   constructor(private commentPlansService: CommentPlansService, private commentsService: CommentsService) {}
 
@@ -47,13 +48,13 @@ export class CommentPlansComponent implements OnInit {
     });
   }
 
-  activatePlan(planType: 'monthly' | 'annual'): void {
+  activatePlan(planType: 'monthly' | 'annual', status: 'pending' | 'active'): void {
     if (this.actionLoading) {
       return;
     }
-
+    this.status = status;
     this.actionLoading = true;
-    this.commentPlansService.activatePlan(planType).subscribe({
+    this.commentPlansService.activatePlan(planType, status).subscribe({
       next: () => {
         this.actionLoading = false;
         this.refreshPlanStatus();
@@ -81,7 +82,13 @@ export class CommentPlansComponent implements OnInit {
 
   onPlanSelected(planType: 'monthly' | 'annual'): void {
     this.showPlanModal = false;
-    this.activatePlan(planType);
+    this.activatePlan(planType, 'active');
+  }
+
+  onWhatsAppPayment(data: { plan: { id: 'monthly' | 'annual' }; status: 'pending' | 'active' }): void {
+    this.showPlanModal = false;
+    this.status = data.status;
+    this.activatePlan(data.plan.id, data.status);
   }
 
   cancelPlan(): void {
@@ -127,6 +134,20 @@ export class CommentPlansComponent implements OnInit {
 
   get isActivePlan(): boolean {
     return this.planStatus?.planType === 'monthly' || this.planStatus?.planType === 'annual';
+  }
+
+  get isPendingPlan(): boolean {
+    return this.planStatus?.status === 'pending';
+  }
+
+  get statusTranslationKey(): string {
+    if (this.isPendingPlan) {
+      return 'COMMENT_PLANS.STATUS_PENDING';
+    }
+    if (this.planStatus?.status === 'active') {
+      return 'COMMENT_PLANS.STATUS_ACTIVE';
+    }
+    return 'COMMENT_PLANS.STATUS_INACTIVE';
   }
 
   get usagePercent(): number {

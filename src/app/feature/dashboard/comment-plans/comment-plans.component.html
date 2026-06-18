@@ -15,13 +15,37 @@
   </div>
 
   <div class="plan-grid" *ngIf="!loading && !error">
-    <div class="plan-card">
+    <div class="plan-card" [class.pending]="isPendingPlan">
+      <div class="pending-alert" *ngIf="isPendingPlan" role="status">
+        <div class="pending-alert__seal" aria-hidden="true">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+        <div class="pending-alert__copy">
+          <span class="pending-alert__eyebrow">{{ 'COMMENT_PLANS.PENDING_EYEBROW' | translate }}</span>
+          <strong>{{ 'COMMENT_PLANS.PENDING_ADMIN_TITLE' | translate }}</strong>
+          <p>{{ 'COMMENT_PLANS.PENDING_ADMIN_MESSAGE' | translate }}</p>
+        </div>
+      </div>
+
       <div class="plan-header">
         <div>
           <h3>{{ planLabel }}</h3>
-          <p class="plan-status">{{ 'COMMENT_PLANS.STATUS_LABEL' | translate }}: {{ planStatus?.status || 'active' }}</p>
+          <p class="plan-status">
+            {{ 'COMMENT_PLANS.STATUS_LABEL' | translate }}
+            <span class="status-chip" [class.pending]="isPendingPlan" [class.active]="!isPendingPlan && planStatus?.status === 'active'">
+              {{ statusTranslationKey | translate }}
+            </span>
+          </p>
         </div>
-        <span class="plan-badge" [class.free]="!isActivePlan">{{ badgeLabel }}</span>
+        <span class="plan-badge" [class.free]="!isActivePlan" [class.pending]="isPendingPlan">{{ badgeLabel }}</span>
+      </div>
+
+      <div class="pending-admin-box" *ngIf="isPendingPlan">
+        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+        <div>
+          <strong>{{ 'COMMENT_PLANS.PENDING_ADMIN_TITLE' | translate }}</strong>
+          <p>{{ 'COMMENT_PLANS.PENDING_ADMIN_NOTE' | translate }}</p>
+        </div>
       </div>
 
       <div class="plan-meta">
@@ -35,7 +59,7 @@
         </div>
       </div>
 
-      <div class="usage-block" *ngIf="planStatus?.usage">
+      <div class="usage-block" *ngIf="planStatus?.usage && !isPendingPlan">
         <div class="usage-header">
           <span>{{ 'COMMENT_PLANS.USAGE' | translate }}</span>
           <span class="usage-count">{{ usageLabel }}</span>
@@ -45,11 +69,31 @@
         </div>
       </div>
 
+      <div class="usage-block usage-block--locked" *ngIf="isPendingPlan">
+        <div class="usage-header">
+          <span>{{ 'COMMENT_PLANS.USAGE' | translate }}</span>
+          <span class="usage-count">{{ 'COMMENT_PLANS.PENDING_USAGE_LOCKED' | translate }}</span>
+        </div>
+        <div class="usage-bar">
+          <div class="usage-fill usage-fill--locked"></div>
+        </div>
+      </div>
+
       <div class="plan-actions">
-        <button class="btn primary" type="button" (click)="openPlanModal()" [disabled]="actionLoading">
+        <button
+          class="btn primary"
+          type="button"
+          (click)="openPlanModal()"
+          [disabled]="actionLoading || isPendingPlan"
+          *ngIf="!isPendingPlan">
           {{ isActivePlan ? ('COMMENT_PLANS.CHANGE_PLAN' | translate) : ('COMMENT_PLANS.CHOOSE_PLAN' | translate) }}
         </button>
-        <button class="btn ghost" type="button" *ngIf="isActivePlan" (click)="cancelPlan()" [disabled]="actionLoading">
+        <button
+          class="btn ghost"
+          type="button"
+          *ngIf="isActivePlan && !isPendingPlan"
+          (click)="cancelPlan()"
+          [disabled]="actionLoading">
           {{ 'COMMENT_PLANS.CANCEL_PLAN' | translate }}
         </button>
       </div>
@@ -70,6 +114,7 @@
     [isOpen]="showPlanModal"
     [currentPlan]="currentPlanType"
     (close)="closePlanModal()"
-    (planSelected)="onPlanSelected($event)">
+    (planSelected)="onPlanSelected($event)"
+    (paymentWhatsApp)="onWhatsAppPayment($event)">
   </app-plan-selection-modal-comment-plans>
 </div>

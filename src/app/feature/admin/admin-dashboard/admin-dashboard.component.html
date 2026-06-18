@@ -76,6 +76,7 @@
         (click)="setAdminSection('users')">
         <i class="bi bi-people"></i>
         {{ 'ADMIN_DASHBOARD.SECTIONS.USERS' | translate }}
+        <span class="section-tab-badge" *ngIf="commentPlansPendingCount">{{ commentPlansPendingCount }}</span>
       </button>
      
     </section>
@@ -250,25 +251,32 @@
             <h2>{{ 'ADMIN_DASHBOARD.USERS.TITLE' | translate }}</h2>
             <p>{{ 'ADMIN_DASHBOARD.USERS.SUBTITLE' | translate }}</p>
           </div>
+          <div class="panel-actions">
+            <button class="filter-btn" type="button" (click)="refreshUsersSection()">
+              <i class="bi bi-arrow-repeat"></i>
+              {{ 'ADMIN_DASHBOARD.USERS.REFRESH' | translate }}
+            </button>
+          </div>
         </div>
 
         <div class="loading-state" *ngIf="usersLoading">
           <app-loader></app-loader>
         </div>
 
-        <div class="table-wrapper" *ngIf="!usersLoading && users.length; else usersEmptyState">
+        <div class="table-wrapper" *ngIf="!usersLoading && users.length; else usersTableState">
           <table>
             <thead>
               <tr>
                 <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.USER' | translate }}</th>
                 <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.EMAIL' | translate }}</th>
-                <!-- <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.PHONE' | translate }}</th> -->
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.COMMENT_PLAN' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.PLAN_STATUS' | translate }}</th>
                 <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.CREATED' | translate }}</th>
-                <th>{{ 'ADMIN_DASHBOARD.USERS.TABLE.ACTION' | translate }}</th>
+                <th>{{ 'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of users">
+              <tr *ngFor="let user of users" [class.comment-plan-pending-row]="canActivateCommentPlan(user)">
                 <td>
                   <div class="user-cell">
                     <div class="user-avatar users-avatar">{{ getUserInitials(user) }}</div>
@@ -278,11 +286,38 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ user?.email || '-' }}</td>
-                <!-- <td>{{ user?.phone || '-' }}</td> -->
-                <td>{{ user?.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ getUserEmail(user) }}</td>
+                <td>
+                  <span class="comment-plan-type-badge" [class.empty]="!hasCommentPlan(user)">
+                    {{ getCommentPlanTypeLabel(user) }}
+                  </span>
+                </td>
+                <td>
+                  <span [class]="getCommentPlanStatusClass(user)">
+                    {{ getCommentPlanStatusLabel(user) }}
+                  </span>
+                </td>
+                <td>{{ getCommentPlanCreatedAt(user) | date: 'dd/MM/yyyy' }}</td>
                 <td>
                   <div class="action-buttons">
+                    <button
+                      class="icon-btn success"
+                      type="button"
+                      *ngIf="canActivateCommentPlan(user)"
+                      [disabled]="isCommentPlanUpdating(user)"
+                      [matTooltip]="'ADMIN_DASHBOARD.USERS.TOOLTIP.ACTIVATE_PLAN' | translate"
+                      (click)="openActivateCommentPlanConfirm(user)">
+                      <i class="bi bi-check2-circle"></i>
+                    </button>
+                    <button
+                      class="icon-btn ghost expire"
+                      type="button"
+                      *ngIf="canExpireCommentPlan(user)"
+                      [disabled]="isCommentPlanUpdating(user)"
+                      [matTooltip]="'ADMIN_DASHBOARD.USERS.TOOLTIP.EXPIRE_PLAN' | translate"
+                      (click)="openExpireCommentPlanConfirm(user)">
+                      <i class="bi bi-clock-history"></i>
+                    </button>
                     <button
                       class="icon-btn ghost danger"
                       type="button"
@@ -298,8 +333,8 @@
           </table>
         </div>
 
-        <ng-template #usersEmptyState>
-          <div class="empty-state">
+        <ng-template #usersTableState>
+          <div class="empty-state" *ngIf="!usersLoading && !users.length">
             <i class="bi bi-people"></i>
             <p>{{ 'ADMIN_DASHBOARD.USERS.EMPTY' | translate }}</p>
           </div>
@@ -310,7 +345,7 @@
           [length]="totalUsersCount"
           [pageIndex]="usersPageIndex"
           [pageSize]="usersPageSize"
-          [pageSizeOptions]="[10, 20, 50]"
+          [pageSizeOptions]="[10, 15, 25, 50]"
           (page)="onUsersPageChange($event)">
         </mat-paginator>
       </div>

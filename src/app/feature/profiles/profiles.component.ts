@@ -40,6 +40,7 @@ export class ProfilesComponent implements OnInit {
     error = '';
     showPlanModal = false;
     showRulesModal = false;
+    status = '' as 'pending' | 'active';
     private embla: EmblaCarouselType | null = null;
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
@@ -431,18 +432,19 @@ export class ProfilesComponent implements OnInit {
 
   onPlanSelected(planType: 'monthly' | 'annual'): void {
     this.showPlanModal = false;
-    this.activatePlan(planType);
+    this.activatePlan(planType, 'active');
   }
 
-  activatePlan(planType: 'monthly' | 'annual'): void {
+  activatePlan(planType: 'monthly' | 'annual', status: 'pending' | 'active'): void {
     if (this.actionLoading) {
       return;
     }
 
     this.actionLoading = true;
-    this.commentPlansService.activatePlan(planType).subscribe({
+    this.commentPlansService.activatePlan(planType, status).subscribe({
       next: () => {
         this.actionLoading = false;
+        this.redirectDashboard();
         this.refreshPlanStatus();
       },
       error: () => {
@@ -451,6 +453,19 @@ export class ProfilesComponent implements OnInit {
       }
     });
   }
+
+  redirectDashboard(): void {
+    this.router.navigate(['/dashboard/comment-plans']);
+  }
+
+  onWhatsAppPayment(data:any): void {
+    debugger;
+    this.showPlanModal = false;
+    const { plan, status } = data;
+    this.status = status;
+    this.closePlanModal();
+    this.activatePlan(plan.id, status);
+  } 
 
   private refreshPlanStatus(): void {
     this.loadStatus();

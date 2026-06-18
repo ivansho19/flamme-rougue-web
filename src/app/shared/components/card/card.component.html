@@ -15,11 +15,11 @@
     </div>
     <div class="verified-row">
       <span class="verified-badge" [class.is-hidden]="!isVerified">
-        <span class="verified-icon" aria-hidden="true">&#10003;</span>
+        <i class="bi bi-patch-check-fill verified-icon" aria-hidden="true"></i>
         <span class="verified-text">{{ 'PROFILE.VERIFIED' | translate }}</span>
       </span>
       <span class="city-badge" *ngIf="city">
-        <span class="city-icon material-icons" aria-hidden="true">place</span>
+        <i class="bi bi-geo-alt-fill city-icon" aria-hidden="true"></i>
         <span class="city-text">{{ city }}</span>
       </span>
     </div>

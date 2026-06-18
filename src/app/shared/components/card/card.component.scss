@@ -233,6 +233,7 @@
   .verified-row {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
     margin-top: 0.6rem;
     color: #7f0a16;
@@ -255,31 +256,33 @@
   .city-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    margin-left: 6px;
-    background: rgba(127, 0, 0, 0.08);
-    color: #7f0000;
-    padding: 2px 8px;
+    gap: 5px;
+    margin-left: auto;
+    background: rgba(127, 10, 22, 0.08);
+    color: #7f0a16;
+    padding: 3px 10px;
     border-radius: 999px;
     font-size: 0.8rem;
   }
 
   .city-icon {
-    font-size: 0.9rem;
+    font-size: 0.72rem;
     line-height: 1;
+    color: #7f0a16;
   }
 
   .verified-icon {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #f0cdca;
     color: #7f0a16;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    border: 1px solid #7f0a16;
+    font-size: 0.72rem;
+    border: 1.5px solid #bf9663;
+    flex-shrink: 0;
   }
 
   .custom-card-btn {

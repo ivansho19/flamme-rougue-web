@@ -20,6 +20,7 @@ export const environment = {
   api_comment_plans_activate: `${urlBase}/comment-plans/activate`,
   api_comment_plans_status: `${urlBase}/comment-plans/status`,
   api_comment_plans_cancel: `${urlBase}/comment-plans/cancel`,
+  api_comment_plan: `${urlBase}/admin/comment-plan`,
   api_paypal_create_order: `${urlBase}/paypal/create-order`,
   api_paypal_capture_order: `${urlBase}/paypal/capture-order`,
   paypalClientId: 'AUmSQSyDGfoJmB_1i5mprH9IeM88tYcdFElXAya0AFbWAU1FCYb79utt50ChCZi1mpToQ0Gu-IzIRbN0',

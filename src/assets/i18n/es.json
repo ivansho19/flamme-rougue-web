@@ -249,17 +249,38 @@
       "WIP_TITLE": "Sección de usuarios en preparación",
       "WIP_SUBTITLE": "Dejamos la UI lista para conectar el nuevo API cuando esté disponible.",
       "TITLE": "Todos los usuarios",
-      "SUBTITLE": "Consulta el listado global de usuarios registrados en la plataforma.",
+      "SUBTITLE": "Gestiona usuarios y activa planes de comentarios pendientes de validación.",
+      "REFRESH": "Actualizar",
       "EMPTY": "No hay usuarios para mostrar.",
+      "EMPTY_PENDING": "No hay planes de comentarios pendientes en esta página.",
+      "COMMENT_PLAN_NONE": "Sin plan",
+      "FILTERS": {
+        "ALL": "Todos",
+        "PENDING_PLANS": "Planes pendientes"
+      },
+      "CARDS": {
+        "PENDING_PLANS": "Planes pendientes de activación",
+        "PENDING_PLANS_HINT": "Valida el pago y activa el plan para habilitar los comentarios del usuario."
+      },
       "TABLE": {
         "USER": "Usuario",
         "EMAIL": "Email",
         "PHONE": "Teléfono",
+        "COMMENT_PLAN": "Plan comentarios",
+        "PLAN_STATUS": "Estado plan",
         "CREATED": "Creado el",
         "ACTION": "Acción"
       },
+      "COMMENT_PLAN_STATUS": {
+        "PENDING": "Pendiente",
+        "ACTIVE": "Activo",
+        "CANCELLED": "Cancelado",
+        "EXPIRED": "Expirado"
+      },
       "TOOLTIP": {
-        "DELETE": "Eliminar usuario"
+        "DELETE": "Eliminar usuario",
+        "ACTIVATE_PLAN": "Activar plan de comentarios",
+        "EXPIRE_PLAN": "Marcar plan como expirado"
       }
     },
     "SIDEBAR": {
@@ -386,7 +407,13 @@
       "CANCEL_TOP_CTA": "Cancelar TOP",
       "DELETE_USER_TITLE": "Eliminar usuario",
       "DELETE_USER_MESSAGE": "Esta acción eliminará el usuario seleccionado de forma permanente.",
-      "DELETE_USER_CTA": "Eliminar usuario"
+      "DELETE_USER_CTA": "Eliminar usuario",
+      "ACTIVATE_COMMENT_PLAN_TITLE": "Activar plan de comentarios",
+      "ACTIVATE_COMMENT_PLAN_MESSAGE": "Confirmas activar el plan {{plan}} de {{name}}? El usuario podrá usar sus comentarios incluidos.",
+      "ACTIVATE_COMMENT_PLAN_CTA": "Activar plan",
+      "EXPIRE_COMMENT_PLAN_TITLE": "Marcar plan como expirado",
+      "EXPIRE_COMMENT_PLAN_MESSAGE": "Confirmas marcar como expirado el plan {{plan}} de {{name}}? El usuario dejará de tener acceso a los comentarios incluidos.",
+      "EXPIRE_COMMENT_PLAN_CTA": "Marcar expirado"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Error",
@@ -407,6 +434,16 @@
       "USERS_DELETE_SUCCESS_MESSAGE": "El usuario se eliminó correctamente.",
       "USERS_DELETE_ERROR_TITLE": "Error",
       "USERS_DELETE_ERROR_MESSAGE": "No se pudo eliminar el usuario.",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_TITLE": "Plan activado",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_MESSAGE": "El plan de comentarios se activó correctamente.",
+      "COMMENT_PLAN_ACTIVATE_ERROR_TITLE": "Error",
+      "COMMENT_PLAN_ACTIVATE_ERROR_MESSAGE": "No se pudo activar el plan de comentarios.",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_TITLE": "Plan expirado",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_MESSAGE": "El plan de comentarios se marcó como expirado.",
+      "COMMENT_PLAN_EXPIRE_ERROR_TITLE": "Error",
+      "COMMENT_PLAN_EXPIRE_ERROR_MESSAGE": "No se pudo marcar el plan como expirado.",
+      "COMMENT_PLANS_LOAD_ERROR_TITLE": "Error",
+      "COMMENT_PLANS_LOAD_ERROR_MESSAGE": "No se pudieron cargar los planes de comentarios pendientes.",
       "ACTIVATE_SUCCESS_TITLE": "Perfil activado",
       "ACTIVATE_SUCCESS_MESSAGE": "El perfil se activo correctamente.",
       "ACTIVATE_ERROR_TITLE": "Error",
@@ -458,7 +495,15 @@
     "FEATURE_MONTHLY_LIMIT": "Hasta 4 comentarios al mes",
     "FEATURE_BADGE_MEMBER": "Badge Miembro",
     "FEATURE_ANNUAL_UNLIMITED": "Comentarios ilimitados",
-    "FEATURE_BADGE_TOP_MAN": "Badge Hombre Top"
+    "FEATURE_BADGE_TOP_MAN": "Badge Hombre Top",
+    "STATUS_PENDING": "Pendiente",
+    "STATUS_ACTIVE": "Activo",
+    "STATUS_INACTIVE": "Inactivo",
+    "PENDING_EYEBROW": "En revisión",
+    "PENDING_ADMIN_TITLE": "Activación pendiente",
+    "PENDING_ADMIN_MESSAGE": "Tu plan quedó registrado. Un administrador debe validar el pago y activarlo antes de que puedas usar los comentarios incluidos.",
+    "PENDING_ADMIN_NOTE": "No necesitas hacer nada más por ahora. Te avisaremos cuando el plan esté activo.",
+    "PENDING_USAGE_LOCKED": "Disponible al activar"
   },
   "LOGIN": {
     "TITLE": "Flamme Rouge",

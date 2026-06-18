@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { finalize, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { LoaderService } from '../loader/loader.service';
+import { AuthHeaders } from '../../clases/getAuthHeaders';
+import { GetAllUsersResponse, UpdateCommentPlanStatusResponse, CommentPlanStatusValue } from '../../models/comment-plans.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,19 +28,19 @@ export class AdminService {
     );
   }
 
-  getAllUsers(page = 1, limit = 10, showLoader = true): Observable<any> {
+  getAllUsers(page = 1, limit = 10, showLoader = true): Observable<GetAllUsersResponse> {
     const params = new HttpParams()
       .set('page', String(page))
       .set('limit', String(limit));
 
     if (showLoader) {
       this.loaderService.setLoaderState(true);
-      return this.http.get(`${this.apiAdmin}/getAllUsers`, { params }).pipe(
+      return this.http.get<GetAllUsersResponse>(`${this.apiAdmin}/getAllUsers`, { params }).pipe(
         finalize(() => this.loaderService.setLoaderState(false))
       );
     }
 
-    return this.http.get(`${this.apiAdmin}/getAllUsers`, { params });
+    return this.http.get<GetAllUsersResponse>(`${this.apiAdmin}/getAllUsers`, { params });
   }
 
   deleteUser(userId: string): Observable<any> {
@@ -109,6 +111,20 @@ export class AdminService {
   ): Observable<any> {
     this.loaderService.setLoaderState(true);
     return this.http.put(`${this.apiAdmin}/top-rojo/${topRojoId}/status`, { status }).pipe(
+      finalize(() => this.loaderService.setLoaderState(false))
+    );
+  }
+
+  updateCommentPlanStatus(
+    commentPlanId: string,
+    status: CommentPlanStatusValue
+  ): Observable<UpdateCommentPlanStatusResponse> {
+    this.loaderService.setLoaderState(true);
+    return this.http.put<UpdateCommentPlanStatusResponse>(
+      `${environment.api_comment_plan}/${commentPlanId}/status`,
+      { status },
+      { headers: AuthHeaders.getAuthHeaders() }
+    ).pipe(
       finalize(() => this.loaderService.setLoaderState(false))
     );
   }

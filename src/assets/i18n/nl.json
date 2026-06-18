@@ -249,17 +249,38 @@
       "WIP_TITLE": "Gebruikerssectie in voorbereiding",
       "WIP_SUBTITLE": "De UI staat klaar zodat we de nieuwe gebruikers-API kunnen koppelen zodra die beschikbaar is.",
       "TITLE": "Alle gebruikers",
-      "SUBTITLE": "Bekijk de globale lijst van gebruikers die op het platform geregistreerd zijn.",
+      "SUBTITLE": "Beheer gebruikers en activeer reactieplannen die wachten op validatie.",
+      "REFRESH": "Vernieuwen",
       "EMPTY": "Er zijn geen gebruikers om te tonen.",
+      "EMPTY_PENDING": "Er zijn geen reactieplannen in afwachting op deze pagina.",
+      "COMMENT_PLAN_NONE": "Geen plan",
+      "FILTERS": {
+        "ALL": "Alle",
+        "PENDING_PLANS": "Plannen in afwachting"
+      },
+      "CARDS": {
+        "PENDING_PLANS": "Plannen wachten op activatie",
+        "PENDING_PLANS_HINT": "Valideer de betaling en activeer het plan om de reacties van de gebruiker in te schakelen."
+      },
       "TABLE": {
         "USER": "Gebruiker",
         "EMAIL": "Email",
         "PHONE": "Telefoon",
+        "COMMENT_PLAN": "Reactieplan",
+        "PLAN_STATUS": "Planstatus",
         "CREATED": "Aangemaakt op",
         "ACTION": "Actie"
       },
+      "COMMENT_PLAN_STATUS": {
+        "PENDING": "In afwachting",
+        "ACTIVE": "Actief",
+        "CANCELLED": "Geannuleerd",
+        "EXPIRED": "Verlopen"
+      },
       "TOOLTIP": {
-        "DELETE": "Gebruiker verwijderen"
+        "DELETE": "Gebruiker verwijderen",
+        "ACTIVATE_PLAN": "Reactieplan activeren",
+        "EXPIRE_PLAN": "Plan als verlopen markeren"
       }
     },
     "SIDEBAR": {
@@ -385,7 +406,13 @@
       "CANCEL_TOP_CTA": "TOP annuleren",
       "DELETE_USER_TITLE": "Gebruiker verwijderen",
       "DELETE_USER_MESSAGE": "Deze actie verwijdert de geselecteerde gebruiker permanent.",
-      "DELETE_USER_CTA": "Gebruiker verwijderen"
+      "DELETE_USER_CTA": "Gebruiker verwijderen",
+      "ACTIVATE_COMMENT_PLAN_TITLE": "Reactieplan activeren",
+      "ACTIVATE_COMMENT_PLAN_MESSAGE": "Bevestig je de activatie van het {{plan}}-plan voor {{name}}? De gebruiker kan dan de inbegrepen reacties gebruiken.",
+      "ACTIVATE_COMMENT_PLAN_CTA": "Plan activeren",
+      "EXPIRE_COMMENT_PLAN_TITLE": "Plan als verlopen markeren",
+      "EXPIRE_COMMENT_PLAN_MESSAGE": "Bevestig je dat het {{plan}}-plan van {{name}} als verlopen wordt gemarkeerd? De gebruiker verliest toegang tot de inbegrepen reacties.",
+      "EXPIRE_COMMENT_PLAN_CTA": "Markeer verlopen"
     },
     "TOAST": {
       "LOAD_ERROR_TITLE": "Fout",
@@ -406,6 +433,16 @@
       "USERS_DELETE_SUCCESS_MESSAGE": "De gebruiker is succesvol verwijderd.",
       "USERS_DELETE_ERROR_TITLE": "Fout",
       "USERS_DELETE_ERROR_MESSAGE": "De gebruiker kon niet worden verwijderd.",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_TITLE": "Plan geactiveerd",
+      "COMMENT_PLAN_ACTIVATE_SUCCESS_MESSAGE": "Het reactieplan is succesvol geactiveerd.",
+      "COMMENT_PLAN_ACTIVATE_ERROR_TITLE": "Fout",
+      "COMMENT_PLAN_ACTIVATE_ERROR_MESSAGE": "Het reactieplan kon niet worden geactiveerd.",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_TITLE": "Plan verlopen",
+      "COMMENT_PLAN_EXPIRE_SUCCESS_MESSAGE": "Het reactieplan is als verlopen gemarkeerd.",
+      "COMMENT_PLAN_EXPIRE_ERROR_TITLE": "Fout",
+      "COMMENT_PLAN_EXPIRE_ERROR_MESSAGE": "Het plan kon niet als verlopen worden gemarkeerd.",
+      "COMMENT_PLANS_LOAD_ERROR_TITLE": "Fout",
+      "COMMENT_PLANS_LOAD_ERROR_MESSAGE": "De reactieplannen in afwachting konden niet worden geladen.",
       "ACTIVATE_SUCCESS_TITLE": "Profiel geactiveerd",
       "ACTIVATE_SUCCESS_MESSAGE": "Het profiel is succesvol geactiveerd.",
       "ACTIVATE_ERROR_TITLE": "Fout",
@@ -457,7 +494,15 @@
     "FEATURE_MONTHLY_LIMIT": "Tot 4 reacties per maand",
     "FEATURE_BADGE_MEMBER": "Lid-badge",
     "FEATURE_ANNUAL_UNLIMITED": "Onbeperkte reacties",
-    "FEATURE_BADGE_TOP_MAN": "Top man-badge"
+    "FEATURE_BADGE_TOP_MAN": "Top man-badge",
+    "STATUS_PENDING": "In afwachting",
+    "STATUS_ACTIVE": "Actief",
+    "STATUS_INACTIVE": "Inactief",
+    "PENDING_EYEBROW": "In beoordeling",
+    "PENDING_ADMIN_TITLE": "Activatie in afwachting",
+    "PENDING_ADMIN_MESSAGE": "Je plan is geregistreerd. Een beheerder moet de betaling valideren en activeren voordat je de inbegrepen reacties kunt gebruiken.",
+    "PENDING_ADMIN_NOTE": "Je hoeft nu niets meer te doen. We laten het weten zodra het plan actief is.",
+    "PENDING_USAGE_LOCKED": "Beschikbaar na activatie"
   },
   "LOGIN": {
     "TITLE": "Flamme Rouge",
