@@ -63,16 +63,20 @@ export class ProfilesComponent implements OnInit {
         if (!this.profileId) {
           return;
         }
-        this.getProfile();
+        this.loadPublicProfilePage();
       });
+    }
+
+    private loadPublicProfilePage(): void {
+      this.getProfile();
+      this.loadComments();
+      this.loadLikes();
     }
 
     getProfile() {
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
           this.profileData = response?.profile ?? response ?? null;
-          this.loadLikes();
-          this.loadComments();
         },
         error: (error) => {
           console.error('Error cargando perfil:', error);
@@ -96,7 +100,8 @@ export class ProfilesComponent implements OnInit {
       });
 
       const userId = localStorage.getItem('userId');
-      if (!userId) {
+      const token = localStorage.getItem('token');
+      if (!userId || !token) {
         this.userReaction = null;
         return;
       }
@@ -459,7 +464,6 @@ export class ProfilesComponent implements OnInit {
   }
 
   onWhatsAppPayment(data:any): void {
-    debugger;
     this.showPlanModal = false;
     const { plan, status } = data;
     this.status = status;

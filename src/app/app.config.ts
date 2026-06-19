@@ -7,11 +7,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { authErrorInterceptor } from './shared/interceptors/auth-error.interceptor';
+import { authTokenInterceptor } from './shared/interceptors/auth-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authErrorInterceptor])),
+    provideHttpClient(withInterceptors([authTokenInterceptor, authErrorInterceptor])),
     provideAnimationsAsync(),
     provideTranslateHttpLoader({
       prefix: './assets/i18n/',

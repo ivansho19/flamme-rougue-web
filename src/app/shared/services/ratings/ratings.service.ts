@@ -33,10 +33,7 @@ export class RatingsService {
   }
 
   getLikesCount(profileId: string) {
-    return this.http.get<ProfileLikesResponse>(
-      `${this.apiProfile}/${profileId}`,
-      { headers: AuthHeaders.getAuthHeaders() }
-    );
+    return this.http.get<ProfileLikesResponse>(`${this.apiProfile}/${profileId}`);
   }
 
   getUserLikeStatus(profileId: string, userId: string) {

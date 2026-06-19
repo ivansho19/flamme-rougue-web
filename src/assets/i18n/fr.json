@@ -567,7 +567,7 @@
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROUGE - Visibilité maximale",
-    "DESCRIPTION": "Apparaît dans le Top 5 de ta ville et sur la page d'accueil. Seulement 5 profils peuvent être TOP simultanément dans chaque ville.",
+    "DESCRIPTION": "Apparaît dans le Top 5 de ta ville et sur la page d'accueil.",
     "BENEFIT_1": "Apparaît dans le Top 5 de ta ville",
     "BENEFIT_2": "Visibilité sur la page d'accueil",
     "BENEFIT_3": "Badge rouge exclusif et en vedette",
