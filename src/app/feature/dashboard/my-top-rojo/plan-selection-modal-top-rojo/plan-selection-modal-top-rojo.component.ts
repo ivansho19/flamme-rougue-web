@@ -140,11 +140,14 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   }
 
   private schedulePayPalRender(): void {
-    setTimeout(() => this.initPayPalButtons(), 0);
+    if (!this.isOpen) {
+      return;
+    }
+    this.initPayPalButtons();
   }
 
   private initPayPalButtons(): void {
-    if (!this.isOpen || !this.paypalButtons?.nativeElement) {
+    if (!this.isOpen) {
       return;
     }
 
@@ -153,17 +156,20 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
       return;
     }
 
-    const container = this.paypalButtons.nativeElement;
-    container.innerHTML = '';
-
     const currency = environment.paypalCurrency || 'EUR';
 
     this.payPalButtonService
-      .renderButtons({
-        container,
-        clientId: environment.paypalClientId,
-        currency,
-        config: {
+      .waitForContainer(() => this.paypalButtons?.nativeElement)
+      .then(container => {
+        if (!this.isOpen) {
+          return;
+        }
+
+        return this.payPalButtonService.renderButtons({
+          container,
+          clientId: environment.paypalClientId,
+          currency,
+          config: {
           style: {
             layout: 'vertical',
             color: 'gold',
@@ -211,10 +217,11 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
               return;
             }
           },
-          onError: () => {
-            this.paypalError = 'Error al procesar el pago con PayPal.';
+            onError: () => {
+              this.paypalError = 'Error al procesar el pago con PayPal.';
+            }
           }
-        }
+        });
       })
       .catch((error) => {
         this.paypalError = error instanceof Error
