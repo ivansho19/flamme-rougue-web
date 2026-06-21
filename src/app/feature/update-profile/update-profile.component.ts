@@ -196,6 +196,7 @@ export class UpdateProfileComponent implements OnInit {
         city: ['', Validators.required],
         zone: ['', Validators.required],
         phone: ['', Validators.required],
+        blockedCountries: [[]],
         availabilitySlots: this.fb.array([])
       }),
 
@@ -288,7 +289,12 @@ export class UpdateProfileComponent implements OnInit {
         country: currentBasicInfo.country || countryValue || '',
         city: currentBasicInfo.city || client.city || '',
         zone: currentBasicInfo.zone || client.zone || '',
-        phone: currentBasicInfo.phone || client.phone || ''
+        phone: currentBasicInfo.phone || client.phone || '',
+        blockedCountries: Array.isArray(currentBasicInfo.blockedCountries)
+          ? currentBasicInfo.blockedCountries
+          : Array.isArray(client.blockedCountries)
+            ? client.blockedCountries
+            : []
       }
     });
   }
@@ -367,7 +373,8 @@ export class UpdateProfileComponent implements OnInit {
         country: countryValue || '',
         city: profile.city || '',
         zone: profile.zone || '',
-        phone: profile.phone || ''
+        phone: profile.phone || '',
+        blockedCountries: Array.isArray(profile.blockedCountries) ? profile.blockedCountries : []
       },
       personalData: {
         gender: profile.gender || '',
@@ -750,6 +757,11 @@ export class UpdateProfileComponent implements OnInit {
           ? posibilitiesValue.split(',').map((item: string) => item.trim()).filter(Boolean)
           : [];
 
+      const blockedCountriesValue = basicInfo.blockedCountries ?? [];
+      const blockedCountriesList = Array.isArray(blockedCountriesValue)
+        ? blockedCountriesValue.map((item: string) => item.trim()).filter(Boolean)
+        : [];
+
       const profilePayload: IProfileCreateRequest = {
         objectId,
         displayName: basicInfo.publicName || '',
@@ -769,6 +781,7 @@ export class UpdateProfileComponent implements OnInit {
         eyeColor: personalData.eyeColor || '',
         languages: languagesList,
         posibilities: posibilitiesList,
+        blockedCountries: blockedCountriesList || [],
         plan: this.selectedPlanId ? [this.selectedPlanId.toString()] : [],
         imagesMain: mainImage,
         imagesGallery: galleryImages,

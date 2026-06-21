@@ -1,8 +1,24 @@
 <div
   class="country-search"
   [class.is-open]="isOpen"
+  [class.is-multiple]="multiple"
   [class.input-error]="hasError"
   [class.is-disabled]="disabled">
+
+  <div class="country-search__selected" *ngIf="multiple && selectedCountries.length">
+    <span class="country-search__chip" *ngFor="let country of selectedCountries">
+      {{ country.name }}
+      <button
+        type="button"
+        class="country-search__chip-remove"
+        [disabled]="disabled"
+        (click)="removeCountry(country.code, $event)"
+        [attr.aria-label]="'PROFILE_FORM.BLOCKED_COUNTRIES_REMOVE' | translate: { country: country.name }">
+        ✕
+      </button>
+    </span>
+  </div>
+
   <button
     type="button"
     class="country-search__trigger"
@@ -33,10 +49,11 @@
       <li
         *ngFor="let country of filteredCountries"
         role="option"
-        [attr.aria-selected]="country.code === selectedCode"
-        [class.is-selected]="country.code === selectedCode"
+        [attr.aria-selected]="isCountrySelected(country.code)"
+        [class.is-selected]="isCountrySelected(country.code)"
         (click)="selectCountry(country)">
-        {{ country.name }}
+        <span>{{ country.name }}</span>
+        <i class="bi bi-check2 country-search__check" *ngIf="multiple && isCountrySelected(country.code)" aria-hidden="true"></i>
       </li>
       <li class="country-search__empty" *ngIf="!filteredCountries.length" role="status">
         {{ 'PROFILE_FORM.COUNTRY_NO_RESULTS' | translate }}

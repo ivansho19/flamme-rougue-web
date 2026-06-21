@@ -400,7 +400,7 @@ export class ProfilesComponent implements OnInit {
     toggleLike() {
       const userId = localStorage.getItem('userId');
       if (!userId || !this.profileId) {
-        this.likeError = 'Debes iniciar sesion para dar like.';
+        this.likeError = this.translate.instant('PROFILE.LIKE_ERROR_LOGIN');
         return;
       }
 

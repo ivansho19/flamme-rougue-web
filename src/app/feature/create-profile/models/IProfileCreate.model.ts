@@ -40,4 +40,5 @@ export interface IProfileCreateRequest {
   cigarette?: string;
   isActiveProfile?: boolean;
   isVerify?: boolean;
+  blockedCountries?: string[];
 }

@@ -30,6 +30,7 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
   @Input() countries: Country[] = [];
   @Input() hasError = false;
   @Input() placeholder = '';
+  @Input() multiple = false;
   @Output() countrySelected = new EventEmitter<string>();
 
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
@@ -38,9 +39,10 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
   searchTerm = '';
   filteredCountries: Country[] = [];
   selectedCode = '';
+  selectedCodes: string[] = [];
   disabled = false;
 
-  private onChange: (value: string) => void = () => {};
+  private onChange: (value: string | string[]) => void = () => {};
   private onTouched: () => void = () => {};
 
   constructor(private elementRef: ElementRef<HTMLElement>) {}
@@ -60,11 +62,24 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
   }
 
   get closedLabel(): string {
+    if (this.multiple) {
+      return this.placeholder;
+    }
+
     return this.selectedCountryName || this.placeholder;
   }
 
   get isPlaceholderVisible(): boolean {
+    if (this.multiple) {
+      return true;
+    }
     return !this.selectedCountryName;
+  }
+
+  get selectedCountries(): Country[] {
+    return this.selectedCodes
+      .map(code => this.countries.find(country => country.code === code))
+      .filter((country): country is Country => !!country);
   }
 
   @HostListener('document:click', ['$event'])
@@ -125,6 +140,15 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
   }
 
   selectCountry(country: Country): void {
+    if (this.multiple) {
+      this.toggleCountryCode(country.code);
+      this.searchTerm = '';
+      this.filterCountries();
+      this.onChange([...this.selectedCodes]);
+      this.onTouched();
+      return;
+    }
+
     this.selectedCode = country.code;
     this.isOpen = false;
     this.searchTerm = '';
@@ -133,11 +157,37 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
     this.countrySelected.emit(country.code);
   }
 
-  writeValue(value: string | null): void {
-    this.selectedCode = value || '';
+  removeCountry(code: string, event?: MouseEvent): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (!this.multiple || this.disabled) {
+      return;
+    }
+
+    this.selectedCodes = this.selectedCodes.filter(item => item !== code);
+    this.onChange([...this.selectedCodes]);
+    this.onTouched();
   }
 
-  registerOnChange(fn: (value: string) => void): void {
+  isCountrySelected(code: string): boolean {
+    return this.multiple ? this.selectedCodes.includes(code) : this.selectedCode === code;
+  }
+
+  getCountryName(code: string): string {
+    return this.countries.find(country => country.code === code)?.name ?? code;
+  }
+
+  writeValue(value: string | string[] | null): void {
+    if (this.multiple) {
+      this.selectedCodes = Array.isArray(value) ? [...value] : value ? [value] : [];
+      return;
+    }
+
+    this.selectedCode = typeof value === 'string' ? value : '';
+  }
+
+  registerOnChange(fn: (value: string | string[]) => void): void {
     this.onChange = fn;
   }
 
@@ -150,6 +200,15 @@ export class CountrySearchSelectComponent implements ControlValueAccessor, OnIni
     if (isDisabled) {
       this.closeDropdown();
     }
+  }
+
+  private toggleCountryCode(code: string): void {
+    if (this.selectedCodes.includes(code)) {
+      this.selectedCodes = this.selectedCodes.filter(item => item !== code);
+      return;
+    }
+
+    this.selectedCodes = [...this.selectedCodes, code];
   }
 
   private filterCountries(): void {

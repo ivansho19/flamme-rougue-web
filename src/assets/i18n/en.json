@@ -63,6 +63,7 @@
     "COMMENT_ERROR_LOGIN": "You must sign in to comment.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Please enter a reply.",
     "COMMENT_REPLY_ERROR_LOGIN": "You must sign in to reply.",
+    "LIKE_ERROR_LOGIN": "You must sign in to like.",
     "COMMENT_ERROR_GENERIC": "Could not send the comment.",
     "COMMENT_REPLY_ERROR_GENERIC": "Could not save the reply.",
     "COMMUNITY_RULES": {
@@ -108,6 +109,10 @@
     "COUNTRY_PLACEHOLDER": "Country",
     "COUNTRY_SEARCH_PLACEHOLDER": "Search country...",
     "COUNTRY_NO_RESULTS": "No countries found",
+    "BLOCKED_COUNTRIES_TITLE": "Country visibility",
+    "BLOCKED_COUNTRIES_HINT": "Optional. Your ad will not be shown to visitors from the countries you select.",
+    "BLOCKED_COUNTRIES_PLACEHOLDER": "Add restricted country",
+    "BLOCKED_COUNTRIES_REMOVE": "Remove {{country}}",
     "CITY_PLACEHOLDER": "City",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Phone",

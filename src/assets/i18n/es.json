@@ -64,6 +64,7 @@
     "COMMENT_ERROR_LOGIN": "Debes iniciar sesión para comentar.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Ingresa una respuesta.",
     "COMMENT_REPLY_ERROR_LOGIN": "Debes iniciar sesión para responder.",
+    "LIKE_ERROR_LOGIN": "Debes iniciar sesión para dar like.",
     "COMMENT_ERROR_GENERIC": "No se pudo enviar el comentario.",
     "COMMENT_REPLY_ERROR_GENERIC": "No se pudo guardar la respuesta.",
     "COMMUNITY_RULES": {
@@ -109,6 +110,10 @@
     "COUNTRY_PLACEHOLDER": "País",
     "COUNTRY_SEARCH_PLACEHOLDER": "Buscar país...",
     "COUNTRY_NO_RESULTS": "No se encontraron países",
+    "BLOCKED_COUNTRIES_TITLE": "Visibilidad por país",
+    "BLOCKED_COUNTRIES_HINT": "Opcional. El anuncio no se mostrará a visitantes desde los países que elijas.",
+    "BLOCKED_COUNTRIES_PLACEHOLDER": "Añadir país restringido",
+    "BLOCKED_COUNTRIES_REMOVE": "Quitar {{country}}",
     "CITY_PLACEHOLDER": "Ciudad",
     "ZONE_PLACEHOLDER": "Zona",
     "PHONE_PLACEHOLDER": "Teléfono",

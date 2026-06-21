@@ -132,6 +132,17 @@
         </div>
       </div>
 
+      <div class="blocked-countries-section">
+        <h4 class="subsection-title">{{ 'PROFILE_FORM.BLOCKED_COUNTRIES_TITLE' | translate }}</h4>
+        <p class="field-hint">{{ 'PROFILE_FORM.BLOCKED_COUNTRIES_HINT' | translate }}</p>
+        <app-country-search-select
+          formControlName="blockedCountries"
+          [countries]="countries"
+          [multiple]="true"
+          [placeholder]="'PROFILE_FORM.BLOCKED_COUNTRIES_PLACEHOLDER' | translate">
+        </app-country-search-select>
+      </div>
+
       <div class="grid-2">
         <div class="field phone-group">
           <div class="phone-row">

@@ -136,6 +136,10 @@
   color: #1f1f1f;
   font-size: 0.92rem;
   transition: background 0.12s ease, color 0.12s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 
   &:hover,
   &.is-selected {
@@ -145,6 +149,52 @@
 
   &.is-selected {
     font-weight: 600;
+  }
+}
+
+.country-search__check {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.country-search.is-multiple .country-search__selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.55rem;
+}
+
+.country-search__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(127, 10, 22, 0.08);
+  border: 1px solid rgba(127, 10, 22, 0.18);
+  color: #7f0a16;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.country-search__chip-remove {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.72rem;
+  opacity: 0.75;
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #7f0a16;
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 

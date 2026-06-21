@@ -63,6 +63,7 @@
     "COMMENT_ERROR_LOGIN": "Je moet inloggen om te reageren.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Vul een antwoord in.",
     "COMMENT_REPLY_ERROR_LOGIN": "Je moet inloggen om te antwoorden.",
+    "LIKE_ERROR_LOGIN": "Je moet inloggen om te liken.",
     "COMMENT_ERROR_GENERIC": "Kan de reactie niet versturen.",
     "COMMENT_REPLY_ERROR_GENERIC": "Kan het antwoord niet opslaan.",
     "COMMUNITY_RULES": {
@@ -108,6 +109,10 @@
     "COUNTRY_PLACEHOLDER": "Land",
     "COUNTRY_SEARCH_PLACEHOLDER": "Land zoeken...",
     "COUNTRY_NO_RESULTS": "Geen landen gevonden",
+    "BLOCKED_COUNTRIES_TITLE": "Zichtbaarheid per land",
+    "BLOCKED_COUNTRIES_HINT": "Optioneel. Je advertentie wordt niet getoond aan bezoekers uit de geselecteerde landen.",
+    "BLOCKED_COUNTRIES_PLACEHOLDER": "Beperkt land toevoegen",
+    "BLOCKED_COUNTRIES_REMOVE": "{{country}} verwijderen",
     "CITY_PLACEHOLDER": "Stad",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telefoon",

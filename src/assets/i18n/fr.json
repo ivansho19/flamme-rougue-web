@@ -63,6 +63,7 @@
     "COMMENT_ERROR_LOGIN": "Vous devez vous connecter pour commenter.",
     "COMMENT_REPLY_ERROR_REQUIRED": "Veuillez saisir une réponse.",
     "COMMENT_REPLY_ERROR_LOGIN": "Vous devez vous connecter pour répondre.",
+    "LIKE_ERROR_LOGIN": "Vous devez vous connecter pour aimer.",
     "COMMENT_ERROR_GENERIC": "Impossible d'envoyer le commentaire.",
     "COMMENT_REPLY_ERROR_GENERIC": "Impossible d'enregistrer la réponse.",
     "COMMUNITY_RULES": {
@@ -108,6 +109,10 @@
     "COUNTRY_PLACEHOLDER": "Pays",
     "COUNTRY_SEARCH_PLACEHOLDER": "Rechercher un pays...",
     "COUNTRY_NO_RESULTS": "Aucun pays trouvé",
+    "BLOCKED_COUNTRIES_TITLE": "Visibilité par pays",
+    "BLOCKED_COUNTRIES_HINT": "Optionnel. L'annonce ne sera pas visible pour les visiteurs des pays sélectionnés.",
+    "BLOCKED_COUNTRIES_PLACEHOLDER": "Ajouter un pays restreint",
+    "BLOCKED_COUNTRIES_REMOVE": "Retirer {{country}}",
     "CITY_PLACEHOLDER": "Ville",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telephone",

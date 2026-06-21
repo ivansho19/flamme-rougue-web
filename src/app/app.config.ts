@@ -8,11 +8,16 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { authErrorInterceptor } from './shared/interceptors/auth-error.interceptor';
 import { authTokenInterceptor } from './shared/interceptors/auth-token.interceptor';
+import { forwardedForInterceptor } from './shared/interceptors/forwarded-for.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authTokenInterceptor, authErrorInterceptor])),
+    provideHttpClient(withInterceptors([
+      forwardedForInterceptor,
+      authTokenInterceptor,
+      authErrorInterceptor
+    ])),
     provideAnimationsAsync(),
     provideTranslateHttpLoader({
       prefix: './assets/i18n/',
