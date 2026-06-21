@@ -17,6 +17,7 @@ import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { TranslateService } from '@ngx-translate/core';
+import { CitySelectionHelper } from '../../shared/clases/citySelection';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -199,6 +200,7 @@ export class UpdateProfileComponent implements OnInit {
         description: ['', Validators.required],
         country: ['', Validators.required],
         city: ['', Validators.required],
+        customCity: [''],
         zone: ['', Validators.required],
         phone: ['', Validators.required],
         blockedCountries: [[]],
@@ -222,6 +224,10 @@ export class UpdateProfileComponent implements OnInit {
     this.profileForm
       .get('personalData.birthDate')
       ?.valueChanges.subscribe(value => this.updateAgeFromBirthDate(value));
+
+    this.profileForm
+      .get('basicInfo.city')
+      ?.valueChanges.subscribe(value => this.syncCustomCityValidators(value));
 
     this.addAvailabilitySlot();
   }
@@ -286,13 +292,17 @@ export class UpdateProfileComponent implements OnInit {
     this.clientData = client;
     const countryValue = this.setCitiesForCountry(client.country);
     const currentBasicInfo = this.profileForm.get('basicInfo')?.value || {};
+    const predefinedCities = this.cities.filter(city => !CitySelectionHelper.isOtherSelected(city));
+    const storedCity = currentBasicInfo.city || client.city || '';
+    const cityFields = CitySelectionHelper.resolveSelectionFromStored(storedCity, predefinedCities);
 
     this.profileForm.patchValue({
       basicInfo: {
         publicName: currentBasicInfo.publicName || client.name || '',
         email: currentBasicInfo.email || client.email || '',
         country: currentBasicInfo.country || countryValue || '',
-        city: currentBasicInfo.city || client.city || '',
+        city: cityFields.city,
+        customCity: cityFields.customCity,
         zone: currentBasicInfo.zone || client.zone || '',
         phone: currentBasicInfo.phone || client.phone || '',
         blockedCountries: Array.isArray(currentBasicInfo.blockedCountries)
@@ -302,6 +312,7 @@ export class UpdateProfileComponent implements OnInit {
             : []
       }
     });
+    this.syncCustomCityValidators(cityFields.city);
   }
 
   private setCitiesForCountry(value?: string | null): string {
@@ -314,13 +325,44 @@ export class UpdateProfileComponent implements OnInit {
       country.code === value || country.name === value
     );
 
-    this.cities = found ? found.cities : [];
+    this.cities = CitySelectionHelper.withOtherOption(found ? found.cities : []);
     return found?.code ?? value;
   }
 
   onCountryChange(value: string) {
     this.setCitiesForCountry(value);
     this.profileForm.get('basicInfo.city')?.setValue('');
+    this.profileForm.get('basicInfo.customCity')?.setValue('');
+  }
+
+  isCityOtherOption(city: string): boolean {
+    return CitySelectionHelper.isOtherSelected(city);
+  }
+
+  get showCustomCityInput(): boolean {
+    return CitySelectionHelper.isOtherSelected(
+      this.profileForm?.get('basicInfo.city')?.value
+    );
+  }
+
+  private syncCustomCityValidators(city: string | null | undefined): void {
+    const customCityCtrl = this.profileForm.get('basicInfo.customCity');
+    if (!customCityCtrl) {
+      return;
+    }
+
+    if (CitySelectionHelper.isOtherSelected(city)) {
+      customCityCtrl.setValidators([Validators.required]);
+    } else {
+      customCityCtrl.clearValidators();
+      customCityCtrl.setValue('', { emitEvent: false });
+    }
+    customCityCtrl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private getResolvedCity(): string {
+    const basicInfo = this.profileForm.get('basicInfo')?.value || {};
+    return CitySelectionHelper.resolveCityForPayload(basicInfo.city, basicInfo.customCity);
   }
 
   private getProfile(id: string) {
@@ -370,13 +412,16 @@ export class UpdateProfileComponent implements OnInit {
 
     const resolvedCountry = profile.country || '';
     const countryValue = this.setCitiesForCountry(resolvedCountry || this.clientData?.country);
+    const predefinedCities = this.cities.filter(city => !CitySelectionHelper.isOtherSelected(city));
+    const cityFields = CitySelectionHelper.resolveSelectionFromStored(profile.city, predefinedCities);
 
     this.profileForm.patchValue({
       basicInfo: {
         publicName: profile.displayName || '',
         description: profile.bio || '',
         country: countryValue || '',
-        city: profile.city || '',
+        city: cityFields.city,
+        customCity: cityFields.customCity,
         zone: profile.zone || '',
         phone: profile.phone || '',
         blockedCountries: Array.isArray(profile.blockedCountries) ? profile.blockedCountries : []
@@ -394,6 +439,7 @@ export class UpdateProfileComponent implements OnInit {
       },
       posibilities: posibilitiesValue
     });
+    this.syncCustomCityValidators(cityFields.city);
 
     this.availabilitySlots.clear();
     if (availabilitySlots.length) {
@@ -504,7 +550,7 @@ export class UpdateProfileComponent implements OnInit {
     return {
       name: basicInfo.publicName || 'Perfil',
       subtitleLabel: 'Ciudad',
-      subtitleValue: basicInfo.city || '',
+      subtitleValue: this.getResolvedCity(),
       phone: basicInfo.phone || '',
       availability: availabilityText,
       bio: basicInfo.description || '',
@@ -865,7 +911,7 @@ export class UpdateProfileComponent implements OnInit {
         bio: basicInfo.description || '',
         phone: basicInfo.phone || '',
         country: basicInfo.country || '',
-        city: basicInfo.city || '',
+        city: this.getResolvedCity(),
         zone: basicInfo.zone || '',
         availability: finalAvailability,
         gender: personalData.gender || '',

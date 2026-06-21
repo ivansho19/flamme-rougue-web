@@ -114,6 +114,8 @@
     "BLOCKED_COUNTRIES_PLACEHOLDER": "Beperkt land toevoegen",
     "BLOCKED_COUNTRIES_REMOVE": "{{country}} verwijderen",
     "CITY_PLACEHOLDER": "Stad",
+    "CITY_OTHER": "Anders",
+    "CITY_CUSTOM_PLACEHOLDER": "Voer je stad in",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telefoon",
     "PHONE_NUMERIC_ERROR": "Telefoon accepteert alleen cijfers",

@@ -114,6 +114,8 @@
     "BLOCKED_COUNTRIES_PLACEHOLDER": "Ajouter un pays restreint",
     "BLOCKED_COUNTRIES_REMOVE": "Retirer {{country}}",
     "CITY_PLACEHOLDER": "Ville",
+    "CITY_OTHER": "Autre",
+    "CITY_CUSTOM_PLACEHOLDER": "Saisissez votre ville",
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telephone",
     "PHONE_NUMERIC_ERROR": "Le telephone n'accepte que des chiffres",

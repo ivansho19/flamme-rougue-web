@@ -12,6 +12,7 @@ import { ProfilePreviewData } from '../../shared/components/profile-preview/prof
 import { GetUserName } from '../../shared/clases/getUserName';
 import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
+import { CitySelectionHelper } from '../../shared/clases/citySelection';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { Country } from '../../shared/model/country.model';
 import { PlanOption } from '../../shared/model/planes.model';
@@ -239,6 +240,7 @@ export class ProfileEditComponent implements OnInit {
                 description: ['', [Validators.required, Validators.maxLength(2500)]],
                 country: ['', Validators.required],
                 city: ['', Validators.required],
+                customCity: [''],
                 zone: [''],
                 phonePrefix: ['+', Validators.maxLength(4)],
                 phone: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^\d+$/)]],
@@ -290,6 +292,10 @@ export class ProfileEditComponent implements OnInit {
             .get('realData.documentType')
             ?.valueChanges.subscribe(value => this.updateDocumentValidators(value));
 
+        this.profileForm
+            .get('basicInfo.city')
+            ?.valueChanges.subscribe(value => this.syncCustomCityValidators(value));
+
         // Watch for form changes to auto-show modal when profile becomes complete
         this.profileForm.statusChanges.subscribe(() => {
             this.checkAndShowPlanModal();
@@ -301,6 +307,49 @@ export class ProfileEditComponent implements OnInit {
     onCountryChange(value: string) {
         this.setCitiesForCountry(value);
         this.profileForm.get('basicInfo.city')?.setValue('');
+        this.profileForm.get('basicInfo.customCity')?.setValue('');
+    }
+
+    isCityOtherOption(city: string): boolean {
+        return CitySelectionHelper.isOtherSelected(city);
+    }
+
+    get showCustomCityInput(): boolean {
+        return CitySelectionHelper.isOtherSelected(
+            this.profileForm?.get('basicInfo.city')?.value
+        );
+    }
+
+    private syncCustomCityValidators(city: string | null | undefined): void {
+        const customCityCtrl = this.profileForm.get('basicInfo.customCity');
+        if (!customCityCtrl) {
+            return;
+        }
+
+        if (CitySelectionHelper.isOtherSelected(city)) {
+            customCityCtrl.setValidators([Validators.required]);
+        } else {
+            customCityCtrl.clearValidators();
+            customCityCtrl.setValue('', { emitEvent: false });
+        }
+        customCityCtrl.updateValueAndValidity({ emitEvent: false });
+    }
+
+    private getResolvedCity(): string {
+        const basicInfo = this.profileForm.get('basicInfo')?.value || {};
+        return CitySelectionHelper.resolveCityForPayload(basicInfo.city, basicInfo.customCity);
+    }
+
+    private isCitySelectionValid(): boolean {
+        const cityCtrl = this.profileForm.get('basicInfo.city');
+        if (!cityCtrl?.valid || !cityCtrl.value) {
+            return false;
+        }
+        if (CitySelectionHelper.isOtherSelected(cityCtrl.value)) {
+            const customCityCtrl = this.profileForm.get('basicInfo.customCity');
+            return !!customCityCtrl?.valid && !!(customCityCtrl.value || '').trim();
+        }
+        return true;
     }
 
     private setCitiesForCountry(value?: string | null): string {
@@ -313,7 +362,7 @@ export class ProfileEditComponent implements OnInit {
             country.code === value || country.name === value
         );
 
-        this.cities = found ? found.cities : [];
+        this.cities = CitySelectionHelper.withOtherOption(found ? found.cities : []);
         return found?.code ?? value;
     }
 
@@ -321,13 +370,16 @@ export class ProfileEditComponent implements OnInit {
         this.clientData = client;
         this.userId = client?._id || this.userId;
         const countryValue = this.setCitiesForCountry(client.country);
+        const predefinedCities = this.cities.filter(city => !CitySelectionHelper.isOtherSelected(city));
+        const cityFields = CitySelectionHelper.resolveSelectionFromStored(client.city, predefinedCities);
 
         this.profileForm.patchValue({
             basicInfo: {
                 publicName: client.name || '',
                 email: client.email || '',
                 country: countryValue || '',
-                city: client.city || '',
+                city: cityFields.city,
+                customCity: cityFields.customCity,
                 phonePrefix: '',
                 phone: client.phone || '',
                 blockedCountries: Array.isArray(client.blockedCountries) ? client.blockedCountries : []
@@ -339,6 +391,7 @@ export class ProfileEditComponent implements OnInit {
             },
             posibilities: Array.isArray(client.posibilities) ? client.posibilities : []
         });
+        this.syncCustomCityValidators(cityFields.city);
     }
 
     get canShowRealDataSection(): boolean {
@@ -477,7 +530,7 @@ export class ProfileEditComponent implements OnInit {
         return {
             name: basicInfo.publicName || 'Perfil',
             subtitleLabel: 'Ciudad',
-            subtitleValue: basicInfo.city || '',
+            subtitleValue: this.getResolvedCity(),
             phone: this.getPhoneWithPrefix(basicInfo),
             availability: availabilityText,
             bio: basicInfo.description || '',
@@ -511,7 +564,7 @@ export class ProfileEditComponent implements OnInit {
         const email = this.profileForm.get('basicInfo.email')?.valid ?? false;
         const description = this.profileForm.get('basicInfo.description')?.valid ?? false;
         const country = this.profileForm.get('basicInfo.country')?.valid ?? false;
-        const city = this.profileForm.get('basicInfo.city')?.valid ?? false;
+        const city = this.isCitySelectionValid();
         const phone = this.profileForm.get('basicInfo.phone')?.valid ?? false;
         
         const basicInfoComplete = publicName && email && description && country && city && phone;
@@ -1014,7 +1067,7 @@ export class ProfileEditComponent implements OnInit {
                                 bio: basicInfo.description || '',
                                 phone: this.getPhoneWithPrefix(basicInfo),
                                 country: basicInfo.country || '',
-                                city: basicInfo.city || '',
+                                city: this.getResolvedCity(),
                                 zone: basicInfo.zone || '',
                                 availability: availabilityList,
                                 gender: personalData.gender || '',

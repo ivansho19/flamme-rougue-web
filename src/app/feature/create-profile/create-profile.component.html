@@ -113,12 +113,25 @@
           </div>
         </div>
 
-        <div class="field">
+        <div class="field city-field">
           <select formControlName="city" [disabled]="!cities.length" [class.input-error]="isInvalid('basicInfo.city')">
             <option value="" disabled selected>{{ 'PROFILE_FORM.CITY_PLACEHOLDER' | translate }}</option>
-            <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+            <option *ngFor="let city of cities" [value]="city">
+              {{ isCityOtherOption(city) ? ('PROFILE_FORM.CITY_OTHER' | translate) : city }}
+            </option>
           </select>
           <div class="error" *ngIf="isInvalid('basicInfo.city')">
+            {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+          </div>
+        </div>
+
+        <div class="field custom-city-field" *ngIf="showCustomCityInput">
+          <input
+            formControlName="customCity"
+            type="text"
+            [placeholder]="'PROFILE_FORM.CITY_CUSTOM_PLACEHOLDER' | translate"
+            [class.input-error]="isInvalid('basicInfo.customCity')">
+          <div class="error" *ngIf="isInvalid('basicInfo.customCity')">
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </div>
         </div>
