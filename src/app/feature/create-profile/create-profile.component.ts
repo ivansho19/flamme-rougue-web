@@ -13,6 +13,7 @@ import { GetUserName } from '../../shared/clases/getUserName';
 import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { CitySelectionHelper } from '../../shared/clases/citySelection';
+import { PlanImageLimitsHelper } from '../../shared/clases/planImageLimits';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { Country } from '../../shared/model/country.model';
 import { PlanOption } from '../../shared/model/planes.model';
@@ -489,6 +490,9 @@ export class ProfileEditComponent implements OnInit {
     }
 
     publishProfile(): void {
+        if (!this.enforcePlanImageLimit()) {
+            return;
+        }
         // Si no hay plan seleccionado, abre el modal para seleccionar uno
         if (!this.selectedPlanId) {
             this.showPlanModal = true;
@@ -645,7 +649,76 @@ export class ProfileEditComponent implements OnInit {
     }
 
     get canPublish(): boolean {
-        return this.isProfileComplete && !!this.selectedPlanId;
+        return this.isProfileComplete && !!this.selectedPlanId && this.isPlanValidForImages;
+    }
+
+    get totalProfileImages(): number {
+        return PlanImageLimitsHelper.countProfileImages(
+            !!this.profile.profileImage,
+            this.profile.galleryImages.length
+        );
+    }
+
+    get planImageValidation() {
+        return PlanImageLimitsHelper.validate(this.selectedPlanId, this.totalProfileImages);
+    }
+
+    get isPlanValidForImages(): boolean {
+        return this.planImageValidation.isValid;
+    }
+
+    get showPlanImageLimitWarning(): boolean {
+        return this.totalProfileImages > 0 && !this.isPlanValidForImages;
+    }
+
+    get exceedsMaxPlanImages(): boolean {
+        return this.totalProfileImages > (PlanImageLimitsHelper.getPlanLimit(3) ?? 30);
+    }
+
+    get selectedPlanImageLimit(): number | null {
+        return PlanImageLimitsHelper.getPlanLimit(this.selectedPlanId);
+    }
+
+    get planImageLimitMessage(): string {
+        const validation = this.planImageValidation;
+        if (validation.isValid || validation.totalImages === 0) {
+            return '';
+        }
+
+        if (this.exceedsMaxPlanImages) {
+            const max = PlanImageLimitsHelper.getPlanLimit(3) ?? 30;
+            return this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_EXCEEDED_MAX', {
+                count: validation.totalImages,
+                max,
+                extra: validation.totalImages - max
+            });
+        }
+
+        return this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_WARNING', {
+            count: validation.totalImages,
+            limit: validation.selectedPlanLimit ?? 0,
+            plan: this.translate.instant(validation.requiredPlanKey || 'PROFILE_FORM.PLAN_VIP'),
+            requiredLimit: validation.requiredPlanLimit ?? 0
+        });
+    }
+
+    openPlanModal(): void {
+        this.showPlanModal = true;
+    }
+
+    private enforcePlanImageLimit(): boolean {
+        if (this.isPlanValidForImages) {
+            return true;
+        }
+
+        this.toastService.showToast(
+            this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_TOAST_TITLE'),
+            this.planImageLimitMessage,
+            'error',
+            7
+        );
+        this.showPlanModal = true;
+        return false;
     }
 
     isInvalid(controlPath: string): boolean {
@@ -949,6 +1022,9 @@ export class ProfileEditComponent implements OnInit {
     }
 
     async saveProfile() {
+                if (!this.enforcePlanImageLimit()) {
+                    return;
+                }
                 if (!this.paymentCompleted && !this.pendingWhatsAppPayment) {
                     this.toastService.showToast(
                         'error',

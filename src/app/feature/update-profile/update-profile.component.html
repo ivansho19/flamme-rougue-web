@@ -28,6 +28,30 @@
                 </mat-expansion-panel-header>
 
                 <div class="images-card fade-in">
+                    <div class="images-plan-meta" *ngIf="totalProfileImages > 0">
+                        <span class="image-count-badge">
+                            {{ 'PROFILE_FORM.PLAN_IMAGE_COUNT' | translate: {
+                                count: totalProfileImages,
+                                limit: selectedPlanImageLimit ?? ('PROFILE_FORM.PLAN_IMAGE_COUNT_NO_PLAN' | translate)
+                            } }}
+                        </span>
+                    </div>
+
+                    <div class="plan-image-limit-alert" *ngIf="showPlanImageLimitWarning" role="alert">
+                        <div class="plan-image-limit-alert__icon" aria-hidden="true">!</div>
+                        <div class="plan-image-limit-alert__body">
+                            <strong>{{ 'PROFILE_FORM.PLAN_IMAGE_LIMIT_TITLE' | translate }}</strong>
+                            <p>{{ planImageLimitMessage }}</p>
+                            <button
+                                type="button"
+                                class="plan-image-limit-alert__cta"
+                                *ngIf="!exceedsMaxPlanImages"
+                                (click)="openPlanModal()">
+                                {{ 'PROFILE_FORM.PLAN_IMAGE_LIMIT_CTA' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="images-layout">
                         <div class="drop-zone main-zone" (click)="openMainFileSelector()" [class.dragging]="isDraggingMain"
                             (dragover)="onDragOverMain($event)" (dragleave)="onDragLeaveMain()" (drop)="onDropMain($event)">
@@ -309,7 +333,7 @@
         </mat-accordion>
 
         <div class="plan-actions">
-            <button type="submit" class="btn-primary" [disabled]="isProfileInactive">
+            <button type="submit" class="btn-primary" [disabled]="isProfileInactive || !canSave">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.SAVE_CHANGES_SHORT' | translate }}</span>
             </button>

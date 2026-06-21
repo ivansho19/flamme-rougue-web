@@ -18,6 +18,7 @@ import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { TranslateService } from '@ngx-translate/core';
 import { CitySelectionHelper } from '../../shared/clases/citySelection';
+import { PlanImageLimitsHelper } from '../../shared/clases/planImageLimits';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -53,6 +54,7 @@ export class UpdateProfileComponent implements OnInit {
   isDraggingMain = false;
   isDraggingGallery = false;
   isProfileInactive = false;
+  isActiveProfile = true;
   paymentCompleted = false;
   pendingWhatsAppPayment = false;
   planExpiresAt: string | Date | null = null;
@@ -462,6 +464,9 @@ export class UpdateProfileComponent implements OnInit {
     this.profile.profileImage = profile.imagesMain?.url || '';
     this.profile.galleryImages = (profile.imagesGallery || []).map((img: ProfileImage) => img.url);
     this.planExpiresAt = profile.planExpiresAt ?? null;
+    this.isActiveProfile = profile.isActiveProfile !== undefined
+      ? !!profile.isActiveProfile
+      : !this.isProfileInactive;
     this.maybeShowPlanExpiryWarning();
   }
 
@@ -484,6 +489,16 @@ export class UpdateProfileComponent implements OnInit {
     this.isProfileInactive = normalized.includes('perfil inactivo');
   }
 
+  private resolveIsActiveProfileForUpdate(): boolean {
+    if (this.pendingWhatsAppPayment) {
+      return false;
+    }
+    if (this.paymentCompleted) {
+      return true;
+    }
+    return this.isActiveProfile;
+  }
+
   planSelected(plan: PlanOption) {
     this.selectedPlanId = plan.id;
     this.selectedPlan = plan;
@@ -492,12 +507,17 @@ export class UpdateProfileComponent implements OnInit {
   handlePlanSelectionFromModal(plan: PlanOption): void {
     this.selectedPlanId = plan.id;
     this.selectedPlan = plan;
+    this.paymentCompleted = true;
+    this.pendingWhatsAppPayment = false;
     this.showPlanModal = false;
     this.updatePlan();
   }
 
   updatePlan() {
     if (this.isProfileInactive) {
+      return;
+    }
+    if (!this.enforcePlanImageLimit()) {
       return;
     }
     if (!this.selectedPlanId) {
@@ -520,7 +540,74 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   get canSave(): boolean {
-    return !!this.profileForm && this.profileForm.valid && !this.loading && this.hasAvailability;
+    return !!this.profileForm
+      && this.profileForm.valid
+      && !this.loading
+      && this.hasAvailability
+      && this.isPlanValidForImages;
+  }
+
+  get totalProfileImages(): number {
+    const hasMain = !!(this.profile.profileImage || this.existingMainImage);
+    return PlanImageLimitsHelper.countProfileImages(hasMain, this.profile.galleryImages.length);
+  }
+
+  get planImageValidation() {
+    return PlanImageLimitsHelper.validate(this.selectedPlanId, this.totalProfileImages);
+  }
+
+  get isPlanValidForImages(): boolean {
+    return this.planImageValidation.isValid;
+  }
+
+  get showPlanImageLimitWarning(): boolean {
+    return this.totalProfileImages > 0 && !this.isPlanValidForImages;
+  }
+
+  get exceedsMaxPlanImages(): boolean {
+    return this.totalProfileImages > (PlanImageLimitsHelper.getPlanLimit(3) ?? 30);
+  }
+
+  get selectedPlanImageLimit(): number | null {
+    return PlanImageLimitsHelper.getPlanLimit(this.selectedPlanId);
+  }
+
+  get planImageLimitMessage(): string {
+    const validation = this.planImageValidation;
+    if (validation.isValid || validation.totalImages === 0) {
+      return '';
+    }
+
+    if (this.exceedsMaxPlanImages) {
+      const max = PlanImageLimitsHelper.getPlanLimit(3) ?? 30;
+      return this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_EXCEEDED_MAX', {
+        count: validation.totalImages,
+        max,
+        extra: validation.totalImages - max
+      });
+    }
+
+    return this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_WARNING', {
+      count: validation.totalImages,
+      limit: validation.selectedPlanLimit ?? 0,
+      plan: this.translate.instant(validation.requiredPlanKey || 'PROFILE_FORM.PLAN_VIP'),
+      requiredLimit: validation.requiredPlanLimit ?? 0
+    });
+  }
+
+  private enforcePlanImageLimit(): boolean {
+    if (this.isPlanValidForImages) {
+      return true;
+    }
+
+    this.toastService.showToast(
+      this.translate.instant('PROFILE_FORM.PLAN_IMAGE_LIMIT_TOAST_TITLE'),
+      this.planImageLimitMessage,
+      'error',
+      7
+    );
+    this.showPlanModal = true;
+    return false;
   }
 
   get hasAvailability(): boolean {
@@ -824,6 +911,9 @@ export class UpdateProfileComponent implements OnInit {
     if (this.isProfileInactive) {
       return;
     }
+    if (!this.enforcePlanImageLimit()) {
+      return;
+    }
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
       this.toastService.showToast('Formulario incompleto', 'Completa los campos obligatorios', 'error', 4);
@@ -929,17 +1019,18 @@ export class UpdateProfileComponent implements OnInit {
         imagesMain: mainImage,
         imagesGallery: galleryImages,
         orientation: personalData.orientation || '',
-        isActiveProfile: this.paymentCompleted && !this.pendingWhatsAppPayment
+        isActiveProfile: this.resolveIsActiveProfileForUpdate()
       };
 
       this.profileService.updateProfile(lookupId, profilePayload).subscribe({
         next: () => {
           this.loading = false;
           if (planUpdated) {
-            this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 5);
+            this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 8);
           } else {
-            this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 5);
+            this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 8);
           }
+          window.location.reload();
         },
         error: (error) => {
           console.error('Error actualizando perfil:', error);
