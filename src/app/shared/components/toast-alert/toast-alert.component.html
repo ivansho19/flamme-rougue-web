@@ -1,5 +1,27 @@
-<div class="toast-alert" *ngIf="isVisible" [class.success]="type === 'success'" [class.error]="type === 'error'">
-  <button class="toast-close" type="button" (click)="close()">✕</button>
-  <div class="toast-title" *ngIf="title">{{ title }}</div>
-  <div class="toast-message">{{ message }}</div>
+<div
+  class="toast-alert"
+  *ngIf="isVisible"
+  [class.success]="type === 'success'"
+  [class.error]="type === 'error'"
+  role="alert"
+  aria-live="polite">
+  <div class="toast-icon" aria-hidden="true">
+    <svg *ngIf="type === 'success'" viewBox="0 0 24 24" focusable="false">
+      <path d="M9.5 16.2 5.8 12.5l-1.4 1.4 5.1 5.1 10.9-10.9-1.4-1.4z" />
+    </svg>
+    <svg *ngIf="type === 'error'" viewBox="0 0 24 24" focusable="false">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+    </svg>
+  </div>
+
+  <div class="toast-body">
+    <div class="toast-title" *ngIf="title">{{ title }}</div>
+    <div class="toast-message">{{ message }}</div>
+  </div>
+
+  <button class="toast-close" type="button" (click)="close()" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+    </svg>
+  </button>
 </div>

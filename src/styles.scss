@@ -6,6 +6,14 @@ body {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  --app-header-height: 84px;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    --app-header-height: 72px;
+  }
 }
 
 body {
@@ -89,3 +97,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 0 !important;
 }
 
+/* CDK overlay defaults to z-index 1000; header is 2000 */
+.cdk-overlay-container {
+  z-index: 3500 !important;
+}
+
+.mat-mdc-snack-bar-container.toast-snackbar,
+.toast-snackbar {
+  margin-top: calc(var(--app-header-height) + 0.75rem) !important;
+}
+
+.cdk-overlay-pane:has(.toast-snackbar) {
+  top: 0 !important;
+  margin-top: 0 !important;
+}

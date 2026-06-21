@@ -16,6 +16,7 @@ import { ProfileImage } from '../../shared/model/profile.model';
 import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -51,6 +52,9 @@ export class UpdateProfileComponent implements OnInit {
   isDraggingMain = false;
   isDraggingGallery = false;
   isProfileInactive = false;
+  paymentCompleted = false;
+  pendingWhatsAppPayment = false;
+  planExpiresAt: string | Date | null = null;
   @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
   @ViewChild('galleryInput') galleryInput!: ElementRef<HTMLInputElement>;
 
@@ -60,7 +64,8 @@ export class UpdateProfileComponent implements OnInit {
     private authService: AuthService,
     private profileService: ProfileService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -410,10 +415,15 @@ export class UpdateProfileComponent implements OnInit {
     this.existingGalleryImages = profile.imagesGallery || [];
     this.profile.profileImage = profile.imagesMain?.url || '';
     this.profile.galleryImages = (profile.imagesGallery || []).map((img: ProfileImage) => img.url);
+    this.planExpiresAt = profile.planExpiresAt ?? null;
+    this.maybeShowPlanExpiryWarning();
   }
 
   private setSelectedPlan(profile: any): void {
-    const rawPlan = profile?.plan ?? profile?.planId ?? profile?.plan?.id ?? null;
+    let rawPlan = profile?.plan ?? profile?.planId ?? profile?.plan?.id ?? null;
+    if (Array.isArray(rawPlan)) {
+      rawPlan = rawPlan[0] ?? null;
+    }
     if (rawPlan === null || rawPlan === undefined) {
       return;
     }
@@ -535,6 +545,93 @@ export class UpdateProfileComponent implements OnInit {
       return 'assets/images/icon_vip.png';
     }
     return null;
+  }
+
+  get planDaysRemaining(): number | null {
+    return this.getDaysUntilPlanExpiration(this.planExpiresAt);
+  }
+
+  get showPlanExpiration(): boolean {
+    return this.planDaysRemaining !== null
+      && this.selectedPlanId !== null
+      && this.selectedPlanId !== 1;
+  }
+
+  get planExpirationTranslationKey(): string | null {
+    const days = this.planDaysRemaining;
+    if (days === null) {
+      return null;
+    }
+    if (days < 0) {
+      return 'PROFILE_FORM.PLAN_EXPIRED';
+    }
+    if (days === 0) {
+      return 'PROFILE_FORM.PLAN_EXPIRES_TODAY';
+    }
+    if (days === 1) {
+      return 'PROFILE_FORM.PLAN_EXPIRES_ONE_DAY';
+    }
+    return 'PROFILE_FORM.PLAN_EXPIRES_IN_DAYS';
+  }
+
+  get isPlanExpiryUrgent(): boolean {
+    const days = this.planDaysRemaining;
+    return days !== null && days >= 0 && days <= 3;
+  }
+
+  get isPlanExpired(): boolean {
+    const days = this.planDaysRemaining;
+    return days !== null && days < 0;
+  }
+
+  private getDaysUntilPlanExpiration(expiresAt: string | Date | null): number | null {
+    if (!expiresAt) {
+      return null;
+    }
+
+    const expiration = new Date(expiresAt);
+    if (Number.isNaN(expiration.getTime())) {
+      return null;
+    }
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfExpiry = new Date(
+      expiration.getFullYear(),
+      expiration.getMonth(),
+      expiration.getDate()
+    );
+    const diffMs = startOfExpiry.getTime() - startOfToday.getTime();
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  }
+
+  private maybeShowPlanExpiryWarning(): void {
+    const days = this.planDaysRemaining;
+    if (days === null || days > 3 || days < 0) {
+      return;
+    }
+
+    if (!this.selectedPlanId || this.selectedPlanId === 1 || !this.planExpiresAt) {
+      return;
+    }
+
+    const storageKey = `plan-expiry-warn-${this.profileId}-${new Date(this.planExpiresAt).toISOString()}`;
+    if (sessionStorage.getItem(storageKey)) {
+      return;
+    }
+
+    sessionStorage.setItem(storageKey, '1');
+
+    let messageKey = 'PROFILE_FORM.PLAN_RENEW_TOAST_MESSAGE_DAYS';
+    if (days === 0) {
+      messageKey = 'PROFILE_FORM.PLAN_RENEW_TOAST_MESSAGE_TODAY';
+    } else if (days === 1) {
+      messageKey = 'PROFILE_FORM.PLAN_RENEW_TOAST_MESSAGE_ONE';
+    }
+
+    const title = this.translate.instant('PROFILE_FORM.PLAN_RENEW_TOAST_TITLE');
+    const message = this.translate.instant(messageKey, { days });
+    this.toastService.showToast(title, message, 'error', 6);
   }
 
   isInvalid(controlPath: string): boolean {
@@ -786,7 +883,7 @@ export class UpdateProfileComponent implements OnInit {
         imagesMain: mainImage,
         imagesGallery: galleryImages,
         orientation: personalData.orientation || '',
-
+        isActiveProfile: this.paymentCompleted && !this.pendingWhatsAppPayment
       };
 
       this.profileService.updateProfile(lookupId, profilePayload).subscribe({
@@ -808,4 +905,13 @@ export class UpdateProfileComponent implements OnInit {
       this.loading = false;
     }
   }
+
+  handleWhatsAppConfirmFromModal(plan: PlanOption): void {
+    this.selectedPlanId = plan.id;
+    this.selectedPlan = plan;
+    this.showPlanModal = false;
+    this.paymentCompleted = false;
+    this.pendingWhatsAppPayment = true;
+    this.updateProfile(true);
+}
 }

@@ -3,9 +3,18 @@
     <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="form-card slide-up">
         <h2 class="section-title">
             {{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}
-            <span class="current-plan" *ngIf="currentPlanKey">
-                <img class="current-plan-badge" *ngIf="currentPlanBadgeImage" [src]="currentPlanBadgeImage" alt="Plan" />
-                {{ 'PROFILE_FORM.CURRENT_PLAN' | translate }}: {{ currentPlanKey | translate }}
+            <span class="plan-status-group" *ngIf="currentPlanKey">
+                <span class="current-plan">
+                    <img class="current-plan-badge" *ngIf="currentPlanBadgeImage" [src]="currentPlanBadgeImage" alt="Plan" />
+                    {{ 'PROFILE_FORM.CURRENT_PLAN' | translate }}: {{ currentPlanKey | translate }}
+                </span>
+                <span
+                    class="plan-expiry-badge"
+                    *ngIf="showPlanExpiration && planExpirationTranslationKey"
+                    [class.plan-expiry-badge--urgent]="isPlanExpiryUrgent"
+                    [class.plan-expiry-badge--expired]="isPlanExpired">
+                    {{ planExpirationTranslationKey | translate: { days: planDaysRemaining } }}
+                </span>
             </span>
         </h2>
         <div class="inactive-warning" *ngIf="isProfileInactive">
@@ -307,7 +316,8 @@
         [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
         [updateMode]="true"
         (close)="closePlanModal()"
-        (planSelected)="handlePlanSelectionFromModal($event)">
+        (planSelected)="handlePlanSelectionFromModal($event)"
+        (whatsAppConfirmed)="handleWhatsAppConfirmFromModal($event)">
     </app-plan-selection-modal>
 
 

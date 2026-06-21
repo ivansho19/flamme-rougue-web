@@ -34,4 +34,5 @@ export interface IProfileResponse {
   posibilities?: string[];
   isActiveProfile?: boolean;
   isVerify?: boolean;
+  planExpiresAt?: Date;
 }

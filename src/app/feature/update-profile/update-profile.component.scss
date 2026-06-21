@@ -6,6 +6,38 @@
   margin-bottom: 0.75rem;
 }
 
+.plan-status-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.plan-expiry-badge {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #5c4a32;
+  background: #fff8eb;
+  border: 1px solid #e7d9c4;
+  border-radius: 999px;
+  padding: 0.38rem 0.75rem;
+  white-space: nowrap;
+}
+
+.plan-expiry-badge--urgent {
+  color: #7a1f1f;
+  background: #fff1f1;
+  border-color: #efb4b4;
+  box-shadow: 0 0 0 1px rgba(140, 3, 14, 0.08);
+}
+
+.plan-expiry-badge--expired {
+  color: #fff;
+  background: #8c030e;
+  border-color: #8c030e;
+}
+
 .current-plan {
   font-size: 0.9rem;
   line-height: 1.2;

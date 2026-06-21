@@ -9,7 +9,8 @@ const FORWARDED_FOR_URL_PARTS = [
   '/profiles/getProfile/',
   '/profiles/getAllProfiles',
   '/profiles/searchProfiles',
-  '/top-rojo/all',
+  '/profiles/updateProfile',
+  '/top-rojo/all'
 ];
 
 export function isPublicReadRequest(url: string): boolean {
