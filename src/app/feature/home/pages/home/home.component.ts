@@ -8,6 +8,7 @@ import { LoaderService } from '../../../../shared/services/loader/loader.service
 import { ProfileService } from '../../../../shared/services/profile/profile.service';
 import { TopRojoService } from '../../../../shared/services/top-rojo/top-rojo.service';
 import { WarningDialogComponent } from '../../../../shared/components/warning-dialog/warning-dialog.component';
+import { resolveProfileId } from '../../../../shared/clases/resolveProfileId';
 
 @Component({
     selector: 'app-home',
@@ -122,16 +123,20 @@ export class HomeComponent implements OnInit, OnDestroy {
             return [];
         }
 
-        return tops.map((top) => ({
-            images: Array.isArray(top?.images)
-                ? top.images.map((img: any) => img?.url).filter(Boolean)
-                : [],
-            title: top?.title || 'TOP ROJO',
-            description: top?.description || '',
-            phone: top?.contactPhone || '',
-            buttonText: top?.profileId ? 'Ver perfil' : undefined,
-            buttonUrl: top?.profileId ? `/profile/${top.profileId}` : undefined
-        }));
+        return tops.map((top) => {
+            const profileId = resolveProfileId(top?.profileId);
+
+            return {
+                images: Array.isArray(top?.images)
+                    ? top.images.map((img: any) => img?.url).filter(Boolean)
+                    : [],
+                title: top?.title || 'TOP ROJO',
+                description: top?.description || '',
+                phone: top?.contactPhone || '',
+                buttonText: profileId ? 'Ver perfil' : undefined,
+                buttonUrl: profileId ? `/profile/${profileId}` : undefined
+            };
+        });
     }
 
 }

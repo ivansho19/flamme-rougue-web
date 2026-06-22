@@ -7,6 +7,7 @@ import { AdminService } from '../../../shared/services/admin/admin.service';
 import { AdminUser } from '../../../shared/models/comment-plans.model';
 import { TopRojoService } from '../../../shared/services/top-rojo/top-rojo.service';
 import { ToastService } from '../../../shared/services/toast/toast.service';
+import { resolveProfileId } from '../../../shared/clases/resolveProfileId';
 
 type TopRojoAdminStatusFilter = 'all' | 'pending' | 'active' | 'expired' | 'cancelled';
 
@@ -856,7 +857,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   goToTopRojoProfile(topRojo: any): void {
-    const profileId = topRojo?.profileId || topRojo?.profile?._id || topRojo?.profile?.id;
+    const profileId = resolveProfileId(topRojo?.profileId) || resolveProfileId(topRojo?.profile);
     if (!profileId) {
       return;
     }

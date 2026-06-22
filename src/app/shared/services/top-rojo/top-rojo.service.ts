@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { finalize, map, Observable } from 'rxjs';
 import {
   ITopRojoCreateRequest,
   ITopRojoResponse,
@@ -11,6 +11,7 @@ import {
 } from '../../models/top-rojo.model';
 import { LoaderService } from '../loader/loader.service';
 import { environment } from '../../../../environments/environment';
+import { resolveProfileId } from '../../clases/resolveProfileId';
 
 @Injectable({
   providedIn: 'root'
@@ -150,7 +151,7 @@ export class TopRojoService {
     return {
       _id: top._id || top.id || '',
       userId: top.userId || '',
-      profileId: top.profileId || '',
+      profileId: resolveProfileId(top.profileId),
       
       displayName: top.displayName || top.title || top.name || '',
       profileImage: top.profileImage || top.image || top.images?.[0]?.url || '',
@@ -235,7 +236,16 @@ export class TopRojoService {
   getAllTopRojo(): Observable<ITopRojoAllResponse> {
     return this.http.get<ITopRojoAllResponse>(
       `${this.apiTopRojo}/all`
-    ).pipe(finalize(() => this.loaderService.setLoaderState(false)));
+    ).pipe(
+      map(response => ({
+        ...response,
+        tops: (response?.tops ?? []).map(top => ({
+          ...top,
+          profileId: resolveProfileId(top.profileId)
+        }))
+      })),
+      finalize(() => this.loaderService.setLoaderState(false))
+    );
   }
 
   /**

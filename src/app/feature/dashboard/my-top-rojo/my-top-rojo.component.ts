@@ -162,13 +162,13 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
     const topRojoId = this.topRojoId;
 
     if (!topRojoId) {
-      this.toastService.showToast('ERROR', 'No se encontro el TOP ROJO a renovar', 'error', 5);
+      this.toastService.showToast('ERROR', 'No se encontro el TOP ROJO a renovar', 'error', 8);
       this.closeRenewPlanModal();
       return;
     }
 
     if (!planType || !['top_24h', 'top_3d', 'top_7d'].includes(planType)) {
-      this.toastService.showToast('ERROR', 'Plan invalido', 'error', 5);
+      this.toastService.showToast('ERROR', 'Plan invalido', 'error', 8);
       return;
     }
 
