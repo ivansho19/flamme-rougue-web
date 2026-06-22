@@ -11,6 +11,8 @@ import { GetCountries } from "../../clases/getCountries";
 import { GetFlags } from "../../clases/getFlagsOptions";
 import { NotificationsService } from "../../services/notifications/notifications.service";
 import { AuthSessionService } from "../../services/auth-session/auth-session.service";
+import { CommentPlansService } from "../../services/comment-plans/comment-plans.service";
+import { CommentPlanBadgeHelper, CommentPlanBadgeType } from "../../clases/commentPlanBadge";
 
 
 @Component({
@@ -38,6 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   profileNotificationsLoading = false;
   profileNotifications: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
   profileReadHistory: Array<{ _id?: string; title?: string; message?: string; createdAt?: string; status?: string }> = [];
+  viewerCommentPlanBadge: CommentPlanBadgeType | null = null;
   private readonly adminNotificationsStatus: 'unread' | 'read' | undefined = undefined;
   private profileNotificationsStatus: 'unread' | 'read' | undefined = 'unread';
   private adminClearedAt: number | null = null;
@@ -56,7 +59,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private translate: TranslateService,
     private notificationsService: NotificationsService,
-    private authSessionService: AuthSessionService
+    private authSessionService: AuthSessionService,
+    private commentPlansService: CommentPlansService
   ) { }
 
   ngOnInit(): void {
@@ -134,6 +138,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.refreshAdminNotifications();
     this.refreshProfileNotifications();
+    this.loadViewerCommentPlanBadge();
+  }
+
+  private loadViewerCommentPlanBadge(): void {
+    const token = localStorage.getItem('token');
+    if (!token || this.isClient() || this.isAdmin()) {
+      this.viewerCommentPlanBadge = null;
+      return;
+    }
+
+    this.commentPlansService.getStatus().subscribe({
+      next: (status) => {
+        this.viewerCommentPlanBadge = CommentPlanBadgeHelper.resolve(status);
+      },
+      error: () => {
+        this.viewerCommentPlanBadge = null;
+      }
+    });
   }
 
   private refreshAdminNotifications(): void {

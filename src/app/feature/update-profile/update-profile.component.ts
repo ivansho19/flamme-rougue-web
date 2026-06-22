@@ -1027,10 +1027,12 @@ export class UpdateProfileComponent implements OnInit {
           this.loading = false;
           if (planUpdated) {
             this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 8);
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
           } else {
             this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 8);
           }
-          window.location.reload();
         },
         error: (error) => {
           console.error('Error actualizando perfil:', error);

@@ -104,11 +104,14 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
 
   confirmWhatsAppPayment(): void {
     const plan = this.getSelectedPlan();
-    if (plan) {
-      this.whatsAppPlanSelected.emit(plan);
+    if (!plan) {
+      return;
     }
+
+    this.whatsAppPlanSelected.emit(plan);
     this.isWhatsAppConfirmOpen = false;
     this.openWhatsAppPayment();
+    this.close.emit();
   }
 
   openWhatsAppPayment(): void {

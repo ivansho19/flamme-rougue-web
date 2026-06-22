@@ -4,8 +4,15 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthHeaders } from '../../clases/getAuthHeaders';
 
-export interface CommentAuthor {
+export interface CommentPlanAuthorInfo {
+  planType?: string | null;
+  status?: string | null;
+  badge?: string | null;
+}
+
+export interface CommentAuthor extends CommentPlanAuthorInfo {
   name: string;
+  commentPlan?: CommentPlanAuthorInfo | null;
 }
 
 export interface CommentItem {
@@ -17,6 +24,10 @@ export interface CommentItem {
   providerReply?: string | null;
   createdAt?: string;
   author?: CommentAuthor;
+  planType?: string | null;
+  status?: string | null;
+  badge?: string | null;
+  commentPlan?: CommentPlanAuthorInfo | null;
 }
 
 @Injectable({

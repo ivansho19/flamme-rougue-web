@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { PaymentService } from '../../../../shared/services/payment/payment.service';
 import { PayPalButtonService } from '../../../../shared/services/paypal/paypal-button.service';
+import { CommentPlanBadgeType } from '../../../../shared/clases/commentPlanBadge';
 
 type CommentPlanType = 'free' | 'monthly' | 'annual';
 
@@ -12,7 +13,7 @@ interface CommentPlanOption {
   name: string;
   price: string;
   period: string;
-  badge?: string;
+  badgeType?: CommentPlanBadgeType;
   features: string[];
   selectable: boolean;
 }
@@ -40,28 +41,28 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
   plans: CommentPlanOption[] = [
     {
       id: 'free',
-      name: 'Gratis',
+      name: 'COMMENT_PLANS.PLAN_FREE',
       price: '0€',
-      period: 'bienvenida',
-      features: ['1 comentario de bienvenida'],
+      period: 'COMMENT_PLANS.PERIOD_WELCOME',
+      features: ['COMMENT_PLANS.FEATURE_FREE_WELCOME'],
       selectable: false
     },
     {
       id: 'monthly',
-      name: 'Mensual',
+      name: 'COMMENT_PLANS.PLAN_MONTHLY',
       price: '19€',
-      period: 'mes',
-      badge: 'Miembro',
-      features: ['Hasta 4 comentarios al mes', 'Badge Miembro'],
+      period: 'COMMENT_PLANS.PERIOD_MONTH',
+      badgeType: 'monthly',
+      features: ['COMMENT_PLANS.FEATURE_MONTHLY_LIMIT', 'COMMENT_PLANS.FEATURE_BADGE_MEMBER'],
       selectable: true
     },
     {
       id: 'annual',
-      name: 'Anual',
+      name: 'COMMENT_PLANS.PLAN_ANNUAL',
       price: '149€',
-      period: 'ano',
-      badge: 'Hombre Top',
-      features: ['Comentarios ilimitados', 'Badge Hombre Top'],
+      period: 'COMMENT_PLANS.PERIOD_YEAR',
+      badgeType: 'annual',
+      features: ['COMMENT_PLANS.FEATURE_ANNUAL_UNLIMITED', 'COMMENT_PLANS.FEATURE_BADGE_TOP_MAN'],
       selectable: true
     }
   ];
@@ -127,7 +128,9 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
 
   openWhatsAppPayment(): void {
     const plan = this.getSelectedPlan();
-    const planName = plan?.name || this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_COMMENT_PLAN');
+    const planName = plan?.name
+      ? this.translate.instant(plan.name)
+      : this.translate.instant('WHATSAPP_PAYMENT.DEFAULT_COMMENT_PLAN');
     const planPrice = plan?.price || '';
     const message = this.translate.instant('WHATSAPP_PAYMENT.COMMENT_PLAN', {
       planName,

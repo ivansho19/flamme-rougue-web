@@ -49,7 +49,15 @@
 }
 
 .username {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
   font-weight: bold;
+}
+
+.username-greeting {
+  line-height: 1.2;
 }
 
 /* Icon Buttons (header-icons) */
@@ -501,7 +509,10 @@
   color: #F2DAAC;
   font-size: 1.1rem;
   border-bottom: 1px solid rgba(242, 218, 172, 0.2);
-  display: block;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
 .mobile-item {

@@ -1,0 +1,19 @@
+<span
+  *ngIf="badgeType === 'monthly'"
+  class="comment-plan-badge comment-plan-badge--member"
+  [class.comment-plan-badge--compact]="compact"
+  role="status"
+>
+  <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+  <span>{{ 'COMMENT_PLANS.BADGE_MEMBER' | translate }}</span>
+</span>
+
+<span
+  *ngIf="badgeType === 'annual'"
+  class="comment-plan-badge comment-plan-badge--top"
+  [class.comment-plan-badge--compact]="compact"
+  role="status"
+>
+  <i class="bi bi-award-fill" aria-hidden="true"></i>
+  <span>{{ 'COMMENT_PLANS.BADGE_TOP_MAN' | translate }}</span>
+</span>

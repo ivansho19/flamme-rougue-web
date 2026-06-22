@@ -24,6 +24,7 @@ import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
 import { LikeButtonComponent } from './like-button/like-button.component';
 import { RulesModalComponent } from './rules-modal/rules-modal.component';
 import { CountrySearchSelectComponent } from './country-search-select/country-search-select.component';
+import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-badge.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CountrySearchSelectComponent } from './country-search-select/country-se
     CardSkeletonComponent,
     LikeButtonComponent,
     RulesModalComponent,
-    CountrySearchSelectComponent
+    CountrySearchSelectComponent,
+    CommentPlanBadgeComponent
   ],
   exports: [
     LoaderComponent,
@@ -65,7 +67,8 @@ import { CountrySearchSelectComponent } from './country-search-select/country-se
     CardSkeletonComponent,
     LikeButtonComponent,
     RulesModalComponent,
-    CountrySearchSelectComponent
+    CountrySearchSelectComponent,
+    CommentPlanBadgeComponent
   ],
   imports: [
     CommonModule,

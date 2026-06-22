@@ -1,14 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { ProfileService } from '../../shared/services/profile/profile.service';
 import { CommentsService, CommentItem } from '../../shared/services/comments/comments.service';
 import { RatingsService } from '../../shared/services/ratings/ratings.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
+import { ProfileDetailFieldsHelper } from '../../shared/clases/profileDetailFields';
+import { ProfileContactFieldsHelper } from '../../shared/clases/profileContactFields';
 import { IProfileResponse } from './models/IProfile.model';
 import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
 import { CommentPlansService } from '../../shared/services/comment-plans/comment-plans.service';
 import { CommentPlanStatus } from '../../shared/models/comment-plans.model';
+import { CommentPlanBadgeHelper, CommentPlanBadgeType } from '../../shared/clases/commentPlanBadge';
 
 @Component({
     selector: 'app-profiles',
@@ -35,6 +40,7 @@ export class ProfilesComponent implements OnInit {
     replyError: Record<string, string> = {};
     replyText: Record<string, string> = {};
     planStatus: CommentPlanStatus | null = null;
+    viewerCommentPlanBadge: CommentPlanBadgeType | null = null;
     loading = false;
     actionLoading = false;
     error = '';
@@ -42,6 +48,7 @@ export class ProfilesComponent implements OnInit {
     showRulesModal = false;
     status = '' as 'pending' | 'active';
     private embla: EmblaCarouselType | null = null;
+    private readonly authorCommentPlanBadges = new Map<string, CommentPlanBadgeType>();
     private readonly serviceLabelMap = new Map<string, string>(
       GetPosibilities.GetPosibilityOptions().map((option: { value: string; label: string }) => [option.value, option.label])
     );
@@ -65,6 +72,7 @@ export class ProfilesComponent implements OnInit {
         }
         this.loadPublicProfilePage();
       });
+      this.loadViewerCommentPlanBadge();
     }
 
     private loadPublicProfilePage(): void {
@@ -122,9 +130,13 @@ export class ProfilesComponent implements OnInit {
       }
 
       this.commentsLoading = true;
+      this.authorCommentPlanBadges.clear();
       this.commentsService.getCommentsByProfile(this.profileId).subscribe({
         next: (comments) => {
-          this.comments = Array.isArray(comments) ? comments : [];
+          this.comments = Array.isArray(comments)
+            ? comments.map((comment) => this.normalizeComment(comment))
+            : [];
+          this.enrichCommentAuthorBadges(this.comments);
           this.commentsLoading = false;
         },
         error: () => {
@@ -179,6 +191,7 @@ export class ProfilesComponent implements OnInit {
           this.newCommentText = '';
           this.commentSubmitting = false;
           this.loadComments();
+          this.loadViewerCommentPlanBadge();
         },
         error: (error) => {
           const client = localStorage.getItem('client');
@@ -316,28 +329,119 @@ export class ProfilesComponent implements OnInit {
       }
     }
 
-    get availabilityText(): string {
-      const availability = this.profileData?.availability ?? this.profileData?.availabity;
-      if (Array.isArray(availability)) {
-        return availability.join(', ');
+    get contactFields() {
+      return ProfileContactFieldsHelper.build(this.profileData);
+    }
+
+    getCommentPlanBadge(comment: CommentItem): CommentPlanBadgeType | null {
+      const fromPayload = CommentPlanBadgeHelper.resolve(comment.author ?? comment);
+      if (fromPayload) {
+        return fromPayload;
       }
-      return availability || '';
-    }
 
-    get languagesText(): string {
-      const languages = this.profileData?.languages ?? this.profileData?.language;
-      if (Array.isArray(languages)) {
-        return languages.join(', ');
+      if (comment.authorId) {
+        return this.authorCommentPlanBadges.get(comment.authorId) ?? null;
       }
-      return languages || '';
+
+      return null;
     }
 
-    get hairColorText(): string {
-      return this.profileData?.hairColor || this.profileData?.haircolor || '';
+    private normalizeComment(raw: any): CommentItem {
+      const author = raw?.author ?? {};
+
+      return {
+        ...raw,
+        author: {
+          name: author.name ?? raw.authorName ?? 'Usuario',
+          planType: author.planType ?? author.commentPlan?.planType ?? raw.authorPlanType ?? raw.planType,
+          status: author.status ?? author.commentPlan?.status ?? raw.authorPlanStatus ?? raw.status,
+          badge: author.badge ?? author.commentPlan?.badge ?? raw.authorBadge ?? raw.badge,
+          commentPlan: author.commentPlan ?? raw.authorCommentPlan ?? raw.commentPlan ?? null
+        }
+      };
     }
 
-    get eyeColorText(): string {
-      return this.profileData?.eyeColor || this.profileData?.eyecolor || '';
+    private enrichCommentAuthorBadges(comments: CommentItem[]): void {
+      const authorIds = [...new Set(
+        comments
+          .map((comment) => comment.authorId)
+          .filter((authorId): authorId is string => !!authorId)
+      )];
+
+      const idsToFetch = authorIds.filter((authorId) => {
+        const comment = comments.find((item) => item.authorId === authorId);
+        return !CommentPlanBadgeHelper.resolve(comment?.author ?? comment);
+      });
+
+      if (!idsToFetch.length) {
+        return;
+      }
+
+      forkJoin(
+        idsToFetch.map((authorId) =>
+          this.commentPlansService.getStatusByUserId(authorId).pipe(
+            catchError(() => of(null)),
+            map((status) => ({
+              authorId,
+              badge: CommentPlanBadgeHelper.resolve(status)
+            }))
+          )
+        )
+      ).subscribe((results) => {
+        results.forEach(({ authorId, badge }) => {
+          if (badge) {
+            this.authorCommentPlanBadges.set(authorId, badge);
+          }
+        });
+      });
+    }
+
+    get viewerDisplayName(): string {
+      const user = localStorage.getItem('user');
+      if (!user) {
+        return '';
+      }
+      try {
+        const parsed = JSON.parse(user);
+        if (typeof parsed === 'string') {
+          return parsed;
+        }
+        return parsed?.name || parsed?.displayName || parsed?.username || '';
+      } catch {
+        return user;
+      }
+    }
+
+    get viewerInitial(): string {
+      return (this.viewerDisplayName.charAt(0) || 'U').toUpperCase();
+    }
+
+    private loadViewerCommentPlanBadge(): void {
+      const token = localStorage.getItem('token');
+      const client = localStorage.getItem('client');
+      const isClient = client ? JSON.parse(client) : false;
+
+      if (!token || isClient) {
+        this.viewerCommentPlanBadge = null;
+        return;
+      }
+
+      this.commentPlansService.getStatus().subscribe({
+        next: (status) => {
+          this.viewerCommentPlanBadge = CommentPlanBadgeHelper.resolve(status);
+        },
+        error: () => {
+          this.viewerCommentPlanBadge = null;
+        }
+      });
+    }
+
+    get profileDetailFields() {
+      return ProfileDetailFieldsHelper.build(this.profileData, {
+        years: this.translate.instant('COMMON.YEARS'),
+        cm: this.translate.instant('COMMON.CM'),
+        kg: this.translate.instant('COMMON.KG')
+      });
     }
 
     get posibilitiesList(): string[] {
@@ -353,6 +457,10 @@ export class ProfilesComponent implements OnInit {
 
     getServiceLabel(value: string): string {
       return this.serviceLabelMap.get(value) || value;
+    }
+
+    getServiceIcon(value: string): string {
+      return GetPosibilities.getServiceIcon(value);
     }
 
     goToEditProfile() {

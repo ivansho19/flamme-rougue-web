@@ -20,8 +20,13 @@
         [class.disabled]="!plan.selectable"
         (click)="selectPlan(plan.id)">
         <div class="plan-header">
-          <h3>{{ plan.name | translate }}</h3>
-          <span class="duration" *ngIf="plan.badge">{{ plan.badge | translate }}</span>
+          <div class="plan-title-block">
+            <h3>{{ plan.name | translate }}</h3>
+            <app-comment-plan-badge
+              *ngIf="plan.badgeType"
+              [badgeType]="plan.badgeType"
+            ></app-comment-plan-badge>
+          </div>
         </div>
 
         <div class="plan-price">
@@ -30,7 +35,10 @@
         </div>
 
         <ul class="plan-features">
-          <li *ngFor="let feature of plan.features">✔ {{ feature | translate }}</li>
+          <li *ngFor="let feature of plan.features">
+            <i class="bi bi-check2" aria-hidden="true"></i>
+            <span>{{ feature | translate }}</span>
+          </li>
         </ul>
 
         <div class="plan-check" *ngIf="selectedPlanId === plan.id && plan.selectable">

@@ -208,8 +208,8 @@ export class TopRojoService {
   /**
    * Renovar TOP ROJO expirado
    */
-  renewTopRojo(topRojoId: string, planType: string): Observable<any> {
-    return this.http.post(`${this.apiTopRojo}/${topRojoId}/renew`, { planType })
+  renewTopRojo(topRojoId: string, planType: string, status: 'active' | 'pending' = 'active'): Observable<any> {
+    return this.http.post(`${this.apiTopRojo}/${topRojoId}/renew`, { planType, status })
       .pipe(finalize(() => this.loaderService.setLoaderState(false)));
   }
 

@@ -9,6 +9,7 @@ import { CreateTopRojoFormComponent } from './create-top-rojo-form/create-top-ro
 import { TopRojoPlanOption } from './plan-selection-modal-top-rojo/plan-selection-modal-top-rojo.component';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-my-top-rojo',
@@ -46,7 +47,8 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
     private cloudinaryService: CloudinaryService,
     private profileService: ProfileService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -158,6 +160,14 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
   }
 
   onRenewPlanSelected(plan: TopRojoPlanOption): void {
+    this.processRenewTopRojo(plan, 'active');
+  }
+
+  onRenewWhatsAppPlanSelected(plan: TopRojoPlanOption): void {
+    this.processRenewTopRojo(plan, 'pending');
+  }
+
+  private processRenewTopRojo(plan: TopRojoPlanOption, status: 'active' | 'pending'): void {
     const planType = plan.id;
     const topRojoId = this.topRojoId;
 
@@ -178,7 +188,7 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.topRojoService
-      .renewTopRojo(topRojoId, planType)
+      .renewTopRojo(topRojoId, planType, status)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -187,7 +197,16 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          this.toastService.showToast('FELICIDADES', 'TOP ROJO renovado exitosamente', 'success', 5);
+          if (status === 'pending') {
+            this.toastService.showToast(
+              this.translate.instant('WHATSAPP_CONFIRM.TITLE'),
+              this.translate.instant('WHATSAPP_CONFIRM.TOP_ROJO_MESSAGE'),
+              'error',
+              8
+            );
+          } else {
+            this.toastService.showToast('FELICIDADES', 'TOP ROJO renovado exitosamente', 'success', 5);
+          }
           this.closeRenewPlanModal();
           this.loadDashboard();
         },
@@ -202,7 +221,6 @@ export class MyTopRojoComponent implements OnInit, OnDestroy {
    * Manejar selección de plan y creación de TOP ROJO
    */
   onPlanSelectedForTopRojo(event: { formData: any; plan: TopRojoPlanOption; status: 'active' | 'pending' }): void {
-    this.showRenewPlanModal = true;
     const { formData, plan, status } = event;
     const { country, city, title, description, phone, photo1File, photo2File } = formData;
     const planType = plan.id;

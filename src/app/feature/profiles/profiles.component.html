@@ -23,7 +23,7 @@
     <!-- Columna derecha: información -->
     <div class="info-column">
       <header class="profile-header">
-        <div>
+        <div class="profile-header-main">
           <h1>{{ profileData.displayName }}</h1>
           <p class="subtitle location-line">
             <i class="bi bi-pin-map-fill location-icon" aria-hidden="true"></i>
@@ -31,9 +31,12 @@
           </p>
           <p class="subtitle" *ngIf="profileData.zone">{{ 'PROFILE.ZONE' | translate }} <span>{{ profileData.zone }}</span></p>
         </div>
-        <button class="contact-pill phone-pill" type="button" *ngIf="profileData.phone != null">
-          <span class="phone">{{ profileData.phone }}</span>
-        </button>
+        <div class="profile-header-actions" *ngIf="profileData.phone">
+          <button class="header-whatsapp-pill" type="button" (click)="openWhatsApp()">
+            <i class="bi bi-whatsapp" aria-hidden="true"></i>
+            <span>{{ 'PROFILE.SEND_MESSAGE' | translate }}</span>
+          </button>
+        </div>
       </header>
 
       <div class="profile-divider"></div>
@@ -57,68 +60,109 @@
         (likeToggled)="toggleLike()"
       ></app-like-button>
 
-      <div class="card">
+      <div class="card contact-card" *ngIf="contactFields.length || profileData.phone">
         <h2 class="custom-card-title">{{ 'PROFILE.CONTACT' | translate }}</h2>
-        <div class="contact-grid">
-          <div><strong>{{ 'PROFILE.PHONE' | translate }}:</strong> <span>{{ profileData.phone }}</span></div>
-          <div><strong>{{ 'PROFILE.AVAILABILITY' | translate }}:</strong> {{ availabilityText }}</div>
-          <div><strong>{{ 'PROFILE.NO_CALL' | translate }}</strong></div>
-          <button class="btn-custom" type="button" (click)="openWhatsApp()">
-            <i class="bi bi-whatsapp" aria-hidden="true"></i>
-            {{ 'PROFILE.SEND_MESSAGE' | translate }}
-          </button>
+        <div class="contact-detail-grid" role="list" *ngIf="contactFields.length">
+          <article class="contact-detail-item" *ngFor="let field of contactFields" role="listitem">
+            <span class="contact-detail-icon" aria-hidden="true">
+              <i class="bi" [ngClass]="field.icon"></i>
+            </span>
+            <div class="contact-detail-body">
+              <span class="contact-detail-label">{{ field.labelKey | translate }}</span>
+              <span class="contact-detail-value">{{ field.value }}</span>
+            </div>
+          </article>
         </div>
+        <button
+          class="contact-whatsapp-btn"
+          type="button"
+          *ngIf="profileData.phone"
+          (click)="openWhatsApp()"
+        >
+          <span class="contact-whatsapp-icon" aria-hidden="true">
+            <i class="bi bi-whatsapp"></i>
+          </span>
+          <span class="contact-whatsapp-copy">
+            <span class="contact-whatsapp-label">{{ 'PROFILE.SEND_MESSAGE' | translate }}</span>
+            <span class="contact-whatsapp-hint">{{ 'PROFILE.NO_CALL' | translate }}</span>
+          </span>
+          <i class="bi bi-arrow-right-short contact-whatsapp-arrow" aria-hidden="true"></i>
+        </button>
       </div>
 
-      <div class="card">
+      <div class="card profile-details-card" *ngIf="profileDetailFields.length">
         <h2 class="custom-card-title">{{ 'PROFILE.DETAILS' | translate }}</h2>
-        <div class="profile-grid">
-          <div><strong>{{ 'PROFILE.GENDER' | translate }}:</strong> {{ profileData.gender }}</div>
-          <div><strong>{{ 'PROFILE.SEXUAL_ORIENTATION' | translate }}:</strong> {{ profileData.orientation }}</div>
-          <div><strong>{{ 'PROFILE.HAIR_COLOR' | translate }}:</strong> {{ hairColorText }}</div>
-          <div><strong>{{ 'PROFILE.AGE' | translate }}:</strong> {{ profileData.age }} {{ 'COMMON.YEARS' | translate }}</div>
-          <div><strong>{{ 'PROFILE.EYE_COLOR' | translate }}:</strong> {{ eyeColorText }}</div>
-          <div><strong>{{ 'PROFILE.NATIONALITY' | translate }}:</strong> {{ profileData.nationality }}</div>
-          <div><strong>{{ 'PROFILE.LANGUAGES' | translate }}:</strong> {{ languagesText }}</div>
-          <div><strong>{{ 'PROFILE.HEIGHT' | translate }}:</strong> {{ profileData.height }}{{ 'COMMON.CM' | translate }}</div>
-          <div><strong>{{ 'PROFILE.WEIGHT' | translate }}:</strong> {{ profileData.weight }}{{ 'COMMON.KG' | translate }}</div>
-           <div><strong>{{ 'PROFILE_FORM.ALCOHOL_PLACEHOLDER' | translate }}:</strong> {{ profileData.alcohol }}</div>
-            <div><strong>{{ 'PROFILE_FORM.CIGARETTE_PLACEHOLDER' | translate }}:</strong> {{ profileData.cigarette }}</div>
+        <div class="profile-detail-grid" role="list">
+          <article class="profile-detail-item" *ngFor="let field of profileDetailFields" role="listitem">
+            <span class="profile-detail-icon" aria-hidden="true">
+              <i class="bi" [ngClass]="field.icon"></i>
+            </span>
+            <div class="profile-detail-body">
+              <span class="profile-detail-label">{{ field.labelKey | translate }}</span>
+              <span class="profile-detail-value">{{ field.value }}</span>
+            </div>
+          </article>
         </div>
       </div>
 
-      <div class="card" *ngIf="posibilitiesList.length">
+      <div class="card possibilities-card" *ngIf="posibilitiesList.length">
         <h2 class="custom-card-title">{{ 'PROFILE.POSSIBILITIES' | translate }}</h2>
-        <ul class="possibilities-list">
-          <li *ngFor="let item of posibilitiesList">✔ {{ getServiceLabel(item) | translate }}</li>
-        </ul>
+        <div class="possibilities-grid" role="list">
+          <article class="possibility-item" *ngFor="let item of posibilitiesList" role="listitem">
+            <span class="possibility-icon" aria-hidden="true">
+              <i class="bi" [ngClass]="getServiceIcon(item)"></i>
+            </span>
+            <span class="possibility-label">{{ getServiceLabel(item) | translate }}</span>
+          </article>
+        </div>
       </div>
 
       <div class="card comments-card">
         <div class="comments-header">
-          <h2 class="custom-card-title">{{ 'PROFILE.COMMENTS_TITLE' | translate }}</h2>
+          <div class="comments-header-title">
+            <span class="comments-header-icon" aria-hidden="true">
+              <i class="bi bi-chat-square-text"></i>
+            </span>
+            <h2 class="custom-card-title">{{ 'PROFILE.COMMENTS_TITLE' | translate }}</h2>
+          </div>
           <span class="comments-count">{{ comments.length }}</span>
         </div>
 
         <div class="comment-list">
           <div class="comments-loading" *ngIf="commentsLoading">{{ 'PROFILE.COMMENTS_LOADING' | translate }}</div>
           <div class="comments-empty" *ngIf="!commentsLoading && !comments.length">
-            {{ 'PROFILE.COMMENTS_EMPTY' | translate }}
+            <span class="comments-empty-icon" aria-hidden="true">
+              <i class="bi bi-chat-dots"></i>
+            </span>
+            <p>{{ 'PROFILE.COMMENTS_EMPTY' | translate }}</p>
           </div>
-          <div class="comment-item" *ngFor="let comment of comments">
+          <article class="comment-item" *ngFor="let comment of comments">
             <div class="comment-avatar">{{ comment.author?.name?.charAt(0) || 'U' }}</div>
             <div class="comment-body">
               <div class="comment-meta">
-                <span class="comment-author">{{ comment.author?.name || 'Usuario' }}</span>
-                <span class="comment-time" *ngIf="comment.createdAt">{{ comment.createdAt | date:'mediumDate' }}</span>
+                <div class="comment-name-block">
+                  <div class="comment-author-row">
+                    <span class="comment-author">{{ comment.author?.name || 'Usuario' }}</span>
+                    <app-comment-plan-badge
+                      *ngIf="getCommentPlanBadge(comment) as authorBadge"
+                      [badgeType]="authorBadge"
+                    ></app-comment-plan-badge>
+                  </div>
+                  <span class="comment-time" *ngIf="comment.createdAt">{{ comment.createdAt | date:'mediumDate' }}</span>
+                </div>
               </div>
               <p class="comment-text">{{ comment.text }}</p>
-              <p class="comment-reply" *ngIf="comment.providerReply">
-                <span class="comment-reply-label">
-                  {{ (profileData.displayName ? ('PROFILE.COMMENT_REPLY_LABEL_NAME' | translate:{ name: profileData.displayName }) : ('PROFILE.COMMENT_REPLY_LABEL_FALLBACK' | translate)) }}:
+              <div class="comment-reply" *ngIf="comment.providerReply">
+                <span class="comment-reply-icon" aria-hidden="true">
+                  <i class="bi bi-reply-fill"></i>
                 </span>
-                {{ comment.providerReply }}
-              </p>
+                <div class="comment-reply-content">
+                  <span class="comment-reply-label">
+                    {{ (profileData.displayName ? ('PROFILE.COMMENT_REPLY_LABEL_NAME' | translate:{ name: profileData.displayName }) : ('PROFILE.COMMENT_REPLY_LABEL_FALLBACK' | translate)) }}
+                  </span>
+                  <p class="comment-reply-text">{{ comment.providerReply }}</p>
+                </div>
+              </div>
               <div class="reply-box" *ngIf="isProfileOwner() && !comment.providerReply">
                 <textarea
                   rows="2"
@@ -133,7 +177,7 @@
                   </button>
                   <button
                     type="button"
-                    class="comment-btn"
+                    class="comment-btn primary"
                     (click)="submitReply(comment)"
                     [disabled]="replySubmitting[comment._id]"
                   >
@@ -142,10 +186,24 @@
                 </div>
               </div>
             </div>
-          </div>
+          </article>
         </div>
-        <div class="comment-input">
-          <div class="comment-avatar">U</div>
+
+        <div class="comment-compose">
+          <div class="comment-compose-head">
+            <div class="comment-avatar comment-avatar--compose">{{ viewerInitial }}</div>
+            <div class="comment-compose-identity">
+              <div class="comment-compose-name-row" *ngIf="viewerDisplayName">
+                <span class="comment-compose-name">{{ viewerDisplayName }}</span>
+                <app-comment-plan-badge
+                  *ngIf="viewerCommentPlanBadge"
+                  [badgeType]="viewerCommentPlanBadge"
+                  [compact]="true"
+                ></app-comment-plan-badge>
+              </div>
+              <span class="comment-compose-label">{{ 'PROFILE.COMMENT_PLACEHOLDER' | translate }}</span>
+            </div>
+          </div>
           <div class="comment-box">
             <textarea
               rows="3"
@@ -159,7 +217,7 @@
               <button type="button" class="comment-btn ghost" (click)="onCommentInput('')">
                 {{ 'PROFILE.COMMENT_CANCEL' | translate }}
               </button>
-              <button type="button" class="comment-btn" (click)="submitComment()" [disabled]="commentSubmitting">
+              <button type="button" class="comment-btn primary" (click)="submitComment()" [disabled]="commentSubmitting">
                 {{ commentSubmitting ? ('PROFILE.COMMENT_SUBMITTING' | translate) : ('PROFILE.COMMENT_SUBMIT' | translate) }}
               </button>
             </div>

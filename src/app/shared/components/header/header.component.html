@@ -6,7 +6,14 @@
 
     <!-- 🖥️ Menú Desktop -->
     <div class="header-right desktop-menu">
-        <span class="username" *ngIf="getUserName()">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
+        <span class="username" *ngIf="getUserName()">
+          <span class="username-greeting">{{ 'HEADER.GREETING' | translate }}, {{ getUserName() }}</span>
+          <app-comment-plan-badge
+            *ngIf="viewerCommentPlanBadge"
+            [badgeType]="viewerCommentPlanBadge"
+            [compact]="true"
+          ></app-comment-plan-badge>
+        </span>
         <div class="header-icons">
             <button class="icon-btn" [title]="'HEADER.SEARCH' | translate" (click)="toggleSearch()"><i class="bi bi-search"></i></button>
             <div class="notif-wrapper" *ngIf="isAdmin()">
@@ -185,7 +192,14 @@
     <!-- 📱 Menú Mobile -->
     <nav class="mobile-menu" [class.show]="mobileMenuOpen">
         <div class="mobile-menu-items">
-            <span class="mobile-username" *ngIf="getUserName()">{{ getUserName() }}</span>
+            <span class="mobile-username" *ngIf="getUserName()">
+              <span>{{ getUserName() }}</span>
+              <app-comment-plan-badge
+                *ngIf="viewerCommentPlanBadge"
+                [badgeType]="viewerCommentPlanBadge"
+                [compact]="true"
+              ></app-comment-plan-badge>
+            </span>
             <button class="mobile-item" type="button" (click)="toggleSearch(); closeMobileMenu()">
                 <i class="bi bi-search"></i> {{ 'HEADER.SEARCH' | translate }}
             </button>
