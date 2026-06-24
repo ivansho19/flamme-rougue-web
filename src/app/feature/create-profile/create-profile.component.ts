@@ -649,7 +649,15 @@ export class ProfileEditComponent implements OnInit {
     }
 
     get canPublish(): boolean {
-        return this.isProfileComplete && !!this.selectedPlanId && this.isPlanValidForImages;
+        if (!this.isProfileComplete) {
+            return false;
+        }
+
+        if (this.exceedsMaxPlanImages) {
+            return false;
+        }
+
+        return true;
     }
 
     get totalProfileImages(): number {
@@ -668,7 +676,10 @@ export class ProfileEditComponent implements OnInit {
     }
 
     get showPlanImageLimitWarning(): boolean {
-        return this.totalProfileImages > 0 && !this.isPlanValidForImages;
+        return PlanImageLimitsHelper.hasSelectedPlanImageConflict(
+            this.selectedPlanId,
+            this.totalProfileImages
+        );
     }
 
     get exceedsMaxPlanImages(): boolean {
@@ -707,7 +718,10 @@ export class ProfileEditComponent implements OnInit {
     }
 
     private enforcePlanImageLimit(): boolean {
-        if (this.isPlanValidForImages) {
+        if (!PlanImageLimitsHelper.hasSelectedPlanImageConflict(
+            this.selectedPlanId,
+            this.totalProfileImages
+        )) {
             return true;
         }
 

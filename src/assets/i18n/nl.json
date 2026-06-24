@@ -385,7 +385,10 @@
       "TAB_PENDING": "In behandeling",
       "REJECT_DISABLED": "Reject-endpoint niet beschikbaar",
       "VIEW_ALL": "Bekijk alle in behandeling",
-      "EMPTY": "Geen KYC in behandeling"
+      "EMPTY": "Geen KYC in behandeling",
+      "PHONE": "Telefoon",
+      "ZOOM_IMAGE": "Document bekijken",
+      "DOWNLOAD_IMAGE": "Document downloaden"
     },
     "TOP_ROJO": {
       "TITLE": "Globaal TOP ROOD-beheer",

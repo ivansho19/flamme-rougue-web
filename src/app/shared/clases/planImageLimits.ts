@@ -72,4 +72,15 @@ export class PlanImageLimitsHelper {
       requiredPlanLimit
     };
   }
+
+  static hasSelectedPlanImageConflict(
+    selectedPlanId: number | null | undefined,
+    totalImages: number
+  ): boolean {
+    if (totalImages === 0 || selectedPlanId == null) {
+      return false;
+    }
+
+    return !this.validate(selectedPlanId, totalImages).isValid;
+  }
 }

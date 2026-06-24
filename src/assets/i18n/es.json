@@ -385,7 +385,10 @@
       "TAB_PENDING": "Pendientes",
       "REJECT_DISABLED": "Endpoint de rechazo pendiente",
       "VIEW_ALL": "Ver todos los pendientes",
-      "EMPTY": "No hay KYC pendientes"
+      "EMPTY": "No hay KYC pendientes",
+      "PHONE": "Teléfono",
+      "ZOOM_IMAGE": "Ver documento",
+      "DOWNLOAD_IMAGE": "Descargar documento"
     },
     "TOP_ROJO": {
       "TITLE": "Gestión global de TOP ROJO",

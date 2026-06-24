@@ -496,20 +496,59 @@
 
         <div class="kyc-list">
           <div class="kyc-card" *ngFor="let kyc of displayedKycItems">
-            <img [src]="getKycAvatar(kyc)" alt="KYC" />
+            <div class="kyc-document-thumb">
+              <button
+                type="button"
+                class="kyc-document-image-btn"
+                [disabled]="!hasKycDocumentImage(kyc)"
+                (click)="openKycImagePreview(kyc)"
+                [attr.aria-label]="'ADMIN_DASHBOARD.KYC.ZOOM_IMAGE' | translate">
+                <img [src]="getKycAvatar(kyc)" [alt]="kyc?.fullName || 'KYC'" />
+                <span class="kyc-document-overlay" *ngIf="hasKycDocumentImage(kyc)">
+                  <i class="bi bi-zoom-in" aria-hidden="true"></i>
+                </span>
+              </button>
+              <div class="kyc-document-tools" *ngIf="hasKycDocumentImage(kyc)">
+                <button
+                  type="button"
+                  class="kyc-tool-btn"
+                  (click)="openKycImagePreview(kyc)"
+                  [matTooltip]="'ADMIN_DASHBOARD.KYC.ZOOM_IMAGE' | translate">
+                  <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  class="kyc-tool-btn"
+                  (click)="downloadKycImage(kyc)"
+                  [matTooltip]="'ADMIN_DASHBOARD.KYC.DOWNLOAD_IMAGE' | translate">
+                  <i class="bi bi-download" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
             <div class="kyc-info">
-              <strong>{{ kyc?.fullName || '---' }}</strong>
-              <span>{{ getKycDocumentType(kyc) }} · {{ getKycDocumentNumber(kyc) }}</span>
+              <div class="kyc-info-head">
+                <strong>{{ kyc?.fullName || '---' }}</strong>
+                <span [class]="getKycClassFromItem(kyc)">{{ getKycLabelFromItem(kyc) }}</span>
+              </div>
+              <span class="kyc-phone" *ngIf="getKycPhone(kyc)">
+                <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+                {{ getKycPhone(kyc) }}
+              </span>
+              <span class="kyc-meta">{{ getKycDocumentType(kyc) }} · {{ getKycDocumentNumber(kyc) }}</span>
               <small>
                 {{ 'ADMIN_DASHBOARD.KYC.UPLOADED' | translate }}
                 {{ getKycUploadedAt(kyc) | date: 'dd/MM/yyyy' }}
               </small>
             </div>
             <div class="kyc-actions">
-              <button class="icon-btn success" type="button" (click)="openVerifyConfirm(kyc)">
+              <button
+                class="icon-btn success"
+                type="button"
+                *ngIf="!isKycVerified(kyc)"
+                (click)="openVerifyConfirm(kyc)">
                 <i class="bi bi-check2"></i>
               </button>
-              <button class="icon-btn ghost" type="button">
+              <button class="icon-btn ghost" type="button" disabled>
                 <i class="bi bi-x"></i>
               </button>
             </div>
@@ -543,3 +582,34 @@
   (confirm)="confirmActionExecution()"
   (cancel)="closeConfirm()">
 </app-confirm-action-modal>
+
+<div class="kyc-preview-modal" *ngIf="kycPreviewItem" role="dialog" aria-modal="true">
+  <div class="kyc-preview-backdrop" (click)="closeKycImagePreview()"></div>
+  <div class="kyc-preview-dialog">
+    <header class="kyc-preview-header">
+      <div>
+        <h3>{{ kycPreviewItem?.fullName || '---' }}</h3>
+        <p>{{ getKycDocumentType(kycPreviewItem) }} · {{ getKycDocumentNumber(kycPreviewItem) }}</p>
+        <p class="kyc-preview-phone" *ngIf="getKycPhone(kycPreviewItem)">
+          <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+          {{ getKycPhone(kycPreviewItem) }}
+        </p>
+      </div>
+      <button type="button" class="kyc-preview-close" (click)="closeKycImagePreview()" aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+    <div class="kyc-preview-body">
+      <img [src]="getKycAvatar(kycPreviewItem)" [alt]="kycPreviewItem?.fullName || 'KYC document'" />
+    </div>
+    <footer class="kyc-preview-footer">
+      <button type="button" class="kyc-preview-btn ghost" (click)="closeKycImagePreview()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button type="button" class="kyc-preview-btn primary" (click)="downloadKycImage(kycPreviewItem)">
+        <i class="bi bi-download" aria-hidden="true"></i>
+        {{ 'ADMIN_DASHBOARD.KYC.DOWNLOAD_IMAGE' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

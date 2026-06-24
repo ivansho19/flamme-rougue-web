@@ -39,6 +39,7 @@ export class AdminDashboardComponent implements OnInit {
   confirmAction: 'delete' | 'verify' | 'activate-top' | 'cancel-top' | 'delete-user' | 'activate-comment-plan' | 'expire-comment-plan' | null = null;
   selectedProfile: any | null = null;
   selectedKyc: any | null = null;
+  kycPreviewItem: any | null = null;
   selectedTopRojo: any | null = null;
   selectedUser: any | null = null;
 
@@ -594,6 +595,10 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   openActivateTopConfirm(topRojo: any): void {
+    if (!this.canActivateTopRojo(topRojo)) {
+      return;
+    }
+
     this.selectedTopRojo = topRojo;
     this.confirmAction = 'activate-top';
     this.confirmTitle = this.translate.instant('ADMIN_DASHBOARD.CONFIRM.ACTIVATE_TOP_TITLE');
@@ -612,6 +617,11 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   activateTopRojo(topRojo: any): void {
+    if (!this.canActivateTopRojo(topRojo)) {
+      this.closeConfirm();
+      return;
+    }
+
     const topRojoId = this.getTopRojoId(topRojo);
     if (!topRojoId || this.topRojoUpdatingIds.has(topRojoId)) {
       this.closeConfirm();
@@ -919,18 +929,56 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getTopRojoStatus(topRojo: any): 'active' | 'pending' | 'expired' | 'cancelled' {
-    const rawStatus = typeof topRojo?.status === 'string' ? topRojo.status.toLowerCase() : '';
+    const rawStatus = this.normalizeTopRojoStatus(topRojo?.status);
 
-    if (rawStatus === 'pending' || rawStatus === 'active' || rawStatus === 'expired' || rawStatus === 'cancelled') {
-      return rawStatus;
+    if (rawStatus === 'cancelled') {
+      return 'cancelled';
     }
 
-    const endDate = topRojo?.endDate ? new Date(topRojo.endDate) : null;
-    if (endDate && !Number.isNaN(endDate.getTime()) && endDate.getTime() < Date.now()) {
+    if (rawStatus === 'expired' || this.isTopRojoPastEndDate(topRojo)) {
       return 'expired';
     }
 
+    if (rawStatus === 'pending') {
+      return 'pending';
+    }
+
+    if (rawStatus === 'active') {
+      return 'active';
+    }
+
     return 'active';
+  }
+
+  private normalizeTopRojoStatus(status: unknown): string {
+    if (typeof status !== 'string') {
+      return '';
+    }
+
+    const normalized = status.trim().toLowerCase();
+
+    if (normalized === 'expirado' || normalized === 'expired' || normalized === 'expire') {
+      return 'expired';
+    }
+
+    if (normalized === 'cancelado' || normalized === 'cancelled' || normalized === 'canceled') {
+      return 'cancelled';
+    }
+
+    if (normalized === 'pendiente' || normalized === 'pending') {
+      return 'pending';
+    }
+
+    if (normalized === 'activo' || normalized === 'active') {
+      return 'active';
+    }
+
+    return normalized;
+  }
+
+  private isTopRojoPastEndDate(topRojo: any): boolean {
+    const endDate = topRojo?.endDate ? new Date(topRojo.endDate) : null;
+    return !!(endDate && !Number.isNaN(endDate.getTime()) && endDate.getTime() < Date.now());
   }
 
   getTopRojoStatusLabel(topRojo: any): string {
@@ -1100,7 +1148,70 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getKycAvatar(kycItem: any): string {
-    return kycItem?.documentImage?.[0]?.url || 'assets/images/gift/present.png';
+    return kycItem?.documentImage?.[0]?.url || kycItem?.documentImage?.url || 'assets/images/gift/present.png';
+  }
+
+  getKycPhone(kycItem: any): string {
+    const phone = kycItem?.phone
+      || kycItem?.contactPhone
+      || kycItem?.profile?.phone
+      || kycItem?.user?.phone
+      || '';
+    return typeof phone === 'string' ? phone.trim() : '';
+  }
+
+  hasKycDocumentImage(kycItem: any): boolean {
+    const url = this.getKycAvatar(kycItem);
+    return !!url && !url.includes('assets/images/gift/present.png');
+  }
+
+  openKycImagePreview(kycItem: any): void {
+    if (!this.hasKycDocumentImage(kycItem)) {
+      return;
+    }
+    this.kycPreviewItem = kycItem;
+  }
+
+  closeKycImagePreview(): void {
+    this.kycPreviewItem = null;
+  }
+
+  downloadKycImage(kycItem: any): void {
+    const url = this.getKycAvatar(kycItem);
+    if (!this.hasKycDocumentImage(kycItem)) {
+      return;
+    }
+
+    const fileName = this.getKycDownloadFileName(kycItem);
+
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch(() => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      });
+  }
+
+  private getKycDownloadFileName(kycItem: any): string {
+    const name = (kycItem?.fullName || 'kyc-document')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const extension = this.getKycImageExtension(kycItem);
+    return `${name || 'kyc-document'}-${this.getKycId(kycItem) || 'doc'}.${extension}`;
+  }
+
+  private getKycImageExtension(kycItem: any): string {
+    const url = this.getKycAvatar(kycItem).split('?')[0];
+    const match = url.match(/\.([a-zA-Z0-9]+)$/);
+    return match?.[1]?.toLowerCase() || 'jpg';
   }
 
   getUserId(user: any): string {

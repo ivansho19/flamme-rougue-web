@@ -385,7 +385,10 @@
       "TAB_PENDING": "En attente",
       "REJECT_DISABLED": "Point de rejet indisponible",
       "VIEW_ALL": "Voir tous les en attente",
-      "EMPTY": "Aucun KYC en attente"
+      "EMPTY": "Aucun KYC en attente",
+      "PHONE": "Téléphone",
+      "ZOOM_IMAGE": "Voir le document",
+      "DOWNLOAD_IMAGE": "Télécharger le document"
     },
     "TOP_ROJO": {
       "TITLE": "Gestion globale du TOP ROUGE",

@@ -561,7 +561,10 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   get showPlanImageLimitWarning(): boolean {
-    return this.totalProfileImages > 0 && !this.isPlanValidForImages;
+    return PlanImageLimitsHelper.hasSelectedPlanImageConflict(
+      this.selectedPlanId,
+      this.totalProfileImages
+    );
   }
 
   get exceedsMaxPlanImages(): boolean {
@@ -596,7 +599,10 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   private enforcePlanImageLimit(): boolean {
-    if (this.isPlanValidForImages) {
+    if (!PlanImageLimitsHelper.hasSelectedPlanImageConflict(
+      this.selectedPlanId,
+      this.totalProfileImages
+    )) {
       return true;
     }
 

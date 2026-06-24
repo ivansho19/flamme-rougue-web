@@ -385,7 +385,10 @@
       "TAB_PENDING": "Pending",
       "REJECT_DISABLED": "Reject endpoint not available",
       "VIEW_ALL": "View all pending",
-      "EMPTY": "No pending KYC"
+      "EMPTY": "No pending KYC",
+      "PHONE": "Phone",
+      "ZOOM_IMAGE": "View document",
+      "DOWNLOAD_IMAGE": "Download document"
     },
     "TOP_ROJO": {
       "TITLE": "Global TOP RED management",
