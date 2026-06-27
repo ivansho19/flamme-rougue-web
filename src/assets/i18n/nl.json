@@ -251,6 +251,23 @@
     "CANCEL": "Annuleren",
     "BACK": "Terug"
   },
+  "PLAN_SELECTION_MODAL": {
+    "PROMO_HAVE_CODE": "Ik heb een code",
+    "PROMO_HIDE": "Promotiecode verbergen",
+    "PROMO_EYEBROW": "Alleen bij profiel aanmaken",
+    "PROMO_TITLE": "Probeer je plan 7 dagen gratis",
+    "PROMO_HINT": "Kies hierboven een plan, voer de code in en publiceer zonder PayPal of WhatsApp.",
+    "PROMO_PLACEHOLDER": "Promotiecode",
+    "PROMO_INPUT_PLACEHOLDER": "Bijv. GRATIS7DIAS",
+    "PROMO_APPLY": "Code toepassen",
+    "PROMO_REQUIRED": "Voer een promotiecode in.",
+    "PROMO_INVALID": "Ongeldige code. Controleer en probeer opnieuw.",
+    "PROMO_SELECT_PLAN": "Selecteer eerst een plan voordat je de code toepast.",
+    "PROMO_SUCCESS_TITLE": "7 dagen gratis geactiveerd",
+    "PROMO_SUCCESS_DESC": "Publiceer je profiel met {{planName}} zonder PayPal of WhatsApp.",
+    "PROMO_REMOVE": "Code verwijderen",
+    "PROMO_PUBLISH_FREE": "Gratis publiceren"
+  },
   "WHATSAPP_CONFIRM": {
     "TITLE": "WhatsApp-betaling bevestigen",
     "CTA": "Ga naar WhatsApp",

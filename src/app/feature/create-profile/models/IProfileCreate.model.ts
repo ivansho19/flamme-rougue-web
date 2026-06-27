@@ -41,4 +41,5 @@ export interface IProfileCreateRequest {
   isActiveProfile?: boolean;
   isVerify?: boolean;
   blockedCountries?: string[];
+  promoCode?: string;
 }

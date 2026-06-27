@@ -251,6 +251,23 @@
     "CANCEL": "Annuler",
     "BACK": "Retour"
   },
+  "PLAN_SELECTION_MODAL": {
+    "PROMO_HAVE_CODE": "J'ai un code",
+    "PROMO_HIDE": "Masquer le code promo",
+    "PROMO_EYEBROW": "Création de profil uniquement",
+    "PROMO_TITLE": "Essayez votre plan 7 jours gratuits",
+    "PROMO_HINT": "Choisissez un plan ci-dessus, saisissez le code et publiez sans PayPal ni WhatsApp.",
+    "PROMO_PLACEHOLDER": "Code promo",
+    "PROMO_INPUT_PLACEHOLDER": "Ex. GRATIS7DIAS",
+    "PROMO_APPLY": "Appliquer le code",
+    "PROMO_REQUIRED": "Saisissez un code promo.",
+    "PROMO_INVALID": "Code invalide. Vérifiez-le et réessayez.",
+    "PROMO_SELECT_PLAN": "Sélectionnez un plan avant d'appliquer le code.",
+    "PROMO_SUCCESS_TITLE": "7 jours gratuits activés",
+    "PROMO_SUCCESS_DESC": "Publiez votre profil avec {{planName}} sans PayPal ni WhatsApp.",
+    "PROMO_REMOVE": "Retirer le code",
+    "PROMO_PUBLISH_FREE": "Publier gratuitement"
+  },
   "WHATSAPP_CONFIRM": {
     "TITLE": "Confirmer le paiement WhatsApp",
     "CTA": "Aller sur WhatsApp",

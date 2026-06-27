@@ -542,7 +542,8 @@
     [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
     (close)="closePlanModal()"
     (paymentCompleted)="handlePlanSelectionFromModal($event)"
-    (whatsAppConfirmed)="handleWhatsAppConfirmFromModal($event)">
+    (whatsAppConfirmed)="handleWhatsAppConfirmFromModal($event)"
+    (promoConfirmed)="handlePromoFromModal($event)">
   </app-plan-selection-modal>
 
   <!-- Publish Button - Triggers plan selection if not chosen yet -->

@@ -6,6 +6,13 @@ import { environment } from '../../../../environments/environment';
 import { PaymentService } from '../../services/payment/payment.service';
 import { PayPalButtonService } from '../../services/paypal/paypal-button.service';
 
+export const PROFILE_CREATE_FREE_TRIAL_PROMO_CODE = 'GRATIS7DIAS';
+
+export interface PlanPromoSelection {
+  plan: PlanOption;
+  promoCode: string;
+}
+
 @Component({
   selector: 'app-plan-selection-modal',
   templateUrl: './plan-selection-modal.component.html',
@@ -20,11 +27,16 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   @Output() planSelected = new EventEmitter<PlanOption>();
   @Output() paymentCompleted = new EventEmitter<PlanOption>();
   @Output() whatsAppConfirmed = new EventEmitter<PlanOption>();
+  @Output() promoConfirmed = new EventEmitter<PlanPromoSelection>();
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
 
   selectedPlanId: number | null = null;
   paypalError = '';
+  promoCodeInput = '';
+  promoError = '';
+  promoApplied = false;
+  showPromoPanel = false;
   private readonly whatsAppPhone = '51999999999';
   isWhatsAppConfirmOpen = false;
 
@@ -95,6 +107,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
       if (this.isOpen) {
         this.schedulePayPalRender();
       } else {
+        this.resetPromoState();
         this.paypalError = '';
       }
     }
@@ -109,6 +122,77 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   selectPlan(planId: number): void {
     this.selectedPlanId = planId;
     this.paypalError = '';
+    if (this.promoApplied) {
+      this.promoError = '';
+    }
+  }
+
+  applyPromoCode(): void {
+    const normalized = this.promoCodeInput.trim().toUpperCase();
+
+    if (!normalized) {
+      this.promoError = this.translate.instant('PLAN_SELECTION_MODAL.PROMO_REQUIRED');
+      this.promoApplied = false;
+      return;
+    }
+
+    if (normalized !== PROFILE_CREATE_FREE_TRIAL_PROMO_CODE) {
+      this.promoError = this.translate.instant('PLAN_SELECTION_MODAL.PROMO_INVALID');
+      this.promoApplied = false;
+      return;
+    }
+
+    if (!this.selectedPlanId) {
+      this.promoError = this.translate.instant('PLAN_SELECTION_MODAL.PROMO_SELECT_PLAN');
+      this.promoApplied = false;
+      return;
+    }
+
+    this.promoApplied = true;
+    this.promoError = '';
+    this.paypalError = '';
+  }
+
+  clearPromoCode(): void {
+    this.resetPromoState();
+  }
+
+  openPromoPanel(): void {
+    this.showPromoPanel = true;
+    this.promoError = '';
+  }
+
+  closePromoPanel(): void {
+    if (this.promoApplied) {
+      return;
+    }
+    this.showPromoPanel = false;
+    this.promoCodeInput = '';
+    this.promoError = '';
+  }
+
+  confirmPromoPublish(): void {
+    const plan = this.getSelectedPlan();
+    if (!plan || !this.promoApplied) {
+      this.promoError = this.translate.instant('PLAN_SELECTION_MODAL.PROMO_SELECT_PLAN');
+      return;
+    }
+
+    this.promoConfirmed.emit({
+      plan,
+      promoCode: PROFILE_CREATE_FREE_TRIAL_PROMO_CODE
+    });
+  }
+
+  get appliedPromoPlanName(): string {
+    return this.getSelectedPlan()?.name || '';
+  }
+
+  private resetPromoState(): void {
+    this.promoCodeInput = '';
+    this.promoError = '';
+    this.promoApplied = false;
+    this.showPromoPanel = false;
   }
 
   confirmPlan(): void {

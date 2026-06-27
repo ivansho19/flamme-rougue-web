@@ -101,6 +101,70 @@
 
       </div>
 
+      <!-- Promo toggle (solo creación de perfil) -->
+      <div class="promo-toggle-wrap" *ngIf="!updateMode && !showPromoPanel && !promoApplied">
+        <button class="promo-toggle-btn" type="button" (click)="openPromoPanel()">
+          <i class="bi bi-ticket-perforated" aria-hidden="true"></i>
+          {{ 'PLAN_SELECTION_MODAL.PROMO_HAVE_CODE' | translate }}
+        </button>
+      </div>
+
+      <!-- Promo code panel -->
+      <section class="promo-panel" *ngIf="!updateMode && (showPromoPanel || promoApplied)">
+        <div class="promo-panel-header">
+          <div class="promo-panel-icon" aria-hidden="true">
+            <i class="bi bi-gift"></i>
+          </div>
+          <div class="promo-panel-heading">
+            <p class="promo-panel-eyebrow">{{ 'PLAN_SELECTION_MODAL.PROMO_EYEBROW' | translate }}</p>
+            <h3>{{ 'PLAN_SELECTION_MODAL.PROMO_TITLE' | translate }}</h3>
+            <p class="promo-panel-hint">{{ 'PLAN_SELECTION_MODAL.PROMO_HINT' | translate }}</p>
+          </div>
+          <button
+            *ngIf="!promoApplied"
+            class="promo-panel-close"
+            type="button"
+            [attr.aria-label]="'PLAN_SELECTION_MODAL.PROMO_HIDE' | translate"
+            (click)="closePromoPanel()">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="promo-panel-body" *ngIf="!promoApplied">
+          <label class="promo-input-label" for="profile-promo-code">
+            {{ 'PLAN_SELECTION_MODAL.PROMO_PLACEHOLDER' | translate }}
+          </label>
+          <div class="promo-input-row">
+            <input
+              id="profile-promo-code"
+              type="text"
+              class="promo-input"
+              [(ngModel)]="promoCodeInput"
+              [placeholder]="'PLAN_SELECTION_MODAL.PROMO_INPUT_PLACEHOLDER' | translate"
+              (keyup.enter)="applyPromoCode()"
+              autocomplete="off"
+              spellcheck="false" />
+            <button class="btn btn-promo-apply" type="button" (click)="applyPromoCode()">
+              {{ 'PLAN_SELECTION_MODAL.PROMO_APPLY' | translate }}
+            </button>
+          </div>
+          <p class="promo-error" *ngIf="promoError">{{ promoError }}</p>
+        </div>
+
+        <div class="promo-success" *ngIf="promoApplied">
+          <div class="promo-success-badge">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ 'PLAN_SELECTION_MODAL.PROMO_SUCCESS_TITLE' | translate }}</span>
+          </div>
+          <p class="promo-success-copy">
+            {{ 'PLAN_SELECTION_MODAL.PROMO_SUCCESS_DESC' | translate:{ planName: appliedPromoPlanName } }}
+          </p>
+          <button class="btn btn-link-promo" type="button" (click)="clearPromoCode()">
+            {{ 'PLAN_SELECTION_MODAL.PROMO_REMOVE' | translate }}
+          </button>
+        </div>
+      </section>
+
       <!-- Info supplementaria -->
       <div class="plan-info">
         <div class="info-item">
@@ -124,7 +188,18 @@
       <button class="btn btn-secondary" (click)="onClose()">
         Decidir después
       </button>
-      <div class="payment-actions">
+
+      <div class="promo-publish-actions" *ngIf="!updateMode && promoApplied">
+        <button
+          class="btn btn-primary btn-promo-publish"
+          type="button"
+          (click)="confirmPromoPublish()">
+          <i class="bi bi-stars"></i>
+          {{ 'PLAN_SELECTION_MODAL.PROMO_PUBLISH_FREE' | translate }}
+        </button>
+      </div>
+
+      <div class="payment-actions" *ngIf="updateMode || !promoApplied">
         <div class="paypal-wrapper">
           <div #paypalButtons></div>
           <div class="error" *ngIf="paypalError">{{ paypalError }}</div>

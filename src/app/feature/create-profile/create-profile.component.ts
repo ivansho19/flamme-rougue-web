@@ -17,6 +17,7 @@ import { PlanImageLimitsHelper } from '../../shared/clases/planImageLimits';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { Country } from '../../shared/model/country.model';
 import { PlanOption } from '../../shared/model/planes.model';
+import { PlanPromoSelection } from '../../shared/components/plan-selection-modal/plan-selection-modal.component';
 import { ToastService } from '../../shared/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -57,6 +58,7 @@ export class ProfileEditComponent implements OnInit {
     selectedPlan: PlanOption | null = null;
     paymentCompleted = false;
     pendingWhatsAppPayment = false;
+    activePromoCode: string | null = null;
     
     showPlanModal = false;
     previousIsProfileComplete = false;
@@ -468,6 +470,7 @@ export class ProfileEditComponent implements OnInit {
         this.selectedPlan = plan;
         this.paymentCompleted = true;
         this.pendingWhatsAppPayment = false;
+        this.activePromoCode = null;
         this.showPlanModal = false;
         console.log('Plan seleccionado desde modal:', plan);
         // Auto-save profile after plan confirmation
@@ -479,8 +482,19 @@ export class ProfileEditComponent implements OnInit {
         this.selectedPlan = plan;
         this.paymentCompleted = false;
         this.pendingWhatsAppPayment = true;
+        this.activePromoCode = null;
         this.showPlanModal = false;
         console.log('Plan seleccionado para WhatsApp:', plan);
+        this.saveProfile();
+    }
+
+    handlePromoFromModal(selection: PlanPromoSelection): void {
+        this.selectedPlanId = selection.plan.id;
+        this.selectedPlan = selection.plan;
+        this.activePromoCode = selection.promoCode;
+        this.paymentCompleted = true;
+        this.pendingWhatsAppPayment = false;
+        this.showPlanModal = false;
         this.saveProfile();
     }
 
@@ -1039,7 +1053,7 @@ export class ProfileEditComponent implements OnInit {
                 if (!this.enforcePlanImageLimit()) {
                     return;
                 }
-                if (!this.paymentCompleted && !this.pendingWhatsAppPayment) {
+                if (!this.paymentCompleted && !this.pendingWhatsAppPayment && !this.activePromoCode) {
                     this.toastService.showToast(
                         'error',
                         this.translate.instant('PROFILE_FORM.TOAST_PAYPAL_REQUIRED')
@@ -1164,7 +1178,7 @@ export class ProfileEditComponent implements OnInit {
                                 orientation: personalData.orientation || '',
                                 alcohol: personalData.alcohol || 'No',
                                 cigarette: personalData.cigarette || 'No',
-                                isActiveProfile: this.paymentCompleted && !this.pendingWhatsAppPayment,
+                                isActiveProfile: (this.paymentCompleted && !this.pendingWhatsAppPayment) || !!this.activePromoCode,
                                 isVerify: false,
                                 birthDate: personalData.birthDate || null,
                                 age: personalData.age,
@@ -1178,7 +1192,8 @@ export class ProfileEditComponent implements OnInit {
                                 blockedCountries: blockedCountriesList || [],
                                 plan: this.selectedPlanId ? [this.selectedPlanId.toString()] : [],
                                 imagesMain: mainImage,
-                                imagesGallery: galleryImages
+                                imagesGallery: galleryImages,
+                                ...(this.activePromoCode ? { promoCode: this.activePromoCode } : {})
                         };
 
                         console.log('Payload a enviar:', profilePayload);
