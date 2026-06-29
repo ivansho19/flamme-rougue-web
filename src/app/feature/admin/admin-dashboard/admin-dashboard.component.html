@@ -1,11 +1,4 @@
 <div class="admin-shell">
-  <aside class="admin-sidebar">
-    <div>
-      <div>
-      </div>
-    </div>
-  </aside>
-
   <div class="admin-main">
     <section class="stats-grid">
       <article class="stat-card">
@@ -168,7 +161,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let topRojo of topRojoItems">
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PROFILE' | translate">
                   <div class="user-cell">
                     <div>
                       <img class="user-avatar" [src]="getTopRojoImage(topRojo)" [alt]="getTopRojoDisplayName(topRojo)" />
@@ -179,22 +172,22 @@
                     </div>
                   </div>
                 </td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PLAN' | translate">
                   <span class="plan-badge vip">{{ getTopRojoPlanLabel(topRojo) }}</span>
                 </td>
-                <td>{{ getTopRojoLocation(topRojo) }}</td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TOP_ROJO.TABLE.LOCATION' | translate">{{ getTopRojoLocation(topRojo) }}</td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TOP_ROJO.TABLE.STATUS' | translate">
                   <span [class]="getTopRojoStatusClass(topRojo)">
                     {{ getTopRojoStatusLabel(topRojo) }}
                   </span>
                 </td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TOP_ROJO.TABLE.PERIOD' | translate">
                   <div class="top-period-cell">
                     <strong>{{ topRojo?.startDate | date: 'dd/MM/yyyy' }}</strong>
                     <span>{{ topRojo?.endDate | date: 'dd/MM/yyyy' }}</span>
                   </div>
                 </td>
-                <td>
+                <td class="actions-cell" [attr.data-label]="'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate">
                   <div class="action-buttons">
                     <button
                       class="icon-btn ghost"
@@ -277,7 +270,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let user of users" [class.comment-plan-pending-row]="canActivateCommentPlan(user)">
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.USERS.TABLE.USER' | translate">
                   <div class="user-cell">
                     <div class="user-avatar users-avatar">{{ getUserInitials(user) }}</div>
                     <div>
@@ -286,19 +279,19 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ getUserEmail(user) }}</td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.USERS.TABLE.EMAIL' | translate">{{ getUserEmail(user) }}</td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.USERS.TABLE.COMMENT_PLAN' | translate">
                   <span class="comment-plan-type-badge" [class.empty]="!hasCommentPlan(user)">
                     {{ getCommentPlanTypeLabel(user) }}
                   </span>
                 </td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.USERS.TABLE.PLAN_STATUS' | translate">
                   <span [class]="getCommentPlanStatusClass(user)">
                     {{ getCommentPlanStatusLabel(user) }}
                   </span>
                 </td>
-                <td>{{ getCommentPlanCreatedAt(user) | date: 'dd/MM/yyyy' }}</td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.USERS.TABLE.CREATED' | translate">{{ getCommentPlanCreatedAt(user) | date: 'dd/MM/yyyy' }}</td>
+                <td class="actions-cell" [attr.data-label]="'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate">
                   <div class="action-buttons">
                     <button
                       class="icon-btn success"
@@ -389,7 +382,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let profile of filteredProfiles">
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.USER' | translate">
                   <div class="user-cell">
                     <div>
                       <img class="user-avatar" [src]="getProfileImage(profile)" alt="{{ getProfileName(profile) }}" />
@@ -400,24 +393,24 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ getProfileEmail(profile) }}</td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.EMAIL' | translate">{{ getProfileEmail(profile) }}</td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.PLAN' | translate">
                   <span [class]="getPlanBadgeClass(getPlanLevel(profile))">
                     {{ getPlanLabel(getPlanLevel(profile)) }}
                   </span>
                 </td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.STATUS' | translate">
                   <span [class]="getStatusClass(profile)">
                     {{ getStatusLabel(profile) }}
                   </span>
                 </td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.KYC' | translate">
                   <span [class]="getKycClass(profile)">
                     {{ getKycLabel(profile) }}
                   </span>
                 </td>
-                <td>{{ profile?.createdAt | date: 'dd/MM/yyyy' }}</td>
-                <td>
+                <td [attr.data-label]="'ADMIN_DASHBOARD.TABLE.CREATED' | translate">{{ profile?.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td class="actions-cell" [attr.data-label]="'ADMIN_DASHBOARD.TABLE.ACTIONS' | translate">
                   <div class="action-buttons">
                     <button
                       class="icon-btn ghost"

@@ -11,7 +11,8 @@
         { value: 'árabe', label: 'LANGUAGES.ARABIC' },
         { value: 'ucraniano', label: 'LANGUAGES.UKRAINIAN' },
         { value: 'chino', label: 'LANGUAGES.CHINESE' },
-        { value: 'japonés', label: 'LANGUAGES.JAPANESE' }
+        { value: 'japonés', label: 'LANGUAGES.JAPANESE' },
+        { value: 'portugués', label: 'LANGUAGES.PORTUGUESE' }
     ];
     }
   }
