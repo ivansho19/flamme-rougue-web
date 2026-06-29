@@ -24,20 +24,16 @@
 
       <div class="form-fields">
         <!-- Country -->
-        <div class="form-group">
-          <label for="country">{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</label>
-          <select 
-            id="country"
+        <div class="form-group country-field">
+          <label>{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</label>
+          <app-country-search-select
             formControlName="country"
-            class="form-control"
-            [class.is-invalid]="topRojoForm.get('country')?.invalid && (topRojoForm.get('country')?.touched || topRojoForm.get('country')?.dirty)"
-            (change)="onCountryChange($any($event.target).value)">
-            <option value="" disabled>{{ 'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate }}</option>
-            <option *ngFor="let country of countries" [value]="country.code">
-              {{ country.name }}
-            </option>
-          </select>
-          <small class="error-text" *ngIf="topRojoForm.get('country')?.hasError('required')">
+            [countries]="countries"
+            [hasError]="isControlInvalid('country')"
+            [placeholder]="'PROFILE_FORM.COUNTRY_PLACEHOLDER' | translate"
+            (countrySelected)="onCountryChange($event)">
+          </app-country-search-select>
+          <small class="error-text" *ngIf="topRojoForm.get('country')?.hasError('required') && (topRojoForm.get('country')?.touched || topRojoForm.get('country')?.dirty)">
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </small>
         </div>

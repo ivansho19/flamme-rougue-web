@@ -251,6 +251,19 @@
     "CANCEL": "Annuleren",
     "BACK": "Terug"
   },
+  "WARNING_DIALOG": {
+    "TITLE": "Welkom bij",
+    "BRAND": "Flamme Rouge",
+    "MESSAGE_BEFORE_AGE": "Deze website is uitsluitend bedoeld voor ",
+    "AGE_REQUIREMENT": "volwassenen van 18 jaar en ouder",
+    "MESSAGE_AFTER_AGE": ". Door verder te browsen bevestig je dat je aan de vereiste leeftijd voldoet.",
+    "IMPORTANT_LABEL": "Belangrijk:",
+    "DISCLAIMER_BODY": " Flamme Rouge is een digitale ruimte voor entertainment en advertenties. ",
+    "DISCLAIMER_HIGHLIGHT": "Het is geen prostitutiesite en promoot geen mensenhandel",
+    "DISCLAIMER_CLOSING": ". Onze toewijding gaat uit naar respect, veiligheid en transparantie.",
+    "ENTER": "Binnenkomen",
+    "EXIT": "Verlaten"
+  },
   "PLAN_SELECTION_MODAL": {
     "PROMO_HAVE_CODE": "Ik heb een code",
     "PROMO_HIDE": "Promotiecode verbergen",
@@ -570,7 +583,7 @@
     "NO_ACCOUNT": "Nog geen account?",
     "REGISTER": "Registreren",
     "FORGOT_PASSWORD": "Wachtwoord vergeten?",
-    "FOOTER": "2025 © Flamme Rouge | Alle rechten voorbehouden",
+    "FOOTER": "2026 © Flamme Rouge | Alle rechten voorbehouden",
     "GO_HOME": "Terug naar Home"
   },
   "LOGOUT_DIALOG": {

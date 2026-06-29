@@ -334,6 +334,7 @@ export class ProfilesComponent implements OnInit {
     }
 
     getCommentPlanBadge(comment: CommentItem): CommentPlanBadgeType | null {
+      debugger;
       const fromPayload = CommentPlanBadgeHelper.resolve(comment.author ?? comment);
       if (fromPayload) {
         return fromPayload;

@@ -251,6 +251,19 @@
     "CANCEL": "Cancel",
     "BACK": "Back"
   },
+  "WARNING_DIALOG": {
+    "TITLE": "Welcome to",
+    "BRAND": "Flamme Rouge",
+    "MESSAGE_BEFORE_AGE": "This website is intended exclusively for ",
+    "AGE_REQUIREMENT": "adults aged 18 and over",
+    "MESSAGE_AFTER_AGE": ". By continuing to browse, you confirm that you meet the required age.",
+    "IMPORTANT_LABEL": "Important:",
+    "DISCLAIMER_BODY": " Flamme Rouge is a digital space for entertainment and listings. ",
+    "DISCLAIMER_HIGHLIGHT": "It is not a prostitution site and does not promote human trafficking",
+    "DISCLAIMER_CLOSING": ". Our commitment is to respect, safety, and transparency.",
+    "ENTER": "Enter",
+    "EXIT": "Leave"
+  },
   "PLAN_SELECTION_MODAL": {
     "PROMO_HAVE_CODE": "I have a code",
     "PROMO_HIDE": "Hide promo code",
@@ -571,7 +584,7 @@
     "NO_ACCOUNT": "No account?",
     "REGISTER": "Register",
     "FORGOT_PASSWORD": "Forgot your password?",
-    "FOOTER": "2025 © Flamme Rouge | All rights reserved",
+    "FOOTER": "2026 © Flamme Rouge | All rights reserved",
     "GO_HOME": "Go to Home"
   },
   "LOGOUT_DIALOG": {

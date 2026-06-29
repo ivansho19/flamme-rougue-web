@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-warning-dialog',
@@ -7,7 +8,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./warning-dialog.component.scss']
 })
 export class WarningDialogComponent {
-  constructor(public dialogRef: MatDialogRef<WarningDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<WarningDialogComponent>, private router: Router) {}
 
   onAccept(): void {
   localStorage.setItem('adult-consent', 'true');
@@ -15,6 +16,8 @@ export class WarningDialogComponent {
 }
 
   onSettings(): void {
-    this.dialogRef.close('settings');
+    localStorage.setItem('adult-consent', 'false');
+    this.dialogRef.close(true);
+    this.router.navigate(['/auth/login']);
   }
 }

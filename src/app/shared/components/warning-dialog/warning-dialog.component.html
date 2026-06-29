@@ -3,20 +3,25 @@
   <hr class="adult-dialog-divider" />
 
   <div class="adult-dialog-title">
-    ⚠️ Bienvenido a <b>Flamme Rouge</b>
+    <span aria-hidden="true">⚠️</span>
+    {{ 'WARNING_DIALOG.TITLE' | translate }} <b>{{ 'WARNING_DIALOG.BRAND' | translate }}</b>
   </div>
 
   <div class="adult-dialog-message">
-    Este sitio web está dirigido exclusivamente a <b>mayores de 18 años</b>.  
-    Al continuar navegando, confirmas que tienes la edad requerida.
+    {{ 'WARNING_DIALOG.MESSAGE_BEFORE_AGE' | translate }}
+    <b>{{ 'WARNING_DIALOG.AGE_REQUIREMENT' | translate }}</b>{{ 'WARNING_DIALOG.MESSAGE_AFTER_AGE' | translate }}
   </div>
 
   <div class="adult-dialog-message secondary">
-    <b>Importante:</b> Flamme Rouge es un espacio digital de entretenimiento y anuncios.  
-    <u>No es un sitio de prostitución ni promueve la trata de personas</u>.  
-    Nuestro compromiso es con el respeto, la seguridad y la transparencia.
+    <b>{{ 'WARNING_DIALOG.IMPORTANT_LABEL' | translate }}</b>
+    {{ 'WARNING_DIALOG.DISCLAIMER_BODY' | translate }}
+    <u>{{ 'WARNING_DIALOG.DISCLAIMER_HIGHLIGHT' | translate }}</u>{{ 'WARNING_DIALOG.DISCLAIMER_CLOSING' | translate }}
   </div>
 
-  <button mat-flat-button color="warn" class="btn-custom" (click)="onAccept()">ENTRAR</button>
-  <button mat-stroked-button color="primary" class="adult-dialog-settings" (click)="onSettings()">CONFIGURAR PREFERENCIAS</button>
+  <button mat-flat-button color="warn" class="btn-custom" (click)="onAccept()">
+    {{ 'WARNING_DIALOG.ENTER' | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="adult-dialog-settings" (click)="onSettings()">
+    {{ 'WARNING_DIALOG.EXIT' | translate }}
+  </button>
 </div>

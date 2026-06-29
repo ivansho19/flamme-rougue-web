@@ -72,7 +72,8 @@ export class CreateTopRojoFormComponent implements OnInit {
     this.countries = GetCountries.getAllCountries();
     console.log('  - Total de países cargados:', this.countries.length);
     
-    this.initForm();
+    const defaultCountryCode = this.resolveCountryCode(this.defaultCountry);
+    this.initForm(defaultCountryCode);
     console.log('  - Formulario inicializado, valores:', this.topRojoForm.value);
     
     // Suscribirse a cambios del form para debuguear
@@ -80,20 +81,22 @@ export class CreateTopRojoFormComponent implements OnInit {
       console.log('[CreateTopRojoForm] Form values changed:', values);
     });
     
-    // Si hay un país por defecto, cargar sus ciudades
-    if (this.defaultCountry) {
-      console.log('  - Cargando ciudades para país:', this.defaultCountry);
-      this.onCountryChange(this.defaultCountry);
+    if (defaultCountryCode) {
+      console.log('  - Cargando ciudades para país:', defaultCountryCode);
+      this.onCountryChange(defaultCountryCode);
+      if (this.defaultCity) {
+        this.topRojoForm.patchValue({ city: this.defaultCity });
+      }
       console.log('  - Ciudades cargadas:', this.cities.length);
     } else {
       console.log('  - NO hay defaultCountry, ciudades no cargadas');
     }
   }
 
-  initForm(): void {
+  initForm(defaultCountryCode = ''): void {
     this.topRojoForm = this.fb.group({
-      country: [this.defaultCountry || '', Validators.required],
-      city: [{value: this.defaultCity || '', disabled: !this.cities.length}, Validators.required],
+      country: [defaultCountryCode, Validators.required],
+      city: [{ value: this.defaultCity || '', disabled: !this.cities.length }, Validators.required],
       title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9\s\-\+\(\)]{7,}$/)]]
@@ -132,6 +135,23 @@ export class CreateTopRojoFormComponent implements OnInit {
     this.topRojoForm.patchValue({ city: '' });
     
     console.log('  - Array cities actualizado:', this.cities);
+  }
+
+  private resolveCountryCode(value: string): string {
+    if (!value) {
+      return '';
+    }
+
+    const found = this.countries.find(country =>
+      country.code === value || country.name === value
+    );
+
+    return found?.code || value;
+  }
+
+  isControlInvalid(controlName: string): boolean {
+    const control = this.topRojoForm?.get(controlName);
+    return !!(control?.invalid && (control.touched || control.dirty));
   }
 
   /**
