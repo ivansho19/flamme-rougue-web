@@ -1,32 +1,64 @@
 <div class="embla">
   <div class="embla__viewport" #embla>
     <div class="embla__container">
-      <div class="embla__slide" *ngFor="let item of items">
-        <div class="carousel-content">
-          <div class="carousel-images">
-            <img *ngFor="let img of item.images" [src]="img" alt="Imagen" />
-          </div>
-          <div class="carousel-text">
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.description }}</p>
-            <div class="carousel-phone">
-              <span><i class="bi bi-whatsapp"></i> {{ item.phone }}</span>
-            </div>
-            <a *ngIf="item.buttonUrl" [routerLink]="item.buttonUrl">
-              <button class="btn-custom">{{ item.buttonText }}</button>
+      <div
+        class="embla__slide"
+        *ngFor="let item of displayItems"
+        [class.embla__slide--promo]="item.isPromo">
+        <ng-container *ngIf="item.isPromo; else profileSlide">
+          <div class="carousel-content carousel-content--promo">
+            <a
+              *ngIf="item.buttonUrl; else promoImageOnly"
+              class="carousel-promo"
+              [routerLink]="item.buttonUrl"
+              [attr.aria-label]="item.title">
+              <img
+                class="carousel-promo__image"
+                [src]="item.images[0]"
+                [alt]="item.title"
+                loading="eager"
+                decoding="async" />
             </a>
-            <button *ngIf="item.buttonText && !item.buttonUrl" class="carousel-btn">
-              {{ item.buttonText }}
-            </button>
+            <ng-template #promoImageOnly>
+              <div class="carousel-promo">
+                <img
+                  class="carousel-promo__image"
+                  [src]="item.images[0]"
+                  [alt]="item.title"
+                  loading="eager"
+                  decoding="async" />
+              </div>
+            </ng-template>
           </div>
-        </div>
+        </ng-container>
+
+        <ng-template #profileSlide>
+          <div class="carousel-content">
+            <div class="carousel-images">
+              <img *ngFor="let img of item.images" [src]="img" [alt]="item.title" />
+            </div>
+            <div class="carousel-text">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.description }}</p>
+              <div class="carousel-phone" *ngIf="item.phone">
+                <span><i class="bi bi-whatsapp"></i> {{ item.phone }}</span>
+              </div>
+              <a *ngIf="item.buttonUrl" [routerLink]="item.buttonUrl">
+                <button class="btn-custom">{{ item.buttonText }}</button>
+              </a>
+              <button *ngIf="item.buttonText && !item.buttonUrl" class="carousel-btn">
+                {{ item.buttonText }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
-  <button class="embla__button embla__button--prev" (click)="scrollPrev()">
+  <button class="embla__button embla__button--prev" type="button" (click)="scrollPrev()" aria-label="Anterior">
     &#8249;
   </button>
-  <button class="embla__button embla__button--next" (click)="scrollNext()">
+  <button class="embla__button embla__button--next" type="button" (click)="scrollNext()" aria-label="Siguiente">
     &#8250;
   </button>
 </div>
