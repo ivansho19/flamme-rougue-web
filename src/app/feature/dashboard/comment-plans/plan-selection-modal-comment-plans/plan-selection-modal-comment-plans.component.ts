@@ -33,7 +33,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
 
   selectedPlanId: CommentPlanType = 'monthly';
   paypalError = '';
-  private readonly whatsAppPhone = '51999999999';
+  private readonly whatsAppPhone = '+34645378025';
   isWhatsAppConfirmOpen = false;
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;

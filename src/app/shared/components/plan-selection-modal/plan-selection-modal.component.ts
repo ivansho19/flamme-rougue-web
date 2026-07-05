@@ -37,7 +37,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   promoError = '';
   promoApplied = false;
   showPromoPanel = false;
-  private readonly whatsAppPhone = '51999999999';
+  private readonly whatsAppPhone = '+34645378025';
   isWhatsAppConfirmOpen = false;
 
   plans: PlanOption[] = [
