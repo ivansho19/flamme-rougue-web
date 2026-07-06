@@ -47,7 +47,8 @@ body {
   grid-template-columns: minmax(320px, 520px) 1fr;
   gap: 32px;
   max-width: 1200px;
-  margin: 15px 15px 15px 15px;
+  margin: 15px auto;
+  width: calc(100% - 30px);
 }
 
 /* Columna izquierda */
