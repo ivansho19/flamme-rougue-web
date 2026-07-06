@@ -39,8 +39,54 @@
   margin: 0;
 }
 
+.layout-scroll-top-btn {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(var(--app-footer-height) + 1rem);
+  z-index: 3600;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(140deg, #a60f2b 0%, #8c030e 100%);
+  color: #f2dbae;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.layout-scroll-top-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.07);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.33);
+}
+
+.layout-scroll-top-btn:focus-visible {
+  outline: 3px solid #f2dbae;
+  outline-offset: 3px;
+}
+
 @media (max-width: 768px) {
   .layout-content {
     padding-top: 72px;
+  }
+
+  .layout-scroll-top-btn {
+    right: 0.85rem;
+    bottom: calc(var(--app-footer-height) + 0.85rem);
+    width: 2.85rem;
+    height: 2.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout-scroll-top-btn {
+    transition: none;
   }
 }

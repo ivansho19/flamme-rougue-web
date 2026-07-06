@@ -1,9 +1,17 @@
 <div class="layout">
     <!-- HEADER -->
     <app-header [hidden]="loader"></app-header>
-    <div class="layout-content">
+    <div class="layout-content" #layoutContent>
         <router-outlet></router-outlet>
     </div>
+        <button
+            class="layout-scroll-top-btn"
+            type="button"
+            (click)="scrollToTop()"
+            aria-label="Volver al inicio"
+        >
+            <span aria-hidden="true">↑</span>
+        </button>
      <!-- FOOTER -->
     <footer [hidden]="loader" class="footer">
         <p>© 2026 Flamme Rouge. Todos los derechos reservados.</p>
