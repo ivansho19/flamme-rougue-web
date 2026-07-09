@@ -68,7 +68,7 @@
     "COMMENT_REPLY_ERROR_GENERIC": "Kan het antwoord niet opslaan.",
     "COMMUNITY_RULES": {
       "TITLE": "Communityregels",
-      "SUBTITLE": "Om te reageren op Flamme Rouge moet je akkoord gaan met onze gedragsregels voor de community.",
+      "SUBTITLE": "Om te reageren op Flammes Rouges moet je akkoord gaan met onze gedragsregels voor de community.",
       "CANCEL": "Annuleren",
       "CONFIRM": "Accepteren",
       "ITEMS": {
@@ -254,12 +254,12 @@
   },
   "WARNING_DIALOG": {
     "TITLE": "Welkom bij",
-    "BRAND": "Flamme Rouge",
+    "BRAND": "Flammes Rouges",
     "MESSAGE_BEFORE_AGE": "Deze website is uitsluitend bedoeld voor ",
     "AGE_REQUIREMENT": "volwassenen van 18 jaar en ouder",
     "MESSAGE_AFTER_AGE": ". Door verder te browsen bevestig je dat je aan de vereiste leeftijd voldoet.",
     "IMPORTANT_LABEL": "Belangrijk:",
-    "DISCLAIMER_BODY": " Flamme Rouge is een digitale ruimte voor entertainment en advertenties. ",
+    "DISCLAIMER_BODY": " Flammes Rouges is een digitale ruimte voor entertainment en advertenties. ",
     "DISCLAIMER_HIGHLIGHT": "Het is geen prostitutiesite en promoot geen mensenhandel",
     "DISCLAIMER_CLOSING": ". Onze toewijding gaat uit naar respect, veiligheid en transparantie.",
     "ENTER": "Binnenkomen",
@@ -576,7 +576,7 @@
     "PENDING_USAGE_LOCKED": "Beschikbaar na activatie"
   },
   "LOGIN": {
-    "TITLE": "Flamme Rouge",
+    "TITLE": "Flammes Rouges",
     "SUBTITLE": "Inloggen",
     "EMAIL_PLACEHOLDER": "E-mail",
     "PASSWORD_PLACEHOLDER": "Wachtwoord",
@@ -584,13 +584,13 @@
     "NO_ACCOUNT": "Nog geen account?",
     "REGISTER": "Registreren",
     "FORGOT_PASSWORD": "Wachtwoord vergeten?",
-    "FOOTER": "2026 © Flamme Rouge | Alle rechten voorbehouden",
+    "FOOTER": "2026 © Flammes Rouges | Alle rechten voorbehouden",
     "GO_HOME": "Terug naar Home"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "Wil je uitloggen?",
     "GREETING": "Hallo",
-    "MESSAGE": "als je uitlogt, moet je opnieuw inloggen om toegang te krijgen tot Flamme Rouge. Zorg dat je je informatie hebt opgeslagen voordat je vertrekt.",
+    "MESSAGE": "als je uitlogt, moet je opnieuw inloggen om toegang te krijgen tot Flammes Rouges. Zorg dat je je informatie hebt opgeslagen voordat je vertrekt.",
     "CONFIRM": "Uitloggen",
     "CANCEL": "Annuleren"
   },

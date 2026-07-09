@@ -69,7 +69,7 @@
     "COMMENT_REPLY_ERROR_GENERIC": "No se pudo guardar la respuesta.",
     "COMMUNITY_RULES": {
       "TITLE": "Normas de la comunidad",
-      "SUBTITLE": "Para comentar en Flamme Rouge, debes comprometerte a respetar nuestras pautas de convivencia.",
+      "SUBTITLE": "Para comentar en Flammes Rouges, debes comprometerte a respetar nuestras pautas de convivencia.",
       "CANCEL": "Cancelar",
       "CONFIRM": "Aceptar",
       "ITEMS": {
@@ -254,12 +254,12 @@
   },
   "WARNING_DIALOG": {
     "TITLE": "Bienvenido a",
-    "BRAND": "Flamme Rouge",
+    "BRAND": "Flammes Rouges",
     "MESSAGE_BEFORE_AGE": "Este sitio web está dirigido exclusivamente a ",
     "AGE_REQUIREMENT": "mayores de 18 años",
     "MESSAGE_AFTER_AGE": ". Al continuar navegando, confirmas que tienes la edad requerida.",
     "IMPORTANT_LABEL": "Importante:",
-    "DISCLAIMER_BODY": " Flamme Rouge es un espacio digital de entretenimiento y anuncios. ",
+    "DISCLAIMER_BODY": " Flammes Rouges es un espacio digital de entretenimiento y anuncios. ",
     "DISCLAIMER_HIGHLIGHT": "No es un sitio de prostitución ni promueve la trata de personas",
     "DISCLAIMER_CLOSING": ". Nuestro compromiso es con el respeto, la seguridad y la transparencia.",
     "ENTER": "Entrar",
@@ -577,7 +577,7 @@
     "PENDING_USAGE_LOCKED": "Disponible al activar"
   },
   "LOGIN": {
-    "TITLE": "Flamme Rouge",
+    "TITLE": "Flammes Rouges",
     "SUBTITLE": "Login",
     "EMAIL_PLACEHOLDER": "Email",
     "PASSWORD_PLACEHOLDER": "Contraseña",
@@ -585,13 +585,13 @@
     "NO_ACCOUNT": "¿No tienes cuenta?",
     "REGISTER": "Regístrate",
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
-    "FOOTER": "2026 © Flamme Rouge | Todos los derechos reservados",
+    "FOOTER": "2026 © Flammes Rouges | Todos los derechos reservados",
     "GO_HOME": "Volver al inicio"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "¿Deseas cerrar sesión?",
     "GREETING": "Hola",
-    "MESSAGE": "si cierras tu sesión, deberás volver a iniciar sesión para acceder nuevamente a Flamme Rouge. Asegúrate de haber guardado tu información antes de salir.",
+    "MESSAGE": "si cierras tu sesión, deberás volver a iniciar sesión para acceder nuevamente a Flammes Rouges. Asegúrate de haber guardado tu información antes de salir.",
     "CONFIRM": "Cerrar Sesión",
     "CANCEL": "Cancelar"
   },

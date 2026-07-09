@@ -2,7 +2,7 @@
 
 ## 1. Resumen
 Repositorio: flamme-rougue-web.
-Frontend web para Flamme Rouge, construido con Angular. Backend y contratos API se gestionan en un proyecto separado.
+Frontend web para Flammes Rouges, construido con Angular. Backend y contratos API se gestionan en un proyecto separado.
 
 ## 2. Arquitectura y modulos
 - App shell y rutas: src/app/app.routes.ts

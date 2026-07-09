@@ -68,7 +68,7 @@
     "COMMENT_REPLY_ERROR_GENERIC": "Could not save the reply.",
     "COMMUNITY_RULES": {
       "TITLE": "Community rules",
-      "SUBTITLE": "To comment on Flamme Rouge, you must agree to follow our community guidelines.",
+      "SUBTITLE": "To comment on Flammes Rouges, you must agree to follow our community guidelines.",
       "CANCEL": "Cancel",
       "CONFIRM": "Accept",
       "ITEMS": {
@@ -253,12 +253,12 @@
   },
   "WARNING_DIALOG": {
     "TITLE": "Welcome to",
-    "BRAND": "Flamme Rouge",
+    "BRAND": "Flammes Rouges",
     "MESSAGE_BEFORE_AGE": "This website is intended exclusively for ",
     "AGE_REQUIREMENT": "adults aged 18 and over",
     "MESSAGE_AFTER_AGE": ". By continuing to browse, you confirm that you meet the required age.",
     "IMPORTANT_LABEL": "Important:",
-    "DISCLAIMER_BODY": " Flamme Rouge is a digital space for entertainment and listings. ",
+    "DISCLAIMER_BODY": " Flammes Rouges is a digital space for entertainment and listings. ",
     "DISCLAIMER_HIGHLIGHT": "It is not a prostitution site and does not promote human trafficking",
     "DISCLAIMER_CLOSING": ". Our commitment is to respect, safety, and transparency.",
     "ENTER": "Enter",
@@ -576,7 +576,7 @@
     "PENDING_USAGE_LOCKED": "Available once activated"
   },
   "LOGIN": {
-    "TITLE": "Flamme Rouge",
+    "TITLE": "Flammes Rouges",
     "SUBTITLE": "Login",
     "EMAIL_PLACEHOLDER": "Email",
     "PASSWORD_PLACEHOLDER": "Password",
@@ -584,13 +584,13 @@
     "NO_ACCOUNT": "No account?",
     "REGISTER": "Register",
     "FORGOT_PASSWORD": "Forgot your password?",
-    "FOOTER": "2026 © Flamme Rouge | All rights reserved",
+    "FOOTER": "2026 © Flammes Rouges | All rights reserved",
     "GO_HOME": "Go to Home"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "Do you want to log out?",
     "GREETING": "Hi",
-    "MESSAGE": "if you log out, you will need to sign in again to access Flamme Rouge. Make sure you have saved your information before leaving.",
+    "MESSAGE": "if you log out, you will need to sign in again to access Flammes Rouges. Make sure you have saved your information before leaving.",
     "CONFIRM": "Log out",
     "CANCEL": "Cancel"
   },

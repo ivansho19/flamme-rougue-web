@@ -68,7 +68,7 @@
     "COMMENT_REPLY_ERROR_GENERIC": "Impossible d'enregistrer la réponse.",
     "COMMUNITY_RULES": {
       "TITLE": "Règles de la communauté",
-      "SUBTITLE": "Pour commenter sur Flamme Rouge, vous devez vous engager à respecter nos règles de vie en communauté.",
+      "SUBTITLE": "Pour commenter sur Flammes Rouges, vous devez vous engager à respecter nos règles de vie en communauté.",
       "CANCEL": "Annuler",
       "CONFIRM": "Accepter",
       "ITEMS": {
@@ -254,12 +254,12 @@
   },
   "WARNING_DIALOG": {
     "TITLE": "Bienvenue sur",
-    "BRAND": "Flamme Rouge",
+    "BRAND": "Flammes Rouges",
     "MESSAGE_BEFORE_AGE": "Ce site web est destiné exclusivement aux ",
     "AGE_REQUIREMENT": "personnes majeures de 18 ans et plus",
     "MESSAGE_AFTER_AGE": ". En continuant à naviguer, vous confirmez avoir l'âge requis.",
     "IMPORTANT_LABEL": "Important :",
-    "DISCLAIMER_BODY": " Flamme Rouge est un espace numérique de divertissement et d'annonces. ",
+    "DISCLAIMER_BODY": " Flammes Rouges est un espace numérique de divertissement et d'annonces. ",
     "DISCLAIMER_HIGHLIGHT": "Ce n'est pas un site de prostitution et ne promeut pas la traite des êtres humains",
     "DISCLAIMER_CLOSING": ". Notre engagement est le respect, la sécurité et la transparence.",
     "ENTER": "Entrer",
@@ -577,7 +577,7 @@
     "PENDING_USAGE_LOCKED": "Disponible apres activation"
   },
   "LOGIN": {
-    "TITLE": "Flamme Rouge",
+    "TITLE": "Flammes Rouges",
     "SUBTITLE": "Connexion",
     "EMAIL_PLACEHOLDER": "Email",
     "PASSWORD_PLACEHOLDER": "Mot de passe",
@@ -585,13 +585,13 @@
     "NO_ACCOUNT": "Pas de compte?",
     "REGISTER": "S inscrire",
     "FORGOT_PASSWORD": "Mot de passe oublie?",
-    "FOOTER": "2026 © Flamme Rouge | Tous droits reserves",
+    "FOOTER": "2026 © Flammes Rouges | Tous droits reserves",
     "GO_HOME": "Retour à l'accueil"
   },
   "LOGOUT_DIALOG": {
     "TITLE": "Voulez-vous vous deconnecter?",
     "GREETING": "Bonjour",
-    "MESSAGE": "si vous vous deconnectez, vous devrez vous reconnecter pour acceder a Flamme Rouge. Assurez-vous d avoir sauvegarde vos informations avant de partir.",
+    "MESSAGE": "si vous vous deconnectez, vous devrez vous reconnecter pour acceder a Flammes Rouges. Assurez-vous d avoir sauvegarde vos informations avant de partir.",
     "CONFIRM": "Se deconnecter",
     "CANCEL": "Annuler"
   },
