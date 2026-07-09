@@ -337,7 +337,7 @@
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.SAVE_CHANGES_SHORT' | translate }}</span>
             </button>
-            <button type="button" class="btn-primary" (click)="openPlanModal()" [disabled]="isProfileInactive">
+            <button type="button" class="btn-primary" (click)="openPlanModal()" [disabled]="!canUpdateExpiredPlan">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.UPDATE_PLAN_SHORT' | translate }}</span>
             </button>

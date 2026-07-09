@@ -514,7 +514,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   updatePlan() {
-    if (this.isProfileInactive) {
+    if (!this.canUpdateExpiredPlan) {
       return;
     }
     if (!this.enforcePlanImageLimit()) {
@@ -529,7 +529,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   openPlanModal(): void {
-    if (this.isProfileInactive) {
+    if (!this.canUpdateExpiredPlan) {
       return;
     }
     this.showPlanModal = true;
@@ -723,6 +723,10 @@ export class UpdateProfileComponent implements OnInit {
     return days !== null && days < 0;
   }
 
+  get canUpdateExpiredPlan(): boolean {
+    return !this.isProfileInactive || this.isPlanExpired;
+  }
+
   private getDaysUntilPlanExpiration(expiresAt: string | Date | null): number | null {
     if (!expiresAt) {
       return null;
@@ -914,7 +918,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   async updateProfile(planUpdated: boolean = false) {
-    if (this.isProfileInactive) {
+    if (this.isProfileInactive && !(planUpdated && this.isPlanExpired)) {
       return;
     }
     if (!this.enforcePlanImageLimit()) {
