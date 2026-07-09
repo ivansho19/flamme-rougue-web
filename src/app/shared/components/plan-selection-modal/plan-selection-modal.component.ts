@@ -44,7 +44,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     {
       id: 1,
       name: "Plan Basico",
-      price: "39€",
+      price: "1€",
       period: "mes",
       features: [
         "Perfil activo",
@@ -58,7 +58,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     {
       id: 2,
       name: "Plan Pro",
-      price: "79€",
+      price: "1€",
       period: "mes",
       features: [
         "Todo lo del Basico",
@@ -74,7 +74,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     {
       id: 3,
       name: "Plan VIP",
-      price: "149€",
+      price: "1€",
       period: "mes",
       features: [
         "Todo lo del Plan Pro",

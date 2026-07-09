@@ -22,7 +22,7 @@ export const environment = {
   api_comment_plan: `${urlBase}/admin/comment-plan`,
   api_paypal_create_order: `${urlBase}/paypal/create-order`,
   api_paypal_capture_order: `${urlBase}/paypal/capture-order`,
-  paypalClientId: 'AVnZvl_aPZV-uuqj3K0Np91Es4ANCjWpNevgdgaoL4r-bZGwISNY8LnJKrD-1VJAdzrMFNx1OijBxWTl',
+  paypalClientId: 'AbgR_IFnyTEYpBaMzn3nZ6FN-ops0l0Et85fppIQmTxJjc-435OREQN3ipLFIxJDEXM3B4nfu1-oumIF',
   paypalCurrency: 'EUR',
 
 };
