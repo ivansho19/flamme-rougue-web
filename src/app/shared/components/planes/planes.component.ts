@@ -15,7 +15,7 @@ export class PlanesComponent {
         {
             id: 1,
             name: "Plan Basico",
-            price: "39€",
+            price: "1€",
             period: "mes",
             features: [
                 "Perfil activo",
@@ -29,7 +29,7 @@ export class PlanesComponent {
         {
             id: 2,
             name: "Plan Pro",
-            price: "79€",
+            price: "1€",
             period: "mes",
             features: [
                 "Todo lo del Basico",
@@ -45,7 +45,7 @@ export class PlanesComponent {
         {
             id: 3,
             name: "Plan VIP",
-            price: "149€",
+            price: "1€",
             period: "mes",
             features: [
                 "Todo lo del Plan Pro",
