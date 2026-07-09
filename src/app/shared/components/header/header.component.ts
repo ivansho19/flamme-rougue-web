@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.searchLoading = false;
       });
 
-    this.notificationsService.connectSocket();
+    // this.notificationsService.connectSocket();
     this.notificationsService
       .onSocketAuthError()
       .pipe(takeUntil(this.destroy$))
