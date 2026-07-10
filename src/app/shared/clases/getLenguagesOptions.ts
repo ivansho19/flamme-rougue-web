@@ -3,7 +3,7 @@
      static getLenguajesOptions(): any  {
       return [
         { value: 'inglés', label: 'LANGUAGES.ENGLISH' },
-        { value: 'belga', label: 'LANGUAGES.BELGIAN' },
+        { value: 'neerlandés', label: 'LANGUAGES.BELGIAN' },
         { value: 'francés', label: 'LANGUAGES.FRENCH' },
         { value: 'español', label: 'LANGUAGES.SPANISH' },
         { value: 'italiano', label: 'LANGUAGES.ITALIAN' },
