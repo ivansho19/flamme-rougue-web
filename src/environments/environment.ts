@@ -5,6 +5,7 @@ export const environment = {
   production: true,
   socket_url: 'http://localhost:5000',
   api_login: `${urlBase}/auth/login`,
+  CODE_PROMO: 'GRATIS7DIAS',
   api_register: `${urlBase}/auth/register`,
   api_register_client: `${urlBase}/auth/registerClient`,
   api_forgot_password: `${urlBase}/auth/forgot-password`,

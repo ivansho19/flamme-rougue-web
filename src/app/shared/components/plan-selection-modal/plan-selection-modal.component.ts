@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { PaymentService } from '../../services/payment/payment.service';
 import { PayPalButtonService } from '../../services/paypal/paypal-button.service';
 
-export const PROFILE_CREATE_FREE_TRIAL_PROMO_CODE = 'GRATIS7DIAS';
+export const PROFILE_CREATE_FREE_TRIAL_PROMO_CODE =  environment.CODE_PROMO;
 
 export interface PlanPromoSelection {
   plan: PlanOption;
