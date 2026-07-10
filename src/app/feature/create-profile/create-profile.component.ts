@@ -146,6 +146,7 @@ export class ProfileEditComponent implements OnInit {
         if (!file) return;
 
         try {
+            // comentado momentaneamente
             // const processed = await this.applyWatermarkToImage(file);
             this.mainImageFile = file;
             this.readFile(file, (result: string) => {
