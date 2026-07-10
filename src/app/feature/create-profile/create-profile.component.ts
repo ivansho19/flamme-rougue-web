@@ -722,9 +722,12 @@ export class ProfileEditComponent implements OnInit {
 
         let documentsComplete = false;
         if (documentType === 'dni') {
-            documentsComplete = documentFrontValid && documentBackValid;
+            documentsComplete = documentFrontValid
+                && documentBackValid
+                && !!this.documentFrontFile
+                && !!this.documentBackFile;
         } else if (documentType === 'passport') {
-            documentsComplete = documentSingleValid;
+            documentsComplete = documentSingleValid && !!this.passportFile;
         }
 
         const realDataComplete = realName && realBirthDate && realAge && realEmail &&
