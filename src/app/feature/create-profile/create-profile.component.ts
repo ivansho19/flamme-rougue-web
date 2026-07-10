@@ -20,6 +20,7 @@ import { PlanOption } from '../../shared/model/planes.model';
 import { PlanPromoSelection } from '../../shared/components/plan-selection-modal/plan-selection-modal.component';
 import { ToastService } from '../../shared/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-create-profile',
@@ -27,6 +28,11 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./create-profile.component.scss']
 })
 export class ProfileEditComponent implements OnInit {
+
+    private readonly watermarkLogoPath = 'assets/images/new_logo.png';
+    private readonly watermarkMarginRatio = 0.03;
+    private readonly watermarkWidthRatio = 0.22;
+    private readonly promoTrialDays = environment.CODE_PROMO_TRIAL_DAYS || 7;
 
     profile: any = {
         profileImage: '',
@@ -135,32 +141,43 @@ export class ProfileEditComponent implements OnInit {
         this.isDraggingGallery = true;
     }
 
-    onMainImageSelected(event: any) {
+    async onMainImageSelected(event: any) {
         const file = event.target.files[0];
         if (!file) return;
 
-        this.mainImageFile = file;
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.profile.profileImage = reader.result as string;
-            this.checkFormStatus();
-        };
-        reader.readAsDataURL(file);
+        try {
+            // const processed = await this.applyWatermarkToImage(file);
+            this.mainImageFile = file;
+            this.readFile(file, (result: string) => {
+                this.profile.profileImage = result;
+            });
+        } catch (error) {
+            console.error('Error applying watermark to main image:', error);
+            this.mainImageFile = file;
+            this.readFile(file, (result: string) => {
+                this.profile.profileImage = result;
+            });
+        }
+
+        this.checkFormStatus();
     }
 
-    onGallerySelected(event: any) {
+    async onGallerySelected(event: any) {
         const files: FileList = event.target.files;
 
-        Array.from(files).forEach(file => {
-
-            this.galleryFiles.push(file);
-
-            const reader = new FileReader();
-            reader.onload = () => {
-                this.profile.galleryImages.push(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        });
+        for (const file of Array.from(files)) {
+            try {
+                const processed = await this.applyWatermarkToImage(file);
+                this.galleryFiles.push(processed.file);
+                this.profile.galleryImages.push(processed.preview);
+            } catch (error) {
+                console.error('Error applying watermark to gallery image:', error);
+                this.galleryFiles.push(file);
+                this.readFile(file, (result: string) => {
+                    this.profile.galleryImages.push(result);
+                });
+            }
+        }
     }
 
     removeGalleryImage(index: number) {
@@ -413,19 +430,25 @@ export class ProfileEditComponent implements OnInit {
         this.isDraggingMain = false;
     }
 
-    onDropMain(event: DragEvent) {
+    async onDropMain(event: DragEvent) {
         event.preventDefault();
         this.isDraggingMain = false;
 
         if (event.dataTransfer?.files.length) {
             const file = event.dataTransfer.files[0];
-            this.mainImageFile = file;
+            try {
+                const processed = await this.applyWatermarkToImage(file);
+                this.mainImageFile = processed.file;
+                this.profile.profileImage = processed.preview;
+            } catch (error) {
+                console.error('Error applying watermark to dropped main image:', error);
+                this.mainImageFile = file;
+                this.readFile(file, (result: string) => {
+                    this.profile.profileImage = result;
+                });
+            }
 
-            const reader = new FileReader();
-            reader.onload = () => {
-                this.profile.profileImage = reader.result as string;
-            };
-            reader.readAsDataURL(file);
+            this.checkFormStatus();
         }
     }
 
@@ -434,22 +457,93 @@ export class ProfileEditComponent implements OnInit {
         this.isDraggingGallery = false;
     }
 
-    onDropGallery(event: DragEvent) {
+    async onDropGallery(event: DragEvent) {
         event.preventDefault();
         this.isDraggingGallery = false;
 
         if (event.dataTransfer?.files.length) {
-            Array.from(event.dataTransfer.files).forEach(file => {
-
-                this.galleryFiles.push(file);
-
-                const reader = new FileReader();
-                reader.onload = () => {
-                    this.profile.galleryImages.push(reader.result as string);
-                };
-                reader.readAsDataURL(file);
-            });
+            for (const file of Array.from(event.dataTransfer.files)) {
+                try {
+                    const processed = await this.applyWatermarkToImage(file);
+                    this.galleryFiles.push(processed.file);
+                    this.profile.galleryImages.push(processed.preview);
+                } catch (error) {
+                    console.error('Error applying watermark to dropped gallery image:', error);
+                    this.galleryFiles.push(file);
+                    this.readFile(file, (result: string) => {
+                        this.profile.galleryImages.push(result);
+                    });
+                }
+            }
         }
+    }
+
+    private async applyWatermarkToImage(file: File): Promise<{ file: File; preview: string }> {
+        const sourceImage = await this.loadImageFromSource(URL.createObjectURL(file));
+        const logoImage = await this.loadImageFromSource(this.watermarkLogoPath);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = sourceImage.naturalWidth;
+        canvas.height = sourceImage.naturalHeight;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('Canvas context is not available');
+        }
+
+        ctx.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+
+        const margin = Math.max(12, Math.round(Math.min(canvas.width, canvas.height) * this.watermarkMarginRatio));
+        const maxWatermarkWidth = Math.round(canvas.width * this.watermarkWidthRatio);
+        const logoRatio = logoImage.naturalWidth / logoImage.naturalHeight;
+        let watermarkWidth = maxWatermarkWidth;
+        let watermarkHeight = Math.round(watermarkWidth / logoRatio);
+
+        const maxWatermarkHeight = Math.round(canvas.height * 0.16);
+        if (watermarkHeight > maxWatermarkHeight) {
+            watermarkHeight = maxWatermarkHeight;
+            watermarkWidth = Math.round(watermarkHeight * logoRatio);
+        }
+
+        const x = margin;
+        const y = canvas.height - watermarkHeight - margin;
+
+        ctx.globalAlpha = 0.9;
+        ctx.drawImage(logoImage, x, y, watermarkWidth, watermarkHeight);
+        ctx.globalAlpha = 1;
+
+        const outputType = file.type && file.type.startsWith('image/') ? file.type : 'image/png';
+        const outputQuality = outputType === 'image/jpeg' || outputType === 'image/webp' ? 0.92 : undefined;
+
+        const blob = await new Promise<Blob>((resolve, reject) => {
+            canvas.toBlob((result) => {
+                if (result) {
+                    resolve(result);
+                    return;
+                }
+                reject(new Error('Could not generate watermarked image blob'));
+            }, outputType, outputQuality);
+        });
+
+        const extension = outputType.split('/')[1] || 'png';
+        const normalizedName = file.name.replace(/\.[^.]+$/, '');
+        const watermarkedName = `${normalizedName}-watermark.${extension}`;
+
+        URL.revokeObjectURL(sourceImage.src);
+
+        return {
+            file: new File([blob], watermarkedName, { type: outputType, lastModified: Date.now() }),
+            preview: canvas.toDataURL(outputType, outputQuality)
+        };
+    }
+
+    private loadImageFromSource(source: string): Promise<HTMLImageElement> {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = () => reject(new Error(`Could not load image source: ${source}`));
+            image.src = source;
+        });
     }
 
     /* ============ READER ============ */
@@ -1193,7 +1287,13 @@ export class ProfileEditComponent implements OnInit {
                                 plan: this.selectedPlanId ? [this.selectedPlanId.toString()] : [],
                                 imagesMain: mainImage,
                                 imagesGallery: galleryImages,
-                                ...(this.activePromoCode ? { promoCode: this.activePromoCode } : {})
+                                ...(this.activePromoCode
+                                    ? {
+                                        promoCode: this.activePromoCode,
+                                        promoDurationDays: this.promoTrialDays,
+                                        promoSelectedPlanId: this.selectedPlanId ? this.selectedPlanId.toString() : ''
+                                    }
+                                    : {})
                         };
 
                         console.log('Payload a enviar:', profilePayload);

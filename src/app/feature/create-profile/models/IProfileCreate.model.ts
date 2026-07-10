@@ -42,4 +42,6 @@ export interface IProfileCreateRequest {
   isVerify?: boolean;
   blockedCountries?: string[];
   promoCode?: string;
+  promoDurationDays?: number;
+  promoSelectedPlanId?: string;
 }

@@ -5,6 +5,7 @@ export const environment = {
   production: true,
   socket_url: 'https://flamme-rouge-backend-production.up.railway.app',
   CODE_PROMO: 'GRATIS7DIAS',
+  CODE_PROMO_TRIAL_DAYS: 7,
   api_login: `${urlBase}/auth/login`,
   api_register: `${urlBase}/auth/register`,
   api_register_client: `${urlBase}/auth/registerClient`,
