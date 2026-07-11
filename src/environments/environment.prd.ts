@@ -1,9 +1,9 @@
-const urlBase = 'https://flamme-rouge-backend-production-913e.up.railway.app/api';
+const urlBase = 'https://flamme-rouge-backend-production-251b.up.railway.app/api';
 
 
 export const environment = {
   production: true,
-  socket_url: 'https://flamme-rouge-backend-production.up.railway.app',
+  socket_url: 'https://flamme-rouge-backend-production-251b.up.railway.app',
   CODE_PROMO: 'GRATIS7DIAS',
   CODE_PROMO_TRIAL_DAYS: 7,
   api_login: `${urlBase}/auth/login`,
