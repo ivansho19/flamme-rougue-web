@@ -5,7 +5,7 @@ const urlBase = 'http://localhost:5000/api';
 export const environment = {
   production: true,
   socket_url: 'http://localhost:5000',
-  CODE_PROMO: 'GRATIS7DIAS',
+  CODE_PROMO: 'ALAFREE7DAYS',
   CODE_PROMO_TRIAL_DAYS: 7,
   api_login: `${urlBase}/auth/login`,
   api_register: `${urlBase}/auth/register`,
