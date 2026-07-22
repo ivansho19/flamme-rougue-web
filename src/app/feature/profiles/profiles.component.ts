@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -14,6 +15,12 @@ import EmblaCarousel, { EmblaCarouselType } from 'embla-carousel';
 import { CommentPlansService } from '../../shared/services/comment-plans/comment-plans.service';
 import { CommentPlanStatus } from '../../shared/models/comment-plans.model';
 import { CommentPlanBadgeHelper, CommentPlanBadgeType } from '../../shared/clases/commentPlanBadge';
+import {
+  buildProfileSlug,
+  parseProfileRouteParam,
+  profileMatchesRouteParam
+} from '../../shared/clases/profileSlug';
+import { resolveProfileId } from '../../shared/clases/resolveProfileId';
 
 @Component({
     selector: 'app-profiles',
@@ -57,6 +64,7 @@ export class ProfilesComponent implements OnInit {
     constructor(
       private route: ActivatedRoute,
       private router: Router,
+      private title: Title,
       private profileService: ProfileService,
       private commentsService: CommentsService,
       private ratingsService: RatingsService,
@@ -66,13 +74,84 @@ export class ProfilesComponent implements OnInit {
 
     ngOnInit() {
       this.route.paramMap.subscribe(params => {
-        this.profileId = params.get('id') || '';
-        if (!this.profileId) {
+        const slugOrId = params.get('slug') || params.get('id') || '';
+        if (!slugOrId) {
           return;
         }
-        this.loadPublicProfilePage();
+        this.resolveAndLoadProfile(slugOrId);
       });
       this.loadViewerCommentPlanBadge();
+    }
+
+    private resolveAndLoadProfile(slugOrId: string): void {
+      const parsed = parseProfileRouteParam(slugOrId);
+
+      if (parsed.isObjectId && parsed.objectId) {
+        this.profileId = parsed.objectId;
+        this.loadPublicProfilePage();
+        return;
+      }
+
+      this.loading = true;
+      const searchQuery = parsed.slugBase.replace(/-/g, ' ').trim();
+
+      this.profileService.searchProfiles(searchQuery || slugOrId).pipe(
+        map((response) => {
+          const list = response?.profiles ?? response ?? [];
+          return Array.isArray(list) ? list : [];
+        }),
+        catchError(() => of([] as any[])),
+        map((profiles) => profiles.find((profile) => profileMatchesRouteParam(profile, parsed)) || null)
+      ).subscribe({
+        next: (matched) => {
+          if (matched) {
+            this.applyResolvedProfile(matched, slugOrId);
+            return;
+          }
+
+          this.profileService.getAllProfiles().subscribe({
+            next: (response) => {
+              const list = response?.profiles ?? response ?? [];
+              const profiles = Array.isArray(list) ? list : [];
+              const found = profiles.find((profile) => profileMatchesRouteParam(profile, parsed)) || null;
+              if (found) {
+                this.applyResolvedProfile(found, slugOrId);
+                return;
+              }
+              this.loading = false;
+              this.profileData = null;
+              this.error = 'PROFILE.NOT_FOUND';
+            },
+            error: () => {
+              this.loading = false;
+              this.profileData = null;
+            }
+          });
+        }
+      });
+    }
+
+    private applyResolvedProfile(profile: any, currentParam: string): void {
+      this.profileId = resolveProfileId(profile);
+      this.profileData = profile;
+      this.loading = false;
+      this.canonicalizeProfileUrl(profile, currentParam);
+      this.loadComments();
+      this.loadLikes();
+      this.updatePageTitle(profile);
+    }
+
+    private canonicalizeProfileUrl(profile: any, currentParam: string): void {
+      const canonical = buildProfileSlug(profile);
+      if (!canonical || canonical === currentParam) {
+        return;
+      }
+      this.router.navigate(['/profile', canonical], { replaceUrl: true });
+    }
+
+    private updatePageTitle(profile: any): void {
+      const name = profile?.displayName || 'Perfil';
+      this.title.setTitle(`${name} | Flammes Rouges`);
     }
 
     private loadPublicProfilePage(): void {
@@ -85,6 +164,14 @@ export class ProfilesComponent implements OnInit {
       this.profileService.getProfileById(this.profileId).subscribe({
         next: (response) => {
           this.profileData = response?.profile ?? response ?? null;
+          if (this.profileData) {
+            const currentParam =
+              this.route.snapshot.paramMap.get('slug') ||
+              this.route.snapshot.paramMap.get('id') ||
+              '';
+            this.canonicalizeProfileUrl(this.profileData, currentParam);
+            this.updatePageTitle(this.profileData);
+          }
         },
         error: (error) => {
           console.error('Error cargando perfil:', error);

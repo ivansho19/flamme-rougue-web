@@ -25,9 +25,21 @@ export class AuthService {
         );
     }
 
-    registerUser(name: string, lastName: string, email: string, password: string): Observable<IAuthResponse> {
+    registerUser(
+      name: string,
+      lastName: string,
+      email: string,
+      password: string,
+      cfTurnstileToken: string
+    ): Observable<IAuthResponse> {
       this.loaderS.setLoaderState(true);
-        return this.http.post<IAuthResponse>(this.apiRegisterUser, { name, lastName, email, password }).pipe(
+        return this.http.post<IAuthResponse>(this.apiRegisterUser, {
+          name,
+          lastName,
+          email,
+          password,
+          cfTurnstileToken
+        }).pipe(
           delay(3000), // Delay artificial de 3 segundos
           finalize(() => this.loaderS.setLoaderState(false))
         );

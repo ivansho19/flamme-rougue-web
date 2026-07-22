@@ -619,7 +619,13 @@
     "PASSWORD_MISMATCH": "Wachtwoorden komen niet overeen",
     "SUBMIT": "Account aanmaken",
     "ALREADY_ACCOUNT": "Heb je al een account?",
-    "LOGIN_LINK": "Inloggen"
+    "LOGIN_LINK": "Inloggen",
+    "TURNSTILE_REQUIRED_TITLE": "Verificatie vereist",
+    "TURNSTILE_REQUIRED": "Voltooi de beveiligingscontrole voordat je je registreert.",
+    "TURNSTILE_FAILED": "We konden niet verifiëren dat je een mens bent. Probeer het opnieuw.",
+    "TURNSTILE_LOAD_ERROR": "De beveiligingscontrole kon niet worden geladen. Vernieuw de pagina.",
+    "REGISTER_ERROR_TITLE": "Registratiefout",
+    "REGISTER_ERROR": "Registratie is mislukt. Probeer het opnieuw."
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROOD - Maximale zichtbaarheid",

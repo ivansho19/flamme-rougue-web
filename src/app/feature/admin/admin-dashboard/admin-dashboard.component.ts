@@ -8,6 +8,7 @@ import { AdminUser } from '../../../shared/models/comment-plans.model';
 import { TopRojoService } from '../../../shared/services/top-rojo/top-rojo.service';
 import { ToastService } from '../../../shared/services/toast/toast.service';
 import { resolveProfileId } from '../../../shared/clases/resolveProfileId';
+import { getProfileRouterCommands } from '../../../shared/clases/profileSlug';
 
 type TopRojoAdminStatusFilter = 'all' | 'pending' | 'active' | 'expired' | 'cancelled';
 
@@ -863,7 +864,7 @@ export class AdminDashboardComponent implements OnInit {
     if (!profileId) {
       return;
     }
-    this.router.navigate(['/profile', profileId]);
+    this.router.navigate(getProfileRouterCommands(profile));
   }
 
   goToTopRojoProfile(topRojo: any): void {
@@ -872,7 +873,12 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/profile', profileId]);
+    this.router.navigate(getProfileRouterCommands({
+      displayName: topRojo?.displayName || topRojo?.title || topRojo?.profile?.displayName,
+      title: topRojo?.title,
+      _id: profileId,
+      profile: topRojo?.profile
+    }));
   }
 
   get topRojoTotalCount(): number {

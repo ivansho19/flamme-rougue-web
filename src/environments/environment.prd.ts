@@ -26,5 +26,6 @@ export const environment = {
   api_paypal_capture_order: `${urlBase}/paypal/capture-order`,
   paypalClientId: 'AbgR_IFnyTEYpBaMzn3nZ6FN-ops0l0Et85fppIQmTxJjc-435OREQN3ipLFIxJDEXM3B4nfu1-oumIF',
   paypalCurrency: 'EUR',
+  turnstileSiteKey: '0x4AAAAAAD66rSRoSOa35VHQ',
 
 };

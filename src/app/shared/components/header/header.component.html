@@ -396,7 +396,7 @@
                     class="search-item"
                     type="button"
                     *ngFor="let result of searchResults"
-                    (click)="selectProfile(result.id)"
+                    (click)="selectProfile(result)"
                 >
                     <img class="search-item-avatar" [src]="result.imageUrl || 'assets/images/model.webp'" alt="Imagen de perfil" />
                     <div class="search-item-text">

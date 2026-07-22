@@ -57,9 +57,20 @@
                 </div>
             </div>
 
+            <div class="form-group turnstile-group">
+                <app-cf-turnstile
+                    [language]="currentLang"
+                    (tokenChange)="onTurnstileToken($event)"
+                    (error)="onTurnstileError()">
+                </app-cf-turnstile>
+                <div class="error" *ngIf="turnstileError">
+                    {{ 'REGISTER_FORM.TURNSTILE_LOAD_ERROR' | translate }}
+                </div>
+            </div>
+
             <!-- Botón -->
             <button class="btn-login" type="submit" (click)="onSubmitUser()"
-                [disabled]="anuncianteForm.invalid">{{ 'REGISTER_FORM.SUBMIT' | translate }}</button>
+                [disabled]="!canSubmit">{{ 'REGISTER_FORM.SUBMIT' | translate }}</button>
 
             <!-- Links extra -->
             <div class="extra-links">

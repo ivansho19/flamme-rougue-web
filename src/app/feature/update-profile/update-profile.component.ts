@@ -13,6 +13,7 @@ import { ToastService } from '../../shared/services/toast/toast.service';
 import { PlanOption } from '../../shared/model/planes.model';
 import { Country } from '../../shared/model/country.model';
 import { ProfileImage } from '../../shared/model/profile.model';
+import { getProfileRouterCommands } from '../../shared/clases/profileSlug';
 import { GetLenguages } from '../../shared/clases/getLenguagesOptions';
 import { GetWeekDays } from '../../shared/clases/getWeekDays';
 import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
@@ -267,7 +268,11 @@ export class UpdateProfileComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/profile', targetProfileId]);
+    const publicName = this.profileForm?.get('basicInfo.publicName')?.value || '';
+    this.router.navigate(getProfileRouterCommands({
+      displayName: publicName,
+      _id: targetProfileId
+    }));
   }
 
   private getProfileByUser(userId: string) {

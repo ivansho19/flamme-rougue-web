@@ -619,7 +619,13 @@
     "PASSWORD_MISMATCH": "Passwords do not match",
     "SUBMIT": "Create account",
     "ALREADY_ACCOUNT": "Already have an account?",
-    "LOGIN_LINK": "Sign in"
+    "LOGIN_LINK": "Sign in",
+    "TURNSTILE_REQUIRED_TITLE": "Verificação necessária",
+    "TURNSTILE_REQUIRED": "Conclua a verificação de segurança antes de se registar.",
+    "TURNSTILE_FAILED": "Não foi possível verificar que é humano. Tente novamente.",
+    "TURNSTILE_LOAD_ERROR": "Não foi possível carregar a verificação de segurança. Atualize a página.",
+    "REGISTER_ERROR_TITLE": "Erro de registo",
+    "REGISTER_ERROR": "Não foi possível concluir o registo. Tente novamente."
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP RED - Maximum Visibility",

@@ -21,9 +21,9 @@
           [age]="card.age"
           [city]="card.city"
           [isVerified]="card.isVerify"
-          [buttonUrl]="'/profile/' + card._id"
+          [buttonUrl]="getProfileUrl(card)"
           [plan]="card.plan"
-          (click)="goToProfile(card._id)">
+          (click)="goToProfile(card)">
         </app-card>
       </div>
     </ng-template>

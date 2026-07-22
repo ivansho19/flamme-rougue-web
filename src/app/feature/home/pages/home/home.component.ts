@@ -9,6 +9,7 @@ import { ProfileService } from '../../../../shared/services/profile/profile.serv
 import { TopRojoService } from '../../../../shared/services/top-rojo/top-rojo.service';
 import { WarningDialogComponent } from '../../../../shared/components/warning-dialog/warning-dialog.component';
 import { resolveProfileId } from '../../../../shared/clases/resolveProfileId';
+import { buildProfileUrl, getProfileRouterCommands } from '../../../../shared/clases/profileSlug';
 
 @Component({
     selector: 'app-home',
@@ -114,8 +115,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    goToProfile(id: string) {
-        this.route.navigate(['/profile', id]);
+    goToProfile(card: any) {
+        this.route.navigate(getProfileRouterCommands(card));
+    }
+
+    getProfileUrl(card: any): string {
+        return buildProfileUrl(card);
     }
 
     private mapTopRojoToCarouselItems(tops: any[]): EmblaItem[] {
@@ -125,6 +130,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         return tops.map((top) => {
             const profileId = resolveProfileId(top?.profileId);
+            const profileRef = {
+                displayName: top?.displayName || top?.title || top?.name,
+                title: top?.title,
+                _id: profileId
+            };
 
             return {
                 images: Array.isArray(top?.images)
@@ -134,7 +144,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 description: top?.description || '',
                 phone: top?.contactPhone || '',
                 buttonText: profileId ? 'Ver perfil' : undefined,
-                buttonUrl: profileId ? `/profile/${profileId}` : undefined
+                buttonUrl: profileId ? buildProfileUrl(profileRef) : undefined
             };
         });
     }

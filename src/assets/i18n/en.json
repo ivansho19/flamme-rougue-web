@@ -620,7 +620,13 @@
     "PASSWORD_MISMATCH": "Passwords do not match",
     "SUBMIT": "Create account",
     "ALREADY_ACCOUNT": "Already have an account?",
-    "LOGIN_LINK": "Sign in"
+    "LOGIN_LINK": "Sign in",
+    "TURNSTILE_REQUIRED_TITLE": "Verification required",
+    "TURNSTILE_REQUIRED": "Complete the security check before registering.",
+    "TURNSTILE_FAILED": "We could not verify that you are human. Please try again.",
+    "TURNSTILE_LOAD_ERROR": "The security check could not load. Please refresh the page.",
+    "REGISTER_ERROR_TITLE": "Registration error",
+    "REGISTER_ERROR": "Registration could not be completed. Please try again."
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP RED - Maximum Visibility",

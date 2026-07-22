@@ -620,7 +620,13 @@
     "PASSWORD_MISMATCH": "Les mots de passe ne correspondent pas",
     "SUBMIT": "S inscrire",
     "ALREADY_ACCOUNT": "Vous avez deja un compte?",
-    "LOGIN_LINK": "Se connecter"
+    "LOGIN_LINK": "Se connecter",
+    "TURNSTILE_REQUIRED_TITLE": "Verification requise",
+    "TURNSTILE_REQUIRED": "Completez la verification de securite avant de vous inscrire.",
+    "TURNSTILE_FAILED": "Impossible de verifier que vous etes humain. Reessayez.",
+    "TURNSTILE_LOAD_ERROR": "Impossible de charger la verification de securite. Rechargez la page.",
+    "REGISTER_ERROR_TITLE": "Erreur d'inscription",
+    "REGISTER_ERROR": "Impossible de terminer l'inscription. Reessayez."
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROUGE - Visibilité maximale",

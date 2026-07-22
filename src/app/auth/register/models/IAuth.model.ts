@@ -3,6 +3,7 @@ export interface IAuthRequest {
   lastName: string;
   email: string;
   password: string;
+  cfTurnstileToken: string;
   country?: string;
   city?: string;
   gender?: string;

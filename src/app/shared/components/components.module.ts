@@ -25,6 +25,7 @@ import { LikeButtonComponent } from './like-button/like-button.component';
 import { RulesModalComponent } from './rules-modal/rules-modal.component';
 import { CountrySearchSelectComponent } from './country-search-select/country-search-select.component';
 import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-badge.component';
+import { CfTurnstileComponent } from './cf-turnstile/cf-turnstile.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-bad
     LikeButtonComponent,
     RulesModalComponent,
     CountrySearchSelectComponent,
-    CommentPlanBadgeComponent
+    CommentPlanBadgeComponent,
+    CfTurnstileComponent
   ],
   exports: [
     LoaderComponent,
@@ -68,7 +70,8 @@ import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-bad
     LikeButtonComponent,
     RulesModalComponent,
     CountrySearchSelectComponent,
-    CommentPlanBadgeComponent
+    CommentPlanBadgeComponent,
+    CfTurnstileComponent
   ],
   imports: [
     CommonModule,

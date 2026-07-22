@@ -620,7 +620,13 @@
     "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
     "SUBMIT": "Registrarme",
     "ALREADY_ACCOUNT": "¿Ya tienes una cuenta?",
-    "LOGIN_LINK": "Inicia sesión"
+    "LOGIN_LINK": "Inicia sesión",
+    "TURNSTILE_REQUIRED_TITLE": "Verificación requerida",
+    "TURNSTILE_REQUIRED": "Completa la verificación de seguridad antes de registrarte.",
+    "TURNSTILE_FAILED": "No se pudo verificar que eres humano. Inténtalo de nuevo.",
+    "TURNSTILE_LOAD_ERROR": "No se pudo cargar la verificación de seguridad. Recarga la página.",
+    "REGISTER_ERROR_TITLE": "Error de registro",
+    "REGISTER_ERROR": "No se pudo completar el registro. Inténtalo de nuevo."
   },
   "TOP_ROJO": {
     "TITLE": "🔴 TOP ROJO - Máxima Visibilidad",

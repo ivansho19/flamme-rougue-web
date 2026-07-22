@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { GetCountries } from "../../clases/getCountries";
 import { GetFlags } from "../../clases/getFlagsOptions";
+import { getProfileRouterCommands } from "../../clases/profileSlug";
 import { NotificationsService } from "../../services/notifications/notifications.service";
 import { AuthSessionService } from "../../services/auth-session/auth-session.service";
 import { CommentPlansService } from "../../services/comment-plans/comment-plans.service";
@@ -26,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   selectedFlagUrl = 'https://flagcdn.com/gb.svg';
   searchOpen = false;
   searchQuery = '';
-  searchResults: Array<{ id: string; name: string; city?: string; imageUrl?: string }> = [];
+  searchResults: Array<{ id: string; name: string; city?: string; imageUrl?: string; slugSource?: any }> = [];
   searchLoading = false;
   currentLang = 'es';
   adminNotificationCount = 0;
@@ -92,7 +93,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 id: profile._id,
                 name: profile.displayName,
                 city: profile.city,
-                imageUrl: profile?.imagesMain?.url
+                imageUrl: profile?.imagesMain?.url,
+                slugSource: profile
               }));
             }),
             catchError(() => of([]))
@@ -244,11 +246,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.searchInput?.nativeElement?.focus();
   }
 
-  selectProfile(profileId: string) {
+  selectProfile(result: { id: string; name: string; slugSource?: any }) {
     this.searchOpen = false;
     this.searchQuery = '';
     this.searchResults = [];
-    this.route.navigate(['/profile', profileId]);
+    this.route.navigate(
+      getProfileRouterCommands(result.slugSource || { displayName: result.name, _id: result.id })
+    );
   }
 
   setFlag(flag: { url: string; label: string; lang: string }) {
@@ -335,7 +339,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.profileNotificationsOpen = false;
     const profileId = this.getStoredProfileId();
     if (profileId) {
-      this.route.navigate(['/profile', profileId]);
+      this.route.navigate(getProfileRouterCommands({
+        displayName: this.getUserName() || undefined,
+        _id: profileId
+      }));
       return;
     }
     this.navigateToProfile();

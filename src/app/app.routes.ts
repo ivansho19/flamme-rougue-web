@@ -38,7 +38,7 @@ export const routes: Routes = [
           import('./feature/home/pages/home/home.module').then((m) => m.HomeModule),
       },
       {
-        path: 'profile/:id',
+        path: 'profile/:slug',
         loadChildren: () =>
           import('./feature/profiles/profiles.module').then((m) => m.ProfilesModule),
       },
