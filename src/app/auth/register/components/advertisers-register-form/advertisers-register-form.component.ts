@@ -174,6 +174,8 @@ export class AdvertisersRegisterFormComponent implements OnInit {
     }
 
     get canSubmit(): boolean {
-        return this.anuncianteForm.valid && !!this.cfTurnstileToken && !this.submitting;
+        return this.anuncianteForm.valid && !this.submitting
+        // && !!this.cfTurnstileToken
+        ;
     }
 }
