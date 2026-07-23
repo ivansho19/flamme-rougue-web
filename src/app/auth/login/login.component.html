@@ -39,7 +39,17 @@
           [controles]="passwordControl"
           name="password">
         </app-input-custom>
-         <button type="submit" class="btn-custom" [disabled]="loginForm.invalid">
+        <!-- <div style="margin-top: 2rem;">
+          <app-cf-turnstile
+              [language]="currentLang"
+              (tokenChange)="onTurnstileToken($event)"
+              (error)="onTurnstileError()">
+          </app-cf-turnstile>
+          <div class="error" *ngIf="turnstileError">
+              {{ 'REGISTER_FORM.TURNSTILE_LOAD_ERROR' | translate }}
+          </div>
+      </div> -->
+         <button type="submit" class="btn-custom" [disabled]="!canSubmit">
           {{ 'LOGIN.SUBMIT' | translate }}
         </button>
 

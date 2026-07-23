@@ -17,9 +17,10 @@ export class AuthService {
 
   constructor(private http: HttpClient, private loaderS: LoaderService) { }
 
-    login(email: string, password: string): Observable<IAuthResponse> {
+    login(email: string, password: string, cfTurnstileToken?: string): Observable<IAuthResponse> {
       this.loaderS.setLoaderState(true);
-        return this.http.post<IAuthResponse>(this.apiGeeGenerateToken, { email, password }).pipe(
+        return this.http.post<IAuthResponse>(this.apiGeeGenerateToken, { email, password, // cfTurnstileToken
+         }).pipe(
           delay(3000), // Delay artificial de 3 segundos
           finalize(() => this.loaderS.setLoaderState(false))
         );
@@ -30,7 +31,7 @@ export class AuthService {
       lastName: string,
       email: string,
       password: string,
-      cfTurnstileToken: string
+      // cfTurnstileToken?: string
     ): Observable<IAuthResponse> {
       this.loaderS.setLoaderState(true);
         return this.http.post<IAuthResponse>(this.apiRegisterUser, {
@@ -38,7 +39,7 @@ export class AuthService {
           lastName,
           email,
           password,
-          cfTurnstileToken
+          // cfTurnstileToken
         }).pipe(
           delay(3000), // Delay artificial de 3 segundos
           finalize(() => this.loaderS.setLoaderState(false))

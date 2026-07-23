@@ -20,8 +20,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   loaderSubscription: Subscription | undefined;
   showPassword: boolean = false;
   currentLang = 'es';
+  turnstileToken: string = '';
+  turnstileError: boolean = false;
   selectedFlagUrl = 'https://flagcdn.com/es.svg';
   flagOptions = GetFlags.getFlagsOptions();
+  submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -62,9 +65,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.valid && !this.submitting) {
       const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
+      this.authService.login(email, password, 
+        // this.turnstileToken
+      ).subscribe({
         next: (response) => {
           console.log('Inicio de sesión exitoso:', response);
           localStorage.setItem('token', response.token);
@@ -84,6 +89,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error en el inicio de sesión:', error);
+          this.submitting = false;
+          this.turnstileToken = '';
           if(error.status === 400){
             this.toastService.showToast('Error', 'Correo electrónico o contraseña incorrecta', 'error', 5);
             return;
@@ -114,6 +121,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currentLang = flag.lang;
     localStorage.setItem('app-lang', flag.lang);
     this.translate.use(flag.lang);
+  }
+
+  onTurnstileToken(token: string): void {
+    this.turnstileToken = token || '';
+    this.turnstileError = false;
+  }
+
+  onTurnstileError(): void {
+    this.turnstileToken = '';
+    this.turnstileError = true;
+  }
+
+  get canSubmit(): boolean {
+    return this.loginForm.valid && !this.submitting
+    // !!this.turnstileToken
+    ;
   }
 
   ngOnDestroy(): void {

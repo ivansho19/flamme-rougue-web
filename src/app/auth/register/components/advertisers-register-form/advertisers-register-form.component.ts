@@ -116,7 +116,7 @@ export class AdvertisersRegisterFormComponent implements OnInit {
             lastName,
             email,
             password,
-            cfTurnstileToken: this.cfTurnstileToken
+            // cfTurnstileToken: this.cfTurnstileToken
         };
 
         this.submitting = true;

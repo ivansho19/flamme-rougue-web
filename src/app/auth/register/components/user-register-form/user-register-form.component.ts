@@ -105,7 +105,7 @@ export class UserRegisterFormComponent implements OnInit {
         const { name, lastName, email, password } = this.userForm.value;
         this.submitting = true;
 
-        this.authService.registerUser(name, lastName, email, password, this.cfTurnstileToken).subscribe({
+        this.authService.registerUser(name, lastName, email, password).subscribe({
             next: (response) => {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('user', JSON.stringify(response.name));
@@ -159,6 +159,8 @@ export class UserRegisterFormComponent implements OnInit {
     }
 
     get canSubmit(): boolean {
-        return this.userForm.valid && !!this.cfTurnstileToken && !this.submitting;
+        return this.userForm.valid  && !this.submitting
+        // && !!this.cfTurnstileToken
+        ;
     }
 }
