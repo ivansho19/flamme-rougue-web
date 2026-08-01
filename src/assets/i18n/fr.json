@@ -207,6 +207,12 @@
     "VIEW_PROFILE": "Voir le profil",
     "VIEW_PROFILE_SHORT": "Voir profil",
     "REQUIRED_ERROR": "Ce champ est obligatoire",
+    "REQUIRED_FIELDS_LEGEND_PREFIX": "Les champs marqués d'un",
+    "REQUIRED_FIELDS_LEGEND_SUFFIX": "sont obligatoires",
+    "PANEL_COMPLETE": "Terminé",
+    "PANEL_INCOMPLETE_SHORT": "Incomplet",
+    "PANEL_INCOMPLETE_MESSAGE": "Il manque des champs obligatoires à remplir",
+    "MAIN_IMAGE_REQUIRED": "La photo principale est obligatoire",
     "INVALID_EMAIL_ERROR": "Format d'email invalide"
     ,
     "TOAST_PAYPAL_REQUIRED": "Terminez le paiement PayPal pour publier votre profil",
@@ -667,5 +673,83 @@
     "PENDING_REVIEW": "En attente de révision",
     "PENDING_REVIEW_DESC": "Ton TOP ROUGE attend l'activation par l'administrateur une fois le paiement validé.",
     "EXPIRED_ON": "Expiré le"
+  },
+  "FOOTER": {
+    "RIGHTS": "Tous droits réservés.",
+    "LEGAL": "Mentions légales",
+    "PRIVACY": "Confidentialité",
+    "TERMS": "Conditions"
+  },
+  "LEGAL": {
+    "KICKER": "Flammes Rouges",
+    "TITLE": "Informations légales",
+    "LEAD": "Retrouvez les mentions légales, conditions d'utilisation, confidentialité, cookies et règles de protection des mineurs.",
+    "UPDATED": "Dernière mise à jour",
+    "LAWYER_NOTE": "Ce texte est une base opérationnelle. Il doit être relu et adapté par un avocat à la réglementation applicable avant d'être considéré comme définitif.",
+    "NAV": {
+      "NOTICE": "Mentions légales",
+      "TERMS": "Conditions",
+      "PRIVACY": "Confidentialité",
+      "COOKIES": "Cookies",
+      "MINORS": "Mineurs",
+      "CONTACT": "Contact"
+    },
+    "NOTICE": {
+      "TITLE": "1. Mentions légales",
+      "P1": "Flammes Rouges (www.flammesrouges.com) est une plateforme d'annonces et de rencontres réservée aux personnes majeures (18+).",
+      "LI1": "Domaine : https://www.flammesrouges.com",
+      "LI2": "Marque : Flammes Rouges",
+      "LI3": "Objet : publication et consultation d'annonces entre utilisateurs adultes",
+      "P2": "L'accès et l'utilisation du site impliquent l'acceptation de ces conditions. Sinon, quittez la plateforme."
+    },
+    "TERMS": {
+      "TITLE": "2. Conditions d'utilisation",
+      "P1": "En vous inscrivant ou en utilisant Flammes Rouges, vous acceptez ces règles et la loi applicable.",
+      "H_USERS": "Types d'utilisateurs",
+      "P_USERS": "Il existe des comptes visiteur/utilisateur, annonceur et administration, avec des fonctions distinctes.",
+      "H_ADS": "Publication d'annonces",
+      "P_ADS": "Les annonceurs sont responsables du contenu publié. Flammes Rouges peut exiger une vérification d'identité (KYC) et modérer ou retirer du contenu.",
+      "H_PROHIBITED": "Contenus et comportements interdits",
+      "LI1": "Tout contenu impliquant des mineurs ou des personnes qui paraissent mineures.",
+      "LI2": "Traite, coercition, violence, menaces ou exploitation.",
+      "LI3": "Fraude, phishing, spam ou usurpation d'identité.",
+      "LI4": "Contenu illégal, non consenti ou portant atteinte aux droits de tiers.",
+      "H_PAYMENTS": "Paiements et forfaits",
+      "P_PAYMENTS": "Les paiements peuvent être traités par des prestataires externes (ex. PayPal). Flammes Rouges ne stocke pas les données complètes de carte dans le frontend.",
+      "H_LIABILITY": "Limitation de responsabilité",
+      "P_LIABILITY": "Flammes Rouges est un intermédiaire technique. Les relations entre utilisateurs sont privées, sans préjudice des obligations légales de la plateforme."
+    },
+    "PRIVACY": {
+      "TITLE": "3. Politique de confidentialité",
+      "P1": "Nous traitons des données personnelles pour fournir le service, vérifier l'identité si nécessaire, prévenir les abus et améliorer la plateforme.",
+      "H_DATA": "Données pouvant être traitées",
+      "LI1": "Compte : nom, e-mail, mot de passe chiffré et rôle.",
+      "LI2": "Annonce : titre, description, localisation, photos, langues et services.",
+      "LI3": "Vérification (KYC) : identité réelle et documents, accès restreint.",
+      "LI4": "Données techniques : IP/approximation réseau, langue, consentement majorité et logs de sécurité.",
+      "H_USE": "Finalités",
+      "P_USE": "Gestion des comptes et annonces, authentification, paiements, modération, support et conformité légale. Nous ne vendons pas les données personnelles.",
+      "H_RIGHTS": "Droits",
+      "P_RIGHTS": "Vous pouvez demander l'accès, la rectification, l'effacement ou la limitation du traitement selon la loi applicable.",
+      "H_RETENTION": "Conservation",
+      "P_RETENTION": "Les données sont conservées pendant la durée du compte et le temps nécessaire aux obligations légales, à la sécurité ou aux réclamations."
+    },
+    "COOKIES": {
+      "TITLE": "4. Cookies et stockage local",
+      "P1": "Nous utilisons le stockage local du navigateur et, le cas échéant, des cookies/technologies similaires.",
+      "LI1": "Session et identification (jeton d'accès).",
+      "LI2": "Langue et consentement de majorité d'âge.",
+      "LI3": "Services tiers de sécurité ou paiement (ex. Cloudflare Turnstile, PayPal).",
+      "P2": "Vous pouvez effacer les données du navigateur ; certaines fonctions peuvent cesser de fonctionner."
+    },
+    "MINORS": {
+      "TITLE": "5. Protection des mineurs",
+      "P1": "Flammes Rouges est un site pour adultes. L'accès, l'inscription ou la publication par des mineurs sont interdits.",
+      "P2": "Tout contenu lié à des mineurs entraînera retrait, blocage et, le cas échéant, coopération avec les autorités."
+    },
+    "CONTACT": {
+      "TITLE": "6. Contact",
+      "P1": "Pour toute question légale, de confidentialité ou de modération, utilisez les canaux officiels de www.flammesrouges.com."
+    }
   }
 }

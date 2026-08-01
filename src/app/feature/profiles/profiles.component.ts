@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,10 +16,12 @@ import { CommentPlanStatus } from '../../shared/models/comment-plans.model';
 import { CommentPlanBadgeHelper, CommentPlanBadgeType } from '../../shared/clases/commentPlanBadge';
 import {
   buildProfileSlug,
+  getProfileDisplayName,
   parseProfileRouteParam,
   profileMatchesRouteParam
 } from '../../shared/clases/profileSlug';
 import { resolveProfileId } from '../../shared/clases/resolveProfileId';
+import { SeoService } from '../../shared/services/seo/seo.service';
 
 @Component({
     selector: 'app-profiles',
@@ -64,7 +65,7 @@ export class ProfilesComponent implements OnInit {
     constructor(
       private route: ActivatedRoute,
       private router: Router,
-      private title: Title,
+      private seo: SeoService,
       private profileService: ProfileService,
       private commentsService: CommentsService,
       private ratingsService: RatingsService,
@@ -150,8 +151,15 @@ export class ProfilesComponent implements OnInit {
     }
 
     private updatePageTitle(profile: any): void {
-      const name = profile?.displayName || 'Perfil';
-      this.title.setTitle(`${name} | Flammes Rouges`);
+      const name = getProfileDisplayName(profile) || 'Perfil';
+      const slug = buildProfileSlug(profile);
+      const description = (profile?.description || profile?.profile?.description || '').toString();
+      const image =
+        profile?.profileImage?.url ||
+        profile?.profileImage ||
+        profile?.mainImage ||
+        undefined;
+      this.seo.applyProfile(name, slug, description.slice(0, 160), image);
     }
 
     private loadPublicProfilePage(): void {

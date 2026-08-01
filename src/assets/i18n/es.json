@@ -207,6 +207,12 @@
     "VIEW_PROFILE": "Ir a mi perfil",
     "VIEW_PROFILE_SHORT": "Ver perfil",
     "REQUIRED_ERROR": "Este campo es obligatorio",
+    "REQUIRED_FIELDS_LEGEND_PREFIX": "Los campos marcados con",
+    "REQUIRED_FIELDS_LEGEND_SUFFIX": "son obligatorios",
+    "PANEL_COMPLETE": "Completado",
+    "PANEL_INCOMPLETE_SHORT": "Incompleto",
+    "PANEL_INCOMPLETE_MESSAGE": "Faltan campos obligatorios por rellenar",
+    "MAIN_IMAGE_REQUIRED": "La foto principal es obligatoria",
     "INVALID_EMAIL_ERROR": "Formato de email inválido"
     ,
     "TOAST_PAYPAL_REQUIRED": "Completa el pago con PayPal para publicar tu perfil",
@@ -679,5 +685,83 @@
     "PENDING_REVIEW_DESC": "Tu TOP ROJO está en espera de activación por el administrador una vez validado el pago.",
     "EXPIRED_ON": "Expiró el",
     "CONFIRM_PLAN": "Confirmar plan"
+  },
+  "FOOTER": {
+    "RIGHTS": "Todos los derechos reservados.",
+    "LEGAL": "Aviso legal",
+    "PRIVACY": "Privacidad",
+    "TERMS": "Términos"
+  },
+  "LEGAL": {
+    "KICKER": "Flammes Rouges",
+    "TITLE": "Información legal",
+    "LEAD": "Aquí encuentras el aviso legal, los términos de uso, la privacidad, las cookies y las reglas de protección de menores de la plataforma.",
+    "UPDATED": "Última actualización",
+    "LAWYER_NOTE": "Este texto es una base operativa para la plataforma. Debe ser revisado y adaptado por un abogado a la normativa aplicable (UE/país de operación) antes de considerarse definitivo.",
+    "NAV": {
+      "NOTICE": "Aviso legal",
+      "TERMS": "Términos",
+      "PRIVACY": "Privacidad",
+      "COOKIES": "Cookies",
+      "MINORS": "Menores",
+      "CONTACT": "Contacto"
+    },
+    "NOTICE": {
+      "TITLE": "1. Aviso legal",
+      "P1": "Flammes Rouges (www.flammesrouges.com) es una plataforma digital de anuncios y citas dirigida exclusivamente a personas mayores de 18 años.",
+      "LI1": "Dominio: https://www.flammesrouges.com",
+      "LI2": "Marca comercial: Flammes Rouges",
+      "LI3": "Ámbito: publicación y consulta de anuncios entre usuarios adultos",
+      "P2": "El acceso y uso del sitio implican la aceptación de estas condiciones. Si no estás de acuerdo, debes abandonar la plataforma."
+    },
+    "TERMS": {
+      "TITLE": "2. Términos y condiciones de uso",
+      "P1": "Al registrarte o usar Flammes Rouges aceptas cumplir estas reglas y la legislación vigente.",
+      "H_USERS": "Tipos de usuario",
+      "P_USERS": "Existen cuentas de usuario/visitante, anunciante y administración. Cada rol tiene funciones distintas (consulta, publicación de anuncios, moderación).",
+      "H_ADS": "Publicación de anuncios",
+      "P_ADS": "Los anunciantes son responsables del contenido que publican (textos, imágenes y datos de contacto públicos). Flammes Rouges puede exigir verificación de identidad (KYC) y moderar o retirar contenido.",
+      "H_PROHIBITED": "Contenido y conductas prohibidas",
+      "LI1": "Cualquier contenido con menores de edad o que aparenten serlo.",
+      "LI2": "Trata de personas, coacción, violencia, amenazas o explotación.",
+      "LI3": "Fraude, phishing, spam o usurpación de identidad.",
+      "LI4": "Contenido ilegal, no consentido o que vulnere derechos de terceros.",
+      "H_PAYMENTS": "Pagos y planes",
+      "P_PAYMENTS": "Los pagos de planes o promociones pueden procesarse mediante proveedores externos (por ejemplo PayPal) u otros canales habilitados. Flammes Rouges no almacena datos completos de tarjetas bancarias en el frontend.",
+      "H_LIABILITY": "Limitación de responsabilidad",
+      "P_LIABILITY": "Flammes Rouges es un intermediario tecnológico. Las relaciones entre usuarios son privadas. La plataforma no garantiza resultados de citas ni se responsabiliza de acuerdos fuera del sitio, sin perjuicio de sus obligaciones legales."
+    },
+    "PRIVACY": {
+      "TITLE": "3. Política de privacidad",
+      "P1": "Tratamos datos personales para prestar el servicio, verificar identidad cuando corresponda, prevenir abuso y mejorar la plataforma.",
+      "H_DATA": "Datos que podemos tratar",
+      "LI1": "Datos de cuenta: nombre, email, contraseña cifrada y rol.",
+      "LI2": "Datos de anuncio: título, descripción, ubicación, fotos, idiomas y servicios.",
+      "LI3": "Datos de verificación (KYC): nombre real, documento e imágenes asociadas, con acceso restringido.",
+      "LI4": "Datos técnicos: IP/aproximación de red, idioma, consentimiento de mayoría de edad y logs de seguridad.",
+      "H_USE": "Finalidades",
+      "P_USE": "Gestionar cuentas y anuncios, autenticación, pagos, moderación, soporte y cumplimiento legal. No vendemos datos personales como producto.",
+      "H_RIGHTS": "Derechos",
+      "P_RIGHTS": "Puedes solicitar acceso, rectificación, eliminación o limitación del tratamiento contactando a la plataforma, según la normativa aplicable.",
+      "H_RETENTION": "Conservación",
+      "P_RETENTION": "Conservamos los datos mientras la cuenta esté activa y el tiempo adicional necesario por obligaciones legales, seguridad o reclamaciones. Al eliminar una cuenta se suprimen o anonimizan los datos operativos cuando sea posible."
+    },
+    "COOKIES": {
+      "TITLE": "4. Cookies y almacenamiento local",
+      "P1": "Usamos almacenamiento local del navegador y, en su caso, cookies/tecnologías similares para el funcionamiento del sitio.",
+      "LI1": "Sesión e identificación de usuario (token de acceso).",
+      "LI2": "Preferencia de idioma y consentimiento de mayoría de edad.",
+      "LI3": "Servicios de terceros necesarios para seguridad o pagos (por ejemplo Cloudflare Turnstile o PayPal), según configuración activa.",
+      "P2": "Puedes borrar datos del navegador o bloquear cookies desde tu dispositivo; algunas funciones podrían dejar de operar."
+    },
+    "MINORS": {
+      "TITLE": "5. Protección de menores",
+      "P1": "Flammes Rouges es un sitio para adultos. Queda prohibido el acceso, registro o publicación por menores de 18 años.",
+      "P2": "Si detectamos contenido o cuentas relacionadas con menores, procederemos a su retirada, bloqueo y, cuando proceda, colaboración con autoridades."
+    },
+    "CONTACT": {
+      "TITLE": "6. Contacto",
+      "P1": "Para consultas legales, privacidad o moderación, utiliza los canales oficiales de contacto publicados en la plataforma o escribe a través del soporte habilitado en www.flammesrouges.com."
+    }
   }
 }

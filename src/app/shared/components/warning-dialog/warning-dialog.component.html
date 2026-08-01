@@ -18,6 +18,10 @@
     <u>{{ 'WARNING_DIALOG.DISCLAIMER_HIGHLIGHT' | translate }}</u>{{ 'WARNING_DIALOG.DISCLAIMER_CLOSING' | translate }}
   </div>
 
+  <p class="adult-dialog-legal-link">
+    <a routerLink="/legal" (click)="dialogRef.close(false)">{{ 'FOOTER.LEGAL' | translate }}</a>
+  </p>
+
   <button mat-flat-button color="warn" class="btn-custom" (click)="onAccept()">
     {{ 'WARNING_DIALOG.ENTER' | translate }}
   </button>
