@@ -38,6 +38,11 @@ export const routes: Routes = [
           import('./feature/home/pages/home/home.module').then((m) => m.HomeModule),
       },
       {
+        path: 'legal',
+        loadChildren: () =>
+          import('./feature/legal/legal.module').then((m) => m.LegalModule),
+      },
+      {
         path: 'profile/:slug',
         loadChildren: () =>
           import('./feature/profiles/profiles.module').then((m) => m.ProfilesModule),

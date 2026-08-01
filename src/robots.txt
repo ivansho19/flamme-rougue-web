@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /create-profile
+Disallow: /my-profile
+Disallow: /payments
+Disallow: /dashboard/
+
+Sitemap: https://www.flammesrouges.com/sitemap.xml

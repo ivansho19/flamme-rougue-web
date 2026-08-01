@@ -1,0 +1,94 @@
+<section class="legal-page">
+  <div class="legal-hero">
+    <p class="legal-kicker">{{ 'LEGAL.KICKER' | translate }}</p>
+    <h1>{{ 'LEGAL.TITLE' | translate }}</h1>
+    <p class="legal-lead">{{ 'LEGAL.LEAD' | translate }}</p>
+    <p class="legal-updated">{{ 'LEGAL.UPDATED' | translate }}: {{ updatedAt }}</p>
+    <p class="legal-disclaimer">{{ 'LEGAL.LAWYER_NOTE' | translate }}</p>
+  </div>
+
+  <nav class="legal-toc" aria-label="Índice legal">
+    <button type="button" (click)="scrollTo('aviso')">{{ 'LEGAL.NAV.NOTICE' | translate }}</button>
+    <button type="button" (click)="scrollTo('terminos')">{{ 'LEGAL.NAV.TERMS' | translate }}</button>
+    <button type="button" (click)="scrollTo('privacidad')">{{ 'LEGAL.NAV.PRIVACY' | translate }}</button>
+    <button type="button" (click)="scrollTo('cookies')">{{ 'LEGAL.NAV.COOKIES' | translate }}</button>
+    <button type="button" (click)="scrollTo('menores')">{{ 'LEGAL.NAV.MINORS' | translate }}</button>
+    <button type="button" (click)="scrollTo('contacto')">{{ 'LEGAL.NAV.CONTACT' | translate }}</button>
+  </nav>
+
+  <article class="legal-doc">
+    <section id="aviso" class="legal-block">
+      <h2>{{ 'LEGAL.NOTICE.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.NOTICE.P1' | translate }}</p>
+      <ul>
+        <li>{{ 'LEGAL.NOTICE.LI1' | translate }}</li>
+        <li>{{ 'LEGAL.NOTICE.LI2' | translate }}</li>
+        <li>{{ 'LEGAL.NOTICE.LI3' | translate }}</li>
+      </ul>
+      <p>{{ 'LEGAL.NOTICE.P2' | translate }}</p>
+    </section>
+
+    <section id="terminos" class="legal-block">
+      <h2>{{ 'LEGAL.TERMS.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.TERMS.P1' | translate }}</p>
+      <h3>{{ 'LEGAL.TERMS.H_USERS' | translate }}</h3>
+      <p>{{ 'LEGAL.TERMS.P_USERS' | translate }}</p>
+      <h3>{{ 'LEGAL.TERMS.H_ADS' | translate }}</h3>
+      <p>{{ 'LEGAL.TERMS.P_ADS' | translate }}</p>
+      <h3>{{ 'LEGAL.TERMS.H_PROHIBITED' | translate }}</h3>
+      <ul>
+        <li>{{ 'LEGAL.TERMS.LI1' | translate }}</li>
+        <li>{{ 'LEGAL.TERMS.LI2' | translate }}</li>
+        <li>{{ 'LEGAL.TERMS.LI3' | translate }}</li>
+        <li>{{ 'LEGAL.TERMS.LI4' | translate }}</li>
+      </ul>
+      <h3>{{ 'LEGAL.TERMS.H_PAYMENTS' | translate }}</h3>
+      <p>{{ 'LEGAL.TERMS.P_PAYMENTS' | translate }}</p>
+      <h3>{{ 'LEGAL.TERMS.H_LIABILITY' | translate }}</h3>
+      <p>{{ 'LEGAL.TERMS.P_LIABILITY' | translate }}</p>
+    </section>
+
+    <section id="privacidad" class="legal-block">
+      <h2>{{ 'LEGAL.PRIVACY.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.PRIVACY.P1' | translate }}</p>
+      <h3>{{ 'LEGAL.PRIVACY.H_DATA' | translate }}</h3>
+      <ul>
+        <li>{{ 'LEGAL.PRIVACY.LI1' | translate }}</li>
+        <li>{{ 'LEGAL.PRIVACY.LI2' | translate }}</li>
+        <li>{{ 'LEGAL.PRIVACY.LI3' | translate }}</li>
+        <li>{{ 'LEGAL.PRIVACY.LI4' | translate }}</li>
+      </ul>
+      <h3>{{ 'LEGAL.PRIVACY.H_USE' | translate }}</h3>
+      <p>{{ 'LEGAL.PRIVACY.P_USE' | translate }}</p>
+      <h3>{{ 'LEGAL.PRIVACY.H_RIGHTS' | translate }}</h3>
+      <p>{{ 'LEGAL.PRIVACY.P_RIGHTS' | translate }}</p>
+      <h3>{{ 'LEGAL.PRIVACY.H_RETENTION' | translate }}</h3>
+      <p>{{ 'LEGAL.PRIVACY.P_RETENTION' | translate }}</p>
+    </section>
+
+    <section id="cookies" class="legal-block">
+      <h2>{{ 'LEGAL.COOKIES.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.COOKIES.P1' | translate }}</p>
+      <ul>
+        <li>{{ 'LEGAL.COOKIES.LI1' | translate }}</li>
+        <li>{{ 'LEGAL.COOKIES.LI2' | translate }}</li>
+        <li>{{ 'LEGAL.COOKIES.LI3' | translate }}</li>
+      </ul>
+      <p>{{ 'LEGAL.COOKIES.P2' | translate }}</p>
+    </section>
+
+    <section id="menores" class="legal-block">
+      <h2>{{ 'LEGAL.MINORS.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.MINORS.P1' | translate }}</p>
+      <p>{{ 'LEGAL.MINORS.P2' | translate }}</p>
+    </section>
+
+    <section id="contacto" class="legal-block">
+      <h2>{{ 'LEGAL.CONTACT.TITLE' | translate }}</h2>
+      <p>{{ 'LEGAL.CONTACT.P1' | translate }}</p>
+      <p>
+        <a href="https://www.flammesrouges.com" rel="noopener">www.flammesrouges.com</a>
+      </p>
+    </section>
+  </article>
+</section>
