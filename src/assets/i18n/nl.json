@@ -207,6 +207,12 @@
     "VIEW_PROFILE": "Ga naar profiel",
     "VIEW_PROFILE_SHORT": "Profiel",
     "REQUIRED_ERROR": "Dit veld is verplicht",
+    "REQUIRED_FIELDS_LEGEND_PREFIX": "Velden gemarkeerd met",
+    "REQUIRED_FIELDS_LEGEND_SUFFIX": "zijn verplicht",
+    "PANEL_COMPLETE": "Voltooid",
+    "PANEL_INCOMPLETE_SHORT": "Onvolledig",
+    "PANEL_INCOMPLETE_MESSAGE": "Er ontbreken nog verplichte velden",
+    "MAIN_IMAGE_REQUIRED": "De hoofdfoto is verplicht",
     "INVALID_EMAIL_ERROR": "Ongeldig e-mailformaat"
     ,
     "TOAST_PAYPAL_REQUIRED": "Voltooi de PayPal-betaling om je profiel te publiceren",
@@ -666,5 +672,83 @@
     "PENDING_REVIEW": "In afwachting van beoordeling",
     "PENDING_REVIEW_DESC": "Je TOP ROOD wacht op activatie door de beheerder zodra de betaling is gevalideerd.",
     "EXPIRED_ON": "Verlopen op"
+  },
+  "FOOTER": {
+    "RIGHTS": "Alle rechten voorbehouden.",
+    "LEGAL": "Juridische info",
+    "PRIVACY": "Privacy",
+    "TERMS": "Voorwaarden"
+  },
+  "LEGAL": {
+    "KICKER": "Flammes Rouges",
+    "TITLE": "Juridische informatie",
+    "LEAD": "Hier vind je de juridische kennisgeving, gebruiksvoorwaarden, privacy, cookies en regels ter bescherming van minderjarigen.",
+    "UPDATED": "Laatst bijgewerkt",
+    "LAWYER_NOTE": "Deze tekst is een operationele basis. Laat hem door een advocaat afstemmen op de toepasselijke wetgeving voordat hij als definitief geldt.",
+    "NAV": {
+      "NOTICE": "Juridisch",
+      "TERMS": "Voorwaarden",
+      "PRIVACY": "Privacy",
+      "COOKIES": "Cookies",
+      "MINORS": "Minderjarigen",
+      "CONTACT": "Contact"
+    },
+    "NOTICE": {
+      "TITLE": "1. Juridische kennisgeving",
+      "P1": "Flammes Rouges (www.flammesrouges.com) is een digitaal advertentie- en datingplatform uitsluitend voor 18+.",
+      "LI1": "Domein: https://www.flammesrouges.com",
+      "LI2": "Merk: Flammes Rouges",
+      "LI3": "Doel: publiceren en bekijken van advertenties tussen volwassen gebruikers",
+      "P2": "Toegang tot en gebruik van de site betekent aanvaarding van deze voorwaarden. Zo niet, verlaat het platform."
+    },
+    "TERMS": {
+      "TITLE": "2. Gebruiksvoorwaarden",
+      "P1": "Door je te registreren of Flammes Rouges te gebruiken, aanvaard je deze regels en de toepasselijke wet.",
+      "H_USERS": "Gebruikersrollen",
+      "P_USERS": "Er zijn bezoeker/gebruiker-, adverteerders- en adminaccounts met verschillende functies.",
+      "H_ADS": "Advertenties publiceren",
+      "P_ADS": "Adverteerders zijn verantwoordelijk voor hun content. Flammes Rouges kan identiteitsverificatie (KYC) eisen en content modereren of verwijderen.",
+      "H_PROHIBITED": "Verboden content en gedrag",
+      "LI1": "Elke content met minderjarigen of personen die minderjarig lijken.",
+      "LI2": "Mensenhandel, dwang, geweld, bedreigingen of uitbuiting.",
+      "LI3": "Fraude, phishing, spam of identiteitsdiefstal.",
+      "LI4": "Illegale, niet-consensuele content of schending van rechten van derden.",
+      "H_PAYMENTS": "Betalingen en plannen",
+      "P_PAYMENTS": "Betalingen kunnen via externe providers (bijv. PayPal) lopen. Flammes Rouges bewaart geen volledige kaartgegevens in de frontend.",
+      "H_LIABILITY": "Aansprakelijkheid",
+      "P_LIABILITY": "Flammes Rouges is een technologische tussenpersoon. Relaties tussen gebruikers zijn privé, onverminderd wettelijke verplichtingen."
+    },
+    "PRIVACY": {
+      "TITLE": "3. Privacybeleid",
+      "P1": "We verwerken persoonsgegevens om de dienst te leveren, identiteit te verifiëren indien nodig, misbruik te voorkomen en het platform te verbeteren.",
+      "H_DATA": "Gegevens die we kunnen verwerken",
+      "LI1": "Account: naam, e-mail, versleuteld wachtwoord en rol.",
+      "LI2": "Advertentie: titel, beschrijving, locatie, foto's, talen en diensten.",
+      "LI3": "Verificatie (KYC): echte identiteit en documenten, met beperkte toegang.",
+      "LI4": "Technische data: IP/netwerkbenadering, taal, meerderjarigheidsconsent en securitylogs.",
+      "H_USE": "Doelen",
+      "P_USE": "Beheer van accounts en advertenties, authenticatie, betalingen, moderatie, support en naleving. We verkopen geen persoonsgegevens.",
+      "H_RIGHTS": "Rechten",
+      "P_RIGHTS": "Je kunt inzage, rectificatie, verwijdering of beperking van verwerking vragen volgens de toepasselijke wet.",
+      "H_RETENTION": "Bewaartermijn",
+      "P_RETENTION": "Gegevens blijven bewaard zolang het account actief is en zolang wettelijk of voor veiligheid/claims nodig is."
+    },
+    "COOKIES": {
+      "TITLE": "4. Cookies en lokale opslag",
+      "P1": "We gebruiken lokale browseropslag en, indien van toepassing, cookies/vergelijkbare technologieën.",
+      "LI1": "Sessie en gebruikersidentificatie (toegangstoken).",
+      "LI2": "Taalvoorkeur en meerderjarigheidsconsent.",
+      "LI3": "Derde diensten voor security of betalingen (bijv. Cloudflare Turnstile of PayPal).",
+      "P2": "Je kunt browsergegevens wissen; sommige functies werken dan mogelijk niet."
+    },
+    "MINORS": {
+      "TITLE": "5. Bescherming van minderjarigen",
+      "P1": "Flammes Rouges is een site voor volwassenen. Toegang, registratie of publicatie door minderjarigen is verboden.",
+      "P2": "Content of accounts gerelateerd aan minderjarigen worden verwijderd/geblokkeerd en, waar nodig, gemeld aan autoriteiten."
+    },
+    "CONTACT": {
+      "TITLE": "6. Contact",
+      "P1": "Voor juridische, privacy- of moderatievragen gebruik je de officiële kanalen op www.flammesrouges.com."
+    }
   }
 }
