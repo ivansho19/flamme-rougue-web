@@ -696,8 +696,8 @@
     },
     "NOTICE": {
       "TITLE": "1. Legal notice",
-      "P1": "Flammes Rouges (www.flammesrouges.com) is a digital ads and dating platform intended exclusively for people aged 18 or over.",
-      "LI1": "Domain: https://www.flammesrouges.com",
+      "P1": "Flammes Rouges (flammesrouges.com) is a digital ads and dating platform intended exclusively for people aged 18 or over.",
+      "LI1": "Domain: https://flammesrouges.com",
       "LI2": "Brand: Flammes Rouges",
       "LI3": "Scope: publishing and browsing ads between adult users",
       "P2": "Accessing and using the site implies acceptance of these conditions. If you disagree, you must leave the platform."
@@ -749,7 +749,7 @@
     },
     "CONTACT": {
       "TITLE": "6. Contact",
-      "P1": "For legal, privacy or moderation queries, use the official contact channels published on the platform or support available at www.flammesrouges.com."
+      "P1": "For legal, privacy or moderation queries, use the official contact channels published on the platform or support available at flammesrouges.com."
     }
   }
 }

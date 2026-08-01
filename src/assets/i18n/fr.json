@@ -696,8 +696,8 @@
     },
     "NOTICE": {
       "TITLE": "1. Mentions légales",
-      "P1": "Flammes Rouges (www.flammesrouges.com) est une plateforme d'annonces et de rencontres réservée aux personnes majeures (18+).",
-      "LI1": "Domaine : https://www.flammesrouges.com",
+      "P1": "Flammes Rouges (flammesrouges.com) est une plateforme d'annonces et de rencontres réservée aux personnes majeures (18+).",
+      "LI1": "Domaine : https://flammesrouges.com",
       "LI2": "Marque : Flammes Rouges",
       "LI3": "Objet : publication et consultation d'annonces entre utilisateurs adultes",
       "P2": "L'accès et l'utilisation du site impliquent l'acceptation de ces conditions. Sinon, quittez la plateforme."
@@ -749,7 +749,7 @@
     },
     "CONTACT": {
       "TITLE": "6. Contact",
-      "P1": "Pour toute question légale, de confidentialité ou de modération, utilisez les canaux officiels de www.flammesrouges.com."
+      "P1": "Pour toute question légale, de confidentialité ou de modération, utilisez les canaux officiels de flammesrouges.com."
     }
   }
 }

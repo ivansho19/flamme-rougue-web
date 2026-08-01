@@ -17,7 +17,7 @@ export class SeoService {
   private readonly meta = inject(Meta);
   private readonly router = inject(Router);
 
-  readonly siteUrl = 'https://www.flammesrouges.com';
+  readonly siteUrl = 'https://flammesrouges.com';
   readonly defaultTitle = 'Flammes Rouges | Plataforma de citas #1 en Europa';
   readonly defaultDescription =
     'Flammes Rouges - La mejor plataforma de citas #1 en las mejores ciudades de Europa. Anuncios verificados para mayores de 18 años.';

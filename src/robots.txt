@@ -7,4 +7,4 @@ Disallow: /my-profile
 Disallow: /payments
 Disallow: /dashboard/
 
-Sitemap: https://www.flammesrouges.com/sitemap.xml
+Sitemap: https://flammesrouges.com/sitemap.xml
