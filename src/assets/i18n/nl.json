@@ -119,7 +119,7 @@
     "ZONE_PLACEHOLDER": "Zone",
     "PHONE_PLACEHOLDER": "Telefoon",
     "PHONE_NUMERIC_ERROR": "Telefoon accepteert alleen cijfers",
-    "PHONE_MAX_ERROR": "Telefoon mag niet langer zijn dan 12 cijfers",
+    "PHONE_MAX_ERROR": "Telefoon mag niet langer zijn dan 15 cijfers",
     "PHONE_PREFIX_MAX_ERROR": "Prefix mag niet langer zijn dan 4 cijfers",
     "AVAILABILITY_TITLE": "Beschikbaarheid",
     "DAY_PLACEHOLDER": "Dag",

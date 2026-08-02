@@ -119,7 +119,7 @@
     "ZONE_PLACEHOLDER": "Zona",
     "PHONE_PLACEHOLDER": "Telefone",
     "PHONE_NUMERIC_ERROR": "O telefone aceita apenas números",
-    "PHONE_MAX_ERROR": "O telefone não pode exceder 12 dígitos",
+    "PHONE_MAX_ERROR": "O telefone não pode exceder 15 dígitos",
     "PHONE_PREFIX_MAX_ERROR": "O prefixo não pode exceder 4 dígitos",
     "AVAILABILITY_TITLE": "Disponibilidade",
     "DAY_PLACEHOLDER": "Dia",
