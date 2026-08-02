@@ -22,6 +22,8 @@ import { ToastService } from '../../shared/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 
+type CreateProfilePanelKey = 'images' | 'basicInfo' | 'personalData' | 'services' | 'realData';
+
 @Component({
     selector: 'app-create-profile',
     templateUrl: './create-profile.component.html',
@@ -80,6 +82,8 @@ export class ProfileEditComponent implements OnInit {
 
     isDraggingMain = false;
     isDraggingGallery = false;
+    /** Panels the user has left at least once — used to show incomplete warnings. */
+    private readonly attemptedPanels = new Set<CreateProfilePanelKey>();
     @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
     @ViewChild('galleryInput') galleryInput!: ElementRef<HTMLInputElement>;
 
@@ -741,13 +745,43 @@ export class ProfileEditComponent implements OnInit {
     }
 
     get isBasicInfoComplete(): boolean {
-        const basicInfoGroup = this.profileForm?.get('basicInfo');
-        return !!basicInfoGroup?.valid;
+        if (!this.profileForm) {
+            return false;
+        }
+
+        const publicName = this.profileForm.get('basicInfo.publicName')?.valid ?? false;
+        const email = this.profileForm.get('basicInfo.email')?.valid ?? false;
+        const description = this.profileForm.get('basicInfo.description')?.valid ?? false;
+        const country = this.profileForm.get('basicInfo.country')?.valid ?? false;
+        const city = this.isCitySelectionValid();
+        const phone = this.profileForm.get('basicInfo.phone')?.valid ?? false;
+        const availability = this.profileForm.get('basicInfo.availabilitySlots')?.valid ?? false;
+
+        return publicName && email && description && country && city && phone && availability;
     }
 
     get isPersonalDataComplete(): boolean {
-        const personalDataGroup = this.profileForm?.get('personalData');
-        return !!personalDataGroup?.valid;
+        if (!this.profileForm) {
+            return false;
+        }
+
+        const gender = this.profileForm.get('personalData.gender')?.valid ?? false;
+        const orientation = this.profileForm.get('personalData.orientation')?.valid ?? false;
+        const birthDate = this.profileForm.get('personalData.birthDate')?.valid ?? false;
+        const nationality = this.profileForm.get('personalData.nationality')?.valid ?? false;
+        const heightControl = this.profileForm.get('personalData.height');
+        const heightValue = heightControl?.value ?? '';
+        const heightValid = heightValue !== '' && !isNaN(Number(heightValue)) && Number(heightValue) > 0;
+        const weightControl = this.profileForm.get('personalData.weight');
+        const weightValue = weightControl?.value ?? '';
+        const weightValid = weightValue !== '' && !isNaN(Number(weightValue)) && Number(weightValue) > 0;
+        const hairColor = this.profileForm.get('personalData.hairColor')?.valid ?? false;
+        const eyeColor = this.profileForm.get('personalData.eyeColor')?.valid ?? false;
+        const languagesValue = this.profileForm.get('personalData.languages')?.value ?? [];
+        const hasLanguages = Array.isArray(languagesValue) && languagesValue.length > 0;
+
+        return gender && orientation && birthDate && nationality &&
+            heightValid && hairColor && eyeColor && weightValid && hasLanguages;
     }
 
     get isServicesComplete(): boolean {
@@ -756,8 +790,87 @@ export class ProfileEditComponent implements OnInit {
     }
 
     get isRealDataComplete(): boolean {
-        const realDataGroup = this.profileForm?.get('realData');
-        return !!realDataGroup?.valid;
+        if (!this.profileForm) {
+            return false;
+        }
+
+        const realName = this.profileForm.get('realData.realName')?.valid ?? false;
+        const realBirthDate = this.profileForm.get('realData.realBirthDate')?.valid ?? false;
+        const realAge = this.profileForm.get('realData.realAge')?.valid ?? false;
+        const realEmail = this.profileForm.get('realData.email')?.valid ?? false;
+        const realNationality = this.profileForm.get('realData.realNationality')?.valid ?? false;
+        const contactPhone = this.profileForm.get('realData.contactPhone')?.valid ?? false;
+        const documentType = this.profileForm.get('realData.documentType')?.value;
+        const documentFrontValid = this.profileForm.get('realData.documentFront')?.valid ?? false;
+        const documentBackValid = this.profileForm.get('realData.documentBack')?.valid ?? false;
+        const documentSingleValid = this.profileForm.get('realData.documentSingle')?.valid ?? false;
+
+        let documentsComplete = false;
+        if (documentType === 'dni') {
+            documentsComplete = documentFrontValid
+                && documentBackValid
+                && !!this.documentFrontFile
+                && !!this.documentBackFile;
+        } else if (documentType === 'passport') {
+            documentsComplete = documentSingleValid && !!this.passportFile;
+        }
+
+        return realName && realBirthDate && realAge && realEmail &&
+            realNationality && contactPhone && !!documentType && documentsComplete;
+    }
+
+    isPanelComplete(panel: CreateProfilePanelKey): boolean {
+        switch (panel) {
+            case 'images':
+                return this.isImagesComplete;
+            case 'basicInfo':
+                return this.isBasicInfoComplete;
+            case 'personalData':
+                return this.isPersonalDataComplete;
+            case 'services':
+                return true; // optional section
+            case 'realData':
+                return this.isRealDataComplete;
+            default:
+                return true;
+        }
+    }
+
+    isPanelIncomplete(panel: CreateProfilePanelKey): boolean {
+        return this.attemptedPanels.has(panel) && !this.isPanelComplete(panel);
+    }
+
+    onPanelClosed(panel: CreateProfilePanelKey): void {
+        this.attemptedPanels.add(panel);
+        this.markPanelControlsTouched(panel);
+    }
+
+    private markPanelControlsTouched(panel: CreateProfilePanelKey): void {
+        if (panel === 'images' || panel === 'services') {
+            return;
+        }
+
+        const groupName = panel === 'basicInfo'
+            ? 'basicInfo'
+            : panel === 'personalData'
+                ? 'personalData'
+                : 'realData';
+
+        const group = this.profileForm?.get(groupName);
+        if (group) {
+            this.markControlTreeTouched(group);
+        }
+    }
+
+    private markControlTreeTouched(control: AbstractControl): void {
+        control.markAsTouched({ onlySelf: true });
+        control.markAsDirty({ onlySelf: true });
+
+        if (control instanceof FormGroup) {
+            Object.values(control.controls).forEach(child => this.markControlTreeTouched(child));
+        } else if (control instanceof FormArray) {
+            control.controls.forEach(child => this.markControlTreeTouched(child));
+        }
     }
 
     get canPublish(): boolean {
