@@ -268,7 +268,7 @@ export class ProfileEditComponent implements OnInit {
                 customCity: [''],
                 zone: [''],
                 phonePrefix: ['+', Validators.maxLength(4)],
-                phone: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^\d+$/)]],
+                phone: ['', [Validators.required, Validators.maxLength(15), Validators.pattern(/^\d+$/)]],
                 availabilitySlots: this.fb.array([], this.minArrayLengthValidator(1)),
                 blockedCountries: [[]]
             }),
@@ -294,7 +294,7 @@ export class ProfileEditComponent implements OnInit {
                 realAge: [null, Validators.required],
                 email: ['', [Validators.required, Validators.email]],
                 realNationality: ['', Validators.required],
-                contactPhone: ['', [Validators.required, Validators.maxLength(12), Validators.pattern(/^\+?\d+$/)]],
+                contactPhone: ['', [Validators.required, Validators.maxLength(15), Validators.pattern(/^\+?\d+$/)]],
                 documentType: ['', Validators.required],
                 documentFront: [null],
                 documentBack: [null],
