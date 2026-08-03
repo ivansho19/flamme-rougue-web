@@ -867,6 +867,14 @@ export class AdminDashboardComponent implements OnInit {
     this.router.navigate(getProfileRouterCommands(profile));
   }
 
+  editProfile(profile: any): void {
+    const profileId = this.getProfileId(profile);
+    if (!profileId) {
+      return;
+    }
+    this.router.navigate(['/admin/edit-profile', profileId]);
+  }
+
   goToTopRojoProfile(topRojo: any): void {
     const profileId = resolveProfileId(topRojo?.profileId) || resolveProfileId(topRojo?.profile);
     if (!profileId) {

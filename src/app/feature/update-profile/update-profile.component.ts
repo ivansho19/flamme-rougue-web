@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
 import { IProfileCreateRequest } from '../create-profile/models/IProfileCreate.model';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
@@ -20,6 +20,7 @@ import { GetPosibilities } from '../../shared/clases/getPosibilityOptions';
 import { TranslateService } from '@ngx-translate/core';
 import { CitySelectionHelper } from '../../shared/clases/citySelection';
 import { PlanImageLimitsHelper } from '../../shared/clases/planImageLimits';
+import { resolveProfileId } from '../../shared/clases/resolveProfileId';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -38,6 +39,9 @@ export class UpdateProfileComponent implements OnInit {
   existingGalleryImages: ProfileImage[] = [];
   loading = false;
   profileId: string = '';
+  /** Owner user id of the profile being edited (needed for admin edits). */
+  ownerObjectId: string = '';
+  isAdminEditMode = false;
   userId: string = '';
   clientData: any;
   profileForm!: FormGroup;
@@ -69,6 +73,7 @@ export class UpdateProfileComponent implements OnInit {
     private profileService: ProfileService,
     private toastService: ToastService,
     private router: Router,
+    private route: ActivatedRoute,
     private translate: TranslateService
   ) {}
 
@@ -78,6 +83,15 @@ export class UpdateProfileComponent implements OnInit {
     this.languageOptions = GetLenguages.getLenguajesOptions();
     this.posibilityOptions = GetPosibilities.GetPosibilityOptions();
     this.weekDays = GetWeekDays.GetWeekDaysOptions();
+
+    const adminProfileId = this.resolveAdminRouteProfileId();
+    if (adminProfileId) {
+      this.isAdminEditMode = true;
+      this.profileId = adminProfileId;
+      this.getProfile(adminProfileId, { persistLocalStorage: false });
+      return;
+    }
+
     this.loadClientFromEmail();
 
     const storedProfileId = localStorage.getItem('profileId');
@@ -92,6 +106,22 @@ export class UpdateProfileComponent implements OnInit {
       this.userId = storedUserId;
       this.getProfileByUser(storedUserId);
     }
+  }
+
+  private resolveAdminRouteProfileId(): string {
+    let current: ActivatedRoute | null = this.route;
+    while (current) {
+      const id = current.snapshot.paramMap.get('id');
+      if (id) {
+        return id;
+      }
+      current = current.parent;
+    }
+    return '';
+  }
+
+  goBackToAdmin(): void {
+    this.router.navigate(['/admin/dashboard']);
   }
 
   openMainFileSelector() {
@@ -259,7 +289,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   goToPublishedProfile(): void {
-    if (this.isProfileInactive) {
+    if (this.isProfileInactive && !this.isAdminEditMode) {
       return;
     }
     const targetProfileId = this.profileId || localStorage.getItem('profileId') || '';
@@ -286,6 +316,11 @@ export class UpdateProfileComponent implements OnInit {
         }
 
         this.profileId = profile._id;
+        this.ownerObjectId =
+          profile.objectId ||
+          profile.userId ||
+          userId ||
+          '';
         localStorage.setItem('profileId', this.profileId);
         this.applyProfileToForm(profile);
       },
@@ -372,8 +407,20 @@ export class UpdateProfileComponent implements OnInit {
     return CitySelectionHelper.resolveCityForPayload(basicInfo.city, basicInfo.customCity);
   }
 
-  private getProfile(id: string) {
+  private getProfile(id: string, options?: { persistLocalStorage?: boolean }) {
+    const persistLocalStorage = options?.persistLocalStorage !== false;
+
     if (!id || id === 'null') {
+      if (this.isAdminEditMode) {
+        this.toastService.showToast(
+          this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
+          this.translate.instant('PROFILE_FORM.ADMIN_EDIT_NOT_FOUND'),
+          'error',
+          4
+        );
+        this.goBackToAdmin();
+        return;
+      }
       this.router.navigate(['/create-profile']);
       return;
     }
@@ -383,17 +430,42 @@ export class UpdateProfileComponent implements OnInit {
         this.updateInactiveState(response);
         const profile = response?.profile ?? response ?? null;
         if (!profile) {
+          if (this.isAdminEditMode) {
+            this.toastService.showToast(
+              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
+              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_NOT_FOUND'),
+              'error',
+              4
+            );
+            this.goBackToAdmin();
+          }
           return;
         }
 
-        this.profileId = profile._id || this.profileId;
-        if (this.profileId) {
+        this.profileId = resolveProfileId(profile) || profile._id || this.profileId;
+        this.ownerObjectId =
+          profile.objectId ||
+          profile.userId ||
+          profile.user?._id ||
+          profile.user?.id ||
+          '';
+
+        if (persistLocalStorage && this.profileId && !this.isAdminEditMode) {
           localStorage.setItem('profileId', this.profileId);
         }
         this.applyProfileToForm(profile);
       },
       error: (error) => {
         console.error('Error cargando perfil:', error);
+        if (this.isAdminEditMode) {
+          this.toastService.showToast(
+            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
+            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_LOAD_ERROR'),
+            'error',
+            4
+          );
+          this.goBackToAdmin();
+        }
       }
     });
   }
@@ -923,7 +995,7 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   async updateProfile(planUpdated: boolean = false) {
-    if (this.isProfileInactive && !(planUpdated && this.isPlanExpired)) {
+    if (!this.isAdminEditMode && this.isProfileInactive && !(planUpdated && this.isPlanExpired)) {
       return;
     }
     if (!this.enforcePlanImageLimit()) {
@@ -935,7 +1007,7 @@ export class UpdateProfileComponent implements OnInit {
       return;
     }
 
-    const lookupId = this.profileId || this.userId;
+    const lookupId = this.profileId || (!this.isAdminEditMode ? this.userId : '');
     if (!lookupId) {
       this.toastService.showToast('Perfil no identificado', 'Inicia sesion nuevamente', 'error', 4);
       return;
@@ -944,7 +1016,9 @@ export class UpdateProfileComponent implements OnInit {
     try {
       this.loading = true;
 
-      const uploadFolder = this.getUploadFolder(this.userId || lookupId);
+      const uploadFolder = this.getUploadFolder(
+        this.ownerObjectId || this.userId || lookupId
+      );
 
       let mainImageUpload$: any = of(null);
       if (this.mainImageFile) {
@@ -977,7 +1051,22 @@ export class UpdateProfileComponent implements OnInit {
 
       const basicInfo = this.profileForm.get('basicInfo')?.value || {};
       const personalData = this.profileForm.get('personalData')?.value || {};
-      const objectId = this.clientData?._id || this.userId;
+      const objectId =
+        this.ownerObjectId ||
+        this.clientData?._id ||
+        this.userId ||
+        '';
+
+      if (!objectId) {
+        this.toastService.showToast(
+          'Perfil incompleto',
+          'No se pudo determinar el usuario dueño del anuncio',
+          'error',
+          4
+        );
+        this.loading = false;
+        return;
+      }
 
       const availabilityList = this.formatAvailabilityList(this.availabilitySlots.value || [])
         .filter(Boolean);
@@ -1045,6 +1134,13 @@ export class UpdateProfileComponent implements OnInit {
             setTimeout(() => {
               window.location.reload();
             }, 3000);
+          } else if (this.isAdminEditMode) {
+            this.toastService.showToast(
+              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS_TITLE'),
+              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS'),
+              'success',
+              6
+            );
           } else {
             this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 8);
           }
@@ -1052,6 +1148,12 @@ export class UpdateProfileComponent implements OnInit {
         error: (error) => {
           console.error('Error actualizando perfil:', error);
           this.loading = false;
+          this.toastService.showToast(
+            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
+            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SAVE_ERROR'),
+            'error',
+            5
+          );
         }
       });
     } catch (error) {

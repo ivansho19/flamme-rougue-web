@@ -2,7 +2,7 @@
     <!-- FORM -->
     <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="form-card slide-up">
         <h2 class="section-title">
-            {{ 'PROFILE_FORM.UPDATE_TITLE' | translate }}
+            {{ (isAdminEditMode ? 'PROFILE_FORM.ADMIN_EDIT_TITLE' : 'PROFILE_FORM.UPDATE_TITLE') | translate }}
             <span class="plan-status-group" *ngIf="currentPlanKey">
                 <span class="current-plan">
                     <img class="current-plan-badge" *ngIf="currentPlanBadgeImage" [src]="currentPlanBadgeImage" alt="Plan" />
@@ -17,6 +17,15 @@
                 </span>
             </span>
         </h2>
+        <div class="admin-edit-banner" *ngIf="isAdminEditMode">
+            <div class="admin-edit-banner__text">
+                <strong>{{ 'PROFILE_FORM.ADMIN_EDIT_BADGE' | translate }}</strong>
+                <span>{{ 'PROFILE_FORM.ADMIN_EDIT_HINT' | translate }}</span>
+            </div>
+            <button type="button" class="admin-edit-banner__back" (click)="goBackToAdmin()">
+                {{ 'PROFILE_FORM.ADMIN_EDIT_BACK' | translate }}
+            </button>
+        </div>
         <div class="inactive-warning" *ngIf="isProfileInactive">
             {{ 'PROFILE_FORM.INACTIVE_WARNING' | translate }}
         </div>
@@ -333,17 +342,21 @@
         </mat-accordion>
 
         <div class="plan-actions">
-            <button type="submit" class="btn-primary" [disabled]="isProfileInactive || !canSave">
+            <button type="submit" class="btn-primary" [disabled]="(!isAdminEditMode && isProfileInactive) || !canSave">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.SAVE_CHANGES' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.SAVE_CHANGES_SHORT' | translate }}</span>
             </button>
-            <button type="button" class="btn-primary" (click)="openPlanModal()" [disabled]="!canUpdateExpiredPlan">
+            <button type="button" class="btn-primary" (click)="openPlanModal()" [disabled]="!canUpdateExpiredPlan" *ngIf="!isAdminEditMode">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.UPDATE_PLAN' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.UPDATE_PLAN_SHORT' | translate }}</span>
             </button>
-            <button type="button" class="btn-primary" (click)="goToPublishedProfile()" [disabled]="isProfileInactive">
+            <button type="button" class="btn-primary" (click)="goToPublishedProfile()" [disabled]="isProfileInactive && !isAdminEditMode">
                 <span class="btn-label-desktop">{{ 'PROFILE_FORM.VIEW_PROFILE' | translate }}</span>
                 <span class="btn-label-mobile">{{ 'PROFILE_FORM.VIEW_PROFILE_SHORT' | translate }}</span>
+            </button>
+            <button type="button" class="btn-primary btn-secondary-admin" *ngIf="isAdminEditMode" (click)="goBackToAdmin()">
+                <span class="btn-label-desktop">{{ 'PROFILE_FORM.ADMIN_EDIT_BACK' | translate }}</span>
+                <span class="btn-label-mobile">{{ 'PROFILE_FORM.ADMIN_EDIT_BACK_SHORT' | translate }}</span>
             </button>
         </div>
     </form>

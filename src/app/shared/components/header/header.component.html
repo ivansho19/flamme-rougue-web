@@ -227,6 +227,9 @@
                 (click)="onProfileNotificationsClick(); closeMobileMenu()">
                 <i class="bi bi-bell"></i> {{ 'HEADER.NOTIFICATIONS' | translate }}
             </button>
+            <button class="mobile-item" *ngIf="isAdmin()" (click)="navigateToDashboard(); closeMobileMenu()" [title]="'HEADER.GO_DASHBOARD' | translate">
+                <i class="bi bi-speedometer2"></i> {{ 'HEADER.GO_DASHBOARD' | translate }}
+            </button>
             <div class="mobile-notifications" *ngIf="isClient() && profileNotificationsOpen">
                 <div class="mobile-notifications-card">
                     <div class="mobile-notifications-header">

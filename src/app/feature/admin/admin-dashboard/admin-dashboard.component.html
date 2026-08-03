@@ -419,6 +419,13 @@
                       (click)="goToProfile(profile)">
                       <i class="bi bi-eye"></i>
                     </button>
+                    <button
+                      class="icon-btn ghost"
+                      type="button"
+                      [matTooltip]="'ADMIN_DASHBOARD.TABLE.TOOLTIP.EDIT' | translate"
+                      (click)="editProfile(profile)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
                     <mat-slide-toggle
                       class="profile-toggle"
                       [class.is-active]="isActive(profile)"

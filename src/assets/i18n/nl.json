@@ -219,7 +219,18 @@
     "TOAST_WHATSAPP_PENDING": "WhatsApp-betaling gestart. Je profiel blijft in beoordeling totdat de betaling is bevestigd.",
     "TOAST_PLAN_REQUIRED": "Je moet een plan selecteren om je profiel te publiceren",
     "TOAST_KYC_WARNING": "Profiel aangemaakt, maar er is een fout opgetreden bij het opslaan van de echte gegevens",
-    "INACTIVE_WARNING": "Je profiel is inactief. Neem contact op met de beheerder om het te activeren."
+    "INACTIVE_WARNING": "Je profiel is inactief. Neem contact op met de beheerder om het te activeren.",
+    "ADMIN_EDIT_TITLE": "Advertentie bewerken (Admin)",
+    "ADMIN_EDIT_BADGE": "Beheerdersmodus",
+    "ADMIN_EDIT_HINT": "Je bewerkt de advertentie van een adverteerder. Wijzigingen worden opgeslagen met je admin-sessie.",
+    "ADMIN_EDIT_BACK": "Terug naar dashboard",
+    "ADMIN_EDIT_BACK_SHORT": "Terug",
+    "ADMIN_EDIT_SUCCESS_TITLE": "Advertentie bijgewerkt",
+    "ADMIN_EDIT_SUCCESS": "De wijzigingen van de adverteerder zijn opgeslagen.",
+    "ADMIN_EDIT_ERROR_TITLE": "Bewerken mislukt",
+    "ADMIN_EDIT_NOT_FOUND": "Profiel niet gevonden.",
+    "ADMIN_EDIT_LOAD_ERROR": "Profiel laden mislukt.",
+    "ADMIN_EDIT_SAVE_ERROR": "Wijzigingen opslaan mislukt."
   },
   "SERVICES": {
     "RELAXING_MASSAGE": "Ontspannende massage",
@@ -401,6 +412,7 @@
       "ACTIONS": "Acties",
       "TOOLTIP": {
         "VIEW": "Profiel bekijken",
+        "EDIT": "Advertentie bewerken",
         "ACTIVATE": "Activeren",
         "DEACTIVATE": "Deactiveren",
         "DELETE": "Profiel verwijderen"

@@ -99,6 +99,56 @@
   margin-bottom: 1.25rem;
 }
 
+.admin-edit-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin: 0 0 1.1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(120deg, rgba(140, 3, 14, 0.1), rgba(242, 218, 172, 0.35));
+  border: 1px solid rgba(140, 3, 14, 0.22);
+}
+
+.admin-edit-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.admin-edit-banner__text strong {
+  color: #8c030e;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.admin-edit-banner__text span {
+  color: #4a3f3f;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.admin-edit-banner__back {
+  border: 1px solid rgba(140, 3, 14, 0.35);
+  background: #fff;
+  color: #8c030e;
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.plan-actions .btn-secondary-admin {
+  border: 1px solid rgba(140, 3, 14, 0.35) !important;
+  background: #fff !important;
+  color: #8c030e !important;
+}
+
 .btn-label-mobile {
   display: none;
 }

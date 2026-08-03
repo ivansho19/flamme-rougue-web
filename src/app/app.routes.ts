@@ -59,6 +59,11 @@ export const routes: Routes = [
           import('./feature/update-profile/update-profile.module').then((m) => m.UpdateProfileModule),
       },
       {
+        path: 'admin/edit-profile/:id',
+        loadChildren: () =>
+          import('./feature/update-profile/update-profile.module').then((m) => m.UpdateProfileModule),
+      },
+      {
         path: 'payments',
         loadChildren: () =>
           import('./feature/payments/payment.module').then((m) => m.PaymentModule),

@@ -219,7 +219,18 @@
     "TOAST_WHATSAPP_PENDING": "Paiement WhatsApp demarre. Votre profil restera en validation jusqu'a confirmation du paiement.",
     "TOAST_PLAN_REQUIRED": "Vous devez selectionner un plan pour publier votre profil",
     "TOAST_KYC_WARNING": "Profil cree, mais une erreur est survenue lors de l'enregistrement des donnees reelles",
-    "INACTIVE_WARNING": "Votre profil est inactif. Veuillez contacter l administrateur pour l activer."
+    "INACTIVE_WARNING": "Votre profil est inactif. Veuillez contacter l administrateur pour l activer.",
+    "ADMIN_EDIT_TITLE": "Modifier l'annonce (Admin)",
+    "ADMIN_EDIT_BADGE": "Mode administrateur",
+    "ADMIN_EDIT_HINT": "Vous modifiez l'annonce d'un annonceur. Les changements sont enregistrés avec votre session admin.",
+    "ADMIN_EDIT_BACK": "Retour au tableau de bord",
+    "ADMIN_EDIT_BACK_SHORT": "Retour",
+    "ADMIN_EDIT_SUCCESS_TITLE": "Annonce mise à jour",
+    "ADMIN_EDIT_SUCCESS": "Les modifications de l'annonceur ont été enregistrées.",
+    "ADMIN_EDIT_ERROR_TITLE": "Impossible de modifier",
+    "ADMIN_EDIT_NOT_FOUND": "Profil introuvable.",
+    "ADMIN_EDIT_LOAD_ERROR": "Erreur lors du chargement du profil.",
+    "ADMIN_EDIT_SAVE_ERROR": "Impossible d'enregistrer les modifications."
   },
   "SERVICES": {
     "RELAXING_MASSAGE": "Massage relaxant",
@@ -401,6 +412,7 @@
       "ACTIONS": "Actions",
       "TOOLTIP": {
         "VIEW": "Voir le profil",
+        "EDIT": "Modifier l'annonce",
         "ACTIVATE": "Activer",
         "DEACTIVATE": "Desactiver",
         "DELETE": "Supprimer le profil"
