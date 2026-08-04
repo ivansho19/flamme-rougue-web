@@ -1,59 +1,103 @@
+:host {
+  display: block;
+  max-height: inherit;
+}
+
 .adult-dialog-container {
+  display: flex;
+  flex-direction: column;
   max-width: 420px;
-  background: #fff;
-  border-radius: 7px;
-  padding: 2.1rem 2rem 1.5rem 2rem;
+  width: 100%;
+  max-height: min(92vh, 720px);
+  max-height: min(92dvh, 720px);
+  padding: 0;
   text-align: center;
-  font-family: 'Roboto', Arial, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, rgba(255, 252, 246, 0.98), rgba(250, 240, 226, 0.96));
+  border-radius: 24px;
+  border: 1px solid rgba(165, 110, 86, 0.18);
+  box-shadow: 0 28px 60px rgba(99, 43, 49, 0.18), 0 10px 24px rgba(139, 87, 62, 0.12);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.adult-dialog-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* Reserva espacio fijo para acciones (~140px) y safe-area */
+  max-height: calc(92vh - 9rem);
+  max-height: calc(92dvh - 9rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2.1rem 2rem 0.75rem;
+}
+
+.adult-dialog-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.85rem 2rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(250, 240, 226, 0.72) 0%, rgba(250, 240, 226, 0.98) 28%);
+  border-top: 1px solid rgba(165, 110, 86, 0.12);
 }
 
 .adult-dialog-logo {
   width: 180px;
+  max-width: 55%;
+  height: auto;
   display: block;
-  margin: 0 auto 1.1rem auto;
+  margin: 0 auto 1.1rem;
 }
 
 .adult-dialog-divider {
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(165, 110, 86, 0.14);
   margin-bottom: 1.3rem;
 }
 
 .adult-dialog-title {
-  font-size: 1.12rem;
-  font-weight: 500;
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
   margin-bottom: 0.75rem;
-  color: #222;
+  color: #6f2130;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .adult-dialog-message {
   font-size: 1rem;
-  color: #444;
+  color: #5f534f;
   margin-bottom: 0.6rem;
-  line-height: 1.45;
+  line-height: 1.6;
 
   b {
     font-weight: bold;
   }
+
   .adult-dialog-link {
     color: #e74c3c;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
   }
+
   a.adult-dialog-link {
     text-decoration: underline;
   }
+
   &.secondary {
-    color: #444;
-    margin-bottom: 1.35rem;
+    color: #5f534f;
+    margin-bottom: 1rem;
     margin-top: 0.5rem;
     font-size: 0.98rem;
   }
 }
 
 .adult-dialog-legal-link {
-  margin: 0 0 1rem;
+  margin: 0 0 0.35rem;
   font-size: 0.9rem;
 
   a {
@@ -64,76 +108,104 @@
   }
 }
 
-.adult-dialog-accept {
-  width: 100%;
-  margin-bottom: 0.8rem;
-  background: #e74c3c !important;
-  color: #fff !important;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  border-radius: 5px;
-  box-shadow: none;
-  height: 46px;
-}
-
-.adult-dialog-settings {
-  width: 100%;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 5px !important;
-  height: 46px;
-  border-width: 2px !important;
-  margin-top: 10px;
-}
-
-::ng-deep .cdk-overlay-backdrop {
-  background: rgba(20, 20, 20, 0.85) !important; // Más oscuro y opaco
-}
-
-/* Shared modal theme override */
-.adult-dialog-container {
-  background: linear-gradient(145deg, rgba(255, 252, 246, 0.98), rgba(250, 240, 226, 0.96));
-  border-radius: 24px;
-  border: 1px solid rgba(165, 110, 86, 0.18);
-  box-shadow: 0 28px 60px rgba(99, 43, 49, 0.18), 0 10px 24px rgba(139, 87, 62, 0.12);
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-.adult-dialog-divider {
-  border-top: 1px solid rgba(165, 110, 86, 0.14);
-}
-
-.adult-dialog-title {
-  font-family: 'Cinzel', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #6f2130;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.adult-dialog-message {
-  color: #5f534f;
-  line-height: 1.6;
-}
-
 button.btn-custom {
+  width: 100%;
+  min-height: 48px;
   background: linear-gradient(90deg, #7f1d2d, #b64e48) !important;
   color: #fff !important;
   border-radius: 14px !important;
   box-shadow: 0 10px 22px rgba(127, 29, 45, 0.24) !important;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .adult-dialog-settings {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
   border-radius: 14px !important;
   border-width: 1px !important;
   border-color: rgba(111, 33, 48, 0.18) !important;
   background: rgba(255, 255, 255, 0.82) !important;
   color: #6f2130 !important;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-::ng-deep .cdk-overlay-backdrop {
-  background: rgba(111, 33, 44, 0.18) !important;
-  backdrop-filter: blur(10px);
+@media (max-width: 640px) {
+  .adult-dialog-container {
+    max-width: none;
+    width: min(100vw - 1rem, 420px);
+    max-height: calc(100dvh - 1rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    border-radius: 20px;
+  }
+
+  .adult-dialog-scroll {
+    padding: 1.25rem 1.1rem 0.5rem;
+    max-height: calc(
+      100dvh - 1rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 9.5rem
+    );
+  }
+
+  .adult-dialog-actions {
+    padding: 0.75rem 1.1rem calc(0.95rem + env(safe-area-inset-bottom, 0px));
+    gap: 0.55rem;
+  }
+
+  .adult-dialog-logo {
+    width: 110px;
+    max-width: 42%;
+    margin-bottom: 0.7rem;
+  }
+
+  .adult-dialog-divider {
+    margin-bottom: 0.85rem;
+  }
+
+  .adult-dialog-title {
+    font-size: 1rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .adult-dialog-message {
+    font-size: 0.92rem;
+    line-height: 1.5;
+
+    &.secondary {
+      font-size: 0.88rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+}
+
+@media (max-width: 640px) and (max-height: 720px) {
+  .adult-dialog-logo {
+    width: 84px;
+    margin-bottom: 0.45rem;
+  }
+
+  .adult-dialog-divider {
+    margin-bottom: 0.6rem;
+  }
+
+  .adult-dialog-title {
+    font-size: 0.95rem;
+  }
+
+  .adult-dialog-scroll {
+    max-height: calc(
+      100dvh - 1rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 9rem
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.btn-custom,
+  .adult-dialog-settings {
+    transition: none;
+  }
 }

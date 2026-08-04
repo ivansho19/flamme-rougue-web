@@ -1,31 +1,35 @@
 <div class="adult-dialog-container">
-  <img src="assets/images/new_logo.png" class="adult-dialog-logo" alt="Flammes Rouges Logo" />
-  <hr class="adult-dialog-divider" />
+  <div class="adult-dialog-scroll">
+    <img src="assets/images/new_logo.png" class="adult-dialog-logo" alt="Flammes Rouges Logo" />
+    <hr class="adult-dialog-divider" />
 
-  <div class="adult-dialog-title">
-    <span aria-hidden="true">⚠️</span>
-    {{ 'WARNING_DIALOG.TITLE' | translate }} <b>{{ 'WARNING_DIALOG.BRAND' | translate }}</b>
+    <div class="adult-dialog-title">
+      <span aria-hidden="true">⚠️</span>
+      {{ 'WARNING_DIALOG.TITLE' | translate }} <b>{{ 'WARNING_DIALOG.BRAND' | translate }}</b>
+    </div>
+
+    <div class="adult-dialog-message">
+      {{ 'WARNING_DIALOG.MESSAGE_BEFORE_AGE' | translate }}
+      <b>{{ 'WARNING_DIALOG.AGE_REQUIREMENT' | translate }}</b>{{ 'WARNING_DIALOG.MESSAGE_AFTER_AGE' | translate }}
+    </div>
+
+    <div class="adult-dialog-message secondary">
+      <b>{{ 'WARNING_DIALOG.IMPORTANT_LABEL' | translate }}</b>
+      {{ 'WARNING_DIALOG.DISCLAIMER_BODY' | translate }}
+      <u>{{ 'WARNING_DIALOG.DISCLAIMER_HIGHLIGHT' | translate }}</u>{{ 'WARNING_DIALOG.DISCLAIMER_CLOSING' | translate }}
+    </div>
+
+    <p class="adult-dialog-legal-link">
+      <a routerLink="/legal" (click)="dialogRef.close(false)">{{ 'FOOTER.LEGAL' | translate }}</a>
+    </p>
   </div>
 
-  <div class="adult-dialog-message">
-    {{ 'WARNING_DIALOG.MESSAGE_BEFORE_AGE' | translate }}
-    <b>{{ 'WARNING_DIALOG.AGE_REQUIREMENT' | translate }}</b>{{ 'WARNING_DIALOG.MESSAGE_AFTER_AGE' | translate }}
+  <div class="adult-dialog-actions">
+    <button mat-flat-button color="warn" class="btn-custom" (click)="onAccept()">
+      {{ 'WARNING_DIALOG.ENTER' | translate }}
+    </button>
+    <button mat-stroked-button color="primary" class="adult-dialog-settings" (click)="onSettings()">
+      {{ 'WARNING_DIALOG.EXIT' | translate }}
+    </button>
   </div>
-
-  <div class="adult-dialog-message secondary">
-    <b>{{ 'WARNING_DIALOG.IMPORTANT_LABEL' | translate }}</b>
-    {{ 'WARNING_DIALOG.DISCLAIMER_BODY' | translate }}
-    <u>{{ 'WARNING_DIALOG.DISCLAIMER_HIGHLIGHT' | translate }}</u>{{ 'WARNING_DIALOG.DISCLAIMER_CLOSING' | translate }}
-  </div>
-
-  <p class="adult-dialog-legal-link">
-    <a routerLink="/legal" (click)="dialogRef.close(false)">{{ 'FOOTER.LEGAL' | translate }}</a>
-  </p>
-
-  <button mat-flat-button color="warn" class="btn-custom" (click)="onAccept()">
-    {{ 'WARNING_DIALOG.ENTER' | translate }}
-  </button>
-  <button mat-stroked-button color="primary" class="adult-dialog-settings" (click)="onSettings()">
-    {{ 'WARNING_DIALOG.EXIT' | translate }}
-  </button>
 </div>

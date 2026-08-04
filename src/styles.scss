@@ -75,14 +75,34 @@ h2.custom-title {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-::ng-deep .adult-dialog-panel .mat-dialog-container {
-  padding: 0;
-  border-radius: 8px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+.adult-dialog-panel.mat-mdc-dialog-panel,
+.cdk-overlay-pane.adult-dialog-panel {
+  max-width: calc(100vw - 1rem) !important;
+  max-height: calc(100dvh - 1rem) !important;
 }
 
-::ng-deep .cdk-overlay-backdrop {
-  background: rgba(0, 0, 0, 0.7) !important;
+.adult-dialog-panel .mat-mdc-dialog-container,
+.adult-dialog-panel .mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 24px !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  max-height: calc(100dvh - 1rem) !important;
+}
+
+.adult-dialog-panel .mdc-dialog__surface,
+.adult-dialog-panel .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+  max-height: inherit !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.cdk-overlay-backdrop {
+  background: rgba(111, 33, 44, 0.28) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   animation: backdropFade 250ms ease-out;
 }
 
@@ -97,9 +117,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 0 !important;
 }
 
-/* CDK overlay defaults to z-index 1000; header is 2000 */
+/* Above header (2000) and layout scroll-top (3600) */
 .cdk-overlay-container {
-  z-index: 3500 !important;
+  z-index: 4000 !important;
 }
 
 .mat-mdc-snack-bar-container.toast-snackbar,

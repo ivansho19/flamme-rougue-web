@@ -110,7 +110,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.dialog.open(WarningDialogComponent, {
                 disableClose: true,
                 panelClass: 'adult-dialog-panel',
-                autoFocus: false
+                autoFocus: false,
+                maxWidth: 'calc(100vw - 1rem)',
+                maxHeight: 'calc(100dvh - 1rem)',
+                width: '420px'
             });
         }
     }
