@@ -92,15 +92,15 @@ export class UserRegisterFormComponent implements OnInit {
             return;
         }
 
-        if (!this.cfTurnstileToken) {
-            this.toastService.showToast(
-                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
-                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
-                'error',
-                4
-            );
-            return;
-        }
+        // if (!this.cfTurnstileToken) {
+        //     this.toastService.showToast(
+        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
+        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
+        //         'error',
+        //         4
+        //     );
+        //     return;
+        // }
 
         const { name, lastName, email, password } = this.userForm.value;
         this.submitting = true;
