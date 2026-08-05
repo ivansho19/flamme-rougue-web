@@ -219,7 +219,7 @@
     "TOAST_WHATSAPP_PENDING": "Pago por WhatsApp iniciado. Tu perfil quedara en validacion hasta confirmar el pago.",
     "TOAST_PLAN_REQUIRED": "Falta seleccionar un plan para poder publicar tu perfil",
     "TOAST_KYC_WARNING": "Perfil creado, pero hubo un error al guardar los datos reales",
-    "INACTIVE_WARNING": "Tu perfil se encuentra inactivo. Comunicate con el administrador para activarlo.",
+    "INACTIVE_WARNING": "Tu perfil se encuentra inactivo. Renova tu plan para poder publicarlo nuevamente.",
     "ADMIN_EDIT_TITLE": "Editar anuncio (Admin)",
     "ADMIN_EDIT_BADGE": "Modo administrador",
     "ADMIN_EDIT_HINT": "Estás editando el anuncio de un anunciante. Los cambios se guardan con tu sesión de admin.",

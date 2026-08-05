@@ -606,9 +606,6 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   openPlanModal(): void {
-    if (!this.canUpdateExpiredPlan) {
-      return;
-    }
     this.showPlanModal = true;
   }
 

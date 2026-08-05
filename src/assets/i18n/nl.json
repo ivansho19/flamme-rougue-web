@@ -219,7 +219,7 @@
     "TOAST_WHATSAPP_PENDING": "WhatsApp-betaling gestart. Je profiel blijft in beoordeling totdat de betaling is bevestigd.",
     "TOAST_PLAN_REQUIRED": "Je moet een plan selecteren om je profiel te publiceren",
     "TOAST_KYC_WARNING": "Profiel aangemaakt, maar er is een fout opgetreden bij het opslaan van de echte gegevens",
-    "INACTIVE_WARNING": "Je profiel is inactief. Neem contact op met de beheerder om het te activeren.",
+    "INACTIVE_WARNING": "Je profiel is inactief. Verleng je plan om het te publiceren.",
     "ADMIN_EDIT_TITLE": "Advertentie bewerken (Admin)",
     "ADMIN_EDIT_BADGE": "Beheerdersmodus",
     "ADMIN_EDIT_HINT": "Je bewerkt de advertentie van een adverteerder. Wijzigingen worden opgeslagen met je admin-sessie.",
