@@ -126,6 +126,60 @@ export class HomeComponent implements OnInit, OnDestroy {
         return buildProfileUrl(card);
     }
 
+    /** Short name for the card heading (never the full SEO string). */
+    getCardName(card: any): string {
+        const explicit =
+            card?.name ||
+            card?.publicName ||
+            (card?.title && card?.displayName && card.title !== card.displayName
+                ? card.displayName
+                : '');
+
+        if (explicit) {
+            return this.shortenName(String(explicit));
+        }
+
+        return this.shortenName(String(card?.displayName || card?.title || ''));
+    }
+
+    /** Advertiser headline; hidden when it would duplicate the name. */
+    getCardAdTitle(card: any): string {
+        const name = this.getCardName(card).trim().toLowerCase();
+        const headline = String(
+            card?.title ||
+            card?.adTitle ||
+            card?.displayName ||
+            ''
+        ).trim();
+
+        if (!headline) {
+            return '';
+        }
+
+        if (headline.toLowerCase() === name) {
+            return '';
+        }
+
+        return headline;
+    }
+
+    private shortenName(raw: string): string {
+        const value = (raw || '').trim();
+        if (!value) {
+            return '';
+        }
+
+        const beforeSep = value.split(/[,|–—]/)[0]?.trim() || value;
+        const words = beforeSep.split(/\s+/).filter(Boolean);
+
+        // SEO titles often start with the given name then role/location.
+        if (words.length > 3) {
+            return words[0];
+        }
+
+        return beforeSep;
+    }
+
     private mapTopRojoToCarouselItems(tops: any[]): EmblaItem[] {
         if (!Array.isArray(tops)) {
             return [];

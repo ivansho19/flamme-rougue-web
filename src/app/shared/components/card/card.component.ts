@@ -6,9 +6,12 @@ import { Component, Input } from "@angular/core";
     styleUrls: ["./card.component.scss"],
 })
 export class CardComponent {
+    /** Short public name shown as the primary heading. */
+    @Input() title: string = '';
+    /** Advertiser headline / SEO title, clamped to 2 lines. */
+    @Input() adTitle: string = '';
     @Input() image: string = '';
     @Input() age: number = 0;
-    @Input() title: string = '';
     @Input() describe: string = '';
     @Input() city: string = '';
     @Input() plan: string[] | null = null;

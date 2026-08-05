@@ -7,6 +7,8 @@ export interface IProfileResponse {
   _id: string;
   objectId?: string;
   displayName: string;
+  /** Optional advertiser / SEO headline separate from displayName. */
+  title?: string;
   bio?: string;
   phone?: string;
   city?: string;

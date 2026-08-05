@@ -1,18 +1,24 @@
 <div class="custom-card">
   <div class="card-image">
-    <img [src]="image" class="custom-card-img" alt="Imagen" />
+    <img [src]="image" class="custom-card-img" [alt]="title || adTitle || 'Perfil'" />
     <div class="plan-badge" *ngIf="planBadgeImage" [ngClass]="planBadgeClass">
       <img [src]="planBadgeImage" alt="Plan" />
     </div>
   </div>
+
   <div class="custom-card-body">
-    <div class="card-row">
-      <h5 class="custom-card-title">{{ title }}</h5>
-      <p class="custom-card-text">{{ age }} years</p>
+    <div class="card-identity">
+      <div class="card-row">
+        <h5 class="custom-card-title">{{ title }}</h5>
+        <p class="custom-card-age" *ngIf="age">
+          <span class="age-number">{{ age }}</span>
+          <span class="age-label">{{ 'COMMON.YEARS' | translate }}</span>
+        </p>
+      </div>
+
+      <p class="custom-card-ad-title" *ngIf="adTitle">{{ adTitle }}</p>
     </div>
-    <div>
-      <p class="custom-card-describe">{{ describe }}</p>
-    </div>
+
     <div class="verified-row">
       <span class="verified-badge" [class.is-hidden]="!isVerified">
         <i class="bi bi-patch-check-fill verified-icon" aria-hidden="true"></i>

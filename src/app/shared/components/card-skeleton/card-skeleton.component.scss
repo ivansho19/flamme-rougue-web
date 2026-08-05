@@ -31,9 +31,24 @@
 
 .skeleton-title {
   height: 18px;
-  width: 60%;
+  width: 55%;
   border-radius: 999px;
   background: #e1c999;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.skeleton-age {
+  height: 28px;
+  width: 42px;
+  border-radius: 8px;
+  background: #e1c999;
+  flex-shrink: 0;
 }
 
 .skeleton-line {

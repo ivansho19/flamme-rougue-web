@@ -195,19 +195,83 @@
   }
 
   .custom-card-body {
-    padding: 1rem 1rem 1.5rem 1rem;
-    text-align: center;
+    padding: 0.85rem 0.9rem 1rem;
+    text-align: left;
     flex: 1 1 auto;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 0.55rem;
+    min-height: 0;
+  }
+
+  .card-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .card-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.65rem;
+    width: 100%;
+    min-width: 0;
   }
 
   .custom-card-title {
     color: #7f1b23;
     font-weight: 700;
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .custom-card-age {
+    flex-shrink: 0;
+    margin: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.05;
+    color: #5f534f;
+  }
+
+  .age-number {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0d0d0d;
+  }
+
+  .age-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+    color: #7a6d66;
+  }
+
+  .custom-card-ad-title {
+    margin: 0;
+    color: #6f2130;
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
   }
 
   .custom-card-text {
@@ -235,7 +299,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 0.6rem;
+    margin-top: auto;
     color: #7f0a16;
     font-weight: 600;
     font-size: 0.9rem;
@@ -311,17 +375,17 @@
   }
 }
 
-.card-row {
-  display: flex;
-  align-items: center; // Centra verticalmente
-  gap: 0.8rem; // Espacio entre título y años
-  justify-content: center; // Opcional, centrar horizontalmente
-}
+@media (prefers-reduced-motion: reduce) {
+  .custom-card,
+  .custom-card .custom-card-img,
+  .custom-card .plan-badge img,
+  .custom-card .plan-badge::before,
+  .custom-card .plan-badge::after {
+    animation: none !important;
+    transition: none !important;
+  }
 
-.custom-card-title {
-  margin-bottom: 0; // Elimina margen para que se alineen mejor
-}
-
-.custom-card-text {
-  margin-bottom: 0; // Elimina margen para que se alineen mejor
+  .custom-card:hover {
+    transform: none;
+  }
 }
