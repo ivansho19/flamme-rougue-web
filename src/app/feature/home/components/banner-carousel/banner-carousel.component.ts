@@ -86,6 +86,14 @@ export class BannerCarouselComponent implements OnInit, OnChanges, AfterViewInit
     this.embla?.scrollNext();
   }
 
+  truncateDescription(text: string, maxLength = 100): string {
+    const value = (text || '').trim();
+    if (value.length <= maxLength) {
+      return value;
+    }
+    return `${value.slice(0, maxLength).trimEnd()}...`;
+  }
+
   private rebuildDisplayItems(): void {
     this.displayItems = [this.buildDefaultPromoItem(), ...(this.items ?? [])];
   }
