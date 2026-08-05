@@ -16,7 +16,8 @@
         { value: 'Experiencias_personalizadas', label: 'SERVICES.CUSTOM_EXPERIENCES', icon: 'bi-gem' },
         { value: 'Parejas', label: 'SERVICES.COUPLES', icon: 'bi-people' },
         { value: 'Viajes_acompanamiento_social', label: 'SERVICES.TRAVEL_SOCIAL_COMPANIONSHIP', icon: 'bi-airplane' },
-        { value: 'webcam_show', label: 'SERVICES.WEB_SHOW', icon: 'bi-camera-video' }
+        { value: 'webcam_show', label: 'SERVICES.WEB_SHOW', icon: 'bi-camera-video' },
+        { value: 'video_call', label: 'SERVICES.VIDEO_CALL', icon: 'bi-camera-video' }
     ];
     }
 
