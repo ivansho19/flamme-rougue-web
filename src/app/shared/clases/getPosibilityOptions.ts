@@ -15,7 +15,8 @@
         { value: 'Acompanamiento_nocturno', label: 'SERVICES.NIGHT_COMPANIONSHIP', icon: 'bi-moon' },
         { value: 'Experiencias_personalizadas', label: 'SERVICES.CUSTOM_EXPERIENCES', icon: 'bi-gem' },
         { value: 'Parejas', label: 'SERVICES.COUPLES', icon: 'bi-people' },
-        { value: 'Viajes_acompanamiento_social', label: 'SERVICES.TRAVEL_SOCIAL_COMPANIONSHIP', icon: 'bi-airplane' }
+        { value: 'Viajes_acompanamiento_social', label: 'SERVICES.TRAVEL_SOCIAL_COMPANIONSHIP', icon: 'bi-airplane' },
+        { value: 'webcam_show', label: 'SERVICES.WEB_SHOW', icon: 'bi-camera-video' }
     ];
     }
 
