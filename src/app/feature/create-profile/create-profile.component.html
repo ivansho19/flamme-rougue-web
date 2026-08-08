@@ -284,13 +284,14 @@
           </label>
           <div class="availability-list" formArrayName="availabilitySlots">
             <div class="availability-row" *ngFor="let slot of availabilitySlots.controls; let i = index"
-              [formGroupName]="i">
+              [formGroupName]="i"
+              [class.is-all-day]="isAllDayAvailability(i)">
               <select formControlName="day">
                 <option value="" disabled selected>{{ 'PROFILE_FORM.DAY_PLACEHOLDER' | translate }}</option>
                 <option *ngFor="let day of weekDays" [value]="day.value">{{ day.label }}</option>
               </select>
-              <input type="time" formControlName="start">
-              <input type="time" formControlName="end">
+              <input *ngIf="!isAllDayAvailability(i)" type="time" formControlName="start">
+              <input *ngIf="!isAllDayAvailability(i)" type="time" formControlName="end">
               <button type="button" class="slot-remove" (click)="removeAvailabilitySlot(i)">✕</button>
             </div>
           </div>
@@ -455,8 +456,17 @@
             {{ 'PROFILE_FORM.HAIR_COLOR_PLACEHOLDER' | translate }}
             <span class="required-asterisk" aria-hidden="true">*</span>
           </label>
-          <input formControlName="hairColor" placeholder="{{ 'PROFILE_FORM.HAIR_COLOR_PLACEHOLDER' | translate }}"
+          <select formControlName="hairColor"
             [class.input-error]="isInvalid('personalData.hairColor')">
+            <option value="" disabled selected>{{ 'PROFILE_FORM.HAIR_COLOR_PLACEHOLDER' | translate }}</option>
+            <option value="brown">{{ 'PROFILE_FORM.HAIR_COLOR_BROWN' | translate }}</option>
+            <option value="blonde">{{ 'PROFILE_FORM.HAIR_COLOR_BLONDE' | translate }}</option>
+            <option value="red">{{ 'PROFILE_FORM.HAIR_COLOR_RED' | translate }}</option>
+            <option value="gray">{{ 'PROFILE_FORM.HAIR_COLOR_GRAY' | translate }}</option>
+            <option value="black">{{ 'PROFILE_FORM.HAIR_COLOR_BLACK' | translate }}</option>
+            <option value="pink">{{ 'PROFILE_FORM.HAIR_COLOR_PINK' | translate }}</option>
+            <option value="castanet">{{ 'PROFILE_FORM.HAIR_COLOR_CASTANET' | translate }}</option>
+          </select>
           <div class="error" *ngIf="isInvalid('personalData.hairColor')">
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </div>
@@ -467,8 +477,16 @@
             {{ 'PROFILE_FORM.EYE_COLOR_PLACEHOLDER' | translate }}
             <span class="required-asterisk" aria-hidden="true">*</span>
           </label>
-          <input formControlName="eyeColor" placeholder="{{ 'PROFILE_FORM.EYE_COLOR_PLACEHOLDER' | translate }}"
+          <select formControlName="eyeColor"
             [class.input-error]="isInvalid('personalData.eyeColor')">
+            <option value="" disabled selected>{{ 'PROFILE_FORM.EYE_COLOR_PLACEHOLDER' | translate }}</option>
+            <option value="brown">{{ 'PROFILE_FORM.EYE_COLOR_BROWN' | translate }}</option>
+            <option value="blue">{{ 'PROFILE_FORM.EYE_COLOR_BLUE' | translate }}</option>
+            <option value="green">{{ 'PROFILE_FORM.EYE_COLOR_GREEN' | translate }}</option>
+            <option value="gray">{{ 'PROFILE_FORM.EYE_COLOR_GRAY' | translate }}</option>
+            <option value="hazel">{{ 'PROFILE_FORM.EYE_COLOR_HAZEL' | translate }}</option>
+            <option value="black">{{ 'PROFILE_FORM.EYE_COLOR_BLACK' | translate }}</option>
+          </select>
           <div class="error" *ngIf="isInvalid('personalData.eyeColor')">
             {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
           </div>
@@ -588,26 +606,33 @@
               </div>
             </div>
 
-            <div class="field">
+            <div class="field phone-group">
               <label class="field-label">
                 {{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}
                 <span class="required-asterisk" aria-hidden="true">*</span>
               </label>
-              <input formControlName="contactPhone"
-                placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}"
-                [class.input-error]="isInvalid('realData.contactPhone')">
-              <div class="error" *ngIf="isInvalid('realData.contactPhone')">
-              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['required']">
-                {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
-              </span>
-              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['pattern']">
-                {{ 'PROFILE_FORM.CONTACT_PHONE_NUMERIC_ERROR' | translate }}
-              </span>
-              <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['maxlength']">
-                {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
-              </span>
+              <div class="phone-row">
+                <input class="phone-prefix" formControlName="contactPhonePrefix" placeholder="+51">
+                <input class="phone-number" formControlName="contactPhone"
+                  placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}"
+                  [class.input-error]="isInvalid('realData.contactPhone')">
               </div>
-
+              <div class="error" *ngIf="isInvalid('realData.contactPhone')">
+                <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['required']">
+                  {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
+                </span>
+                <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['pattern']">
+                  {{ 'PROFILE_FORM.CONTACT_PHONE_NUMERIC_ERROR' | translate }}
+                </span>
+                <span *ngIf="profileForm.get('realData.contactPhone')?.errors?.['maxlength']">
+                  {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
+                </span>
+              </div>
+              <div class="error" *ngIf="isInvalid('realData.contactPhonePrefix')">
+                <span *ngIf="profileForm.get('realData.contactPhonePrefix')?.errors?.['maxlength']">
+                  {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
+                </span>
+              </div>
             </div>
           </div>
 

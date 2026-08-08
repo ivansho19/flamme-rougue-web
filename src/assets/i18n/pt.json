@@ -170,7 +170,7 @@
     "REAL_AGE_PLACEHOLDER": "Idade",
     "REAL_NATIONALITY_PLACEHOLDER": "Nacionalidade",
     "CONTACT_PHONE_PLACEHOLDER": "Telefone de contato",
-    "CONTACT_PHONE_NUMERIC_ERROR": "O telefone de contato aceita apenas números e o sinal +",
+    "CONTACT_PHONE_NUMERIC_ERROR": "O telefone de contato aceita apenas números",
     "DOCUMENT_TYPE_LABEL": "Tipo de documento",
     "DOCUMENT_TYPE_DNI": "Documento de identidade",
     "DOCUMENT_TYPE_PASSPORT": "Passaporte",

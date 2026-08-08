@@ -528,6 +528,10 @@ input, textarea, select {
   align-items: center;
 }
 
+.availability-row.is-all-day {
+  grid-template-columns: 1fr auto;
+}
+
 .slot-add {
   align-self: flex-start;
   background: #f2f2f2;
@@ -832,6 +836,10 @@ input, textarea, select {
     grid-row: 1 / 4;
     align-self: center;
     justify-self: center;
+  }
+
+  .availability-row.is-all-day .slot-remove {
+    grid-row: 1 / 2;
   }
 
   .slot-add {

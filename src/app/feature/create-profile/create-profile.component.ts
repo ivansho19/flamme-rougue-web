@@ -294,7 +294,8 @@ export class ProfileEditComponent implements OnInit {
                 realAge: [null, Validators.required],
                 email: ['', [Validators.required, Validators.email]],
                 realNationality: ['', Validators.required],
-                contactPhone: ['', [Validators.required, Validators.maxLength(15), Validators.pattern(/^\+?\d+$/)]],
+                contactPhonePrefix: ['+', Validators.maxLength(4)],
+                contactPhone: ['', [Validators.required, Validators.maxLength(15), Validators.pattern(/^\d+$/)]],
                 documentType: ['', Validators.required],
                 documentFront: [null],
                 documentBack: [null],
@@ -975,6 +976,9 @@ export class ProfileEditComponent implements OnInit {
             start: ['', Validators.required],
             end: ['', Validators.required]
         });
+        group.get('day')?.valueChanges.subscribe(day => {
+            this.updateAvailabilityTimeValidators(group, day);
+        });
         this.availabilitySlots.push(group);
     }
 
@@ -982,9 +986,29 @@ export class ProfileEditComponent implements OnInit {
         this.availabilitySlots.removeAt(index);
     }
 
+    isAllDayAvailability(index: number): boolean {
+        return this.availabilitySlots.at(index)?.get('day')?.value === '24/7';
+    }
+
     isAvailabilityInvalid(): boolean {
         const control = this.profileForm.get('basicInfo.availabilitySlots');
         return !!(control && control.invalid && (control.touched || control.dirty));
+    }
+
+    private updateAvailabilityTimeValidators(group: FormGroup, day: string | null): void {
+        const start = group.get('start');
+        const end = group.get('end');
+        if (day === '24/7') {
+            start?.clearValidators();
+            end?.clearValidators();
+            start?.setValue('', { emitEvent: false });
+            end?.setValue('', { emitEvent: false });
+        } else {
+            start?.setValidators(Validators.required);
+            end?.setValidators(Validators.required);
+        }
+        start?.updateValueAndValidity({ emitEvent: false });
+        end?.updateValueAndValidity({ emitEvent: false });
     }
 
     onLanguagesChange(event: any): void {
@@ -1134,8 +1158,16 @@ export class ProfileEditComponent implements OnInit {
 
     private formatAvailabilityList(slots: Array<{ day: string; start: string; end: string }>): string[] {
         return slots
-            .filter(slot => slot?.day && slot?.start && slot?.end)
-            .map(slot => `${slot.day} ${slot.start}-${slot.end}`);
+            .filter(slot => {
+                if (!slot?.day) {
+                    return false;
+                }
+                if (slot.day === '24/7') {
+                    return true;
+                }
+                return !!(slot.start && slot.end);
+            })
+            .map(slot => slot.day === '24/7' ? '24/7' : `${slot.day} ${slot.start}-${slot.end}`);
     }
 
     private getPhoneWithPrefix(basicInfo: { phonePrefix?: string; phone?: string }): string {
@@ -1481,7 +1513,10 @@ export class ProfileEditComponent implements OnInit {
                 fullName: realName,
                 age: realData.realAge || null,
                 nationality: realData.realNationality || '',
-                phone: realData.contactPhone || '',
+                phone: this.getPhoneWithPrefix({
+                    phonePrefix: realData.contactPhonePrefix,
+                    phone: realData.contactPhone
+                }),
                 email: realData.email || '',
                 documentImage: {
                     url: documentUpload.secure_url,

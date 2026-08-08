@@ -17,6 +17,7 @@ export interface IProfileCreateRequest {
   objectId: string;
   displayName: string;
   bio?: string;
+  email?: string;
   phone?: string;
   country?: string;
   city?: string;

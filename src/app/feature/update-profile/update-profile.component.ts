@@ -497,6 +497,7 @@ export class UpdateProfileComponent implements OnInit {
     this.profileForm.patchValue({
       basicInfo: {
         publicName: profile.displayName || '',
+        email: profile.email || this.clientData?.email || '',
         description: profile.bio || '',
         country: countryValue || '',
         city: cityFields.city,
@@ -523,11 +524,16 @@ export class UpdateProfileComponent implements OnInit {
     this.availabilitySlots.clear();
     if (availabilitySlots.length) {
       availabilitySlots.forEach(slot => {
-        this.availabilitySlots.push(this.fb.group({
+        const group = this.fb.group({
           day: [slot.day, Validators.required],
           start: [slot.start, Validators.required],
           end: [slot.end, Validators.required]
-        }));
+        });
+        this.updateAvailabilityTimeValidators(group, slot.day);
+        group.get('day')?.valueChanges.subscribe(day => {
+          this.updateAvailabilityTimeValidators(group, day);
+        });
+        this.availabilitySlots.push(group);
       });
     } else {
       this.addAvailabilitySlot();
@@ -866,11 +872,18 @@ export class UpdateProfileComponent implements OnInit {
       start: ['', Validators.required],
       end: ['', Validators.required]
     });
+    group.get('day')?.valueChanges.subscribe(day => {
+      this.updateAvailabilityTimeValidators(group, day);
+    });
     this.availabilitySlots.push(group);
   }
 
   removeAvailabilitySlot(index: number) {
     this.availabilitySlots.removeAt(index);
+  }
+
+  isAllDayAvailability(index: number): boolean {
+    return this.availabilitySlots.at(index)?.get('day')?.value === '24/7';
   }
 
   isAvailabilityInvalid(): boolean {
@@ -879,6 +892,22 @@ export class UpdateProfileComponent implements OnInit {
     }
     const control = this.profileForm.get('basicInfo.availabilitySlots');
     return !!(control && (control.touched || control.dirty));
+  }
+
+  private updateAvailabilityTimeValidators(group: FormGroup, day: string | null): void {
+    const start = group.get('start');
+    const end = group.get('end');
+    if (day === '24/7') {
+      start?.clearValidators();
+      end?.clearValidators();
+      start?.setValue('', { emitEvent: false });
+      end?.setValue('', { emitEvent: false });
+    } else {
+      start?.setValidators(Validators.required);
+      end?.setValidators(Validators.required);
+    }
+    start?.updateValueAndValidity({ emitEvent: false });
+    end?.updateValueAndValidity({ emitEvent: false });
   }
 
   onLanguagesChange(event: any): void {
@@ -949,8 +978,16 @@ export class UpdateProfileComponent implements OnInit {
 
   private formatAvailabilityList(slots: Array<{ day: string; start: string; end: string }>): string[] {
     return slots
-      .filter(slot => slot?.day && slot?.start && slot?.end)
-      .map(slot => `${slot.day} ${slot.start}-${slot.end}`);
+      .filter(slot => {
+        if (!slot?.day) {
+          return false;
+        }
+        if (slot.day === '24/7') {
+          return true;
+        }
+        return !!(slot.start && slot.end);
+      })
+      .map(slot => slot.day === '24/7' ? '24/7' : `${slot.day} ${slot.start}-${slot.end}`);
   }
 
   private parseAvailabilitySlots(value: string[] | string): Array<{ day: string; start: string; end: string }> {
@@ -962,7 +999,11 @@ export class UpdateProfileComponent implements OnInit {
 
     return items
       .map(item => {
-        const [dayPart, timePart] = item.split(' ');
+        const trimmed = item.trim();
+        if (trimmed === '24/7' || trimmed.startsWith('24/7 ')) {
+          return { day: '24/7', start: '', end: '' };
+        }
+        const [dayPart, timePart] = trimmed.split(' ');
         if (!dayPart || !timePart || !timePart.includes('-')) {
           return null;
         }
@@ -1100,6 +1141,7 @@ export class UpdateProfileComponent implements OnInit {
         objectId,
         displayName: basicInfo.publicName || '',
         bio: basicInfo.description || '',
+        email: basicInfo.email || '',
         phone: basicInfo.phone || '',
         country: basicInfo.country || '',
         city: this.getResolvedCity(),

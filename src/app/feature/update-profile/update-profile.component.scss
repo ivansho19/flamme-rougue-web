@@ -278,6 +278,10 @@
     justify-self: center;
   }
 
+  .availability-row.is-all-day .slot-remove {
+    grid-row: 1 / 2;
+  }
+
   .slot-add {
     width: 100%;
     text-align: center;
