@@ -300,6 +300,9 @@
     "EXIT": "Leave"
   },
   "PLAN_SELECTION_MODAL": {
+    "CLOSE": "Close",
+    "PLANS_COUNT": "{{count}} plans",
+    "MORE_PLANS_HINT": "Swipe to see more",
     "PROMO_HAVE_CODE": "I have a code",
     "PROMO_HIDE": "Hide promo code",
     "PROMO_EYEBROW": "Profile creation only",

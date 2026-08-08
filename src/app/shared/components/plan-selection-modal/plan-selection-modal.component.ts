@@ -30,6 +30,7 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
   @Output() promoConfirmed = new EventEmitter<PlanPromoSelection>();
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
+  @ViewChild('plansRail', { static: false }) plansRail?: ElementRef<HTMLDivElement>;
 
   selectedPlanId: number | null = null;
   paypalError = '';
@@ -106,6 +107,12 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     if (changes['isOpen']) {
       if (this.isOpen) {
         this.schedulePayPalRender();
+        // Show the recommended plan centered so neighbors peek into view.
+        setTimeout(() => {
+          if (this.selectedPlanId) {
+            this.scrollPlanIntoView(this.selectedPlanId);
+          }
+        }, 80);
       } else {
         this.resetPromoState();
         this.paypalError = '';
@@ -125,6 +132,20 @@ export class PlanSelectionModalComponent implements OnInit, OnChanges, AfterView
     if (this.promoApplied) {
       this.promoError = '';
     }
+    this.scrollPlanIntoView(planId);
+  }
+
+  private scrollPlanIntoView(planId: number): void {
+    const rail = this.plansRail?.nativeElement;
+    if (!rail) {
+      return;
+    }
+    const index = this.plans.findIndex(plan => plan.id === planId);
+    if (index < 0) {
+      return;
+    }
+    const card = rail.children.item(index) as HTMLElement | null;
+    card?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
   applyPromoCode(): void {

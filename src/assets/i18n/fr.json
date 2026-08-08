@@ -300,6 +300,9 @@
     "EXIT": "Quitter"
   },
   "PLAN_SELECTION_MODAL": {
+    "CLOSE": "Fermer",
+    "PLANS_COUNT": "{{count}} forfaits",
+    "MORE_PLANS_HINT": "Glisse pour en voir plus",
     "PROMO_HAVE_CODE": "J'ai un code",
     "PROMO_HIDE": "Masquer le code promo",
     "PROMO_EYEBROW": "Création de profil uniquement",

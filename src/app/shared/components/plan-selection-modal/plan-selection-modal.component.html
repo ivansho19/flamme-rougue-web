@@ -1,36 +1,68 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    
+  <div class="modal-content" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+    [attr.aria-label]="updateMode ? 'Elige un plan para actualizar' : 'Elige un plan'">
+
     <!-- Header -->
     <div class="modal-header">
+      <button
+        type="button"
+        class="close-btn"
+        (click)="onClose()"
+        [attr.aria-label]="'PLAN_SELECTION_MODAL.CLOSE' | translate">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
       <div class="header-content" *ngIf="!updateMode">
         <div class="progress-badge">100%</div>
         <h2>¡Perfil completado!</h2>
         <p class="header-subtitle">{{ profileName }}, estás listo para anunciarte con nosotros</p>
       </div>
-       <div class="header-content" *ngIf="updateMode">
+      <div class="header-content" *ngIf="updateMode">
         <div class="progress-badge">100%</div>
         <h2>¡Elige un plan para actualizar!</h2>
         <p class="header-subtitle">{{ profileName }}, estás listo para actualizar tu plan con nosotros</p>
       </div>
-      <button class="close-btn" (click)="onClose()">✕</button>
     </div>
 
     <div class="modal-body">
-      
+
       <!-- Motivational Message -->
       <div class="motivation-banner">
-        <i class="bi bi-star-fill"></i>
+        <i class="bi bi-star-fill" aria-hidden="true"></i>
         <p>Elige tu plan ideal y comienza a recibir solicitudes hoy mismo</p>
       </div>
 
-      <!-- Plans Grid -->
-      <div class="plans-modal-grid">
-        
+      <!-- Scroll / multi-plan cue (mobile) -->
+      <div class="plans-rail-cue" aria-hidden="false">
+        <span class="plans-rail-cue__count">
+          {{ 'PLAN_SELECTION_MODAL.PLANS_COUNT' | translate:{ count: plans.length } }}
+        </span>
+        <span class="plans-rail-cue__hint desktop-hide">
+          <i class="bi bi-arrow-left-right" aria-hidden="true"></i>
+          {{ 'PLAN_SELECTION_MODAL.MORE_PLANS_HINT' | translate }}
+        </span>
+        <div class="plans-rail-dots" role="tablist" [attr.aria-label]="'PLAN_SELECTION_MODAL.PLANS_COUNT' | translate:{ count: plans.length }">
+          <button
+            type="button"
+            class="plans-rail-dot"
+            *ngFor="let plan of plans"
+            [class.active]="selectedPlanId === plan.id"
+            [attr.aria-label]="plan.name"
+            (click)="selectPlan(plan.id)">
+          </button>
+        </div>
+      </div>
+
+      <!-- Plans Grid / horizontal rail on mobile -->
+      <div class="plans-modal-grid" #plansRail>
+
         <!-- PLAN BASICO -->
-        <div class="plan-card" 
+        <div class="plan-card"
           [class.selected]="selectedPlanId === 1"
-          (click)="selectPlan(1)">
+          (click)="selectPlan(1)"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="selectPlan(1)">
 
           <div class="plan-header">
             <h3>Plan Básico</h3>
@@ -46,14 +78,17 @@
           </ul>
 
           <div class="plan-check" *ngIf="selectedPlanId === 1">
-            <i class="bi bi-check-circle-fill"></i>
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
           </div>
         </div>
 
         <!-- PLAN PRO (RECOMENDADO) -->
-        <div class="plan-card popular" 
+        <div class="plan-card popular"
           [class.selected]="selectedPlanId === 2"
-          (click)="selectPlan(2)">
+          (click)="selectPlan(2)"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="selectPlan(2)">
 
           <div class="badge-recommended">RECOMENDADO</div>
 
@@ -71,14 +106,17 @@
           </ul>
 
           <div class="plan-check" *ngIf="selectedPlanId === 2">
-            <i class="bi bi-check-circle-fill"></i>
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
           </div>
         </div>
 
         <!-- PLAN VIP -->
-        <div class="plan-card vip" 
+        <div class="plan-card vip"
           [class.selected]="selectedPlanId === 3"
-          (click)="selectPlan(3)">
+          (click)="selectPlan(3)"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="selectPlan(3)">
 
           <div class="plan-header">
             <h3>Plan VIP</h3>
@@ -95,7 +133,7 @@
           </ul>
 
           <div class="plan-check" *ngIf="selectedPlanId === 3">
-            <i class="bi bi-check-circle-fill"></i>
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
           </div>
         </div>
 
@@ -168,15 +206,15 @@
       <!-- Info supplementaria -->
       <div class="plan-info">
         <div class="info-item">
-          <i class="bi bi-credit-card"></i>
+          <i class="bi bi-credit-card" aria-hidden="true"></i>
           <span>Pago seguro via PayPal</span>
         </div>
         <div class="info-item">
-          <i class="bi bi-arrow-repeat"></i>
+          <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
           <span>Puedes cambiar de plan cuando quieras</span>
         </div>
         <div class="info-item">
-          <i class="bi bi-shield-check"></i>
+          <i class="bi bi-shield-check" aria-hidden="true"></i>
           <span>7 días de garantía de dinero devuelto</span>
         </div>
       </div>
@@ -185,7 +223,7 @@
 
     <!-- Footer -->
     <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="onClose()">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">
         Decidir después
       </button>
 

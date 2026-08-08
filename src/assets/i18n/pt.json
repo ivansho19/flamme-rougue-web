@@ -282,6 +282,9 @@
     "EXIT": "Leave"
   },
   "PLAN_SELECTION_MODAL": {
+    "CLOSE": "Fechar",
+    "PLANS_COUNT": "{{count}} planos",
+    "MORE_PLANS_HINT": "Desliza para ver mais",
     "PROMO_HAVE_CODE": "Tenho um código",
     "PROMO_HIDE": "Ocultar código promocional",
     "PROMO_EYEBROW": "Apenas na criação de perfil",

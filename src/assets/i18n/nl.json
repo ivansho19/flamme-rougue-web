@@ -300,6 +300,9 @@
     "EXIT": "Verlaten"
   },
   "PLAN_SELECTION_MODAL": {
+    "CLOSE": "Sluiten",
+    "PLANS_COUNT": "{{count}} abonnementen",
+    "MORE_PLANS_HINT": "Veeg om meer te zien",
     "PROMO_HAVE_CODE": "Ik heb een code",
     "PROMO_HIDE": "Promotiecode verbergen",
     "PROMO_EYEBROW": "Alleen bij profiel aanmaken",
