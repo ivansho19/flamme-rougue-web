@@ -17,8 +17,7 @@
         (closed)="onPanelClosed('images')">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}
-            <span class="required-asterisk" aria-hidden="true">*</span>
+            <span class="panel-title-text is-required">{{ 'PROFILE_FORM.IMAGES_TITLE' | translate }}</span>
           </mat-panel-title>
           <mat-panel-description>
             <span class="panel-status" *ngIf="isImagesComplete">{{ 'PROFILE_FORM.PANEL_COMPLETE' | translate }}</span>
@@ -113,8 +112,7 @@
         (closed)="onPanelClosed('basicInfo')">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}
-            <span class="required-asterisk" aria-hidden="true">*</span>
+            <span class="panel-title-text is-required">{{ 'PROFILE_FORM.PROFILE_INFO_TITLE' | translate }}</span>
           </mat-panel-title>
           <mat-panel-description>
             <span class="panel-status" *ngIf="isBasicInfoComplete">{{ 'PROFILE_FORM.PANEL_COMPLETE' | translate }}</span>
@@ -312,8 +310,7 @@
         (closed)="onPanelClosed('personalData')">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}
-            <span class="required-asterisk" aria-hidden="true">*</span>
+            <span class="panel-title-text is-required">{{ 'PROFILE_FORM.PERSONAL_DATA_TITLE' | translate }}</span>
           </mat-panel-title>
           <mat-panel-description>
             <span class="panel-status" *ngIf="isPersonalDataComplete">{{ 'PROFILE_FORM.PANEL_COMPLETE' | translate }}</span>
@@ -516,7 +513,9 @@
         class="accordion-panel"
         (closed)="onPanelClosed('services')">
         <mat-expansion-panel-header>
-          <mat-panel-title>{{ 'PROFILE_FORM.SERVICES_TITLE' | translate }}</mat-panel-title>
+          <mat-panel-title>
+            <span class="panel-title-text">{{ 'PROFILE_FORM.SERVICES_TITLE' | translate }}</span>
+          </mat-panel-title>
           <mat-panel-description>
             <span class="panel-status" *ngIf="isServicesComplete">{{ 'PROFILE_FORM.PANEL_COMPLETE' | translate }}</span>
           </mat-panel-description>
@@ -544,8 +543,7 @@
         (closed)="onPanelClosed('realData')">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ 'PROFILE_FORM.REAL_DATA_TITLE' | translate }}
-            <span class="required-asterisk" aria-hidden="true">*</span>
+            <span class="panel-title-text is-required">{{ 'PROFILE_FORM.REAL_DATA_TITLE' | translate }}</span>
           </mat-panel-title>
           <mat-panel-description>
             <span class="panel-status" *ngIf="isRealDataComplete">{{ 'PROFILE_FORM.PANEL_COMPLETE' | translate }}</span>
@@ -605,6 +603,9 @@
                 {{ 'PROFILE_FORM.REQUIRED_ERROR' | translate }}
               </div>
             </div>
+          </div>
+
+          <div class="grid-2">
 
             <div class="field phone-group">
               <label class="field-label">
