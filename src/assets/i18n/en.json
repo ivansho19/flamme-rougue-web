@@ -706,7 +706,9 @@
     "COMPLETE": "completed",
     "PENDING_REVIEW": "Pending review",
     "PENDING_REVIEW_DESC": "Your TOP RED is waiting for admin activation once the payment is validated.",
-    "EXPIRED_ON": "Expired on"
+    "EXPIRED_ON": "Expired on",
+    "PLANS_COUNT": "{{count}} plans",
+    "MORE_PLANS_HINT": "Swipe to see more"
   },
   "FOOTER": {
     "RIGHTS": "All rights reserved.",

@@ -34,6 +34,7 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   isWhatsAppConfirmOpen = false;
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
+  @ViewChild('plansRail', { static: false }) plansRail?: ElementRef<HTMLDivElement>;
 
   constructor(
     private paymentService: PaymentService,
@@ -50,6 +51,11 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
     if (changes['isOpen']) {
       if (this.isOpen) {
         this.schedulePayPalRender();
+        setTimeout(() => {
+          if (this.selectedPlanId) {
+            this.scrollPlanIntoView(this.selectedPlanId);
+          }
+        }, 80);
       } else {
         this.paypalError = '';
       }
@@ -59,6 +65,11 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
   ngAfterViewInit(): void {
     if (this.isOpen) {
       this.schedulePayPalRender();
+      setTimeout(() => {
+        if (this.selectedPlanId) {
+          this.scrollPlanIntoView(this.selectedPlanId);
+        }
+      }, 80);
     }
   }
 
@@ -80,6 +91,29 @@ export class PlanSelectionModalTopRojoComponent implements OnInit, OnChanges, Af
 
   selectPlan(planId: TopRojoPlantType): void {
     this.selectedPlanId = planId;
+    this.paypalError = '';
+    this.scrollPlanIntoView(planId);
+  }
+
+  onPlanDotClick(planId: TopRojoPlantType): void {
+    this.selectPlan(planId);
+  }
+
+  private scrollPlanIntoView(planId: TopRojoPlantType): void {
+    if (typeof window !== 'undefined' && !window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
+    const rail = this.plansRail?.nativeElement;
+    if (!rail) {
+      return;
+    }
+    const index = this.plans.findIndex(plan => plan.id === planId);
+    if (index < 0) {
+      return;
+    }
+    const card = rail.children.item(index) as HTMLElement | null;
+    card?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
   confirmSelection(): void {

@@ -706,7 +706,9 @@
     "COMPLETE": "complété",
     "PENDING_REVIEW": "En attente de révision",
     "PENDING_REVIEW_DESC": "Ton TOP ROUGE attend l'activation par l'administrateur une fois le paiement validé.",
-    "EXPIRED_ON": "Expiré le"
+    "EXPIRED_ON": "Expiré le",
+    "PLANS_COUNT": "{{count}} forfaits",
+    "MORE_PLANS_HINT": "Glisse pour en voir plus"
   },
   "FOOTER": {
     "RIGHTS": "Tous droits réservés.",

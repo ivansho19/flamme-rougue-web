@@ -1,52 +1,81 @@
-<!-- Background overlay -->
-<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+<!-- Modal overlay + content -->
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()">
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Elige tu plan TOP ROJO">
 
-<!-- Modal container -->
-<div class="modal-container" *ngIf="isOpen">
-  <div class="modal-content">
-    <!-- Header -->
     <div class="modal-header">
+      <button
+        type="button"
+        class="close-btn"
+        (click)="closeModal()"
+        [attr.aria-label]="'COMMON.CANCEL' | translate">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
       <div class="header-content">
         <h2>Elige tu plan TOP ROJO</h2>
-        <p class="subtitle">{{ profileName }}</p>
-      </div>
-      <button class="close-btn" (click)="closeModal()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <!-- Plans container -->
-    <div class="plans-container">
-      <div 
-        class="plan-card"
-        *ngFor="let plan of plans"
-        [class.selected]="selectedPlanId === plan.id"
-        (click)="selectPlan(plan.id)">
-        
-        <!-- Plan header -->
-        <div class="plan-header">
-          <h3>{{ plan.name }}</h3>
-          <span class="duration">{{ getDurationText(plan.duration) }}</span>
-        </div>
-
-        <!-- Plan description -->
-        <p class="plan-description">{{ plan.description }}</p>
-
-        <!-- Price -->
-        <div class="plan-price">
-          <span class="price">€{{ plan.price }}</span>
-        </div>
-
-        <!-- Check icon for selected plan -->
-        <div class="plan-check" *ngIf="selectedPlanId === plan.id">
-          <i class="bi bi-check-circle-fill"></i>
-        </div>
+        <p class="subtitle" *ngIf="profileName">{{ profileName }}</p>
       </div>
     </div>
 
-    <!-- Footer actions -->
+    <div class="modal-body">
+      <div class="plans-rail-cue">
+        <span class="plans-rail-cue__count">
+          {{ 'TOP_ROJO.PLANS_COUNT' | translate:{ count: plans.length } }}
+        </span>
+        <span class="plans-rail-cue__hint">
+          <i class="bi bi-arrow-left-right" aria-hidden="true"></i>
+          {{ 'TOP_ROJO.MORE_PLANS_HINT' | translate }}
+        </span>
+        <div
+          class="plans-rail-dots"
+          role="tablist"
+          [attr.aria-label]="'TOP_ROJO.PLANS_COUNT' | translate:{ count: plans.length }">
+          <button
+            type="button"
+            class="plans-rail-dot"
+            *ngFor="let plan of plans"
+            [class.active]="selectedPlanId === plan.id"
+            [attr.aria-label]="plan.name"
+            (click)="onPlanDotClick(plan.id)">
+          </button>
+        </div>
+      </div>
+
+      <div class="plans-container" #plansRail>
+        <div
+          class="plan-card"
+          *ngFor="let plan of plans"
+          [class.selected]="selectedPlanId === plan.id"
+          (click)="selectPlan(plan.id)"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="selectPlan(plan.id)">
+
+          <div class="plan-header">
+            <h3>{{ plan.name }}</h3>
+            <span class="duration">{{ getDurationText(plan.duration) }}</span>
+          </div>
+
+          <p class="plan-description">{{ plan.description }}</p>
+
+          <div class="plan-price">
+            <span class="price">€{{ plan.price }}</span>
+          </div>
+
+          <div class="plan-check" *ngIf="selectedPlanId === plan.id">
+            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="closeModal()">
+      <button class="btn btn-secondary" type="button" (click)="closeModal()">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
       <div class="payment-actions">
@@ -55,7 +84,7 @@
           <div class="error" *ngIf="paypalError">{{ paypalError }}</div>
         </div>
         <button class="btn btn-whatsapp" type="button" (click)="openWhatsAppConfirm()">
-          Pagar via   <i class="bi bi-whatsapp"></i>
+          Pagar via <i class="bi bi-whatsapp"></i>
         </button>
       </div>
     </div>

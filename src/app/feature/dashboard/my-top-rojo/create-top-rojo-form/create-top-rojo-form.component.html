@@ -1,8 +1,8 @@
 <!-- Background overlay -->
-<div class="modal-overlay" *ngIf="isOpen" (click)="closeForm()"></div>
+<div class="modal-overlay" *ngIf="isOpen && !showPlanModal" (click)="closeForm()"></div>
 
 <!-- Main form container -->
-<div class="form-container" *ngIf="isOpen" [@slideUp]>
+<div class="form-container" *ngIf="isOpen && !showPlanModal" [@slideUp]>
   <!-- Header -->
   <div class="form-header">
     <div class="header-content">
@@ -15,7 +15,7 @@
   </div>
 
   <!-- Form content -->
-  <form [formGroup]="topRojoForm" (ngSubmit)="proceedToPlanSelection()" *ngIf="!showPlanModal" class="form-content">
+  <form [formGroup]="topRojoForm" (ngSubmit)="proceedToPlanSelection()" class="form-content">
     
     <!-- Location Section -->
     <div class="location-section">
@@ -180,13 +180,12 @@
       </button>
     </div>
   </form>
-
-  <!-- Plan Selection Modal TOP ROJO (nested) -->
-  <app-plan-selection-modal-top-rojo
-    [isOpen]="showPlanModal"
-    [profileName]="profileName"
-    (close)="closePlanModal()"
-    (planSelected)="onPlanSelected($event)"
-    (whatsAppPlanSelected)="onWhatsAppPlanSelected($event)">
-  </app-plan-selection-modal-top-rojo>
 </div>
+
+<app-plan-selection-modal-top-rojo
+  [isOpen]="showPlanModal"
+  [profileName]="profileName"
+  (close)="closePlanModal()"
+  (planSelected)="onPlanSelected($event)"
+  (whatsAppPlanSelected)="onWhatsAppPlanSelected($event)">
+</app-plan-selection-modal-top-rojo>

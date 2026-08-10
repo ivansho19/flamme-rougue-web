@@ -718,7 +718,9 @@
     "PENDING_REVIEW": "Pendiente de revisión",
     "PENDING_REVIEW_DESC": "Tu TOP ROJO está en espera de activación por el administrador una vez validado el pago.",
     "EXPIRED_ON": "Expiró el",
-    "CONFIRM_PLAN": "Confirmar plan"
+    "CONFIRM_PLAN": "Confirmar plan",
+    "PLANS_COUNT": "{{count}} planes",
+    "MORE_PLANS_HINT": "Desliza para ver más"
   },
   "FOOTER": {
     "RIGHTS": "Todos los derechos reservados.",

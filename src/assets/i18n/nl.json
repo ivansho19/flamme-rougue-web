@@ -705,7 +705,9 @@
     "COMPLETE": "voltooid",
     "PENDING_REVIEW": "In afwachting van beoordeling",
     "PENDING_REVIEW_DESC": "Je TOP ROOD wacht op activatie door de beheerder zodra de betaling is gevalideerd.",
-    "EXPIRED_ON": "Verlopen op"
+    "EXPIRED_ON": "Verlopen op",
+    "PLANS_COUNT": "{{count}} abonnementen",
+    "MORE_PLANS_HINT": "Veeg om meer te zien"
   },
   "FOOTER": {
     "RIGHTS": "Alle rechten voorbehouden.",
