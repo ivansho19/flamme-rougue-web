@@ -591,6 +591,8 @@
     "MODAL_SUBTITLE": "Selectionnez le plan qui vous convient le mieux",
     "MODAL_CLOSE": "Fermer",
     "MODAL_CONFIRM": "Activer le plan",
+    "PLANS_COUNT": "{{count}} forfaits",
+    "MORE_PLANS_HINT": "Glisse pour en voir plus",
     "PLAN_FREE": "Gratuit",
     "PLAN_MONTHLY": "Mensuel",
     "PLAN_ANNUAL": "Annuel",

@@ -590,6 +590,8 @@
     "MODAL_SUBTITLE": "Selecteer het plan dat het beste bij je past",
     "MODAL_CLOSE": "Sluiten",
     "MODAL_CONFIRM": "Plan activeren",
+    "PLANS_COUNT": "{{count}} abonnementen",
+    "MORE_PLANS_HINT": "Veeg om meer te zien",
     "PLAN_FREE": "Gratis",
     "PLAN_MONTHLY": "Maandelijks",
     "PLAN_ANNUAL": "Jaarlijks",

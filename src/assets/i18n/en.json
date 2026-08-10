@@ -591,6 +591,8 @@
     "MODAL_SUBTITLE": "Select the plan that fits you best",
     "MODAL_CLOSE": "Close",
     "MODAL_CONFIRM": "Activate plan",
+    "PLANS_COUNT": "{{count}} plans",
+    "MORE_PLANS_HINT": "Swipe to see more",
     "PLAN_FREE": "Free",
     "PLAN_MONTHLY": "Monthly",
     "PLAN_ANNUAL": "Annual",

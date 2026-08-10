@@ -37,6 +37,7 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
   isWhatsAppConfirmOpen = false;
 
   @ViewChild('paypalButtons', { static: false }) paypalButtons?: ElementRef<HTMLDivElement>;
+  @ViewChild('plansRail', { static: false }) plansRail?: ElementRef<HTMLDivElement>;
 
   plans: CommentPlanOption[] = [
     {
@@ -81,15 +82,21 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
     if (changes['isOpen']) {
       if (this.isOpen) {
         this.schedulePayPalRender();
+        setTimeout(() => this.scrollPlanIntoView(this.selectedPlanId), 80);
       } else {
         this.paypalError = '';
       }
+    }
+
+    if (changes['currentPlan'] && this.currentPlan) {
+      this.selectedPlanId = this.currentPlan === 'free' ? 'monthly' : this.currentPlan;
     }
   }
 
   ngAfterViewInit(): void {
     if (this.isOpen) {
       this.schedulePayPalRender();
+      setTimeout(() => this.scrollPlanIntoView(this.selectedPlanId), 80);
     }
   }
 
@@ -99,6 +106,30 @@ export class PlanSelectionModalCommentPlansComponent implements OnInit, OnChange
       return;
     }
     this.selectedPlanId = planId;
+    this.paypalError = '';
+    this.scrollPlanIntoView(planId);
+  }
+
+  onPlanDotClick(planId: CommentPlanType): void {
+    this.scrollPlanIntoView(planId);
+    this.selectPlan(planId);
+  }
+
+  private scrollPlanIntoView(planId: CommentPlanType): void {
+    if (typeof window !== 'undefined' && !window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
+    const rail = this.plansRail?.nativeElement;
+    if (!rail) {
+      return;
+    }
+    const index = this.plans.findIndex(plan => plan.id === planId);
+    if (index < 0) {
+      return;
+    }
+    const card = rail.children.item(index) as HTMLElement | null;
+    card?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
   confirmSelection(): void {

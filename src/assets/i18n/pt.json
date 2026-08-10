@@ -573,6 +573,8 @@
     "MODAL_SUBTITLE": "Select the plan that fits you best",
     "MODAL_CLOSE": "Close",
     "MODAL_CONFIRM": "Activate plan",
+    "PLANS_COUNT": "{{count}} planos",
+    "MORE_PLANS_HINT": "Desliza para ver mais",
     "PLAN_FREE": "Free",
     "PLAN_MONTHLY": "Monthly",
     "PLAN_ANNUAL": "Annual",

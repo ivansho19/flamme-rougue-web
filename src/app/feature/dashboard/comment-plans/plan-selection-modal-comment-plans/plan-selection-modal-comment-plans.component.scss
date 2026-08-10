@@ -1,76 +1,132 @@
+/* Comment-plans modal — cream/wine look; desktop grid + mobile rail */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease-out;
 }
 
-.modal-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  width: 100%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
+  position: relative;
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: min(94vw, 920px);
+  max-height: min(90vh, 880px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  z-index: 1001;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-header {
+  flex-shrink: 0;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 24px;
+  padding: 1.5rem 4rem 1.35rem 1.5rem;
   border-bottom: 1px solid #f0f0f0;
   background: linear-gradient(135deg, #8c030e 0%, #b71c1c 100%);
   color: #ffffff;
+  border-radius: 16px 16px 0 0;
 
   h2 {
     margin: 0;
-    font-size: 1.6rem;
+    font-size: 1.55rem;
+    line-height: 1.25;
+    font-weight: 700;
   }
 
   .subtitle {
     margin: 0.5rem 0 0;
-    opacity: 0.9;
+    opacity: 0.92;
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
 
   .close-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    z-index: 6;
     background: rgba(255, 255, 255, 0.2);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.45);
     color: #ffffff;
     width: 40px;
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.32);
+      transform: rotate(90deg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 }
 
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.5rem 1.5rem 1.25rem;
+}
+
+/* Rail cue: mobile-only (all cards visible on desktop) */
+.plans-rail-cue {
+  display: none;
+}
+
 .plans-container {
-  padding: 24px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
 }
 
 .plan-card {
   position: relative;
-  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.15rem 1.1rem 1rem;
   border: 2px solid #e7d9c4;
   border-radius: 12px;
   background: #fff9ef;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 
   &:hover {
     border-color: #a20f1f;
@@ -84,9 +140,15 @@
   }
 
   &.disabled {
-    opacity: 0.7;
+    opacity: 0.72;
     cursor: not-allowed;
     background: #f7f2ea;
+
+    &:hover {
+      transform: none;
+      border-color: #e7d9c4;
+      box-shadow: none;
+    }
   }
 }
 
@@ -96,15 +158,18 @@
 
 .plan-title-block {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.55rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-right: 1.5rem;
+  min-width: 0;
 
   h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: #7f0a16;
+    line-height: 1.25;
+    min-width: 0;
   }
 }
 
@@ -112,12 +177,13 @@
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 
   .price {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #a20f1f;
+    line-height: 1.1;
   }
 
   .period {
@@ -130,16 +196,21 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 
   li {
     display: flex;
     align-items: flex-start;
     gap: 0.45rem;
-    font-size: 0.85rem;
-    padding: 0.4rem 0;
+    font-size: 0.88rem;
+    padding: 0.45rem 0;
     border-bottom: 1px solid #efe2ce;
     color: #4f3b2a;
     line-height: 1.35;
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     i {
       flex: 0 0 auto;
@@ -152,23 +223,26 @@
 
 .plan-check {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   color: #a20f1f;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
 }
 
 .modal-footer {
+  flex-shrink: 0;
   display: flex;
-  gap: 12px;
-  padding: 20px 24px 24px;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.15rem 1.5rem 1.35rem;
   border-top: 1px solid #f0f0f0;
   background: #faf6f0;
   align-items: center;
+  justify-content: space-between;
+  border-radius: 0 0 16px 16px;
 
   .btn {
-    flex: 1;
-    padding: 12px 18px;
+    padding: 0.75rem 1.25rem;
     border-radius: 8px;
     border: none;
     font-weight: 600;
@@ -176,22 +250,20 @@
   }
 
   .btn-secondary {
+    flex: 0 0 auto;
     background: #f0e6d8;
     color: #6b6b6b;
-  }
-
-  .btn-primary {
-    background: #a20f1f;
-    color: #f2daac;
+    min-width: 120px;
   }
 
   .btn-whatsapp {
     background: #25d366;
     color: #ffffff;
-  }
+    width: 100%;
 
-  .btn-whatsapp:hover {
-    background: #1ebe5d;
+    &:hover {
+      background: #1ebe5d;
+    }
   }
 }
 
@@ -199,25 +271,236 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-width: 220px;
+  min-width: 240px;
+  flex: 0 1 280px;
 }
 
 .paypal-wrapper {
   min-height: 44px;
+  width: 100%;
 }
 
 .error {
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
   color: #e74c3c;
   font-size: 0.85rem;
 }
 
-@media (max-width: 520px) {
-  .modal-container {
-    width: 95%;
+/* Tablet: still show 3 cards, slightly tighter */
+@media (max-width: 900px) and (min-width: 769px) {
+  .modal-content {
+    width: min(96vw, 820px);
   }
 
   .plans-container {
-    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .plan-card {
+    padding: 1rem 0.85rem 0.9rem;
+  }
+
+  .plan-title-block h3 {
+    font-size: 1.05rem;
+  }
+
+  .plan-price .price {
+    font-size: 1.35rem;
+  }
+
+  .plan-features li {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile: bottom sheet + horizontal rail */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: none;
+    max-height: min(94dvh, 100%);
+    border-radius: 18px 18px 0 0;
+  }
+
+  .modal-header {
+    padding: 1rem 3.2rem 0.95rem 1rem;
+    border-radius: 18px 18px 0 0;
+
+    h2 {
+      font-size: 1.15rem;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+    }
+
+    .close-btn {
+      right: 0.65rem;
+      top: 0.65rem;
+      width: 38px;
+      height: 38px;
+      background: rgba(0, 0, 0, 0.22);
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+  }
+
+  .modal-body {
+    padding: 0.85rem 0 1rem;
+  }
+
+  .plans-rail-cue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    margin: 0 0.9rem 0.65rem;
+  }
+
+  .plans-rail-cue__count {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7f0a16;
+  }
+
+  .plans-rail-cue__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #a20f1f;
+    animation: cuePulse 1.8s ease-in-out infinite;
+
+    i {
+      font-size: 0.95rem;
+    }
+  }
+
+  @keyframes cuePulse {
+    0%, 100% { opacity: 0.7; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(2px); }
+  }
+
+  .plans-rail-dots {
+    display: flex;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .plans-rail-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: rgba(162, 15, 31, 0.22);
+    cursor: pointer;
+    transition: width 0.2s ease, background 0.2s ease;
+
+    &.active {
+      width: 22px;
+      background: linear-gradient(90deg, #8c030e, #a20f1f);
+    }
+
+    &.disabled {
+      opacity: 0.45;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(162, 15, 31, 0.4);
+      outline-offset: 2px;
+    }
+  }
+
+  .plans-container {
+    display: flex;
+    gap: 0.7rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.9rem;
+    padding: 0.35rem 0.9rem 0.85rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .plan-card {
+    flex: 0 0 min(78%, 280px);
+    scroll-snap-align: center;
+    padding: 0.95rem;
+
+    &:hover {
+      transform: none;
+    }
+
+    .plan-title-block h3 {
+      font-size: 1rem;
+    }
+
+    .plan-price .price {
+      font-size: 1.25rem;
+    }
+
+    .plan-features li {
+      font-size: 0.78rem;
+      padding: 0.28rem 0;
+    }
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0.75rem 0.9rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    border-radius: 0;
+    gap: 0.55rem;
+
+    .btn-secondary {
+      width: 100%;
+      min-width: unset;
+      padding: 0.75rem 1rem;
+    }
+  }
+
+  .payment-actions {
+    width: 100%;
+    min-width: unset;
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .plan-card {
+    flex-basis: min(82%, 260px);
+  }
+
+  .plans-rail-cue__hint {
+    font-size: 0.74rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .modal-content,
+  .plans-rail-cue__hint {
+    animation: none !important;
+  }
+
+  .plan-card,
+  .close-btn,
+  .btn {
+    transition: none !important;
   }
 }
