@@ -1412,6 +1412,7 @@ export class ProfileEditComponent implements OnInit {
                                 objectId,
                                 displayName: basicInfo.publicName || '',
                                 bio: basicInfo.description || '',
+                                email: basicInfo.email || '',
                                 phone: this.getPhoneWithPrefix(basicInfo),
                                 country: basicInfo.country || '',
                                 city: this.getResolvedCity(),
