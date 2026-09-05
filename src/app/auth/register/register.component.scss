@@ -77,9 +77,11 @@
 .form-container {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   background: $color-gray;
   position: relative;
+  overflow: hidden;
 }
 
 .login-topbar-register {
@@ -95,18 +97,51 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 0;
+}
+
+/* Columna del form: scroll interno para no cortar CTA + Turnstile */
+.form-half--form {
+  overflow-x: hidden;
+  overflow-y: auto;
+  align-items: stretch;
+  justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 3, 14, 0.55) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(140, 3, 14, 0.45);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(140, 3, 14, 0.7);
+  }
+}
+
+.form-half--media {
   overflow: hidden;
 }
 
 .img-half {
-   width: 100%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 0;
-  }
+}
 
 .form-box {
   background: #fff;
@@ -282,9 +317,15 @@
   .form-container {
     height: auto;
     min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
   }
 
-  .form-half:last-child {
+  .form-half--form {
+    overflow: visible;
+  }
+
+  .form-half--media {
     display: none;
   }
 }

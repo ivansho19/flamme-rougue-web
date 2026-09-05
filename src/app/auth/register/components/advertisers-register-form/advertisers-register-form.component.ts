@@ -85,7 +85,7 @@ export class AdvertisersRegisterFormComponent implements OnInit {
     }
 
     onTurnstileToken(token: string): void {
-        this.cfTurnstileToken = token || '';
+        this.cfTurnstileToken = token;
         this.turnstileError = false;
     }
 
@@ -100,15 +100,15 @@ export class AdvertisersRegisterFormComponent implements OnInit {
             return;
         }
 
-        // if (!this.cfTurnstileToken) {
-        //     this.toastService.showToast(
-        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
-        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
-        //         'error',
-        //         4
-        //     );
-        //     return;
-        // }
+        if (!this.cfTurnstileToken) {
+            this.toastService.showToast(
+                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
+                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
+                'error',
+                4
+            );
+            return;
+        }
 
         const { name, lastName, email, password } = this.anuncianteForm.value;
         const req: IAuthRequest = {
@@ -116,7 +116,7 @@ export class AdvertisersRegisterFormComponent implements OnInit {
             lastName,
             email,
             password,
-            // cfTurnstileToken: this.cfTurnstileToken
+            cfTurnstileToken: this.cfTurnstileToken
         };
 
         this.submitting = true;
@@ -175,7 +175,7 @@ export class AdvertisersRegisterFormComponent implements OnInit {
 
     get canSubmit(): boolean {
         return this.anuncianteForm.valid && !this.submitting
-        // && !!this.cfTurnstileToken
+        && !!this.cfTurnstileToken
         ;
     }
 }

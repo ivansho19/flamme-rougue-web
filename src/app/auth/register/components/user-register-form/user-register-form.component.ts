@@ -92,20 +92,20 @@ export class UserRegisterFormComponent implements OnInit {
             return;
         }
 
-        // if (!this.cfTurnstileToken) {
-        //     this.toastService.showToast(
-        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
-        //         this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
-        //         'error',
-        //         4
-        //     );
-        //     return;
-        // }
+        if (!this.cfTurnstileToken) {
+            this.toastService.showToast(
+                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED_TITLE'),
+                this.translate.instant('REGISTER_FORM.TURNSTILE_REQUIRED'),
+                'error',
+                4
+            );
+            return;
+        }
 
         const { name, lastName, email, password } = this.userForm.value;
         this.submitting = true;
 
-        this.authService.registerUser(name, lastName, email, password).subscribe({
+        this.authService.registerUser(name, lastName, email, password, this.cfTurnstileToken).subscribe({
             next: (response) => {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('user', JSON.stringify(response.name));
@@ -160,7 +160,7 @@ export class UserRegisterFormComponent implements OnInit {
 
     get canSubmit(): boolean {
         return this.userForm.valid  && !this.submitting
-        // && !!this.cfTurnstileToken
+        && !!this.cfTurnstileToken
         ;
     }
 }

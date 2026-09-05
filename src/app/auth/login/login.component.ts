@@ -67,8 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.loginForm.valid && !this.submitting) {
       const { email, password } = this.loginForm.value;
-      this.authService.login(email, password, 
-        // this.turnstileToken
+      this.authService.login(email, password, this.turnstileToken
       ).subscribe({
         next: (response) => {
           console.log('Inicio de sesión exitoso:', response);
@@ -135,7 +134,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   get canSubmit(): boolean {
     return this.loginForm.valid && !this.submitting
-    // !!this.turnstileToken
+     && !!this.turnstileToken
     ;
   }
 
