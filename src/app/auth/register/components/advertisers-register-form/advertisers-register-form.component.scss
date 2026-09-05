@@ -1,15 +1,32 @@
 @import '../../../../../assets/styles/variables.scss';
 
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
 .login-right {
-  flex: 1; /* 50% */
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background: $color-gray;
-  padding: 2rem;
+  /* Room for absolute "Volver" topbar + breathing room at bottom for CTA */
+  padding: 5rem 1.25rem 2.5rem;
   position: relative;
   margin-top: 0;
+}
+
+/* Center the stack when the viewport is tall enough; otherwise scroll from the top */
+@media (min-height: 920px) {
+  .login-right {
+    justify-content: center;
+    padding-top: 3.5rem;
+  }
 }
 
 .login-topbar {
@@ -34,21 +51,29 @@
 }
 
 .logo-container {
+  flex-shrink: 0;
+  margin-bottom: 0.75rem;
+
   img {
-    width: 250px;
-    height: 250px;
+    width: auto;
+    height: auto;
+    max-width: 240px;
+    max-height: 200px;
+    object-fit: contain;
+    display: block;
   }
 }
 
 .login-box {
   background: $color-primary;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem 1.75rem 1.75rem;
   color: $color-light;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  width: 500px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  width: 100%;
   max-width: 400px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 h1.login-title,
@@ -64,7 +89,7 @@ h2.login-title {
 
   input,
   select {
-    width: 100%; // Cambia aquí de 90% a 100%
+    width: 100%;
     padding: 0.8rem;
     border: 1px solid $color-brown;
     border-radius: 8px;
@@ -82,7 +107,12 @@ h2.login-title {
   }
 }
 
-// Ajusta form-row para que use el mismo ancho que los inputs individuales
+.turnstile-group {
+  width: 100%;
+  overflow: visible;
+  margin-bottom: 0.5rem;
+}
+
 .form-row {
   display: flex;
   gap: 1rem;
@@ -95,9 +125,8 @@ h2.login-title {
   }
 }
 
-// Opcional: fuerza el ancho máximo del form para que todo quede igual
 .login-box form {
-  width: 90%; // O el mismo porcentaje que usabas para los inputs antes
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -118,7 +147,7 @@ h2.login-title {
 .btn-login {
   width: 90%;
   padding: 0.8rem;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   background: linear-gradient(90deg, #e0c070, #c92a2a);
   border: none;
   border-radius: 8px;
@@ -159,7 +188,32 @@ h2.login-title {
   text-decoration: underline;
 }
 
+@media (max-height: 800px) {
+  .logo-container {
+    margin-bottom: 0.35rem;
+
+    img {
+      max-width: 190px;
+      max-height: 150px;
+    }
+  }
+
+  .login-box {
+    padding: 1.15rem 1.35rem 1.35rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .login-right {
+    min-height: auto;
+    padding: 4.5rem 1rem 2rem;
+    justify-content: flex-start;
+  }
+
   .login-topbar {
     top: 12px;
     left: 50%;

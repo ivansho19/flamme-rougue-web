@@ -1,7 +1,7 @@
 <div class="login-right">
   <!-- Logo -->
   <div class="logo-container">
-    <img src="assets/images/new_logo.png" alt="Logo" />
+    <img src="assets/images/new_logo.png" alt="Logo" width="280px" height="240px"/>
   </div>
 
   <!-- Caja del formulario -->
@@ -56,11 +56,11 @@
       </div>
 
       <div class="form-group turnstile-group">
-        <!-- <app-cf-turnstile
+        <app-cf-turnstile
           [language]="currentLang"
           (tokenChange)="onTurnstileToken($event)"
           (error)="onTurnstileError()">
-        </app-cf-turnstile> -->
+        </app-cf-turnstile>
         <div class="error" *ngIf="turnstileError">
           {{ 'REGISTER_FORM.TURNSTILE_LOAD_ERROR' | translate }}
         </div>
