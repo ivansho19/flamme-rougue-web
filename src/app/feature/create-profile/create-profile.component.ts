@@ -1309,7 +1309,7 @@ export class ProfileEditComponent implements OnInit {
                         'info',
                         this.translate.instant('PROFILE_FORM.TOAST_WHATSAPP_PENDING'),
                         'error',
-                        10
+                        1000
                     );
                 }
                 // Validar que haya un plan seleccionado
