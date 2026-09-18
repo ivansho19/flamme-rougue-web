@@ -1,6 +1,6 @@
 <div class="layout">
     <!-- HEADER -->
-    <app-header [hidden]="loader"></app-header>
+    <app-header [hidden]="showChromeHidden"></app-header>
     <div class="layout-content" #layoutContent>
         <router-outlet></router-outlet>
     </div>
@@ -13,7 +13,7 @@
             <span aria-hidden="true">↑</span>
         </button>
      <!-- FOOTER -->
-    <footer [hidden]="loader" class="footer">
+    <footer [hidden]="showChromeHidden" class="footer">
         <div class="footer-inner">
             <p>© 2026 Flammes Rouges. {{ 'FOOTER.RIGHTS' | translate }}</p>
             <nav class="footer-links" aria-label="Legal">
@@ -23,4 +23,6 @@
             </nav>
         </div>
     </footer>
+
+    <app-loader *ngIf="pageTransitionLoader"></app-loader>
 </div>
