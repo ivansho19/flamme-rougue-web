@@ -57,6 +57,18 @@
               ],
               "outputHashing": "all"
             },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": true,
+              "extractLicenses": true,
+              "sourceMap": false
+            },
             "development": {
               "fileReplacements": [
                 {
@@ -77,6 +89,9 @@
           "configurations": {
             "production": {
               "buildTarget": "flamme-rouge-web:build:production"
+            },
+            "qa": {
+              "buildTarget": "flamme-rouge-web:build:qa"
             },
             "development": {
               "buildTarget": "flamme-rouge-web:build:development"
