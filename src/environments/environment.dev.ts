@@ -1,10 +1,10 @@
-const urlBase = 'http://localhost:5000/api';
-// const urlBase = 'https://flamme-rouge-backend-qa.up.railway.app/api';
+// const urlBase = 'http://localhost:5000/api';
+const urlBase = 'https://flamme-rouge-backend-qa.up.railway.app/api';
 
 
 export const environment = {
   production: true,
-  socket_url: 'http://localhost:5000',
+  socket_url: 'https://flamme-rouge-backend-qa.up.railway.app',
   CODE_PROMO: 'ALAFREE7DAYS',
   CODE_PROMO_TRIAL_DAYS: 7,
   api_login: `${urlBase}/auth/login`,

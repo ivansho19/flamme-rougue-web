@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -29,7 +29,7 @@ type CreateProfilePanelKey = 'images' | 'basicInfo' | 'personalData' | 'services
     templateUrl: './create-profile.component.html',
     styleUrls: ['./create-profile.component.scss']
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, OnDestroy {
 
     private readonly watermarkLogoPath = 'assets/images/new_logo.png';
     private readonly watermarkMarginRatio = 0.03;
@@ -69,7 +69,10 @@ export class ProfileEditComponent implements OnInit {
     activePromoCode: string | null = null;
     
     showPlanModal = false;
-    previousIsProfileComplete = false;
+    /** Client-side feedback while validating before opening the plan modal. */
+    isRegisterProcessing = false;
+    registerStatusMessage: 'processing' | 'choose_plan' | null = null;
+    private registerProcessTimer: ReturnType<typeof setTimeout> | null = null;
 
     countries: Country[] = [];
     cities: string[] = [];
@@ -125,6 +128,13 @@ export class ProfileEditComponent implements OnInit {
             }
             this.loadClientFromEmail();
         });
+    }
+
+    ngOnDestroy(): void {
+        if (this.registerProcessTimer) {
+            clearTimeout(this.registerProcessTimer);
+            this.registerProcessTimer = null;
+        }
     }
 
     openMainFileSelector() {
@@ -321,11 +331,6 @@ export class ProfileEditComponent implements OnInit {
         this.profileForm
             .get('basicInfo.city')
             ?.valueChanges.subscribe(value => this.syncCustomCityValidators(value));
-
-        // Watch for form changes to auto-show modal when profile becomes complete
-        this.profileForm.statusChanges.subscribe(() => {
-            this.checkAndShowPlanModal();
-        });
 
         this.addAvailabilitySlot();
     }
@@ -572,6 +577,7 @@ export class ProfileEditComponent implements OnInit {
         this.pendingWhatsAppPayment = false;
         this.activePromoCode = null;
         this.showPlanModal = false;
+        this.registerStatusMessage = null;
         console.log('Plan seleccionado desde modal:', plan);
         // Auto-save profile after plan confirmation
         this.saveProfile();
@@ -584,6 +590,7 @@ export class ProfileEditComponent implements OnInit {
         this.pendingWhatsAppPayment = true;
         this.activePromoCode = null;
         this.showPlanModal = false;
+        this.registerStatusMessage = null;
         console.log('Plan seleccionado para WhatsApp:', plan);
         this.saveProfile();
     }
@@ -595,35 +602,85 @@ export class ProfileEditComponent implements OnInit {
         this.paymentCompleted = true;
         this.pendingWhatsAppPayment = false;
         this.showPlanModal = false;
+        this.registerStatusMessage = null;
         this.saveProfile();
     }
 
     closePlanModal(): void {
-        // Permite cerrar el modal sin hacer nada (cuando hace clic en "Decidir después")
+        // Close without wiping the form — plan selection is deferred on purpose.
         this.showPlanModal = false;
+        if (!this.selectedPlanId) {
+            this.registerStatusMessage = 'choose_plan';
+        }
     }
 
-    publishProfile(): void {
+    /**
+     * Explicit CTA: validate → short “processing” feedback → ask for plan → open modal.
+     * Replaces auto-open on KYC complete (which conflicted with iPhone camera return).
+     */
+    registerProfile(): void {
+        if (this.isRegisterProcessing || this.loading) {
+            return;
+        }
+
+        if (!this.validateProfileForRegistration()) {
+            this.toastService.showToast(
+                this.translate.instant('PROFILE_FORM.TOAST_REGISTER_INCOMPLETE_TITLE'),
+                this.translate.instant('PROFILE_FORM.TOAST_REGISTER_INCOMPLETE'),
+                'error'
+            );
+            return;
+        }
+
         if (!this.enforcePlanImageLimit()) {
             return;
         }
-        // Si no hay plan seleccionado, abre el modal para seleccionar uno
-        if (!this.selectedPlanId) {
-            this.showPlanModal = true;
+
+        // Already paid / promo / WhatsApp pending → publish directly.
+        if (this.selectedPlanId && (this.paymentCompleted || this.pendingWhatsAppPayment || this.activePromoCode)) {
+            this.saveProfile();
             return;
         }
-        // Si ya hay plan, procede a guardar el perfil
-        this.saveProfile();
+
+        this.startRegisterPlanFlow();
+    }
+
+    private startRegisterPlanFlow(): void {
+        if (this.registerProcessTimer) {
+            clearTimeout(this.registerProcessTimer);
+            this.registerProcessTimer = null;
+        }
+
+        this.isRegisterProcessing = true;
+        this.registerStatusMessage = 'processing';
+
+        this.registerProcessTimer = setTimeout(() => {
+            this.isRegisterProcessing = false;
+            this.registerStatusMessage = 'choose_plan';
+            this.showPlanModal = true;
+            this.registerProcessTimer = null;
+        }, 900);
+    }
+
+    private validateProfileForRegistration(): boolean {
+        (['images', 'basicInfo', 'personalData', 'services', 'realData'] as CreateProfilePanelKey[])
+            .forEach((panel) => this.onPanelClosed(panel));
+
+        if (!this.profile.profileImage) {
+            return false;
+        }
+
+        this.profileForm.markAllAsTouched();
+        return this.isProfileComplete && this.canPublish;
+    }
+
+    publishProfile(): void {
+        this.registerProfile();
     }
 
     checkAndShowPlanModal(): void {
-        // Auto-show modal when profile becomes complete for the first time
-        if (this.isProfileComplete && !this.previousIsProfileComplete) {
-            this.showPlanModal = true;
-            this.previousIsProfileComplete = true;
-        } else if (!this.isProfileComplete && this.previousIsProfileComplete) {
-            this.previousIsProfileComplete = false;
-        }
+        // Intentionally disabled: auto-opening the plan modal after KYC complete
+        // caused mobile (iPhone camera) users to lose form state when dismissing it.
     }
 
     get previewProfile(): ProfilePreviewData | null {

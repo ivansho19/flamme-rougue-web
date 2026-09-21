@@ -739,7 +739,6 @@
     <app-profile-preview [profile]="previewProfile"></app-profile-preview>
   </div>
 
-  <!-- Plan Selection Modal - Auto-triggers when profile is complete -->
   <app-plan-selection-modal
     [isOpen]="showPlanModal"
     [profileName]="profileForm.get('basicInfo.publicName')?.value || ''"
@@ -749,16 +748,40 @@
     (promoConfirmed)="handlePromoFromModal($event)">
   </app-plan-selection-modal>
 
-  <!-- Publish Button - Triggers plan selection if not chosen yet -->
-  <button 
-    style="margin-top: 30px;" 
-    *ngIf="isProfileComplete" 
-    type="button" 
-    class="btn-primary" 
-    [disabled]="!canPublish"
-    (click)="publishProfile()">
-    {{ selectedPlanId ? ('PROFILE_FORM.PUBLISH_PROFILE' | translate) : 'Elige tu plan y publica tu perfil' }}
-  </button>
+  <div class="register-cta">
+    <p
+      class="register-cta__status"
+      *ngIf="registerStatusMessage === 'processing'"
+      role="status"
+      aria-live="polite">
+      {{ 'PROFILE_FORM.REGISTER_PROCESSING' | translate }}
+    </p>
+    <p
+      class="register-cta__hint"
+      *ngIf="registerStatusMessage === 'choose_plan'"
+      role="status"
+      aria-live="polite">
+      {{ 'PROFILE_FORM.REGISTER_CHOOSE_PLAN' | translate }}
+    </p>
+
+    <button
+      type="button"
+      class="btn-primary register-cta__button"
+      [disabled]="isRegisterProcessing || loading"
+      (click)="registerProfile()">
+      <ng-container *ngIf="!isRegisterProcessing; else processingLabel">
+        {{
+          selectedPlanId && (paymentCompleted || pendingWhatsAppPayment || activePromoCode)
+            ? ('PROFILE_FORM.PUBLISH_PROFILE' | translate)
+            : ('PROFILE_FORM.REGISTER_PROFILE' | translate)
+        }}
+      </ng-container>
+      <ng-template #processingLabel>
+        {{ 'PROFILE_FORM.REGISTER_PROCESSING' | translate }}
+      </ng-template>
+    </button>
+  </div>
+
   <app-kyc-info-modal
     #kycInfoModal
     imageSrc="assets/images/kyc_es.png">
