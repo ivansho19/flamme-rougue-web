@@ -154,6 +154,7 @@
     "SEXUAL_ORIENTATION_OTHER": "Other",
     "ALCOHOL_PLACEHOLDER": "Do you consume alcohol?",
     "ALCOHOL_OPTION_EVENTS": "Only at events",
+    "ALCOHOL_OPTION_NEVER": "Never",
     "ALCOHOL_OPTION_OCCASIONAL": "Occasionally",
     "ALCOHOL_OPTION_FREQUENT": "Frequently",
     "CIGARETTE_PLACEHOLDER": "Cigarette",
