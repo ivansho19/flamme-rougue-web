@@ -1,5 +1,9 @@
+# netlify.toml overrides the Build command set in the Netlify UI.
+# - Production site: leave NPM_BUILD_SCRIPT unset → "npm run build" (environment.prd)
+# - QA site: set env NPM_BUILD_SCRIPT=build:qa → "npm run build:qa" (environment.dev)
+
 [build]
-  command = "npm run build"
+  command = "npm run ${NPM_BUILD_SCRIPT:-build}"
   publish = "dist/flamme-rouge-web/browser"
 
 [[redirects]]

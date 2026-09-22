@@ -238,6 +238,12 @@
   margin-top: 2.5rem;
 }
 
+@media (max-width: 900px) {
+  .preview-section {
+    display: none !important;
+  }
+}
+
 /* POSIBILIDADES */
 .possibilities-card {
   background: #fff7e6;
@@ -672,9 +678,51 @@ input, textarea, select {
   transition: all .3s ease;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.btn-primary:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
+.register-cta {
+  margin: 1.75rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 560px;
+}
+
+.register-cta__status,
+.register-cta__hint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #6f2130;
+}
+
+.register-cta__status {
+  font-weight: 600;
+}
+
+.register-cta__hint {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(242, 218, 172, 0.45);
+  border: 1px solid rgba(140, 3, 14, 0.18);
+  color: #8c030e;
+  font-weight: 500;
+}
+
+.register-cta__button {
+  margin-top: 0.25rem;
 }
 
 /* ANIMATIONS */
@@ -930,5 +978,25 @@ input, textarea, select {
   .btn-primary {
     width: 100%;
     min-width: 0;
+  }
+
+  .register-cta {
+    margin: 1.25rem 0 1.5rem;
+    max-width: none;
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 20;
+    padding: 0.65rem 0.35rem 0.35rem;
+    background: linear-gradient(180deg, rgba(255, 247, 239, 0) 0%, rgba(255, 247, 239, 0.92) 28%, #fff7ef 100%);
+  }
+
+  .register-cta__hint {
+    font-size: 0.88rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .register-cta__button {
+    min-height: 3rem;
+    font-size: 0.95rem;
   }
 }

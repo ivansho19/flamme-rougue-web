@@ -4,11 +4,12 @@
 | --- | --- |
 | Producto | Flammes Rouges |
 | Repositorio | `flamme-rouge-web` (frontend Angular) |
-| Versión del documento | 1.1 |
-| Fecha | 5 de septiembre de 2026 |
+| Versión del documento | 1.2 |
+| Fecha | 17 de septiembre de 2026 |
 | Estado | Borrador operativo (as-is + requisitos vigentes) |
 | Idioma por defecto | Español (`es`) |
 | Audiencia | Producto, ingeniería, QA, operación |
+| Cambio 1.2 | SEO orgánico: descubrimiento de perfiles públicos (sitemap) + requisitos de indexación y relevancia |
 
 ---
 
@@ -21,15 +22,17 @@ El frontend vive en este repositorio. El backend, pagos y almacenamiento de medi
 **Propuesta de valor**
 
 - Para visitantes: descubrir perfiles verificados, filtrar por búsqueda y ver campañas destacadas.
-- Para anunciantes: publicar un perfil estructurado, pagar visibilidad y aparecer en home / TOP ROJO.
+- Para anunciantes: publicar un perfil estructurado, pagar visibilidad y aparecer en home / TOP ROJO **y en búsqueda orgánica de Google** cuando el perfil es público.
 - Para usuarios: participar con comentarios y likes, con planes que desbloquean más actividad.
-- Para el negocio: monetizar visibilidad (planes de perfil + TOP ROJO) y engagement (planes de comentarios), con un panel de moderación.
+- Para el negocio: monetizar visibilidad (planes de perfil + TOP ROJO) y engagement (planes de comentarios), con un panel de moderación; ampliar adquisición orgánica vía perfiles indexables.
 
 ---
 
 ## 2. Problema y oportunidad
 
 Los anunciantes necesitan un canal digital para publicar un perfil con fotos, disponibilidad y contacto, con control de visibilidad y verificación. Los visitantes necesitan un directorio claro, con perfiles verificados y campañas destacadas. La plataforma necesita KYC, pagos y moderación para operar con seguridad, cumplimiento de mayoría de edad y control de contenido.
+
+**Oportunidad SEO:** Google Search Console confirma que el sitemap se procesa, pero históricamente solo listaba páginas estáticas (`/`, `/home`, `/legal`, `/auth/register`). Los perfiles públicos (`/profile/:slug`) no se descubrían por sitemap. El negocio necesita que Google **descubra e indexe** perfiles activos automáticamente y que las fichas se relacionen con búsquedas reales (ciudad, nacionalidad, tipo de anuncio), **sin** páginas duplicadas ni keyword stuffing artificial.
 
 ---
 
@@ -42,6 +45,8 @@ Los anunciantes necesitan un canal digital para publicar un perfil con fotos, di
 3. Permitir crear y editar un perfil de anunciante con datos, disponibilidad, galería, KYC y plan.
 4. Monetizar visibilidad (planes Básico / Pro / VIP y campañas TOP ROJO) y comentarios (gratis / mensual / anual).
 5. Dar al admin herramientas para verificar KYC, activar/desactivar perfiles, gestionar usuarios y aprobar campañas y planes.
+6. Permitir que Google descubra e indexe **automáticamente** los perfiles públicos activos (sin edición manual del sitemap por cada alta).
+7. Mejorar la relevancia orgánica de fichas públicas usando atributos reales del perfil (ciudad, nacionalidad, género, etc.), no keywords inventadas.
 
 ### 3.2 Métricas de éxito (propuestas)
 
@@ -53,6 +58,8 @@ Los anunciantes necesitan un canal digital para publicar un perfil con fotos, di
 | TOP ROJO activos | Campañas `active` por ciudad | Máx. 5 slots por ciudad (rotación si hay más) |
 | KYC pendiente | Ítems en cola de revisión | SLA de revisión (por definir) |
 | Comentarios válidos | Comentarios enviados sin rechazo de plan / normas | Cumplir límites por plan |
+| Cobertura sitemap perfiles | % de perfiles con `isActiveProfile === true` presentes en el sitemap de perfiles | 100 % tras cada alta/activación (objetivo dinámico) |
+| Indexación orgánica | Perfiles públicos en estado “indexada” / con impresiones en Search Console | Medir baseline tras sitemap dinámico + SEO on-page |
 
 ---
 
@@ -91,6 +98,7 @@ Reglas de negocio relevantes:
 - i18n: ES, EN, FR, NL (existe `pt.json` no expuesto en el selector).
 - Páginas legales: aviso, términos, privacidad, cookies, menores, contacto.
 - Notificaciones (admin y perfil) vía API y Socket.io.
+- SEO técnico base: `robots.txt`, canonical/meta vía `SeoService`, slug SEO de perfil (`/profile/:slug`), y generación de sitemap en build (`sitemap.xml` índice + `sitemap-static.xml` + `sitemap-profiles.xml`).
 
 ### 5.2 Fuera de alcance / pendiente
 
@@ -101,6 +109,10 @@ Reglas de negocio relevantes:
 - Chat in-app (el contacto es teléfono / WhatsApp).
 - Módulo `core` de Angular (aún no existe).
 - CI/CD, quality gate y cobertura mínima definidos.
+- **Sitemap 100 % dinámico en tiempo real** (sin depender de un deploy): ver FR-11 y roadmap P0 SEO.
+- **SSR / prerender** de fichas `/profile/:slug` (SPA CSR hoy; limitación para crawlers).
+- **Listados públicos por intención de búsqueda** (ciudad, nacionalidad, categoría) tipo `/ciudad/madrid`.
+- Keyword stuffing, páginas duplicadas o landing vacías solo para SEO (explícitamente fuera de alcance).
 
 ---
 
@@ -194,6 +206,9 @@ Reglas de negocio relevantes:
 | FR-03.4 | Comentarios autenticados, solo clientes; respuesta del perfil | Must |
 | FR-03.5 | Modal de normas de comunidad antes de comentar | Must |
 | FR-03.6 | Respetar límite de comentarios según plan del usuario | Must |
+| FR-03.7 | URL canónica `/profile/{slug}` con slug estable (nombre amigable + últimos 6 chars del id) | Must |
+| FR-03.8 | Meta SEO de ficha: `index, follow`, canonical propia, título/description derivados del perfil | Must |
+| FR-03.9 | Perfiles inactivos, privados o eliminados no deben presentarse como indexables | Must |
 
 ### FR-04 Perfil de anunciante (alta)
 
@@ -273,6 +288,32 @@ Campos de campaña: `profileId`, `displayName`, `city`, `country`, `title`, `des
 | FR-10.3 | Página `/legal` con aviso, términos, privacidad, cookies, menores y contacto | Must |
 | FR-10.4 | Catch-all `**` redirige a `/home` | Must |
 
+### FR-11 SEO orgánico y sitemap
+
+Objetivo de producto: que Google descubra e indexe perfiles públicos activos y que las fichas se relacionen con búsquedas reales a partir de **atributos del perfil** (p. ej. ciudad + nacionalidad + género), sin duplicar páginas ni inventar keywords.
+
+| ID | Requisito | Prioridad |
+| --- | --- | --- |
+| FR-11.1 | `robots.txt` permite rastrear `/`, `/home`, `/legal` y `/profile/`; bloquea áreas privadas (`/auth/`, `/admin/`, `/create-profile`, `/my-profile`, `/payments`, `/dashboard/`) | Must |
+| FR-11.2 | Declarar en `robots.txt` el sitemap canónico `https://flammesrouges.com/sitemap.xml` | Must |
+| FR-11.3 | El sitemap (o índice de sitemaps) incluye páginas estáticas públicas y **todas** las URLs `/profile/{slug}` con `isActiveProfile === true` | Must |
+| FR-11.4 | La inclusión de un perfil nuevo/publicado en el sitemap **no requiere edición manual** del XML | Must |
+| FR-11.5 | Objetivo técnico: sitemap de perfiles **dinámico** (servido en request desde backend o función serverless), para no depender de un redeploy por cada alta | Must (target) |
+| FR-11.6 | Estado intermedio aceptable: generación en `npm run build` desde `GET /profiles/getAllProfiles` (`scripts/generate-sitemap.mjs`) hasta completar FR-11.5 | Should (as-is) |
+| FR-11.7 | URLs del sitemap usan el dominio canónico `https://flammesrouges.com` (sin variante www duplicada) | Must |
+| FR-11.8 | No incluir en sitemap perfiles inactivos, privados, eliminados ni rutas `Disallow` | Must |
+| FR-11.9 | Título y description de ficha pública incorporan atributos reales disponibles (nombre, ciudad, nacionalidad, género/orientación según datos del anuncio), sin keyword stuffing | Should |
+| FR-11.10 | Listados públicos indexables por ciudad/categoría (p. ej. Madrid, nacionalidad) que enlacen a perfiles | Could (roadmap) |
+| FR-11.11 | HTML rastreable de fichas (SSR o prerender) para que title/description/canonical no dependan solo de JS del cliente | Could (roadmap) |
+
+**Separación de responsabilidades (producto)**
+
+| Necesidad | Mecanismo |
+| --- | --- |
+| Descubrimiento de URLs nuevas | Sitemap dinámico + enlaces internos (home, búsqueda, listados) |
+| Relación con búsquedas (“madrid colombiana”, “chica trans”, etc.) | Contenido y meta de la ficha / listados a partir de datos reales del perfil |
+| No hacer | Páginas clonadas, keywords artificiales en el sitemap, indexar perfiles inactivos |
+
 ---
 
 ## 8. Requisitos no funcionales
@@ -289,6 +330,8 @@ Campos de campaña: `profileId`, `displayName`, `city`, `country`, `title`, `des
 | NFR-08 | Accesibilidad | Labels de formularios y toasts; mejorar a11y de modales (Should) |
 | NFR-09 | Pagos | Moneda EUR; PayPal client-side + create/capture order en backend |
 | NFR-10 | Tiempo real | Socket.io para notificaciones |
+| NFR-11 | SEO / indexación | Dominio canónico `https://flammesrouges.com`; perfiles públicos indexables (`index, follow` + canonical propia); sitemap coherente con `robots.txt` |
+| NFR-12 | SEO / arquitectura | Hoy: SPA CSR (Angular) en Netlify; metas de perfil se aplican en cliente. Limitación conocida para crawlers hasta SSR/prerender (FR-11.11) |
 
 ---
 
@@ -309,13 +352,16 @@ Campos de campaña: `profileId`, `displayName`, `city`, `country`, `title`, `des
 
 **Stack frontend:** Angular 17.3, TypeScript 5.4, Angular Material, Bootstrap 5, ngx-translate, RxJS 7.8, Embla Carousel, socket.io-client, Cloudflare Turnstile (`app-cf-turnstile`), @stripe/stripe-js (no usado en flujo activo).
 
+**Hosting / estáticos SEO:** Netlify publica `dist/flamme-rouge-web/browser`. `robots.txt` y `sitemap*.xml` se copian como assets (`angular.json`). Las rutas SPA hacen fallback a `index.html`; los XML estáticos en raíz deben seguir sirviéndose con precedencia sobre el catch-all.
+
 **Entornos**
 
 | Entorno | API |
 | --- | --- |
 | Local / QA (file `environment.dev.ts`) | `https://flamme-rouge-backend-qa.up.railway.app/api` (también documentado localhost:5000) |
-| Producción | `https://flamme-rouge-backend-production.up.railway.app/api` |
+| Producción | `https://flamme-rouge-backend-production-251b.up.railway.app/api` |
 | SPA local | `ng serve` → `http://localhost:4200` |
+| Sitio canónico | `https://flammesrouges.com` |
 
 ---
 
@@ -412,6 +458,9 @@ Un incremento se considera listo cuando:
 6. No se rompe el disclaimer de +18 ni la validación de edad 18+.
 7. No se suben secretos (PayPal client id de prod, Turnstile site key, etc.) a issues públicas.
 8. Login y registro (usuario y anunciante) no permiten submit sin Turnstile válido; el token viaja al backend y, si falla, el widget se resetea.
+9. Perfiles públicos activos aparecen en el sitemap de perfiles con su URL canónica; perfiles inactivos no.
+10. Ficha pública expone (tras carga) `robots` indexable y `link rel="canonical"` a su propia URL en `flammesrouges.com`.
+11. No se añaden páginas duplicadas ni keywords artificiales solo para SEO.
 
 ---
 
@@ -427,6 +476,10 @@ Un incremento se considera listo cuando:
 | Turnstile depende de Cloudflare y de validación backend | Login/registro fallan si el site key es inválido o el backend no verifica el token | Site key correcta por entorno; backend debe validar `cfTurnstileToken` con el secret key |
 | Formularios auth más altos por el widget | CTA puede quedar bajo el fold | Scroll interno en columna de registro; padding suficiente en login |
 | Contenido sensible +18 | Riesgo legal y de marca | KYC, legales, bloqueo de menores |
+| Sitemap estático / solo en build | Perfiles nuevos no aparecen en Google hasta el siguiente deploy | Pasar a sitemap dinámico (FR-11.5); webhook de deploy como mitigación temporal |
+| SPA sin SSR | Crawlers pueden no ver title/description/canonical de `/profile/:slug` | Prerender/SSR (FR-11.11); meanwhile metas client-side + sitemap + enlaces internos |
+| Confundir descubrimiento con ranking | Expectativa de posicionar solo con sitemap | Separar FR-11 descubrimiento vs relevancia (atributos + listados) |
+| Keyword stuffing / landings vacías | Riesgo de calidad y posible acción manual | Prohibido en alcance; SEO solo con datos reales del perfil |
 
 ---
 
@@ -435,13 +488,24 @@ Un incremento se considera listo cuando:
 | Prioridad | Ítem |
 | --- | --- |
 | P0 | Guards de autenticación y rol en router |
+| P0 | **SEO:** sitemap de perfiles dinámico (backend Railway o Netlify Function) sin edición manual ni dependencia de redeploy (FR-11.5) |
+| P1 | **SEO:** título/description de ficha con atributos reales (ciudad, nacionalidad, género) (FR-11.9) |
 | P1 | Flujo forgot-password |
 | P1 | Exponer o retirar `pt.json` |
 | P1 | Tests e2e de los 6 flujos de la sección 6 |
+| P2 | **SEO:** listados públicos por ciudad / categoría con enlaces a perfiles (FR-11.10) |
+| P2 | **SEO:** SSR o prerender de `/profile/:slug` (FR-11.11) |
 | P2 | Stripe o unificar PSP |
 | P2 | Búsqueda avanzada (ciudad, plan, verificado) en home |
 | P2 | Observabilidad frontend (errores, RUM) |
 | P3 | Módulo `core`, CI y quality gate |
+
+**Fases SEO acordadas (producto)**
+
+1. Descubrimiento: sitemap dinámico de perfiles activos.
+2. Relevancia on-page: meta/H1 a partir de datos del perfil.
+3. Intención de búsqueda: listados por ciudad/categoría.
+4. HTML real para crawlers: SSR/prerender.
 
 ---
 
@@ -458,6 +522,11 @@ Un incremento se considera listo cuando:
 | Verificado | Perfil con KYC aprobado (`isVerify`) |
 | Pending | Pago o campaña a la espera de activación (típico WhatsApp) |
 | Turnstile | Challenge anti-bot de Cloudflare; token `cfTurnstileToken` requerido en login y registro |
+| Sitemap | Archivo(s) XML que listan URLs públicas para que Google las descubra |
+| Sitemap index | `sitemap.xml` que apunta a sitemaps hijos (estático + perfiles) |
+| Slug de perfil | Segmento SEO de `/profile/:slug` (nombre slugificado + sufijo de id) |
+| SEO on-page | Title, description, canonical y contenido visible de la ficha |
+| CSR / SSR | Client-side rendering (actual) vs server-side rendering (objetivo crawlers) |
 
 ---
 
@@ -471,3 +540,4 @@ Un incremento se considera listo cuando:
 - Contexto técnico: `IA/context.md`
 - i18n: `src/assets/i18n/es.json` (y en, fr, nl, pt)
 - Modelos: `src/app/feature/create-profile/models/IProfileCreate.model.ts`, `src/app/shared/models/top-rojo.model.ts`, `src/app/shared/models/comment-plans.model.ts`, `src/app/auth/register/models/IAuth.model.ts`
+- SEO / sitemap: `src/robots.txt`, `src/sitemap.xml`, `src/sitemap-static.xml`, `src/sitemap-profiles.xml`, `scripts/generate-sitemap.mjs`, `src/app/shared/services/seo/seo.service.ts`, `src/app/shared/clases/profileSlug.ts`
