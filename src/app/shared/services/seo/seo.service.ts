@@ -116,12 +116,23 @@ export class SeoService {
     this.apply({
       title: `${safeName} | Flammes Rouges`,
       description:
-        description?.trim() ||
+        this.toMetaDescription(description) ||
         `Perfil de ${safeName} en Flammes Rouges. Plataforma de citas en las mejores ciudades de Europa.`,
       path,
       image: image || this.defaultImage,
       noIndex: false
     });
+  }
+
+  /** Collapses whitespace and cuts at a word boundary so snippets never end mid-word. */
+  private toMetaDescription(text?: string, maxLength = 155): string {
+    const clean = (text || '').replace(/\s+/g, ' ').trim();
+    if (clean.length <= maxLength) {
+      return clean;
+    }
+    const cut = clean.slice(0, maxLength - 1);
+    const lastSpace = cut.lastIndexOf(' ');
+    return `${(lastSpace > maxLength * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.–—-]+$/, '')}…`;
   }
 
   private setCanonical(url: string): void {

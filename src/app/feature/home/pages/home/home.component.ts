@@ -9,7 +9,7 @@ import { ProfileService } from '../../../../shared/services/profile/profile.serv
 import { TopRojoService } from '../../../../shared/services/top-rojo/top-rojo.service';
 import { WarningDialogComponent } from '../../../../shared/components/warning-dialog/warning-dialog.component';
 import { resolveProfileId } from '../../../../shared/clases/resolveProfileId';
-import { buildProfileUrl, getProfileRouterCommands } from '../../../../shared/clases/profileSlug';
+import { buildProfileUrl } from '../../../../shared/clases/profileSlug';
 
 @Component({
     selector: 'app-home',
@@ -116,10 +116,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 width: '420px'
             });
         }
-    }
-
-    goToProfile(card: any) {
-        this.route.navigate(getProfileRouterCommands(card));
     }
 
     getProfileUrl(card: any): string {

@@ -14,17 +14,18 @@
     </ng-container>
     <ng-template #cardsLoaded>
       <div class="col-12 col-sm-6 col-md-6 col-lg-3" *ngFor="let card of anunciantes">
-        <app-card
-          [image]="card.imagesMain?.url || ''"
-          [title]="getCardName(card)"
-          [adTitle]="getCardAdTitle(card)"
-          [age]="card.age"
-          [city]="card.city"
-          [isVerified]="card.isVerify"
-          [buttonUrl]="getProfileUrl(card)"
-          [plan]="card.plan"
-          (click)="goToProfile(card)">
-        </app-card>
+        <a class="profile-card-link" [routerLink]="getProfileUrl(card)">
+          <app-card
+            [image]="card.imagesMain?.url || ''"
+            [title]="getCardName(card)"
+            [adTitle]="getCardAdTitle(card)"
+            [age]="card.age"
+            [city]="card.city"
+            [isVerified]="card.isVerify"
+            [buttonUrl]="getProfileUrl(card)"
+            [plan]="card.plan">
+          </app-card>
+        </a>
       </div>
     </ng-template>
   </div>

@@ -153,13 +153,20 @@ export class ProfilesComponent implements OnInit {
     private updatePageTitle(profile: any): void {
       const name = getProfileDisplayName(profile) || 'Perfil';
       const slug = buildProfileSlug(profile);
-      const description = (profile?.description || profile?.profile?.description || '').toString();
+      const description = (
+        profile?.bio ||
+        profile?.description ||
+        profile?.profile?.bio ||
+        profile?.profile?.description ||
+        ''
+      ).toString();
       const image =
+        profile?.imagesMain?.url ||
         profile?.profileImage?.url ||
         profile?.profileImage ||
         profile?.mainImage ||
         undefined;
-      this.seo.applyProfile(name, slug, description.slice(0, 160), image);
+      this.seo.applyProfile(name, slug, description, image);
     }
 
     private loadPublicProfilePage(): void {
