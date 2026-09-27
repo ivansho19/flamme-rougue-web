@@ -4,12 +4,13 @@
 | --- | --- |
 | Producto | Flammes Rouges |
 | Repositorio | `flamme-rouge-web` (frontend Angular) |
-| Versión del documento | 1.2 |
-| Fecha | 17 de septiembre de 2026 |
+| Versión del documento | 1.3 |
+| Fecha | 27 de septiembre de 2026 |
 | Estado | Borrador operativo (as-is + requisitos vigentes) |
 | Idioma por defecto | Español (`es`) |
 | Audiencia | Producto, ingeniería, QA, operación |
 | Cambio 1.2 | SEO orgánico: descubrimiento de perfiles públicos (sitemap) + requisitos de indexación y relevancia |
+| Cambio 1.3 | SEO Fase 0 entregada (sitemap automático post-build, meta description desde `bio`, enlaces rastreables, `rating adult`); plan SEO por fases (datos del perfil, ficha, landings ciudad/país, prerender en Angular 17); nuevo flujo "Registrar perfil" en alta; entorno QA en Netlify |
 
 ---
 
@@ -32,7 +33,9 @@ El frontend vive en este repositorio. El backend, pagos y almacenamiento de medi
 
 Los anunciantes necesitan un canal digital para publicar un perfil con fotos, disponibilidad y contacto, con control de visibilidad y verificación. Los visitantes necesitan un directorio claro, con perfiles verificados y campañas destacadas. La plataforma necesita KYC, pagos y moderación para operar con seguridad, cumplimiento de mayoría de edad y control de contenido.
 
-**Oportunidad SEO:** Google Search Console confirma que el sitemap se procesa, pero históricamente solo listaba páginas estáticas (`/`, `/home`, `/legal`, `/auth/register`). Los perfiles públicos (`/profile/:slug`) no se descubrían por sitemap. El negocio necesita que Google **descubra e indexe** perfiles activos automáticamente y que las fichas se relacionen con búsquedas reales (ciudad, nacionalidad, tipo de anuncio), **sin** páginas duplicadas ni keyword stuffing artificial.
+**Oportunidad SEO:** hasta septiembre de 2026 el sitemap solo listaba páginas estáticas (`/`, `/home`, `/legal`, `/auth/register`) y los perfiles públicos (`/profile/:slug`) no se descubrían por sitemap. El negocio necesita que Google **descubra e indexe** perfiles activos automáticamente y que las fichas se relacionen con búsquedas reales (p. ej. "trans valladolid", "colombiana en España"), **sin** páginas duplicadas ni keyword stuffing artificial.
+
+**Estado a 27/09/2026:** el sitemap se genera automáticamente en cada deploy de producción con los 20 perfiles activos (ver FR-11). En Search Console el índice se procesa correctamente, `sitemap-static.xml` figura como "Correcto" y `sitemap-profiles.xml` está pendiente de su primera lectura por Google. Solo `/`, `/home` y `/legal` están indexadas; ninguna ficha todavía.
 
 ---
 
@@ -58,8 +61,8 @@ Los anunciantes necesitan un canal digital para publicar un perfil con fotos, di
 | TOP ROJO activos | Campañas `active` por ciudad | Máx. 5 slots por ciudad (rotación si hay más) |
 | KYC pendiente | Ítems en cola de revisión | SLA de revisión (por definir) |
 | Comentarios válidos | Comentarios enviados sin rechazo de plan / normas | Cumplir límites por plan |
-| Cobertura sitemap perfiles | % de perfiles con `isActiveProfile === true` presentes en el sitemap de perfiles | 100 % tras cada alta/activación (objetivo dinámico) |
-| Indexación orgánica | Perfiles públicos en estado “indexada” / con impresiones en Search Console | Medir baseline tras sitemap dinámico + SEO on-page |
+| Cobertura sitemap perfiles | % de perfiles con `isActiveProfile === true` presentes en el sitemap de perfiles | 100 % en cada deploy (27/09/2026: 20 de 20); 100 % sin deploy manual tras FR-11.5 |
+| Indexación orgánica | Perfiles públicos en estado “indexada” / con impresiones en Search Console | Baseline 27/09/2026: 0 fichas indexadas; revisar a las 2 y 8 semanas |
 
 ---
 
@@ -98,7 +101,8 @@ Reglas de negocio relevantes:
 - i18n: ES, EN, FR, NL (existe `pt.json` no expuesto en el selector).
 - Páginas legales: aviso, términos, privacidad, cookies, menores, contacto.
 - Notificaciones (admin y perfil) vía API y Socket.io.
-- SEO técnico base: `robots.txt`, canonical/meta vía `SeoService`, slug SEO de perfil (`/profile/:slug`), y generación de sitemap en build (`sitemap.xml` índice + `sitemap-static.xml` + `sitemap-profiles.xml`).
+- SEO técnico base: `robots.txt`, canonical/meta vía `SeoService`, slug SEO de perfil (`/profile/:slug`), `<meta name="rating" content="adult">`, tarjetas de home como enlaces `<a href>` rastreables y sitemap generado automáticamente después de `ng build` en producción (`sitemap.xml` índice + `sitemap-static.xml` + `sitemap-profiles.xml`).
+- Entorno QA propio en Netlify (rama `qa`, configuración de build `qa`, API QA).
 
 ### 5.2 Fuera de alcance / pendiente
 
@@ -109,9 +113,11 @@ Reglas de negocio relevantes:
 - Chat in-app (el contacto es teléfono / WhatsApp).
 - Módulo `core` de Angular (aún no existe).
 - CI/CD, quality gate y cobertura mínima definidos.
-- **Sitemap 100 % dinámico en tiempo real** (sin depender de un deploy): ver FR-11 y roadmap P0 SEO.
-- **SSR / prerender** de fichas `/profile/:slug` (SPA CSR hoy; limitación para crawlers).
-- **Listados públicos por intención de búsqueda** (ciudad, nacionalidad, categoría) tipo `/ciudad/madrid`.
+- **Actualización del sitemap sin deploy:** hoy un perfil nuevo entra en el siguiente deploy de producción; falta el build hook disparado por el backend (Fase SEO 4, FR-11.5).
+- **Prerender / SSR** de fichas `/profile/:slug` y landings (SPA CSR hoy; limitación para crawlers). Ver sección 16.1.
+- **Landings por intención de búsqueda** (país, ciudad, categoría, nacionalidad) tipo `/perfiles/espana/valladolid/trans`. Ver FR-11.10.
+- **Datos geo/identidad normalizados** del perfil (código de país, slug de ciudad, nacionalidad como código). Ver FR-04.12–04.15.
+- Borrador persistente del formulario de alta en `localStorage` (opción descartada por ahora; reevaluar si persisten recargas en iPhone).
 - Keyword stuffing, páginas duplicadas o landing vacías solo para SEO (explícitamente fuera de alcance).
 
 ---
@@ -146,8 +152,12 @@ Reglas de negocio relevantes:
    - Datos personales (género, orientación, fecha de nacimiento ≥ 18, nacionalidad, idiomas, etc.).
    - Servicios / posibilidades, alcohol, tabaco.
    - Datos reales KYC (nombre, documento frente/reverso o pasaporte).
-4. Al completar, se abre el modal de planes (Básico / Pro / VIP).
-5. Paga con PayPal, confirma WhatsApp (queda pendiente) o aplica código promo de 7 días.
+   - En desktop se muestra la vista previa del perfil; en pantallas ≤ 900 px se oculta.
+4. Pulsa **Registrar perfil**. El modal de planes ya **no** se abre solo al completar el formulario:
+   - Si faltan datos, se marcan los paneles incompletos y se muestra un toast.
+   - Si todo es válido, se muestra "Procesando perfil…" y luego el modal de planes (Básico / Pro / VIP).
+   - Si cierra el modal sin elegir plan, el formulario se conserva y aparece el aviso "para finalizar debes elegir un plan o método de pago"; el botón permite reabrirlo.
+5. Paga con PayPal, confirma WhatsApp (queda pendiente) o aplica código promo de 7 días. Si ya había pagado o aplicado promo, "Registrar perfil" guarda directamente.
 6. El perfil se crea; KYC queda pendiente de verificación admin. El perfil público se activa según reglas de plan y moderación.
 
 ### 6.4 Anunciante — TOP ROJO
@@ -209,6 +219,8 @@ Reglas de negocio relevantes:
 | FR-03.7 | URL canónica `/profile/{slug}` con slug estable (nombre amigable + últimos 6 chars del id) | Must |
 | FR-03.8 | Meta SEO de ficha: `index, follow`, canonical propia, título/description derivados del perfil | Must |
 | FR-03.9 | Perfiles inactivos, privados o eliminados no deben presentarse como indexables | Must |
+| FR-03.10 | La meta description se toma de `bio` (campo real de la API), sin saltos de línea y cortada en ~155 caracteres sin partir palabras; fallback genérico solo si no hay `bio` | Must (hecho) |
+| FR-03.11 | La imagen Open Graph / Twitter es la foto principal del perfil (`imagesMain.url`) | Should (hecho) |
 
 ### FR-04 Perfil de anunciante (alta)
 
@@ -222,8 +234,14 @@ Reglas de negocio relevantes:
 | FR-04.6 | KYC: documento (frente/reverso) o pasaporte, subido a Cloudinary | Must |
 | FR-04.7 | Disponibilidad por días o 24/7 | Must |
 | FR-04.8 | Países bloqueados opcionales | Should |
-| FR-04.9 | Preview del perfil antes de publicar | Should |
+| FR-04.9 | Preview del perfil antes de publicar (solo desktop; oculta en ≤ 900 px) | Should |
 | FR-04.10 | Código promo de 7 días al crear perfil, sin PayPal/WhatsApp | Must |
+| FR-04.11 | CTA explícito **Registrar perfil**: valida todo el formulario, muestra estado "Procesando" y abre el modal de planes; cerrar el modal nunca borra el formulario. CTA fijo abajo en móvil (≤ 600 px) | Must (hecho) |
+| FR-04.12 | País guardado como código ISO y ciudad como slug canónico además del texto visible; "otra ciudad" queda para revisión o se asigna a una existente | Should (Fase SEO 1) |
+| FR-04.13 | Nacionalidad como selector de países (se guarda el código, p. ej. `CO`); el gentilicio se muestra por i18n según género ("colombiana" / "colombiano") | Should (Fase SEO 1) |
+| FR-04.14 | Género y tipo de perfil como valores fijos (enum), traducidos al mostrarse | Should (Fase SEO 1) |
+| FR-04.15 | Título del anuncio opcional (campo `title`, máx. 70 caracteres) con sugerencia prellenada "{nombre}, {tipo} {nacionalidad} en {ciudad}", para que `displayName` sea solo el nombre | Should (Fase SEO 1) |
+| FR-04.16 | Bio con mínimo recomendado de ~150 caracteres, contador y pista ("cuenta en qué zona atiendes y qué te diferencia") | Should (Fase SEO 1) |
 
 ### FR-05 Edición de perfil
 
@@ -296,21 +314,39 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 | --- | --- | --- |
 | FR-11.1 | `robots.txt` permite rastrear `/`, `/home`, `/legal` y `/profile/`; bloquea áreas privadas (`/auth/`, `/admin/`, `/create-profile`, `/my-profile`, `/payments`, `/dashboard/`) | Must |
 | FR-11.2 | Declarar en `robots.txt` el sitemap canónico `https://flammesrouges.com/sitemap.xml` | Must |
-| FR-11.3 | El sitemap (o índice de sitemaps) incluye páginas estáticas públicas y **todas** las URLs `/profile/{slug}` con `isActiveProfile === true` | Must |
-| FR-11.4 | La inclusión de un perfil nuevo/publicado en el sitemap **no requiere edición manual** del XML | Must |
-| FR-11.5 | Objetivo técnico: sitemap de perfiles **dinámico** (servido en request desde backend o función serverless), para no depender de un redeploy por cada alta | Must (target) |
-| FR-11.6 | Estado intermedio aceptable: generación en `npm run build` desde `GET /profiles/getAllProfiles` (`scripts/generate-sitemap.mjs`) hasta completar FR-11.5 | Should (as-is) |
-| FR-11.7 | URLs del sitemap usan el dominio canónico `https://flammesrouges.com` (sin variante www duplicada) | Must |
-| FR-11.8 | No incluir en sitemap perfiles inactivos, privados, eliminados ni rutas `Disallow` | Must |
-| FR-11.9 | Título y description de ficha pública incorporan atributos reales disponibles (nombre, ciudad, nacionalidad, género/orientación según datos del anuncio), sin keyword stuffing | Should |
-| FR-11.10 | Listados públicos indexables por ciudad/categoría (p. ej. Madrid, nacionalidad) que enlacen a perfiles | Could (roadmap) |
-| FR-11.11 | HTML rastreable de fichas (SSR o prerender) para que title/description/canonical no dependan solo de JS del cliente | Could (roadmap) |
+| FR-11.3 | El sitemap (o índice de sitemaps) incluye páginas estáticas públicas y **todas** las URLs `/profile/{slug}` con `isActiveProfile === true` | Must (hecho) |
+| FR-11.4 | La inclusión de un perfil nuevo/publicado en el sitemap **no requiere edición manual** del XML | Must (hecho) |
+| FR-11.5 | Un perfil publicado, editado, desactivado o borrado se refleja en el sitemap **sin deploy manual**: el backend llama a un build hook de Netlify (con límite, p. ej. 1 build cada 10 min) o se sirve un sitemap dinámico | Must (Fase SEO 4) |
+| FR-11.6 | As-is: `npm run build` ejecuta `ng build` y después `scripts/generate-sitemap.mjs`, que consulta `GET /profiles/getAllProfiles` (prod) y escribe los XML directamente en `dist/flamme-rouge-web/browser` (no en `src/`) | Must (hecho) |
+| FR-11.6a | Si la API falla durante el build, el script avisa en el log, no bloquea el deploy y se publica el respaldo `src/sitemap.xml` | Must (hecho) |
+| FR-11.6b | El build de QA (`build:qa`) no genera sitemap, para no promover indexación del entorno QA | Must (hecho) |
+| FR-11.7 | URLs del sitemap usan el dominio canónico `https://flammesrouges.com` (sin variante www duplicada; `www` redirige 301) | Must (hecho) |
+| FR-11.8 | No incluir en sitemap perfiles inactivos, privados, eliminados, rutas `Disallow` (`/auth/register`) ni URLs no canónicas (`/`, que redirige a `/home`) | Must (hecho) |
+| FR-11.9 | Título y description de ficha pública incorporan atributos reales disponibles (nombre, tipo, nacionalidad, ciudad, país), sin keyword stuffing. Ej.: `Enyell — trans colombiana en Roeselare, Bélgica \| Flammes Rouges` (~60 caracteres) | Should (Fase SEO 2) |
+| FR-11.10 | Landings indexables por país / ciudad / categoría / nacionalidad que enlacen a perfiles, con las reglas de la tabla "Reglas de landings" | Should (Fase SEO 3) |
+| FR-11.11 | HTML rastreable de home, landings y fichas mediante **prerender** (SSG) en Angular 17; SSR completo solo si el prerender no basta | Should (Fase SEO 4) |
+| FR-11.12 | `<meta name="rating" content="adult">` en todas las páginas | Must (hecho) |
+| FR-11.13 | Los enlaces a perfiles son `<a href>` reales (`routerLink`), no navegación solo por `(click)` | Must (hecho en home; aplicar a nuevas vistas) |
+| FR-11.14 | Una sola URL de portada indexable: `/` redirige con 301 a `/home` (hoy la redirección es solo en cliente y Google indexa ambas) | Should (pendiente) |
+| FR-11.15 | Ficha con texto visible geo/identidad: H1 con el nombre, línea "Trans · Colombiana · Roeselare, Bélgica", migas de pan País › Ciudad enlazadas a landings, bloque "Otros perfiles en {ciudad}", JSON-LD `BreadcrumbList` y `alt` de fotos "{nombre} en {ciudad}" | Should (Fase SEO 2) |
+
+**Reglas de landings (FR-11.10)**
+
+| Regla | Detalle |
+| --- | --- |
+| Estructura de URL | `/perfiles/{pais}`, `/perfiles/{pais}/{ciudad}`, `/perfiles/{pais}/{ciudad}/{categoria}`, `/perfiles/{pais}/{nacionalidad-plural}` (p. ej. `/perfiles/espana/valladolid/trans`, `/perfiles/espana/colombianas`) |
+| Umbral de publicación | País/ciudad: ≥ 1 perfil activo. Combinaciones (ciudad + categoría, país + nacionalidad): ≥ 2. Por debajo: `noindex` y fuera del sitemap |
+| Profundidad | Máximo dos niveles de filtro, para no generar combinaciones vacías |
+| Contenido | H1 claro ("Perfiles trans en Valladolid"), número de perfiles, zonas, grid de fichas enlazadas; párrafo editorial escrito por el cliente en ciudades principales |
+| Enlazado interno | Desde home, migas de pan de las fichas y footer de ciudades |
+| Datos | Inicialmente calculados en build desde `getAllProfiles`; después endpoint de conteos del backend |
+| Sitemap | Nuevo `sitemap-landings.xml` en el índice, solo con landings que superan el umbral |
 
 **Separación de responsabilidades (producto)**
 
 | Necesidad | Mecanismo |
 | --- | --- |
-| Descubrimiento de URLs nuevas | Sitemap dinámico + enlaces internos (home, búsqueda, listados) |
+| Descubrimiento de URLs nuevas | Sitemap automático + enlaces internos rastreables (home, landings, migas de pan) |
 | Relación con búsquedas (“madrid colombiana”, “chica trans”, etc.) | Contenido y meta de la ficha / listados a partir de datos reales del perfil |
 | No hacer | Páginas clonadas, keywords artificiales en el sitemap, indexar perfiles inactivos |
 
@@ -320,7 +356,7 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 
 | ID | Área | Requisito |
 | --- | --- | --- |
-| NFR-01 | Performance | Home debe mostrar skeletons mientras cargan perfiles; carrusel autoplay ~4 s |
+| NFR-01 | Performance | Home debe mostrar skeletons mientras cargan perfiles; carrusel autoplay ~4 s; al cambiar de página se muestra el loader de marca durante 1 s (header y footer ocultos) como transición |
 | NFR-02 | Responsive | Planes y modales usables en móvil (swipe, botón cerrar, no recorte); formularios de login/registro con scroll interno cuando el widget Turnstile alarga el bloque |
 | NFR-03 | i18n | UI en ES, EN, FR, NL; default `es` |
 | NFR-04 | Seguridad | Token en interceptor; Turnstile obligatorio en login/registro; no loguear secretos ni site keys; KYC e imágenes fuera del repo |
@@ -331,7 +367,7 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 | NFR-09 | Pagos | Moneda EUR; PayPal client-side + create/capture order en backend |
 | NFR-10 | Tiempo real | Socket.io para notificaciones |
 | NFR-11 | SEO / indexación | Dominio canónico `https://flammesrouges.com`; perfiles públicos indexables (`index, follow` + canonical propia); sitemap coherente con `robots.txt` |
-| NFR-12 | SEO / arquitectura | Hoy: SPA CSR (Angular) en Netlify; metas de perfil se aplican en cliente. Limitación conocida para crawlers hasta SSR/prerender (FR-11.11) |
+| NFR-12 | SEO / arquitectura | Hoy: SPA CSR (Angular 17) en Netlify; metas de perfil se aplican en cliente. Limitación conocida para crawlers hasta el prerender (FR-11.11). Para prerender, el código que se ejecuta en rutas públicas no puede acceder a `window`, `document` ni `localStorage` sin `isPlatformBrowser` / `afterNextRender` (≈145 accesos en ~30 archivos; prioridad: layout, header, home, profiles, card, `SeoService`, `auth-session`, socket, Turnstile) |
 
 ---
 
@@ -352,16 +388,17 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 
 **Stack frontend:** Angular 17.3, TypeScript 5.4, Angular Material, Bootstrap 5, ngx-translate, RxJS 7.8, Embla Carousel, socket.io-client, Cloudflare Turnstile (`app-cf-turnstile`), @stripe/stripe-js (no usado en flujo activo).
 
-**Hosting / estáticos SEO:** Netlify publica `dist/flamme-rouge-web/browser`. `robots.txt` y `sitemap*.xml` se copian como assets (`angular.json`). Las rutas SPA hacen fallback a `index.html`; los XML estáticos en raíz deben seguir sirviéndose con precedencia sobre el catch-all.
+**Hosting / estáticos SEO:** Netlify publica `dist/flamme-rouge-web/browser`. `netlify.toml` define el comando de build (`npm run ${NPM_BUILD_SCRIPT:-build}`) y tiene prioridad sobre la configuración de la UI de Netlify. `robots.txt` y el respaldo `src/sitemap.xml` se copian como assets (`angular.json`); en producción, `scripts/generate-sitemap.mjs` sobrescribe `sitemap.xml` en `dist/` y añade `sitemap-static.xml` y `sitemap-profiles.xml`. Las rutas SPA hacen fallback a `index.html`; Netlify sirve primero los archivos que existen, así que los XML tienen precedencia sobre el catch-all.
 
 **Entornos**
 
-| Entorno | API |
-| --- | --- |
-| Local / QA (file `environment.dev.ts`) | `https://flamme-rouge-backend-qa.up.railway.app/api` (también documentado localhost:5000) |
-| Producción | `https://flamme-rouge-backend-production-251b.up.railway.app/api` |
-| SPA local | `ng serve` → `http://localhost:4200` |
-| Sitio canónico | `https://flammesrouges.com` |
+| Entorno | API | Build |
+| --- | --- | --- |
+| Local (`ng serve`, `http://localhost:4200`) | `environment.dev.ts` → `https://flamme-rouge-backend-qa.up.railway.app/api` | `npm start` (configuración `development`) |
+| QA (sitio Netlify propio, rama `qa`) | `environment.dev.ts` (API QA) | Variable de entorno de Netlify `NPM_BUILD_SCRIPT=build:qa` → `ng build --configuration qa`; sin sitemap |
+| Producción (`https://flammesrouges.com`) | `environment.prd.ts` → `https://flamme-rouge-backend-production-251b.up.railway.app/api` | `npm run build` → `ng build --configuration production` + generación de sitemap |
+
+El hostname de cada sitio (producción, QA y `localhost`) debe estar en la lista de hostnames del widget de Cloudflare Turnstile; si falta, el widget muestra "No es posible conectarse".
 
 ---
 
@@ -369,7 +406,7 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 
 | Ruta | Auth esperado | Descripción |
 | --- | --- | --- |
-| `/` | No | Redirect a `/home` |
+| `/` | No | Redirect a `/home` (hoy solo en cliente; pendiente 301 en Netlify, FR-11.14) |
 | `/home` | No | Descubrimiento |
 | `/auth/login` | No | Login (email, password + Turnstile) |
 | `/auth/register` | No | Registro usuario o anunciante (ambos con Turnstile) |
@@ -458,9 +495,11 @@ Un incremento se considera listo cuando:
 6. No se rompe el disclaimer de +18 ni la validación de edad 18+.
 7. No se suben secretos (PayPal client id de prod, Turnstile site key, etc.) a issues públicas.
 8. Login y registro (usuario y anunciante) no permiten submit sin Turnstile válido; el token viaja al backend y, si falla, el widget se resetea.
-9. Perfiles públicos activos aparecen en el sitemap de perfiles con su URL canónica; perfiles inactivos no.
-10. Ficha pública expone (tras carga) `robots` indexable y `link rel="canonical"` a su propia URL en `flammesrouges.com`.
+9. Perfiles públicos activos aparecen en el sitemap de perfiles con su URL canónica; perfiles inactivos no. El log de build de producción muestra `[sitemap] Profile URLs: N`.
+10. Ficha pública expone (tras carga) `robots` indexable, `link rel="canonical"` a su propia URL en `flammesrouges.com` y una meta description tomada de su `bio`.
 11. No se añaden páginas duplicadas ni keywords artificiales solo para SEO.
+12. Toda nueva vista que liste perfiles usa enlaces `<a href>` rastreables.
+13. En el alta de perfil, cerrar el modal de planes (X o "decidir después") no borra el formulario, en móvil y desktop.
 
 ---
 
@@ -476,8 +515,14 @@ Un incremento se considera listo cuando:
 | Turnstile depende de Cloudflare y de validación backend | Login/registro fallan si el site key es inválido o el backend no verifica el token | Site key correcta por entorno; backend debe validar `cfTurnstileToken` con el secret key |
 | Formularios auth más altos por el widget | CTA puede quedar bajo el fold | Scroll interno en columna de registro; padding suficiente en login |
 | Contenido sensible +18 | Riesgo legal y de marca | KYC, legales, bloqueo de menores |
-| Sitemap estático / solo en build | Perfiles nuevos no aparecen en Google hasta el siguiente deploy | Pasar a sitemap dinámico (FR-11.5); webhook de deploy como mitigación temporal |
-| SPA sin SSR | Crawlers pueden no ver title/description/canonical de `/profile/:slug` | Prerender/SSR (FR-11.11); meanwhile metas client-side + sitemap + enlaces internos |
+| Sitemap generado solo en build | Perfiles nuevos no aparecen en el sitemap hasta el siguiente deploy de producción | Build hook llamado por el backend (FR-11.5); mientras tanto "Trigger deploy" manual o rebuild diario programado |
+| API caída durante el build | El deploy publica el sitemap de respaldo (4 URLs, sin perfiles) | El script avisa en el log (FR-11.6a); revisar el log tras cada deploy |
+| Search Console muestra "No se ha podido obtener" en `sitemap-profiles.xml` | Falsa alarma mientras Google no lo ha leído (sin "Última lectura") | Verificado que responde 200 `application/xml` a Googlebot; enviarlo también por separado y esperar 24–72 h |
+| `/` y `/home` indexadas a la vez | Autoridad de portada repartida entre dos URLs | Redirección 301 `/` → `/home` en Netlify (FR-11.14) |
+| SPA sin HTML renderizado | Crawlers pueden no ver title/description/canonical de `/profile/:slug` | Prerender (FR-11.11); mientras tanto metas client-side + sitemap + enlaces internos |
+| Angular 17 fuera de soporte (LTS terminó en mayo de 2025) | Sin parches de seguridad; sin renderizado híbrido por ruta | Upgrade como proyecto aparte (Fase SEO 5); no bloquea el prerender |
+| Prerender exige rebuild por cambio de perfil | Coste en minutos de build de Netlify | Límite de frecuencia del build hook; volumen actual (~20 perfiles) compila en segundos |
+| Anunciantes meten ciudad y keywords en `displayName` | Slugs largos, títulos duplicados, cards recortadas | Campo de título del anuncio + datos geo normalizados (FR-04.12–04.15) |
 | Confundir descubrimiento con ranking | Expectativa de posicionar solo con sitemap | Separar FR-11 descubrimiento vs relevancia (atributos + listados) |
 | Keyword stuffing / landings vacías | Riesgo de calidad y posible acción manual | Prohibido en alcance; SEO solo con datos reales del perfil |
 
@@ -488,24 +533,52 @@ Un incremento se considera listo cuando:
 | Prioridad | Ítem |
 | --- | --- |
 | P0 | Guards de autenticación y rol en router |
-| P0 | **SEO:** sitemap de perfiles dinámico (backend Railway o Netlify Function) sin edición manual ni dependencia de redeploy (FR-11.5) |
-| P1 | **SEO:** título/description de ficha con atributos reales (ciudad, nacionalidad, género) (FR-11.9) |
+| P0 | **SEO:** redirección 301 `/` → `/home` (FR-11.14) |
+| P1 | **SEO Fase 1:** datos geo/identidad normalizados en alta y edición + migración de perfiles existentes (FR-04.12–04.16) |
+| P1 | **SEO Fase 2:** title/description/texto visible de ficha con atributos reales (FR-11.9, FR-11.15) |
 | P1 | Flujo forgot-password |
 | P1 | Exponer o retirar `pt.json` |
 | P1 | Tests e2e de los 6 flujos de la sección 6 |
-| P2 | **SEO:** listados públicos por ciudad / categoría con enlaces a perfiles (FR-11.10) |
-| P2 | **SEO:** SSR o prerender de `/profile/:slug` (FR-11.11) |
+| P2 | **SEO Fase 3:** landings por país / ciudad / categoría / nacionalidad (FR-11.10) |
+| P2 | **SEO Fase 4:** prerender en Angular 17 + build hook desde backend (FR-11.5, FR-11.11) |
 | P2 | Stripe o unificar PSP |
 | P2 | Búsqueda avanzada (ciudad, plan, verificado) en home |
 | P2 | Observabilidad frontend (errores, RUM) |
+| P3 | **SEO Fase 5:** upgrade de Angular + renderizado híbrido por ruta; valorar URLs por idioma con `hreflang` |
 | P3 | Módulo `core`, CI y quality gate |
 
-**Fases SEO acordadas (producto)**
+### 16.1 Plan SEO por fases
 
-1. Descubrimiento: sitemap dinámico de perfiles activos.
-2. Relevancia on-page: meta/H1 a partir de datos del perfil.
-3. Intención de búsqueda: listados por ciudad/categoría.
-4. HTML real para crawlers: SSR/prerender.
+| Fase | Estado | Contenido | Depende de |
+| --- | --- | --- | --- |
+| 0. Base técnica | **Hecha (27/09/2026)** | Sitemap automático post-build (índice + estático + perfiles, respaldo si falla la API); meta description desde `bio`; imagen OG del perfil; cards de home como `<a href>`; `rating adult`; sitemap enviado en Search Console | — |
+| 1. Datos del perfil | Pendiente | País ISO + slug de ciudad, nacionalidad como código con gentilicio i18n, género/tipo enum, título del anuncio opcional, bio con mínimo recomendado, migración de perfiles actuales | Backend (campos + migración) |
+| 2. SEO de ficha | Pendiente | Title/description con plantilla de datos reales, línea de identidad visible, migas de pan a landings, "Otros perfiles en {ciudad}", JSON-LD `BreadcrumbList`, `alt` de fotos; opcional: ciudad en el slug (las URLs viejas siguen resolviendo por el sufijo del id) | Fase 1 |
+| 3. Landings | Pendiente | Rutas `/perfiles/...` con las reglas de FR-11.10; `sitemap-landings.xml` | Fase 1 (datos limpios) |
+| 4. Prerender | Pendiente | Ver decisión técnica abajo | Fases 2–3 (qué rutas prerenderizar) |
+| 5. Upgrade Angular | Opcional | Actualizar versión a versión desde 17; renderizado híbrido por ruta; `hreflang` | — |
+
+**Decisión técnica: prerender en Angular 17 (sin upgrade obligatorio)**
+
+- `ng add @angular/ssr` funciona en Angular 17.3 con el builder `application` que ya usa el proyecto.
+- Se elige **prerender (SSG)** de rutas públicas (home, landings, fichas) en vez de SSR completo: Netlify sigue sirviendo estáticos, no hay funciones ni arranques en frío, y solo hay que adaptar el código de rutas públicas (NFR-12).
+- La lista de rutas a prerenderizar sale del mismo script que genera el sitemap (`routesFile`).
+- `provideClientHydration()` para que el cliente no repita la carga de datos ni parpadee.
+- Build hook de Netlify llamado por el backend al activar, editar, desactivar o borrar un perfil, con límite de frecuencia.
+- Verificación: "Inspección de URLs" en Search Console debe mostrar title y texto del perfil en el HTML renderizado.
+- SSR completo solo si el volumen de perfiles hace inviable recompilar en cada cambio.
+
+**Qué necesita el backend**
+
+1. Campos normalizados (código de país, slug de ciudad, código de nacionalidad, género enum) y migración de perfiles existentes.
+2. Llamada al build hook de Netlify cuando cambia un perfil publicado.
+3. Más adelante: endpoint de conteos por país / ciudad / nacionalidad / género para landings y sitemap.
+
+**Cómo se mide (Search Console)**
+
+- Sitemaps: `sitemap-profiles.xml` en "Correcto" con todas las URLs descubiertas.
+- Indexación → Páginas, filtrado por sitemap de perfiles: perfiles indexados y motivos de exclusión.
+- Rendimiento: impresiones y clics en consultas tipo "trans valladolid" o "colombiana en España". Esperar 4–8 semanas desde cada deploy para ver tendencia; estas búsquedas solo aparecen con SafeSearch desactivado.
 
 ---
 
@@ -526,7 +599,11 @@ Un incremento se considera listo cuando:
 | Sitemap index | `sitemap.xml` que apunta a sitemaps hijos (estático + perfiles) |
 | Slug de perfil | Segmento SEO de `/profile/:slug` (nombre slugificado + sufijo de id) |
 | SEO on-page | Title, description, canonical y contenido visible de la ficha |
-| CSR / SSR | Client-side rendering (actual) vs server-side rendering (objetivo crawlers) |
+| CSR / SSR | Client-side rendering (actual) vs server-side rendering en cada petición |
+| Prerender / SSG | HTML de cada ruta generado en el build (objetivo para crawlers en Angular 17) |
+| Landing | Página pública que agrupa perfiles reales por país, ciudad, categoría o nacionalidad |
+| Build hook | URL de Netlify que dispara un deploy; la llamará el backend al cambiar un perfil |
+| Doorway page | Página creada solo para captar búsquedas, sin contenido propio; penalizada por Google y fuera de alcance |
 
 ---
 
@@ -540,4 +617,7 @@ Un incremento se considera listo cuando:
 - Contexto técnico: `IA/context.md`
 - i18n: `src/assets/i18n/es.json` (y en, fr, nl, pt)
 - Modelos: `src/app/feature/create-profile/models/IProfileCreate.model.ts`, `src/app/shared/models/top-rojo.model.ts`, `src/app/shared/models/comment-plans.model.ts`, `src/app/auth/register/models/IAuth.model.ts`
-- SEO / sitemap: `src/robots.txt`, `src/sitemap.xml`, `src/sitemap-static.xml`, `src/sitemap-profiles.xml`, `scripts/generate-sitemap.mjs`, `src/app/shared/services/seo/seo.service.ts`, `src/app/shared/clases/profileSlug.ts`
+- SEO / sitemap: `src/robots.txt`, `src/sitemap.xml` (respaldo), `scripts/generate-sitemap.mjs` (genera los XML en `dist/`), `src/app/shared/services/seo/seo.service.ts`, `src/app/shared/clases/profileSlug.ts`, `src/index.html` (metas base)
+- Build y deploy: `angular.json` (configuraciones `production`, `qa`, `development`), `package.json` (`build`, `build:qa`, `generate:sitemap`), `netlify.toml`
+- Alta de perfil: `src/app/feature/create-profile/` (CTA "Registrar perfil", modal de planes)
+- Transición de página: `src/app/shared/components/layout/`
