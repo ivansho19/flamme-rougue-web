@@ -6,6 +6,14 @@
   command = "npm run ${NPM_BUILD_SCRIPT:-build}"
   publish = "dist/flamme-rouge-web/browser"
 
+# Single indexable home URL: the Angular router also redirects "" → /home,
+# but only client-side, so Google indexed both "/" and "/home".
+[[redirects]]
+  from = "/"
+  to = "/home"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

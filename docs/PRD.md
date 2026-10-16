@@ -327,7 +327,9 @@ Objetivo de producto: que Google descubra e indexe perfiles públicos activos y 
 | FR-11.11 | HTML rastreable de home, landings y fichas mediante **prerender** (SSG) en Angular 17; SSR completo solo si el prerender no basta | Should (Fase SEO 4) |
 | FR-11.12 | `<meta name="rating" content="adult">` en todas las páginas | Must (hecho) |
 | FR-11.13 | Los enlaces a perfiles son `<a href>` reales (`routerLink`), no navegación solo por `(click)` | Must (hecho en home; aplicar a nuevas vistas) |
-| FR-11.14 | Una sola URL de portada indexable: `/` redirige con 301 a `/home` (hoy la redirección es solo en cliente y Google indexa ambas) | Should (pendiente) |
+| FR-11.14 | Una sola URL de portada indexable: `/` redirige con 301 a `/home` en `netlify.toml` (antes la redirección era solo en cliente y Google indexaba ambas) | Must (hecho) |
+| FR-11.16 | El HTML inicial de `/profile/:slug` ya trae title, description, canonical, Open Graph y Twitter del perfil (edge function `profile-seo`), con los mismos valores que `SeoService`. Perfil desconocido, inactivo o API caída → HTML original sin cambios | Must (hecho) |
+| FR-11.17 | `index.html` no declara canonical ni `og:url` fijos (antes apuntaban a la portada en todas las rutas y Google trataba las fichas como copias) | Must (hecho) |
 | FR-11.15 | Ficha con texto visible geo/identidad: H1 con el nombre, línea "Trans · Colombiana · Roeselare, Bélgica", migas de pan País › Ciudad enlazadas a landings, bloque "Otros perfiles en {ciudad}", JSON-LD `BreadcrumbList` y `alt` de fotos "{nombre} en {ciudad}" | Should (Fase SEO 2) |
 
 **Reglas de landings (FR-11.10)**
@@ -406,7 +408,7 @@ El hostname de cada sitio (producción, QA y `localhost`) debe estar en la lista
 
 | Ruta | Auth esperado | Descripción |
 | --- | --- | --- |
-| `/` | No | Redirect a `/home` (hoy solo en cliente; pendiente 301 en Netlify, FR-11.14) |
+| `/` | No | Redirect 301 a `/home` (Netlify, FR-11.14) |
 | `/home` | No | Descubrimiento |
 | `/auth/login` | No | Login (email, password + Turnstile) |
 | `/auth/register` | No | Registro usuario o anunciante (ambos con Turnstile) |
@@ -518,7 +520,9 @@ Un incremento se considera listo cuando:
 | Sitemap generado solo en build | Perfiles nuevos no aparecen en el sitemap hasta el siguiente deploy de producción | Build hook llamado por el backend (FR-11.5); mientras tanto "Trigger deploy" manual o rebuild diario programado |
 | API caída durante el build | El deploy publica el sitemap de respaldo (4 URLs, sin perfiles) | El script avisa en el log (FR-11.6a); revisar el log tras cada deploy |
 | Search Console muestra "No se ha podido obtener" en `sitemap-profiles.xml` | Falsa alarma mientras Google no lo ha leído (sin "Última lectura") | Verificado que responde 200 `application/xml` a Googlebot; enviarlo también por separado y esperar 24–72 h |
-| `/` y `/home` indexadas a la vez | Autoridad de portada repartida entre dos URLs | Redirección 301 `/` → `/home` en Netlify (FR-11.14) |
+| `/` y `/home` indexadas a la vez | Autoridad de portada repartida entre dos URLs | Redirección 301 `/` → `/home` en Netlify (FR-11.14, hecho) |
+| Search Console 07/10/2026: 26 sin indexar (13 "Descubierta: actualmente sin indexar", 7 "Página alternativa con canónica adecuada", 5 redirección, 1 duplicada) | Fichas sin indexar | Causa: HTML inicial idéntico en todas las fichas con canonical a la portada. Mitigado con FR-11.16 y FR-11.17; después, solicitar indexación por URL y validar corrección |
+| Edge function y `SeoService` duplican la lógica de título/description/slug | Si cambia una plantilla y no la otra, Google ve valores distintos en HTML inicial y renderizado | Cambiar ambas a la vez (también `scripts/generate-sitemap.mjs`); se unifica con el prerender (Fase 4) |
 | SPA sin HTML renderizado | Crawlers pueden no ver title/description/canonical de `/profile/:slug` | Prerender (FR-11.11); mientras tanto metas client-side + sitemap + enlaces internos |
 | Angular 17 fuera de soporte (LTS terminó en mayo de 2025) | Sin parches de seguridad; sin renderizado híbrido por ruta | Upgrade como proyecto aparte (Fase SEO 5); no bloquea el prerender |
 | Prerender exige rebuild por cambio de perfil | Coste en minutos de build de Netlify | Límite de frecuencia del build hook; volumen actual (~20 perfiles) compila en segundos |
@@ -619,5 +623,6 @@ Un incremento se considera listo cuando:
 - Modelos: `src/app/feature/create-profile/models/IProfileCreate.model.ts`, `src/app/shared/models/top-rojo.model.ts`, `src/app/shared/models/comment-plans.model.ts`, `src/app/auth/register/models/IAuth.model.ts`
 - SEO / sitemap: `src/robots.txt`, `src/sitemap.xml` (respaldo), `scripts/generate-sitemap.mjs` (genera los XML en `dist/`), `src/app/shared/services/seo/seo.service.ts`, `src/app/shared/clases/profileSlug.ts`, `src/index.html` (metas base)
 - Build y deploy: `angular.json` (configuraciones `production`, `qa`, `development`), `package.json` (`build`, `build:qa`, `generate:sitemap`), `netlify.toml`
+- Edge function SEO de fichas: `netlify/edge-functions/profile-seo.js` (env opcional `PROFILE_SEO_API` para QA)
 - Alta de perfil: `src/app/feature/create-profile/` (CTA "Registrar perfil", modal de planes)
 - Transición de página: `src/app/shared/components/layout/`
