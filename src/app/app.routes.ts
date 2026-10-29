@@ -21,7 +21,22 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./auth/register/register.module').then((m) => m.RegisterModule),
       },
+      {
+        path: 'forgot-password',
+        loadChildren: () =>
+          import('./auth/forgot-password/forgot-password.module').then(
+            (m) => m.ForgotPasswordModule
+          ),
+      },
     ],
+  },
+  {
+    // Must match the link in the recovery email: /reset-password?token=...
+    path: 'reset-password',
+    loadChildren: () =>
+      import('./auth/reset-password/reset-password.module').then(
+        (m) => m.ResetPasswordModule
+      ),
   },
   {
     path: '',

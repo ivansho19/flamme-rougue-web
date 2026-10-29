@@ -5,7 +5,8 @@ const AUTH_SKIP_URL_PARTS = [
   '/auth/login',
   '/auth/register',
   '/auth/registerClient',
-  '/auth/forgot-password'
+  '/auth/forgot-password',
+  '/auth/reset-password'
 ];
 
 const EXTERNAL_HOST_SKIP = [
