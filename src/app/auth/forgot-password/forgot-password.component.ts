@@ -23,7 +23,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   turnstileError = false;
   submitting = false;
   sent = false;
-  successMessage = '';
   /** Present in non-production API responses for QA. */
   resetUrl: string | null = null;
 
@@ -77,9 +76,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.submitting = false;
         this.sent = true;
-        this.successMessage =
-          response?.message ||
-          this.translate.instant('FORGOT_PASSWORD.SUCCESS_GENERIC');
         this.resetUrl = response?.resetUrl || null;
         this.turnstileToken = '';
       },
@@ -87,12 +83,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
         this.submitting = false;
         this.turnstileToken = '';
         const status = error?.status;
-        const apiMessage = error?.error?.message;
 
         if (status === 429) {
           this.toastService.showToast(
             this.translate.instant('FORGOT_PASSWORD.ERROR_TITLE'),
-            apiMessage || this.translate.instant('FORGOT_PASSWORD.ERROR_RATE_LIMIT'),
+            this.translate.instant('FORGOT_PASSWORD.ERROR_RATE_LIMIT'),
             'error',
             6
           );
@@ -102,7 +97,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
         if (status === 400) {
           this.toastService.showToast(
             this.translate.instant('FORGOT_PASSWORD.ERROR_TITLE'),
-            apiMessage || this.translate.instant('FORGOT_PASSWORD.ERROR_INVALID'),
+            this.translate.instant('FORGOT_PASSWORD.ERROR_INVALID'),
             'error',
             5
           );
@@ -111,7 +106,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
         this.toastService.showToast(
           this.translate.instant('FORGOT_PASSWORD.ERROR_TITLE'),
-          apiMessage || this.translate.instant('FORGOT_PASSWORD.ERROR_GENERIC'),
+          this.translate.instant('FORGOT_PASSWORD.ERROR_GENERIC'),
           'error',
           5
         );

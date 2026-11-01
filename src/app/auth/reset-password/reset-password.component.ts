@@ -125,11 +125,11 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     const password = String(this.form.value.password || '');
 
     this.authService.resetPassword(this.token, password, this.turnstileToken).subscribe({
-      next: (response) => {
+      next: () => {
         this.submitting = false;
         this.toastService.showToast(
           this.translate.instant('RESET_PASSWORD.SUCCESS_TITLE'),
-          response?.message || this.translate.instant('RESET_PASSWORD.SUCCESS_MESSAGE'),
+          this.translate.instant('RESET_PASSWORD.SUCCESS_MESSAGE'),
           'success',
           5
         );
@@ -139,12 +139,11 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         this.submitting = false;
         this.turnstileToken = '';
         const status = error?.status;
-        const apiMessage = error?.error?.message;
 
         if (status === 429) {
           this.toastService.showToast(
             this.translate.instant('RESET_PASSWORD.ERROR_TITLE'),
-            apiMessage || this.translate.instant('RESET_PASSWORD.ERROR_RATE_LIMIT'),
+            this.translate.instant('RESET_PASSWORD.ERROR_RATE_LIMIT'),
             'error',
             6
           );
@@ -154,7 +153,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         if (status === 400) {
           this.toastService.showToast(
             this.translate.instant('RESET_PASSWORD.ERROR_TITLE'),
-            apiMessage || this.translate.instant('RESET_PASSWORD.ERROR_INVALID_TOKEN'),
+            this.translate.instant('RESET_PASSWORD.ERROR_INVALID_TOKEN'),
             'error',
             6
           );
@@ -163,7 +162,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
         this.toastService.showToast(
           this.translate.instant('RESET_PASSWORD.ERROR_TITLE'),
-          apiMessage || this.translate.instant('RESET_PASSWORD.ERROR_GENERIC'),
+          this.translate.instant('RESET_PASSWORD.ERROR_GENERIC'),
           'error',
           5
         );
