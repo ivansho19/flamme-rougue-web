@@ -14,6 +14,8 @@ export class AuthService {
   private readonly apiRegisterUser = environment.api_register;
   private readonly apiRegisterClient = environment.api_register_client;
   private readonly apiClientByEmail = environment.api_client_by_email;
+  private readonly apiForgotPassword = environment.api_forgot_password;
+  private readonly apiResetPassword = environment.api_reset_password;
 
   constructor(private http: HttpClient, private loaderS: LoaderService) { }
 
@@ -60,5 +62,30 @@ export class AuthService {
       return this.http.get(`${this.apiClientByEmail}/${encodedEmail}`).pipe(
         finalize(() => this.loaderS.setLoaderState(false))
       );
+    }
+
+    forgotPassword(email: string, cfTurnstileToken?: string): Observable<{ message: string; resetUrl?: string }> {
+      this.loaderS.setLoaderState(true);
+      return this.http
+        .post<{ message: string; resetUrl?: string }>(this.apiForgotPassword, {
+          email,
+          cfTurnstileToken
+        })
+        .pipe(finalize(() => this.loaderS.setLoaderState(false)));
+    }
+
+    resetPassword(
+      token: string,
+      password: string,
+      cfTurnstileToken?: string
+    ): Observable<{ message: string }> {
+      this.loaderS.setLoaderState(true);
+      return this.http
+        .post<{ message: string }>(this.apiResetPassword, {
+          token,
+          password,
+          cfTurnstileToken
+        })
+        .pipe(finalize(() => this.loaderS.setLoaderState(false)));
     }
 }

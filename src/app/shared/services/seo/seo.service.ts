@@ -43,6 +43,16 @@ export class SeoService {
       description: 'Regístrate en Flammes Rouges para publicar o explorar anuncios.',
       noIndex: false
     },
+    '/auth/forgot-password': {
+      title: 'Recuperar contraseña | Flammes Rouges',
+      description: 'Solicita un enlace para restablecer tu contraseña de Flammes Rouges.',
+      noIndex: true
+    },
+    '/reset-password': {
+      title: 'Nueva contraseña | Flammes Rouges',
+      description: 'Restablece tu contraseña de Flammes Rouges.',
+      noIndex: true
+    },
     '/create-profile': {
       title: 'Crear anuncio | Flammes Rouges',
       noIndex: true
