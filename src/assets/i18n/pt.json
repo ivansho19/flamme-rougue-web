@@ -272,7 +272,11 @@
     "KG": "kg",
     "CITY": "Cidade",
     "CANCEL": "Cancelar",
-    "BACK": "Voltar"
+    "BACK": "Voltar",
+    "HOME": "Início"
+  },
+  "BREADCRUMB": {
+    "ARIA": "Navegação estrutural"
   },
   "WARNING_DIALOG": {
     "TITLE": "Welcome to",

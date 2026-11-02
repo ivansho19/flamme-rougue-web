@@ -1,15 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router
-} from '@angular/router';
 import { delay, Subscription } from 'rxjs';
 import { LoaderService } from '../../services/loader/loader.service';
-
-const PAGE_TRANSITION_MS = 1000;
+import { ScrollToTop } from '../../clases/scrollToTop';
 
 @Component({
   selector: 'app-layout',
@@ -18,14 +10,10 @@ const PAGE_TRANSITION_MS = 1000;
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   public subscription = new Subscription();
+  /** Global spinner only when LoaderService is asked by a real network call. */
   public loader = false;
-  /** Full-screen loader used as the page-change transition (~1s). */
-  pageTransitionLoader = false;
   loaderSubscription: Subscription = new Subscription();
   private scrollAnimationFrameId: number | null = null;
-  private transitionHideTimer: ReturnType<typeof setTimeout> | null = null;
-  private transitionStartedAt = 0;
-  private isFirstNavigation = true;
   isHomePage = false;
 
   @ViewChild('drawer') drawer!: any;
@@ -36,68 +24,14 @@ export class LayoutComponent implements OnInit, OnDestroy {
   typeFilter: any;
   indexTabGeneral: any;
 
-  constructor(
-    private loaderService: LoaderService,
-    private router: Router
-  ) {}
+  constructor(private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.showLoader();
-    this.watchPageTransitions();
   }
 
   get showChromeHidden(): boolean {
-    return this.loader || this.pageTransitionLoader;
-  }
-
-  private watchPageTransitions(): void {
-    this.subscription.add(
-      this.router.events.subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          if (this.isFirstNavigation) {
-            this.isFirstNavigation = false;
-            return;
-          }
-          this.startPageTransition();
-          return;
-        }
-
-        if (
-          event instanceof NavigationEnd ||
-          event instanceof NavigationCancel ||
-          event instanceof NavigationError
-        ) {
-          this.finishPageTransition();
-        }
-      })
-    );
-  }
-
-  private startPageTransition(): void {
-    if (this.transitionHideTimer) {
-      clearTimeout(this.transitionHideTimer);
-      this.transitionHideTimer = null;
-    }
-    this.transitionStartedAt = Date.now();
-    this.pageTransitionLoader = true;
-  }
-
-  private finishPageTransition(): void {
-    if (!this.pageTransitionLoader) {
-      return;
-    }
-
-    const elapsed = Date.now() - this.transitionStartedAt;
-    const remaining = Math.max(0, PAGE_TRANSITION_MS - elapsed);
-
-    if (this.transitionHideTimer) {
-      clearTimeout(this.transitionHideTimer);
-    }
-
-    this.transitionHideTimer = setTimeout(() => {
-      this.pageTransitionLoader = false;
-      this.transitionHideTimer = null;
-    }, remaining);
+    return this.loader;
   }
 
   showLoader() {
@@ -112,7 +46,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   scrollToTop(): void {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-      this.setAllScrollPositions(0);
+      ScrollToTop.reset({ behavior: 'auto' });
       return;
     }
 
@@ -124,6 +58,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     const duration = 650;
     const startTop = this.getCurrentScrollPosition();
     if (startTop <= 0) {
+      ScrollToTop.reset({ behavior: 'auto' });
       return;
     }
 
@@ -144,7 +79,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }
 
       this.scrollAnimationFrameId = null;
-      this.setAllScrollPositions(0);
+      ScrollToTop.reset({ behavior: 'auto' });
     };
 
     this.scrollAnimationFrameId = requestAnimationFrame(tick);
@@ -165,14 +100,11 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   private setAllScrollPositions(top: number): void {
     window.scrollTo(0, top);
-
     document.documentElement.scrollTop = top;
     document.body.scrollTop = top;
-
     if (document.scrollingElement) {
       document.scrollingElement.scrollTop = top;
     }
-
     const contentEl = this.layoutContent?.nativeElement as HTMLElement | undefined;
     if (contentEl) {
       contentEl.scrollTop = top;
@@ -181,14 +113,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.loader = false;
-    this.pageTransitionLoader = false;
     if (this.scrollAnimationFrameId !== null) {
       cancelAnimationFrame(this.scrollAnimationFrameId);
       this.scrollAnimationFrameId = null;
-    }
-    if (this.transitionHideTimer) {
-      clearTimeout(this.transitionHideTimer);
-      this.transitionHideTimer = null;
     }
     this.subscription.unsubscribe();
     this.loaderSubscription.unsubscribe();

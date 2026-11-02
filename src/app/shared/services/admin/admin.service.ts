@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { finalize, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { LoaderService } from '../loader/loader.service';
+import { ProfileService } from '../profile/profile.service';
 import { AuthHeaders } from '../../clases/getAuthHeaders';
 import { GetAllUsersResponse, UpdateCommentPlanStatusResponse, CommentPlanStatusValue } from '../../models/comment-plans.model';
 
@@ -13,7 +15,11 @@ export class AdminService {
   private readonly apiAdmin = environment.api_admin;
   private readonly apiProfile = environment.api_profile;
 
-  constructor(private http: HttpClient, private loaderService: LoaderService) {}
+  constructor(
+    private http: HttpClient,
+    private loaderService: LoaderService,
+    private profileService: ProfileService
+  ) {}
 
   getAllProfiles(page = 1, limit = 15, name?: string): Observable<any> {
     this.loaderService.setLoaderState(true);
@@ -53,6 +59,7 @@ export class AdminService {
   deleteProfile(profileId: string): Observable<any> {
     this.loaderService.setLoaderState(true);
     return this.http.delete(`${this.apiAdmin}/deleteProfile/${profileId}`).pipe(
+      tap(() => this.profileService.invalidateCache()),
       finalize(() => this.loaderService.setLoaderState(false))
     );
   }
@@ -60,6 +67,7 @@ export class AdminService {
   activateProfile(profileId: string, isActiveProfile: boolean): Observable<any> {
     this.loaderService.setLoaderState(true);
     return this.http.put(`${this.apiAdmin}/activeProfile/${profileId}`, { isActiveProfile }).pipe(
+      tap(() => this.profileService.invalidateCache()),
       finalize(() => this.loaderService.setLoaderState(false))
     );
   }
@@ -67,6 +75,7 @@ export class AdminService {
   verifyKyc(kycId: string): Observable<any> {
     this.loaderService.setLoaderState(true);
     return this.http.put(`${this.apiAdmin}/verifyKYC/${kycId}`, { verify: true }).pipe(
+      tap(() => this.profileService.invalidateCache()),
       finalize(() => this.loaderService.setLoaderState(false))
     );
   }

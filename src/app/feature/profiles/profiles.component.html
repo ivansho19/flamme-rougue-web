@@ -1,5 +1,8 @@
+<div class="profile-page" *ngIf="profileData">
+  <div class="profile-page-inner">
+    <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
 
-<div class="profile-layout" *ngIf="profileData">
+    <div class="profile-layout">
     <!-- Columna izquierda: imágenes -->
     <div class="media-column">
       <div class="media-frame">
@@ -225,13 +228,16 @@
         </div>
       </div>
     </div>
+    </div>
+
     <app-plan-selection-modal-comment-plans
-    [isOpen]="showPlanModal"
-    [currentPlan]="currentPlanType"
-    (close)="closePlanModal()"
-    (planSelected)="onPlanSelected($event)"
-    (paymentWhatsApp)="onWhatsAppPayment($event)">
-  </app-plan-selection-modal-comment-plans>
+      [isOpen]="showPlanModal"
+      [currentPlan]="currentPlanType"
+      (close)="closePlanModal()"
+      (planSelected)="onPlanSelected($event)"
+      (paymentWhatsApp)="onWhatsAppPayment($event)">
+    </app-plan-selection-modal-comment-plans>
+  </div>
 </div>
 
   <div class="gallery-modal" *ngIf="showGallery">

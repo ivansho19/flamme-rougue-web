@@ -290,7 +290,11 @@
     "KG": "kg",
     "CITY": "Ciudad",
     "CANCEL": "Cancelar",
-    "BACK": "Volver"
+    "BACK": "Volver",
+    "HOME": "Inicio"
+  },
+  "BREADCRUMB": {
+    "ARIA": "Migas de pan"
   },
   "WARNING_DIALOG": {
     "TITLE": "Bienvenido a",

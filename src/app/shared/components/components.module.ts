@@ -26,6 +26,7 @@ import { RulesModalComponent } from './rules-modal/rules-modal.component';
 import { CountrySearchSelectComponent } from './country-search-select/country-search-select.component';
 import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-badge.component';
 import { CfTurnstileComponent } from './cf-turnstile/cf-turnstile.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { CfTurnstileComponent } from './cf-turnstile/cf-turnstile.component';
     RulesModalComponent,
     CountrySearchSelectComponent,
     CommentPlanBadgeComponent,
-    CfTurnstileComponent
+    CfTurnstileComponent,
+    BreadcrumbsComponent
   ],
   exports: [
     LoaderComponent,
@@ -71,7 +73,8 @@ import { CfTurnstileComponent } from './cf-turnstile/cf-turnstile.component';
     RulesModalComponent,
     CountrySearchSelectComponent,
     CommentPlanBadgeComponent,
-    CfTurnstileComponent
+    CfTurnstileComponent,
+    BreadcrumbsComponent
   ],
   imports: [
     CommonModule,

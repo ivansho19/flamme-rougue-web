@@ -1,0 +1,30 @@
+<nav class="breadcrumbs" *ngIf="items?.length" [attr.aria-label]="'BREADCRUMB.ARIA' | translate">
+  <ol class="breadcrumbs-list">
+    <li
+      class="breadcrumbs-item"
+      *ngFor="let item of items; let last = last; let i = index">
+      <a
+        *ngIf="item.link && !last; else currentCrumb"
+        class="breadcrumbs-link"
+        [class.is-home]="i === 0"
+        [routerLink]="item.link">
+        <span *ngIf="i === 0" class="breadcrumbs-seal" aria-hidden="true">
+          <i class="bi bi-house-door-fill"></i>
+        </span>
+        <span class="breadcrumbs-label">
+          {{ item.labelKey ? (item.labelKey | translate) : item.label }}
+        </span>
+      </a>
+
+      <ng-template #currentCrumb>
+        <span class="breadcrumbs-current" aria-current="page">
+          {{ item.labelKey ? (item.labelKey | translate) : item.label }}
+        </span>
+      </ng-template>
+
+      <span class="breadcrumbs-sep" *ngIf="!last" aria-hidden="true">
+        <span class="breadcrumbs-sep-gem"></span>
+      </span>
+    </li>
+  </ol>
+</nav>
