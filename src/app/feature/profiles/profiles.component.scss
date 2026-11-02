@@ -42,13 +42,22 @@ body {
   padding: 24px;
 }
 
+.profile-page {
+  width: 100%;
+}
+
+.profile-page-inner {
+  max-width: 1200px;
+  margin: 15px auto;
+  width: calc(100% - 30px);
+}
+
 .profile-layout {
   display: grid;
   grid-template-columns: minmax(320px, 520px) 1fr;
   gap: 32px;
-  max-width: 1200px;
-  margin: 15px auto;
-  width: calc(100% - 30px);
+  width: 100%;
+  margin: 0;
 }
 
 /* Columna izquierda */
@@ -1186,6 +1195,11 @@ body {
 
 /* Responsive */
 @media (max-width: 900px) {
+  .profile-page-inner {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+  }
+
   .profile-layout {
     grid-template-columns: 1fr;
   }

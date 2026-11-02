@@ -290,7 +290,11 @@
     "KG": "kg",
     "CITY": "Ville",
     "CANCEL": "Annuler",
-    "BACK": "Retour"
+    "BACK": "Retour",
+    "HOME": "Accueil"
+  },
+  "BREADCRUMB": {
+    "ARIA": "Fil d'Ariane"
   },
   "WARNING_DIALOG": {
     "TITLE": "Bienvenue sur",

@@ -22,6 +22,8 @@ import {
 } from '../../shared/clases/profileSlug';
 import { resolveProfileId } from '../../shared/clases/resolveProfileId';
 import { SeoService } from '../../shared/services/seo/seo.service';
+import { BreadcrumbItem } from '../../shared/components/breadcrumbs/breadcrumbs.component';
+import { ScrollToTop } from '../../shared/clases/scrollToTop';
 
 @Component({
     selector: 'app-profiles',
@@ -85,6 +87,8 @@ export class ProfilesComponent implements OnInit {
     }
 
     private resolveAndLoadProfile(slugOrId: string): void {
+      ScrollToTop.resetAfterNavigation();
+
       const parsed = parseProfileRouteParam(slugOrId);
 
       if (parsed.isObjectId && parsed.objectId) {
@@ -94,6 +98,13 @@ export class ProfilesComponent implements OnInit {
       }
 
       this.loading = true;
+
+      const fromCache = this.profileService.findInListCache(slugOrId);
+      if (fromCache) {
+        this.applyResolvedProfile(fromCache, slugOrId);
+        return;
+      }
+
       const searchQuery = parsed.slugBase.replace(/-/g, ' ').trim();
 
       this.profileService.searchProfiles(searchQuery || slugOrId).pipe(
@@ -110,6 +121,7 @@ export class ProfilesComponent implements OnInit {
             return;
           }
 
+          // Uses list cache when home already warmed it; otherwise one network fetch.
           this.profileService.getAllProfiles().subscribe({
             next: (response) => {
               const list = response?.profiles ?? response ?? [];
@@ -376,6 +388,14 @@ export class ProfilesComponent implements OnInit {
       }
 
       return urls;
+    }
+
+    get breadcrumbItems(): BreadcrumbItem[] {
+      const name = getProfileDisplayName(this.profileData) || this.profileData?.displayName || '';
+      return [
+        { labelKey: 'COMMON.HOME', link: '/home' },
+        { label: name }
+      ];
     }
 
     get planBadgeImage(): string | null {

@@ -19,7 +19,7 @@ import { buildProfileUrl } from '../../../../shared/clases/profileSlug';
 export class HomeComponent implements OnInit, OnDestroy {
     @ViewChild('emblaRef') emblaRef!: ElementRef<HTMLDivElement>;
     loaderSubscription: Subscription = new Subscription;
-    public loader = true;
+    public loader = false;
     embla!: EmblaCarouselType;
     autoplayInterval: any;
     anunciantes: any[] = [];
@@ -64,7 +64,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.cardsLoading = true;
+        const cachedList = this.profileService.peekAllProfiles();
+        if (cachedList) {
+            this.anunciantes = cachedList?.profiles ?? cachedList ?? [];
+            this.cardsLoading = false;
+        } else {
+            this.cardsLoading = true;
+        }
+
         this.profileService.getAllProfiles().subscribe({
             next: (response) => {
                 this.anunciantes = response?.profiles ?? response ?? [];
