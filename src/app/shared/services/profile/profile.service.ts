@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { finalize, shareReplay, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, finalize, shareReplay, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { LoaderService } from '../loader/loader.service';
-import { IProfileCreateRequest } from '../../../feature/create-profile/models/IProfileCreate.model';
+import {
+  IKYCCreateRequest,
+  IKYCRecord,
+  IKYCUpdateRequest,
+  IProfileCreateRequest
+} from '../../../feature/create-profile/models/IProfileCreate.model';
 import { resolveProfileId } from '../../clases/resolveProfileId';
 import {
   parseProfileRouteParam,
@@ -121,11 +126,51 @@ export class ProfileService {
     });
   }
 
-  createKYC(payload: any): Observable<any> {
+  createKYC(payload: IKYCCreateRequest): Observable<any> {
     this.loaderS.setLoaderState(true);
     return this.http.post(`${this.apiProfile}/createKYC`, payload).pipe(
       finalize(() => this.loaderS.setLoaderState(false))
     );
+  }
+
+  getKYCByUser(userId: string): Observable<{ kyc: IKYCRecord | null; message?: string }> {
+    return this.http
+      .get<{ kyc: IKYCRecord | null; message?: string }>(
+        `${this.apiProfile}/getKYCByUser/${encodeURIComponent(userId)}`
+      )
+      .pipe(
+        catchError((err) => {
+          if (err?.status === 404) {
+            return of({ kyc: null, message: err?.error?.message });
+          }
+          return throwError(() => err);
+        })
+      );
+  }
+
+  getKYCByProfile(profileId: string): Observable<{ kyc: IKYCRecord | null; message?: string }> {
+    return this.http
+      .get<{ kyc: IKYCRecord | null; message?: string }>(
+        `${this.apiProfile}/getKYCByProfile/${encodeURIComponent(profileId)}`
+      )
+      .pipe(
+        catchError((err) => {
+          if (err?.status === 404) {
+            return of({ kyc: null, message: err?.error?.message });
+          }
+          return throwError(() => err);
+        })
+      );
+  }
+
+  updateKYC(kycId: string, payload: IKYCUpdateRequest): Observable<any> {
+    this.loaderS.setLoaderState(true);
+    return this.http
+      .put(`${this.apiProfile}/updateKYC/${encodeURIComponent(kycId)}`, payload)
+      .pipe(
+        tap(() => this.invalidateCache()),
+        finalize(() => this.loaderS.setLoaderState(false))
+      );
   }
 
   /**

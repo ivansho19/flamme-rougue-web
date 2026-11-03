@@ -1506,18 +1506,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                         console.log('Payload a enviar:', profilePayload);
 
                         this.profileService.createProfile(profilePayload).subscribe({
-                                next: (response) => {
+                                next: async (response) => {
                                         console.log('Perfil creado:', response);
                                 const createdProfile = response?.profile ?? response;
                                 const storedProfileId = createdProfile?._id || response?.profileId;
                                 if (storedProfileId) {
                                     localStorage.setItem('profileId', storedProfileId);
                                 }
-                                
-                                // 6️⃣ GUARDAR DATOS REALES (KYC) SI TIENEN DOCUMENTO
-                                this.saveKYCData(objectId).catch((kycError) => {
+
+                                try {
+                                    await this.saveKYCData(objectId);
+                                } catch (kycError) {
                                     console.warn('KYC guardado parcialmente con error:', kycError);
-                                });
+                                }
 
                                 this.loading = false;
                                 this.pendingWhatsAppPayment = false;
@@ -1542,30 +1543,33 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private async saveKYCData(userId: string): Promise<void> {
         const realData = this.profileForm.get('realData')?.value || {};
         const realName = realData.realName || '';
-        
-        // Si no hay documento seleccionado, no hacer nada
-        const documentFile = this.documentFrontFile || this.documentBackFile || this.passportFile;
-        if (!documentFile) {
+        const files = [this.documentFrontFile, this.documentBackFile, this.passportFile].filter(
+            (file): file is File => !!file
+        );
+
+        if (!files.length) {
             console.log('No hay documento KYC para guardar');
             return;
         }
 
         try {
-            // 1️⃣ CREAR CARPETA KYC CON FORMATO JERÁRQUICO: kyc/[nombre-real-usuario]+[id]
             const slugifiedName = this.slugifyName(realName);
             const kycFolder = `kyc/${slugifiedName}+${userId}`;
 
-            // 2️⃣ SUBIR IMAGEN A CLOUDINARY
-            console.log('Subiendo documento KYC a carpeta:', kycFolder);
-            const documentUpload: any = await firstValueFrom(
-                this.cloudinaryService.uploadImage(documentFile, kycFolder)
-            );
-
-            if (!documentUpload?.secure_url || !documentUpload?.public_id) {
-                throw new Error('Error al subir documento KYC a Cloudinary');
+            const documentImages = [];
+            for (const file of files) {
+                const documentUpload: any = await firstValueFrom(
+                    this.cloudinaryService.uploadImage(file, kycFolder)
+                );
+                if (!documentUpload?.secure_url || !documentUpload?.public_id) {
+                    throw new Error('Error al subir documento KYC a Cloudinary');
+                }
+                documentImages.push({
+                    url: documentUpload.secure_url,
+                    public_id: documentUpload.public_id
+                });
             }
 
-            // 3️⃣ PREPARAR PAYLOAD PARA API KYC
             const kycPayload: IKYCCreateRequest = {
                 userId: userId,
                 fullName: realName,
@@ -1576,19 +1580,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                     phone: realData.contactPhone
                 }),
                 email: realData.email || '',
-                documentImage: {
-                    url: documentUpload.secure_url,
-                    public_id: documentUpload.public_id
-                }
+                documentType: realData.documentType || undefined,
+                documentImage: documentImages.length === 1 ? documentImages[0] : documentImages
             };
 
-            console.log('Payload KYC:', kycPayload);
-
-            // 4️⃣ LLAMAR A LA API /api/profiles/createKYC
-            const kycResponse = await firstValueFrom(
-                this.profileService.createKYC(kycPayload)
-            );
-
+            await firstValueFrom(this.profileService.createKYC(kycPayload));
         } catch (error) {
             console.error('Error al guardar KYC:', error);
             this.toastService.showToast(
