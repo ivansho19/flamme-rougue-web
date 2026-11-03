@@ -2,7 +2,13 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
-import { IProfileCreateRequest } from '../create-profile/models/IProfileCreate.model';
+import {
+  IImageData,
+  IKYCCreateRequest,
+  IKYCRecord,
+  IKYCUpdateRequest,
+  IProfileCreateRequest
+} from '../create-profile/models/IProfileCreate.model';
 import { CloudinaryService } from '../../shared/services/cloudinary/cloudinary.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
@@ -65,6 +71,17 @@ export class UpdateProfileComponent implements OnInit {
   planExpiresAt: string | Date | null = null;
   @ViewChild('mainInput') mainInput!: ElementRef<HTMLInputElement>;
   @ViewChild('galleryInput') galleryInput!: ElementRef<HTMLInputElement>;
+
+  existingKycId: string | null = null;
+  existingKyc: IKYCRecord | null = null;
+  existingDocumentImages: IImageData[] = [];
+  documentFrontFile: File | null = null;
+  documentBackFile: File | null = null;
+  passportFile: File | null = null;
+  documentFrontPreview: string | null = null;
+  documentBackPreview: string | null = null;
+  passportPreview: string | null = null;
+  kycLoading = false;
 
   constructor(
     private cloudinaryService: CloudinaryService,
@@ -251,12 +268,29 @@ export class UpdateProfileComponent implements OnInit {
         weight: [null, Validators.required],
         languages: [[], Validators.required]
       }),
+      realData: this.fb.group({
+        realName: [''],
+        realBirthDate: [null],
+        realAge: [null],
+        email: ['', Validators.email],
+        realNationality: [''],
+        contactPhonePrefix: ['+', Validators.maxLength(4)],
+        contactPhone: ['', [Validators.maxLength(15), Validators.pattern(/^\d*$/)]],
+        documentType: [''],
+        documentFront: [null],
+        documentBack: [null],
+        documentSingle: [null]
+      }),
       posibilities: [[]]
     });
 
     this.profileForm
       .get('personalData.birthDate')
       ?.valueChanges.subscribe(value => this.updateAgeFromBirthDate(value));
+
+    this.profileForm
+      .get('realData.realBirthDate')
+      ?.valueChanges.subscribe(value => this.updateRealAgeFromBirthDate(value));
 
     this.profileForm
       .get('basicInfo.city')
@@ -551,6 +585,7 @@ export class UpdateProfileComponent implements OnInit {
       ? !!profile.isActiveProfile
       : !this.isProfileInactive;
     this.maybeShowPlanExpiryWarning();
+    this.loadKYC();
   }
 
   private setSelectedPlan(profile: any): void {
@@ -1032,6 +1067,319 @@ export class UpdateProfileComponent implements OnInit {
       .replace(/(^-|-$)/g, '') || 'user';
   }
 
+  private loadKYC(): void {
+    const userId = this.ownerObjectId || this.userId || this.clientData?._id || '';
+    const profileId = this.profileId || '';
+    if (!userId && !profileId) {
+      return;
+    }
+
+    this.kycLoading = true;
+    const request$ = userId
+      ? this.profileService.getKYCByUser(userId)
+      : this.profileService.getKYCByProfile(profileId);
+
+    request$.subscribe({
+      next: (response) => {
+        this.kycLoading = false;
+        this.applyKycToForm(response?.kyc ?? null);
+      },
+      error: (error) => {
+        this.kycLoading = false;
+        console.error('Error cargando KYC:', error);
+      }
+    });
+  }
+
+  private applyKycToForm(kyc: IKYCRecord | null): void {
+    this.existingKyc = kyc;
+    this.existingKycId = kyc?._id || null;
+    this.existingDocumentImages = this.normalizeDocumentImages(kyc?.documentImage);
+    this.clearDocumentUploads(false);
+
+    if (!kyc) {
+      return;
+    }
+
+    const phoneParts = this.splitPhone(kyc.phone || '');
+    const docType = (kyc.documentType || '').toLowerCase();
+    const images = this.existingDocumentImages;
+
+    this.profileForm.get('realData')?.patchValue({
+      realName: kyc.fullName || '',
+      realBirthDate: null,
+      realAge: kyc.age ?? null,
+      email: kyc.email || '',
+      realNationality: kyc.nationality || '',
+      contactPhonePrefix: phoneParts.prefix,
+      contactPhone: phoneParts.number,
+      documentType: docType === 'passport' ? 'passport' : docType === 'dni' ? 'dni' : docType || ''
+    }, { emitEvent: false });
+
+    if (docType === 'passport') {
+      this.passportPreview = images[0]?.url || null;
+    } else if (images.length) {
+      this.documentFrontPreview = images[0]?.url || null;
+      this.documentBackPreview = images[1]?.url || null;
+    }
+
+    this.profileForm.get('realData')?.markAsPristine();
+  }
+
+  private normalizeDocumentImages(raw: IImageData | IImageData[] | undefined | null): IImageData[] {
+    if (!raw) {
+      return [];
+    }
+    const list = Array.isArray(raw) ? raw : [raw];
+    return list.filter((item): item is IImageData => !!item?.url && !!item?.public_id);
+  }
+
+  private splitPhone(phone: string): { prefix: string; number: string } {
+    const raw = (phone || '').trim();
+    if (!raw) {
+      return { prefix: '+', number: '' };
+    }
+    const match = raw.match(/^(\+|00)(\d{1,4})\s*(.*)$/);
+    if (match) {
+      return {
+        prefix: `+${match[2]}`,
+        number: (match[3] || '').replace(/\D/g, '')
+      };
+    }
+    return { prefix: '+', number: raw.replace(/\D/g, '') };
+  }
+
+  private getPhoneWithPrefix(basicInfo: { phonePrefix?: string; phone?: string }): string {
+    const prefix = (basicInfo.phonePrefix || '').trim();
+    const phone = (basicInfo.phone || '').trim();
+    if (!phone && !prefix) {
+      return '';
+    }
+    if (!prefix) {
+      return phone;
+    }
+    if (prefix.startsWith('+') || prefix.startsWith('00')) {
+      return `${prefix}${phone}`;
+    }
+    return `+${prefix}${phone}`;
+  }
+
+  private updateRealAgeFromBirthDate(value: unknown): void {
+    const age = this.calculateAge(value);
+    this.profileForm.get('realData.realAge')?.setValue(age);
+    this.profileForm.get('realData.realAge')?.markAsDirty();
+  }
+
+  openDocumentSelector(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  onDocumentSelected(type: 'front' | 'back' | 'passport', event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (type === 'front') {
+        this.documentFrontFile = file;
+        this.documentFrontPreview = reader.result as string;
+        this.profileForm.get('realData.documentFront')?.setValue(file);
+      }
+      if (type === 'back') {
+        this.documentBackFile = file;
+        this.documentBackPreview = reader.result as string;
+        this.profileForm.get('realData.documentBack')?.setValue(file);
+      }
+      if (type === 'passport') {
+        this.passportFile = file;
+        this.passportPreview = reader.result as string;
+        this.profileForm.get('realData.documentSingle')?.setValue(file);
+      }
+      this.profileForm.get('realData')?.markAsDirty();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onDocumentTypeChange(_event: Event): void {
+    this.clearDocumentUploads(true);
+    this.profileForm.get('realData')?.markAsDirty();
+  }
+
+  private clearDocumentUploads(clearExistingImages: boolean): void {
+    this.documentFrontFile = null;
+    this.documentBackFile = null;
+    this.passportFile = null;
+    this.documentFrontPreview = null;
+    this.documentBackPreview = null;
+    this.passportPreview = null;
+    this.profileForm.get('realData.documentFront')?.setValue(null);
+    this.profileForm.get('realData.documentBack')?.setValue(null);
+    this.profileForm.get('realData.documentSingle')?.setValue(null);
+    if (clearExistingImages) {
+      this.existingDocumentImages = [];
+    }
+  }
+
+  get kycStatusLabelKey(): string {
+    const status = (this.existingKyc?.status || '').toLowerCase();
+    if (this.existingKyc?.verify || status === 'verified') {
+      return 'PROFILE_FORM.KYC_STATUS_VERIFIED';
+    }
+    if (status === 'rejected') {
+      return 'PROFILE_FORM.KYC_STATUS_REJECTED';
+    }
+    if (this.existingKycId) {
+      return 'PROFILE_FORM.KYC_STATUS_PENDING';
+    }
+    return 'PROFILE_FORM.KYC_STATUS_MISSING';
+  }
+
+  private hasNewDocumentFiles(): boolean {
+    return !!(this.documentFrontFile || this.documentBackFile || this.passportFile);
+  }
+
+  private shouldPersistKyc(): boolean {
+    const realData = this.profileForm.get('realData')?.value || {};
+    if (this.existingKycId) {
+      return !!this.profileForm.get('realData')?.dirty || this.hasNewDocumentFiles();
+    }
+    return !!(
+      (realData.realName || '').trim() ||
+      (realData.email || '').trim() ||
+      this.hasNewDocumentFiles()
+    );
+  }
+
+  private validateKycBeforeSave(): boolean {
+    const realData = this.profileForm.get('realData')?.value || {};
+    const missing =
+      !(realData.realName || '').trim() ||
+      realData.realAge == null ||
+      !(realData.realNationality || '').trim() ||
+      !(realData.email || '').trim() ||
+      !(realData.contactPhone || '').trim() ||
+      !(realData.documentType || '').trim();
+
+    if (missing) {
+      this.toastService.showToast(
+        this.translate.instant('PROFILE_FORM.KYC_INCOMPLETE_TITLE'),
+        this.translate.instant('PROFILE_FORM.KYC_INCOMPLETE_BODY'),
+        'error',
+        5
+      );
+      this.profileForm.get('realData')?.markAllAsTouched();
+      return false;
+    }
+
+    const docType = realData.documentType;
+    const hasExisting = this.existingDocumentImages.length > 0;
+
+    if (docType === 'dni') {
+      const creating = !this.existingKycId;
+      const hasDocs = creating
+        ? !!(this.documentFrontFile && this.documentBackFile)
+        : !!(this.documentFrontFile || this.documentBackFile || this.documentFrontPreview || this.documentBackPreview || hasExisting);
+      if (!hasDocs) {
+        this.toastService.showToast(
+          this.translate.instant('PROFILE_FORM.KYC_INCOMPLETE_TITLE'),
+          this.translate.instant('PROFILE_FORM.KYC_DOCUMENT_REQUIRED'),
+          'error',
+          5
+        );
+        return false;
+      }
+    } else if (docType === 'passport') {
+      if (!this.passportFile && !this.passportPreview && !hasExisting) {
+        this.toastService.showToast(
+          this.translate.instant('PROFILE_FORM.KYC_INCOMPLETE_TITLE'),
+          this.translate.instant('PROFILE_FORM.KYC_DOCUMENT_REQUIRED'),
+          'error',
+          5
+        );
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private async resolveDocumentImagesForSave(userId: string): Promise<IImageData[]> {
+    const realName = this.profileForm.get('realData.realName')?.value || 'user';
+    const folder = `kyc/${this.slugifyName(realName)}+${userId}`;
+    const docType = this.profileForm.get('realData.documentType')?.value;
+    const existing = [...this.existingDocumentImages];
+
+    const uploadOne = async (file: File): Promise<IImageData> => {
+      const upload: any = await firstValueFrom(this.cloudinaryService.uploadImage(file, folder));
+      if (!upload?.secure_url || !upload?.public_id) {
+        throw new Error('Error al subir documento KYC');
+      }
+      return { url: upload.secure_url, public_id: upload.public_id };
+    };
+
+    if (docType === 'passport') {
+      if (this.passportFile) {
+        return [await uploadOne(this.passportFile)];
+      }
+      return existing.slice(0, 1);
+    }
+
+    let front = existing[0];
+    let back = existing[1];
+    if (this.documentFrontFile) {
+      front = await uploadOne(this.documentFrontFile);
+    }
+    if (this.documentBackFile) {
+      back = await uploadOne(this.documentBackFile);
+    }
+    return [front, back].filter((item): item is IImageData => !!item?.url && !!item?.public_id);
+  }
+
+  private async persistKyc(userId: string): Promise<void> {
+    if (!this.shouldPersistKyc()) {
+      return;
+    }
+
+    const realData = this.profileForm.get('realData')?.value || {};
+    const documentImages = await this.resolveDocumentImagesForSave(userId);
+    if (!documentImages.length) {
+      throw new Error('KYC_NO_IMAGES');
+    }
+
+    const basePayload = {
+      fullName: realData.realName || '',
+      age: realData.realAge ?? null,
+      nationality: realData.realNationality || '',
+      phone: this.getPhoneWithPrefix({
+        phonePrefix: realData.contactPhonePrefix,
+        phone: realData.contactPhone
+      }),
+      email: realData.email || '',
+      documentType: realData.documentType || '',
+      documentNumber: this.existingKyc?.documentNumber ?? null,
+      documentImage: documentImages
+    };
+
+    if (this.existingKycId) {
+      const updatePayload: IKYCUpdateRequest = { ...basePayload };
+      const response = await firstValueFrom(
+        this.profileService.updateKYC(this.existingKycId, updatePayload)
+      );
+      this.applyKycToForm(response?.kyc ?? { ...this.existingKyc, ...updatePayload, _id: this.existingKycId });
+      return;
+    }
+
+    const createPayload: IKYCCreateRequest = {
+      userId,
+      ...basePayload
+    };
+    const created = await firstValueFrom(this.profileService.createKYC(createPayload));
+    this.applyKycToForm(created?.kyc ?? null);
+  }
+
   async updateProfile(planUpdated: boolean = false) {
     if (!this.isAdminEditMode && this.isProfileInactive && !(planUpdated && this.isPlanExpired)) {
       return;
@@ -1048,6 +1396,10 @@ export class UpdateProfileComponent implements OnInit {
     const lookupId = this.profileId || (!this.isAdminEditMode ? this.userId : '');
     if (!lookupId) {
       this.toastService.showToast('Perfil no identificado', 'Inicia sesion nuevamente', 'error', 4);
+      return;
+    }
+
+    if (this.shouldPersistKyc() && !this.validateKycBeforeSave()) {
       return;
     }
 
@@ -1165,39 +1517,49 @@ export class UpdateProfileComponent implements OnInit {
         isActiveProfile: this.resolveIsActiveProfileForUpdate()
       };
 
-      this.profileService.updateProfile(lookupId, profilePayload).subscribe({
-        next: () => {
+      await firstValueFrom(this.profileService.updateProfile(lookupId, profilePayload));
+
+      try {
+        await this.persistKyc(objectId);
+      } catch (kycError: any) {
+        if (kycError?.message === 'KYC_INVALID' || kycError?.message === 'KYC_NO_IMAGES') {
           this.loading = false;
-          if (planUpdated) {
-            this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 8);
-            setTimeout(() => {
-              window.location.reload();
-            }, 3000);
-          } else if (this.isAdminEditMode) {
-            this.toastService.showToast(
-              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS_TITLE'),
-              this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS'),
-              'success',
-              6
-            );
-          } else {
-            this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 8);
-          }
-        },
-        error: (error) => {
-          console.error('Error actualizando perfil:', error);
-          this.loading = false;
-          this.toastService.showToast(
-            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
-            this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SAVE_ERROR'),
-            'error',
-            5
-          );
+          return;
         }
-      });
-    } catch (error) {
-      console.error('Error subiendo imágenes:', error);
+        console.error('Error guardando KYC:', kycError);
+        this.toastService.showToast(
+          this.translate.instant('PROFILE_FORM.KYC_UPDATE_ERROR_TITLE'),
+          this.translate.instant('PROFILE_FORM.TOAST_KYC_UPDATE_WARNING'),
+          'error',
+          5
+        );
+      }
+
       this.loading = false;
+      if (planUpdated) {
+        this.toastService.showToast('Plan actualizado', '¡El plan se actualizo correctamente!', 'success', 8);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else if (this.isAdminEditMode) {
+        this.toastService.showToast(
+          this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS_TITLE'),
+          this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SUCCESS'),
+          'success',
+          6
+        );
+      } else {
+        this.toastService.showToast('Perfil actualizado', '¡Los cambios se guardaron con exito!', 'success', 8);
+      }
+    } catch (error) {
+      console.error('Error actualizando perfil:', error);
+      this.loading = false;
+      this.toastService.showToast(
+        this.translate.instant('PROFILE_FORM.ADMIN_EDIT_ERROR_TITLE'),
+        this.translate.instant('PROFILE_FORM.ADMIN_EDIT_SAVE_ERROR'),
+        'error',
+        5
+      );
     }
   }
 

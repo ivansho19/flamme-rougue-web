@@ -3,6 +3,7 @@ export interface IImageData {
   public_id: string;
 }
 
+/** Shape accepted by POST /profiles/createKYC (legacy: single object). */
 export interface IKYCCreateRequest {
   userId: string;
   fullName: string;
@@ -10,7 +11,39 @@ export interface IKYCCreateRequest {
   nationality?: string;
   phone?: string;
   email?: string;
-  documentImage: IImageData;
+  documentType?: string;
+  documentNumber?: string | null;
+  documentImage: IImageData | IImageData[];
+}
+
+export interface IKYCRecord {
+  _id: string;
+  userId?: string;
+  profileId?: string;
+  fullName?: string;
+  age?: number | null;
+  nationality?: string;
+  phone?: string;
+  email?: string;
+  documentType?: string;
+  documentNumber?: string | null;
+  documentImage?: IImageData | IImageData[];
+  verify?: boolean;
+  status?: 'pending' | 'verified' | 'rejected' | string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** Body for PUT /profiles/updateKYC/:kycId — documentImage as array. */
+export interface IKYCUpdateRequest {
+  fullName?: string;
+  age?: number | null;
+  nationality?: string;
+  phone?: string;
+  email?: string;
+  documentType?: string;
+  documentNumber?: string | null;
+  documentImage?: IImageData[];
 }
 
 export interface IProfileCreateRequest {
