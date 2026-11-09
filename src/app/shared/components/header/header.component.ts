@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   selectedFlagUrl = 'https://flagcdn.com/gb.svg';
   searchOpen = false;
   searchQuery = '';
-  searchResults: Array<{ id: string; name: string; city?: string; imageUrl?: string; slugSource?: any }> = [];
+  searchResults: Array<{ id: string; name: string; city?: string; country?: string; imageUrl?: string; slugSource?: any }> = [];
   searchLoading = false;
   currentLang = 'es';
   adminNotificationCount = 0;
@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }),
         switchMap((query) => {
           if (query.trim().length < 3) {
-            return of([] as Array<{ id: string; name: string; city?: string; imageUrl?: string }>);
+            return of([] as Array<{ id: string; name: string; city?: string; country?: string; imageUrl?: string }>);
           }
 
           return this.profileService.searchProfiles(query).pipe(
@@ -93,6 +93,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 id: profile._id,
                 name: profile.displayName,
                 city: profile.city,
+                country: profile.country,
                 imageUrl: profile?.imagesMain?.url,
                 slugSource: profile
               }));

@@ -24,6 +24,7 @@ import { CardSkeletonComponent } from './card-skeleton/card-skeleton.component';
 import { LikeButtonComponent } from './like-button/like-button.component';
 import { RulesModalComponent } from './rules-modal/rules-modal.component';
 import { CountrySearchSelectComponent } from './country-search-select/country-search-select.component';
+import { CountryFlagComponent } from './country-flag/country-flag.component';
 import { CommentPlanBadgeComponent } from './comment-plan-badge/comment-plan-badge.component';
 import { CfTurnstileComponent } from './cf-turnstile/cf-turnstile.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -48,6 +49,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
     LikeButtonComponent,
     RulesModalComponent,
     CountrySearchSelectComponent,
+    CountryFlagComponent,
     CommentPlanBadgeComponent,
     CfTurnstileComponent,
     BreadcrumbsComponent
@@ -72,6 +74,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
     LikeButtonComponent,
     RulesModalComponent,
     CountrySearchSelectComponent,
+    CountryFlagComponent,
     CommentPlanBadgeComponent,
     CfTurnstileComponent,
     BreadcrumbsComponent

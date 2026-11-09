@@ -253,7 +253,15 @@
             <span class="required-asterisk" aria-hidden="true">*</span>
           </label>
           <div class="phone-row">
-            <input class="phone-prefix" formControlName="phonePrefix" placeholder="+51">
+            <input class="phone-prefix" formControlName="phonePrefix" placeholder="+51"
+              maxlength="4"
+              inputmode="tel"
+              autocomplete="tel-country-code"
+              [class.input-error]="isInvalid('basicInfo.phonePrefix') || isPhonePrefixLimitHint('basicInfo.phonePrefix')"
+              (keydown)="onPhonePrefixKeydown($event, 'basicInfo.phonePrefix')"
+              (input)="onPhonePrefixInput('basicInfo.phonePrefix')"
+              (blur)="onPhonePrefixBlur('basicInfo.phonePrefix')"
+              (paste)="onPhonePrefixPaste($event, 'basicInfo.phonePrefix')">
             <input class="phone-number" formControlName="phone" placeholder="{{ 'PROFILE_FORM.PHONE_PLACEHOLDER' | translate }}"
               [class.input-error]="isInvalid('basicInfo.phone')">
           </div>
@@ -268,10 +276,8 @@
               {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
             </span>
           </div>
-          <div class="error" *ngIf="isInvalid('basicInfo.phonePrefix')">
-            <span *ngIf="profileForm.get('basicInfo.phonePrefix')?.errors?.['maxlength']">
-              {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
-            </span>
+          <div class="error" *ngIf="isInvalid('basicInfo.phonePrefix') || isPhonePrefixLimitHint('basicInfo.phonePrefix')">
+            {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
           </div>
         </div>
 
@@ -614,7 +620,15 @@
                 <span class="required-asterisk" aria-hidden="true">*</span>
               </label>
               <div class="phone-row">
-                <input class="phone-prefix" formControlName="contactPhonePrefix" placeholder="+51">
+                <input class="phone-prefix" formControlName="contactPhonePrefix" placeholder="+51"
+                  maxlength="4"
+                  inputmode="tel"
+                  autocomplete="tel-country-code"
+                  [class.input-error]="isInvalid('realData.contactPhonePrefix') || isPhonePrefixLimitHint('realData.contactPhonePrefix')"
+                  (keydown)="onPhonePrefixKeydown($event, 'realData.contactPhonePrefix')"
+                  (input)="onPhonePrefixInput('realData.contactPhonePrefix')"
+                  (blur)="onPhonePrefixBlur('realData.contactPhonePrefix')"
+                  (paste)="onPhonePrefixPaste($event, 'realData.contactPhonePrefix')">
                 <input class="phone-number" formControlName="contactPhone"
                   placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}"
                   [class.input-error]="isInvalid('realData.contactPhone')">
@@ -630,10 +644,8 @@
                   {{ 'PROFILE_FORM.PHONE_MAX_ERROR' | translate }}
                 </span>
               </div>
-              <div class="error" *ngIf="isInvalid('realData.contactPhonePrefix')">
-                <span *ngIf="profileForm.get('realData.contactPhonePrefix')?.errors?.['maxlength']">
-                  {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
-                </span>
+              <div class="error" *ngIf="isInvalid('realData.contactPhonePrefix') || isPhonePrefixLimitHint('realData.contactPhonePrefix')">
+                {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
               </div>
             </div>
           </div>

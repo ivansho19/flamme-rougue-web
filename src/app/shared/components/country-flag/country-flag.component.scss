@@ -1,0 +1,20 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.country-flag {
+  display: block;
+  width: 1.05rem;
+  height: 0.7rem;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+:host(.country-flag--md) .country-flag {
+  width: 1.2rem;
+  height: 0.8rem;
+}

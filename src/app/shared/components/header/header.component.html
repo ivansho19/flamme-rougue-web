@@ -404,7 +404,10 @@
                     <img class="search-item-avatar" [src]="result.imageUrl || 'assets/images/model.webp'" alt="Imagen de perfil" />
                     <div class="search-item-text">
                         <div class="search-item-title">{{ result.name }}</div>
-                        <div class="search-item-subtitle" *ngIf="result.city">{{ result.city }}</div>
+                        <div class="search-item-subtitle" *ngIf="result.city">
+                            <app-country-flag [code]="result.country"></app-country-flag>
+                            <span>{{ result.city }}</span>
+                        </div>
                     </div>
                 </button>
         </div>

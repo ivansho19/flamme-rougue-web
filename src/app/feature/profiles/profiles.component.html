@@ -29,7 +29,7 @@
         <div class="profile-header-main">
           <h1>{{ profileData.displayName }}</h1>
           <p class="subtitle location-line">
-            <i class="bi bi-pin-map-fill location-icon" aria-hidden="true"></i>
+            <app-country-flag class="country-flag--md" [code]="profileData.country"></app-country-flag>
             {{ 'PROFILE.SUBTITLE' | translate }} <span>{{ profileData.city }}</span>
           </p>
           <p class="subtitle" *ngIf="profileData.zone">{{ 'PROFILE.ZONE' | translate }} <span>{{ profileData.zone }}</span></p>

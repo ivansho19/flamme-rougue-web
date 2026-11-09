@@ -14,6 +14,7 @@ export class CardComponent {
     @Input() age: number = 0;
     @Input() describe: string = '';
     @Input() city: string = '';
+    @Input() country: string = '';
     @Input() plan: string[] | null = null;
     @Input() buttonText: string = 'Go somewhere';
     @Input() buttonUrl: string = '#';

@@ -1,0 +1,9 @@
+<img
+  *ngIf="flagUrl"
+  class="country-flag"
+  [src]="flagUrl"
+  [alt]="label || ''"
+  [attr.aria-hidden]="label ? null : 'true'"
+  loading="lazy"
+  decoding="async"
+/>

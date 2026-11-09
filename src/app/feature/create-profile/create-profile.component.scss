@@ -555,13 +555,33 @@ input, textarea, select {
 }
 
 .phone-row {
-  display: grid;
-  grid-template-columns: 120px 1fr;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
   gap: 0.75rem;
+  width: 100%;
+}
+
+.phone-row .phone-prefix,
+.phone-row .phone-number {
+  margin-bottom: 0;
 }
 
 .phone-prefix {
+  flex: 0 0 5.5rem;
+  width: 5.5rem;
+  max-width: 5.5rem;
+  min-width: 5.5rem;
   text-align: center;
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
+}
+
+.phone-number {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
 }
 
 .availability-list {
@@ -927,8 +947,24 @@ input, textarea, select {
   }
 
   .phone-row {
-    grid-template-columns: 1fr;
-    gap: 0.6rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+
+  .phone-prefix {
+    flex: 0 0 4.25rem;
+    width: 4.25rem;
+    max-width: 4.25rem;
+    min-width: 4.25rem;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+  }
+
+  .phone-number {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .availability-list {

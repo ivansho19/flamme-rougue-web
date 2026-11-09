@@ -379,16 +379,43 @@
 
 .phone-row {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
   gap: 0.5rem;
+  width: 100%;
+}
+
+.phone-row .phone-prefix,
+.phone-row .phone-number {
+  margin-bottom: 0;
 }
 
 .phone-prefix {
-  width: 4.5rem;
-  flex-shrink: 0;
+  flex: 0 0 4.25rem;
+  width: 4.25rem;
+  max-width: 4.25rem;
+  min-width: 4.25rem;
+  text-align: center;
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
 }
 
 .phone-number {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+}
+
+@media (min-width: 901px) {
+  .phone-prefix {
+    flex: 0 0 5.5rem;
+    width: 5.5rem;
+    max-width: 5.5rem;
+    min-width: 5.5rem;
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
 }
 
 @keyframes uploadPulse {
