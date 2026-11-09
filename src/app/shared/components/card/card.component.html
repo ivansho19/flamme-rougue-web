@@ -25,7 +25,7 @@
         <span class="verified-text">{{ 'PROFILE.VERIFIED' | translate }}</span>
       </span>
       <span class="city-badge" *ngIf="city">
-        <i class="bi bi-geo-alt-fill city-icon" aria-hidden="true"></i>
+        <app-country-flag [code]="country"></app-country-flag>
         <span class="city-text">{{ city }}</span>
       </span>
     </div>

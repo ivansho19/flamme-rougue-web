@@ -37,6 +37,11 @@
                 "glob": "sitemap.xml",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "*.svg",
+                "input": "node_modules/country-flag-icons/3x2",
+                "output": "/assets/flags"
               }
             ],
             "styles": [
@@ -126,6 +131,11 @@
                 "glob": "sitemap.xml",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "*.svg",
+                "input": "node_modules/country-flag-icons/3x2",
+                "output": "/assets/flags"
               }
             ],
             "styles": [

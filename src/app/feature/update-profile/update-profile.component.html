@@ -385,9 +385,20 @@
                         <div class="field phone-group">
                             <label class="field-label">{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}</label>
                             <div class="phone-row">
-                                <input class="phone-prefix" formControlName="contactPhonePrefix" placeholder="+51">
+                                <input class="phone-prefix" formControlName="contactPhonePrefix" placeholder="+51"
+                                    maxlength="4"
+                                    inputmode="tel"
+                                    autocomplete="tel-country-code"
+                                    [class.input-error]="isInvalid('realData.contactPhonePrefix') || isPhonePrefixLimitHint('realData.contactPhonePrefix')"
+                                    (keydown)="onPhonePrefixKeydown($event, 'realData.contactPhonePrefix')"
+                                    (input)="onPhonePrefixInput('realData.contactPhonePrefix')"
+                                    (blur)="onPhonePrefixBlur('realData.contactPhonePrefix')"
+                                    (paste)="onPhonePrefixPaste($event, 'realData.contactPhonePrefix')">
                                 <input class="phone-number" formControlName="contactPhone"
                                     placeholder="{{ 'PROFILE_FORM.CONTACT_PHONE_PLACEHOLDER' | translate }}">
+                            </div>
+                            <div class="error" *ngIf="isInvalid('realData.contactPhonePrefix') || isPhonePrefixLimitHint('realData.contactPhonePrefix')">
+                                {{ 'PROFILE_FORM.PHONE_PREFIX_MAX_ERROR' | translate }}
                             </div>
                         </div>
                     </div>

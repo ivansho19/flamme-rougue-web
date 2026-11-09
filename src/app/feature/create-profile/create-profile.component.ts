@@ -73,6 +73,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     isRegisterProcessing = false;
     registerStatusMessage: 'processing' | 'choose_plan' | null = null;
     private registerProcessTimer: ReturnType<typeof setTimeout> | null = null;
+    private readonly phonePrefixMaxLength = 4;
+    private readonly phonePrefixHintTimers = new Map<string, ReturnType<typeof setTimeout>>();
+    phonePrefixLimitHints: Record<string, boolean> = {};
 
     countries: Country[] = [];
     cities: string[] = [];
@@ -411,7 +414,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                 country: countryValue || '',
                 city: cityFields.city,
                 customCity: cityFields.customCity,
-                phonePrefix: '',
+                phonePrefix: '+',
                 phone: client.phone || '',
                 blockedCountries: Array.isArray(client.blockedCountries) ? client.blockedCountries : []
             },
@@ -1227,19 +1230,163 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             .map(slot => slot.day === '24/7' ? '24/7' : `${slot.day} ${slot.start}-${slot.end}`);
     }
 
+    private normalizePhonePrefix(raw: unknown): string {
+        let value = String(raw ?? '').replace(/\s+/g, '');
+        if (!value || value === '+') {
+            return '+';
+        }
+        if (value.startsWith('00')) {
+            value = `+${value.slice(2)}`;
+        }
+        value = value.replace(/^\++/, '+');
+        if (!value.startsWith('+')) {
+            value = `+${value}`;
+        }
+        return value.slice(0, this.phonePrefixMaxLength) || '+';
+    }
+
+    private setPhonePrefixValue(controlPath: string, value: string): void {
+        const control = this.profileForm.get(controlPath);
+        if (!control) {
+            return;
+        }
+        const normalized = this.normalizePhonePrefix(value);
+        if (control.value !== normalized) {
+            control.setValue(normalized);
+            control.markAsDirty();
+        }
+    }
+
     private getPhoneWithPrefix(basicInfo: { phonePrefix?: string; phone?: string }): string {
-        const prefix = (basicInfo.phonePrefix || '').trim();
-        const phone = (basicInfo.phone || '').trim();
-        if (!phone && !prefix) {
+        const phone = (basicInfo.phone || '').trim().replace(/^\+/, '');
+        if (!phone) {
             return '';
         }
-        if (!prefix) {
-            return phone;
+        const prefix = this.normalizePhonePrefix(basicInfo.phonePrefix);
+        if (prefix === '+') {
+            return `+${phone}`;
         }
-        if (prefix.startsWith('+') || prefix.startsWith('00')) {
-            return `${prefix}${phone}`;
+        return `${prefix}${phone}`;
+    }
+
+    isPhonePrefixLimitHint(controlPath: string): boolean {
+        return !!this.phonePrefixLimitHints[controlPath];
+    }
+
+    onPhonePrefixBlur(controlPath: string): void {
+        const control = this.profileForm.get(controlPath);
+        if (!control) {
+            return;
         }
-        return `+${prefix}${phone}`;
+        const normalized = this.normalizePhonePrefix(control.value);
+        if (control.value !== normalized) {
+            control.setValue(normalized);
+        }
+    }
+
+    onPhonePrefixInput(controlPath: string): void {
+        const control = this.profileForm.get(controlPath);
+        if (!control) {
+            return;
+        }
+        const current = String(control.value ?? '');
+        if (!current || current === '+' || current.startsWith('+')) {
+            return;
+        }
+        this.setPhonePrefixValue(controlPath, current);
+    }
+
+    onPhonePrefixKeydown(event: KeyboardEvent, controlPath: string): void {
+        const input = event.target as HTMLInputElement;
+        if (!input) {
+            return;
+        }
+
+        const value = input.value || '';
+        const start = input.selectionStart ?? 0;
+        const end = input.selectionEnd ?? 0;
+        const selectionLength = end - start;
+
+        if (event.key === 'Backspace' || event.key === 'Delete') {
+            const clearsAll = selectionLength > 0 && start === 0 && end >= value.length;
+            const removesPlusWithBackspace =
+                event.key === 'Backspace' && value.startsWith('+') && selectionLength === 0 && start === 1;
+            const removesPlusWithDelete =
+                event.key === 'Delete' && value.startsWith('+') && selectionLength === 0 && start === 0;
+            const selectionIncludesPlus = value.startsWith('+') && start === 0 && end >= 1;
+
+            if (clearsAll || removesPlusWithBackspace || removesPlusWithDelete || selectionIncludesPlus) {
+                event.preventDefault();
+                const remainder = clearsAll || selectionIncludesPlus
+                    ? `+${value.slice(Math.max(end, 1))}`
+                    : value;
+                this.setPhonePrefixValue(controlPath, remainder);
+                queueMicrotask(() => {
+                    const el = event.target as HTMLInputElement;
+                    const cursor = 1;
+                    el.setSelectionRange(cursor, cursor);
+                });
+                return;
+            }
+            return;
+        }
+
+        if (this.isPrefixNavigationKey(event)) {
+            return;
+        }
+
+        const isPrintable = event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey;
+        if (isPrintable && value.length >= this.phonePrefixMaxLength && selectionLength === 0) {
+            event.preventDefault();
+            this.showPhonePrefixLimitHint(controlPath);
+        }
+    }
+
+    onPhonePrefixPaste(event: ClipboardEvent, controlPath: string): void {
+        const input = event.target as HTMLInputElement;
+        if (!input) {
+            return;
+        }
+
+        const paste = event.clipboardData?.getData('text') ?? '';
+        const start = input.selectionStart ?? 0;
+        const end = input.selectionEnd ?? 0;
+        const nextValue = `${input.value.slice(0, start)}${paste}${input.value.slice(end)}`;
+        const normalized = this.normalizePhonePrefix(nextValue);
+
+        event.preventDefault();
+        this.setPhonePrefixValue(controlPath, normalized);
+        if (nextValue.replace(/\s+/g, '').length > this.phonePrefixMaxLength || normalized.length < nextValue.replace(/\s+/g, '').length) {
+            this.showPhonePrefixLimitHint(controlPath);
+        }
+    }
+
+    private isPrefixNavigationKey(event: KeyboardEvent): boolean {
+        return [
+            'Tab',
+            'Escape',
+            'Enter',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            'Home',
+            'End'
+        ].includes(event.key);
+    }
+
+    private showPhonePrefixLimitHint(controlPath: string): void {
+        this.phonePrefixLimitHints = { ...this.phonePrefixLimitHints, [controlPath]: true };
+        const existingTimer = this.phonePrefixHintTimers.get(controlPath);
+        if (existingTimer) {
+            clearTimeout(existingTimer);
+        }
+        const timer = setTimeout(() => {
+            const { [controlPath]: _removed, ...rest } = this.phonePrefixLimitHints;
+            this.phonePrefixLimitHints = rest;
+            this.phonePrefixHintTimers.delete(controlPath);
+        }, 2500);
+        this.phonePrefixHintTimers.set(controlPath, timer);
     }
 
     private getUploadFolder(userId: string): string {

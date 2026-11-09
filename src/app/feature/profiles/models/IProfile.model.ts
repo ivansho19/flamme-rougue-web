@@ -11,6 +11,7 @@ export interface IProfileResponse {
   title?: string;
   bio?: string;
   phone?: string;
+  country?: string;
   city?: string;
   zone?: string;
   availability?: string[];
