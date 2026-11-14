@@ -18,9 +18,9 @@ export class SeoService {
   private readonly router = inject(Router);
 
   readonly siteUrl = 'https://flammesrouges.com';
-  readonly defaultTitle = 'Flammes Rouges | Plataforma de citas #1 en Europa';
+  readonly defaultTitle = 'Scort y putas en Europa: Bélgica y España | Flammes Rouges';
   readonly defaultDescription =
-    'Flammes Rouges - La mejor plataforma de citas #1 en las mejores ciudades de Europa. Anuncios verificados para mayores de 18 años.';
+    'Anuncios de scort y putas en Europa, con especial presencia en Bélgica y España. Encuentra perfiles verificados para mayores de 18 años en Flammes Rouges.';
   readonly defaultImage = `${this.siteUrl}/assets/images/new_logo.png`;
 
   private readonly routeDefaults: Record<string, SeoConfig> = {
