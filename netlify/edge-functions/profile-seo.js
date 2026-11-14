@@ -20,6 +20,23 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 
 let cache = { at: 0, profiles: null };
 
+const STATIC_SEO = {
+  '/home': {
+    title: 'Scort y putas en Europa: Bélgica y España | Flammes Rouges',
+    description:
+      'Anuncios de scort y putas en Europa, con especial presencia en Bélgica y España. Encuentra perfiles verificados para mayores de 18 años en Flammes Rouges.',
+    url: `${SITE_URL}/home`,
+    image: `${SITE_URL}/assets/images/new_logo.png`
+  },
+  '/legal': {
+    title: 'Aviso legal y términos | Flammes Rouges',
+    description:
+      'Consulta el aviso legal, términos de uso, privacidad, cookies y política de protección de menores de Flammes Rouges.',
+    url: `${SITE_URL}/legal`,
+    image: `${SITE_URL}/assets/images/new_logo.png`
+  }
+};
+
 function readEnv(name) {
   try {
     return globalThis.Netlify?.env?.get(name) || '';
@@ -181,8 +198,41 @@ function parseRequest(request) {
   }
 }
 
+function getStaticSeo(request) {
+  try {
+    const pathname = new URL(request.url).pathname.replace(/\/+$/, '') || '/';
+    return STATIC_SEO[pathname] || null;
+  } catch {
+    return null;
+  }
+}
+
+async function injectSeoResponse(response, seo, headerName) {
+  const contentType = response.headers.get('content-type') || '';
+  if (!response.ok || !contentType.includes('text/html')) {
+    return response;
+  }
+
+  const headers = new Headers(response.headers);
+  headers.delete('content-length');
+  headers.delete('content-encoding');
+  headers.set(headerName, 'hit');
+
+  const html = injectProfileSeo(await response.text(), seo);
+  return new Response(html, { status: response.status, headers });
+}
+
 export default async function profileSeo(request, context) {
-  const parsed = request.method === 'GET' ? parseRequest(request) : null;
+  if (request.method !== 'GET') {
+    return context.next();
+  }
+
+  const staticSeo = getStaticSeo(request);
+  if (staticSeo) {
+    return injectSeoResponse(await context.next(), staticSeo, 'x-route-seo');
+  }
+
+  const parsed = parseRequest(request);
   if (!parsed) {
     return context.next();
   }
@@ -209,4 +259,6 @@ export default async function profileSeo(request, context) {
   return new Response(html, { status: response.status, headers });
 }
 
-export const config = { path: '/profile/*' };
+export const config = {
+  path: ['/home', '/home/', '/legal', '/legal/', '/profile/*']
+};
