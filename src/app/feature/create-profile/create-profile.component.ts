@@ -23,6 +23,16 @@ import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 
 type CreateProfilePanelKey = 'images' | 'basicInfo' | 'personalData' | 'services' | 'realData';
+type ProfileCreationStage = 'profile-upload' | 'kyc-upload' | 'kyc-save' | 'profile-save';
+
+class ProfileCreationError extends Error {
+    constructor(
+        readonly stage: ProfileCreationStage,
+        readonly originalError?: any
+    ) {
+        super(stage);
+    }
+}
 
 @Component({
     selector: 'app-create-profile',
@@ -73,6 +83,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     isRegisterProcessing = false;
     registerStatusMessage: 'processing' | 'choose_plan' | null = null;
     private registerProcessTimer: ReturnType<typeof setTimeout> | null = null;
+    private savedKycUserId: string | null = null;
     private readonly phonePrefixMaxLength = 4;
     private readonly phonePrefixHintTimers = new Map<string, ReturnType<typeof setTimeout>>();
     phonePrefixLimitHints: Record<string, boolean> = {};
@@ -1497,6 +1508,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     }
 
     async saveProfile() {
+                if (this.loading) {
+                    return;
+                }
                 if (!this.enforcePlanImageLimit()) {
                     return;
                 }
@@ -1652,19 +1666,26 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
 
                         console.log('Payload a enviar:', profilePayload);
 
-                        this.profileService.createProfile(profilePayload).subscribe({
-                                next: async (response) => {
-                                        console.log('Perfil creado:', response);
+                        /*
+                         * KYC is mandatory. It must be persisted before createProfile so a
+                         * failed document upload/API request can never leave an orphan profile.
+                         */
+                        await this.saveKYCData(objectId);
+
+                        let response: any;
+                        try {
+                                response = await firstValueFrom(
+                                    this.profileService.createProfile(profilePayload)
+                                );
+                        } catch (error) {
+                                throw new ProfileCreationError('profile-save', error);
+                        }
+
+                        console.log('Perfil creado:', response);
                                 const createdProfile = response?.profile ?? response;
                                 const storedProfileId = createdProfile?._id || response?.profileId;
                                 if (storedProfileId) {
                                     localStorage.setItem('profileId', storedProfileId);
-                                }
-
-                                try {
-                                    await this.saveKYCData(objectId);
-                                } catch (kycError) {
-                                    console.warn('KYC guardado parcialmente con error:', kycError);
                                 }
 
                                 this.loading = false;
@@ -1672,22 +1693,24 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                                 this.ngZone.run(() => {
                                     this.router.navigate(['/home']);
                                 });
-                                },
-                                error: (error) => {
-                                        console.error('Error creando perfil:', error);
-                                        this.loading = false;
-                                }
-                        });
 
                 } catch (error) {
 
-                        console.error('Error subiendo imágenes:', error);
+                        const processError = error instanceof ProfileCreationError
+                            ? error
+                            : new ProfileCreationError('profile-upload', error);
+                        console.error('Error en la creación obligatoria del perfil:', processError);
                         this.loading = false;
+                        this.showProfileCreationError(processError);
 
                 }
         }
 
     private async saveKYCData(userId: string): Promise<void> {
+        if (this.savedKycUserId === userId) {
+            return;
+        }
+
         const realData = this.profileForm.get('realData')?.value || {};
         const realName = realData.realName || '';
         const files = [this.documentFrontFile, this.documentBackFile, this.passportFile].filter(
@@ -1695,50 +1718,116 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         );
 
         if (!files.length) {
-            console.log('No hay documento KYC para guardar');
-            return;
+            throw new ProfileCreationError(
+                'kyc-upload',
+                new Error('KYC_DOCUMENTS_MISSING')
+            );
         }
 
+        // A previous profile attempt may have saved KYC before createProfile failed.
+        // Reuse it so retrying does not create a duplicate record.
         try {
-            const slugifiedName = this.slugifyName(realName);
-            const kycFolder = `kyc/${slugifiedName}+${userId}`;
+            const existingResponse = await firstValueFrom(
+                this.profileService.getKYCByUser(userId)
+            );
+            const existingKyc = existingResponse?.kyc;
+            const existingImages = existingKyc?.documentImage;
+            const hasExistingDocuments = Array.isArray(existingImages)
+                ? existingImages.length > 0
+                : !!existingImages?.url;
 
-            const documentImages = [];
+            if (existingKyc?._id && hasExistingDocuments) {
+                this.savedKycUserId = userId;
+                return;
+            }
+        } catch (error) {
+            throw new ProfileCreationError('kyc-save', error);
+        }
+
+        const slugifiedName = this.slugifyName(realName);
+        const kycFolder = `kyc/${slugifiedName}+${userId}`;
+
+        const documentImages = [];
+        try {
             for (const file of files) {
                 const documentUpload: any = await firstValueFrom(
                     this.cloudinaryService.uploadImage(file, kycFolder)
                 );
                 if (!documentUpload?.secure_url || !documentUpload?.public_id) {
-                    throw new Error('Error al subir documento KYC a Cloudinary');
+                    throw new Error('KYC_UPLOAD_INVALID_RESPONSE');
                 }
                 documentImages.push({
                     url: documentUpload.secure_url,
                     public_id: documentUpload.public_id
                 });
             }
-
-            const kycPayload: IKYCCreateRequest = {
-                userId: userId,
-                fullName: realName,
-                age: realData.realAge || null,
-                nationality: realData.realNationality || '',
-                phone: this.getPhoneWithPrefix({
-                    phonePrefix: realData.contactPhonePrefix,
-                    phone: realData.contactPhone
-                }),
-                email: realData.email || '',
-                documentType: realData.documentType || undefined,
-                documentImage: documentImages.length === 1 ? documentImages[0] : documentImages
-            };
-
-            await firstValueFrom(this.profileService.createKYC(kycPayload));
         } catch (error) {
-            console.error('Error al guardar KYC:', error);
-            this.toastService.showToast(
-                'warning',
-                this.translate.instant('PROFILE_FORM.TOAST_KYC_WARNING')
-            );
-            throw error;
+            throw new ProfileCreationError('kyc-upload', error);
         }
+
+        const kycPayload: IKYCCreateRequest = {
+            userId: userId,
+            fullName: realName,
+            age: realData.realAge || null,
+            nationality: realData.realNationality || '',
+            phone: this.getPhoneWithPrefix({
+                phonePrefix: realData.contactPhonePrefix,
+                phone: realData.contactPhone
+            }),
+            email: realData.email || '',
+            documentType: realData.documentType || undefined,
+            documentImage: documentImages.length === 1 ? documentImages[0] : documentImages
+        };
+
+        try {
+            await firstValueFrom(this.profileService.createKYC(kycPayload));
+            this.savedKycUserId = userId;
+        } catch (error) {
+            throw new ProfileCreationError('kyc-save', error);
+        }
+    }
+
+    private showProfileCreationError(error: ProfileCreationError): void {
+        const original = error.originalError;
+        const status = original?.status ?? original?.error?.http_code;
+        let messageKey = `PROFILE_FORM.TOAST_${error.stage.replace(/-/g, '_').toUpperCase()}_ERROR`;
+
+        if (status === 0) {
+            messageKey = 'PROFILE_FORM.TOAST_PROCESS_NETWORK_ERROR';
+        } else if (status === 413) {
+            messageKey = 'PROFILE_FORM.TOAST_PROCESS_FILE_SIZE_ERROR';
+        } else if (status === 401 || status === 403) {
+            messageKey = 'PROFILE_FORM.TOAST_PROCESS_SESSION_ERROR';
+        }
+
+        const baseMessage = this.translate.instant(messageKey);
+        const serverReason = this.getSafeProcessErrorReason(original);
+        const message = serverReason ? `${baseMessage} ${serverReason}` : baseMessage;
+
+        this.toastService.showToast(
+            this.translate.instant('PROFILE_FORM.TOAST_PROCESS_ERROR_TITLE'),
+            message,
+            'error',
+            10
+        );
+    }
+
+    private getSafeProcessErrorReason(error: any): string {
+        const reason = error?.error?.error?.message
+            || error?.error?.message
+            || error?.message
+            || '';
+        const normalized = String(reason).replace(/\s+/g, ' ').trim();
+
+        if (
+            !normalized
+            || normalized === 'KYC_DOCUMENTS_MISSING'
+            || normalized === 'KYC_UPLOAD_INVALID_RESPONSE'
+            || normalized.startsWith('Http failure response')
+        ) {
+            return '';
+        }
+
+        return `(${normalized.slice(0, 220)})`;
     }
 }
